@@ -59,7 +59,7 @@ CastBar:SetScript('OnUpdate',function(self)
 	if (Auras:CharacterCheck(nil,0)) then
 		local spec = GetSpecialization()
 		local db = Auras.db.char
-		local bar = db.elements[spec].statusbars.castBar
+		local bar = Auras.db.char.statusbars[spec].bars.CastBar
 		local isMoving = db.elements.isMoving
 
 		Auras:ToggleProgressBarMove(self,isMoving,bar)

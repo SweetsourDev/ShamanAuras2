@@ -31,7 +31,7 @@ ManaBar:SetScript('OnUpdate',function(self)
 		local power,maxPower = UnitPower('player',powerID),UnitPowerMax('player',powerID)
 		
 		local db = Auras.db.char
-		local bar = db.elements[3].statusbars.manaBar
+		local bar = Auras.db.char.statusbars[3].bars.ManaBar
 		local isMoving = db.elements.isMoving
 		
 		local _,maxVal = self:GetMinMaxValues()

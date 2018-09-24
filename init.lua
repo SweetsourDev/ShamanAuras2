@@ -158,7 +158,11 @@ local function ResetAdjustable()
 	db.elements[1].cooldowns.secondary[2].isPreview = false]]
 	--db.elements[1].statusbars.healthBar.adjust.isEnabled = false
 	--db.elements[1].statusbars.healthBar.adjust.showBG = false
-	db.elements[1].statusbars.maelstromBar.adjust.isEnabled = false
+	for k,v in pairs(Auras.db.char.statusbars[1].bars) do
+		v.adjust.isEnabled = false
+		v.adjust.showBG = false
+	end
+	--[[db.elements[1].statusbars.maelstromBar.adjust.isEnabled = false
 	db.elements[1].statusbars.maelstromBar.adjust.showBG = false
 	db.elements[1].statusbars.castBar.adjust.isEnabled = false
 	db.elements[1].statusbars.castBar.adjust.showBG = false
@@ -166,7 +170,7 @@ local function ResetAdjustable()
 	db.elements[1].statusbars.channelBar.adjust.showBG = false
 	db.elements[1].statusbars.icefuryBar.adjust.isEnabled = false
 	db.elements[1].statusbars.icefuryBar.adjust.showBG = false
-	db.elements[1].statusbars.icefuryBar.adjust.showTimer = false
+	db.elements[1].statusbars.icefuryBar.adjust.showTimer = false]]
 	
 	--[[db.elements[2].cooldowns.adjust = false
 	db.elements[2].cooldowns.primary[1].isPreview = false
@@ -756,7 +760,7 @@ function Auras:PLAYER_TOTEM_UPDATE()
 	local spec = GetSpecialization()
 	local isHealingStreamOne, isHealingStreamTwo = false,false
 	local timerbars = Auras.db.char.timerbars[spec]
-	SSA.DataFrame.text:SetText('')
+	--SSA.DataFrame.text:SetText('')
 	--[[for i=1,10 do
 		local hasTotem,totemName,start,duration = GetTotemInfo(i)
 		
@@ -910,7 +914,7 @@ Frame:HookScript("OnEvent",function(self,event,...)
 			end
 		elseif (event == "UNIT_SPELLCAST_START") then
 			local db = Auras.db.char
-			local bar = db.elements[spec].statusbars.castBar
+			local bar = Auras.db.char.statusbars[spec].bars.CastBar
 			
 			local spellName,_,texture,startTime,endTime = UnitCastingInfo('player')
 
@@ -962,7 +966,7 @@ Frame:HookScript("OnEvent",function(self,event,...)
 			
 			castBar:SetAlpha(1);
 		else
-			local db = Auras.db.char.elements[spec].statusbars.channelBar
+			local bar = Auras.db.char.statusbars[spec].bars.ChannelBar
 			local spellName,_,texture,startTime,endTime = UnitChannelInfo('player')
 
 			endTime = endTime / 1e3
@@ -979,22 +983,22 @@ Frame:HookScript("OnEvent",function(self,event,...)
 			channelBar.isChannel = true
 			channelBar:SetAlpha(1)
 
-			if (db.icon.isEnabled) then
+			if (bar.icon.isEnabled) then
 				if (not channelBar.icon:IsShown()) then
 					channelBar.icon:Show()
 				end
 				
 				channelBar.icon:SetTexture(texture)
-				channelBar:SetWidth(db.layout.width - db.layout.height)
+				channelBar:SetWidth(bar.layout.width - bar.layout.height)
 			else
 				if (channelBar.icon:IsShown()) then
 					channelBar.icon:Hide()
 				end
 				
-				channelBar:SetWidth(db.layout.width)
+				channelBar:SetWidth(bar.layout.width)
 			end
 			
-			if (db.spark) then
+			if (bar.spark) then
 				if (not channelBar.spark:IsShown()) then
 					channelBar.spark:Show()
 				end
@@ -1006,7 +1010,7 @@ Frame:HookScript("OnEvent",function(self,event,...)
 				end
 			end
 			
-			if (db.timetext.isDisplayText) then
+			if (bar.timetext.isDisplayText) then
 				channelBar.timetext:SetText(spellName)
 			else
 				channelBar.timetext:SetText('')
@@ -1017,11 +1021,11 @@ Frame:HookScript("OnEvent",function(self,event,...)
 			end
 		end
 	elseif (event == "UNIT_SPELLCAST_CHANNEL_STOP") then
-		if (not Auras.db.char.elements[spec].statusbars.channelBar.adjust.isEnabled) then
+		if (not Auras.db.char.statusbars[spec].bars.ChannelBar.adjust.isEnabled) then
 			channelBar:SetAlpha(0)
 		end
 	elseif (event == "UNIT_SPELLCAST_INTERRUPTED" or event == "UNIT_SPELLCAST_SUCCEEDED") then
-		local cd = Auras.db.char.elements[spec].cooldowns
+		local cd = Auras.db.char.auras[spec].cooldowns
 		if (event == "UNIT_SPELLCAST_INTERRUPTED") then
 			cd.interrupted = true
 			cd.GCD.length = 0

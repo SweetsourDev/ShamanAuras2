@@ -162,10 +162,7 @@ end
 
 local function HideTimerBar(bar)
 	if (bar.adjustExpireTime) then
-		print("Clearing Expire Time")
 		bar.adjustExpireTime = nil
-	else
-		print("No Time to Clear")
 	end
 	
 	bar:Hide()

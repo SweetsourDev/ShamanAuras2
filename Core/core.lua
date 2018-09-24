@@ -54,7 +54,7 @@ function Auras:CharacterCheck(obj,spec,...)
 			objDb = 'auras'
 		elseif (Auras.db.char.timerbars[curSpec].bars[obj:GetName()]) then
 			objDb = 'timerbars'
-		elseif (Auras.db.char.statusbars[curSpec][obj:GetName()]) then
+		elseif (Auras.db.char.statusbars[curSpec].bars[obj:GetName()]) then
 			objDb = 'statusbar'
 		end
 		--[[if (not Auras.db.char.auras[spec]) then
@@ -98,13 +98,13 @@ function Auras:CharacterCheck(obj,spec,...)
 			end
 		elseif (objDb == "statusbar") then
 			if (spec == 0) then
-				if (Auras.db.char.statusbars[curSpec][obj:GetName()]) then
-					isAuraInUse = Auras.db.char.statusbars[curSpec][obj:GetName()].isEnabled
+				if (Auras.db.char.statusbars[curSpec].bars[obj:GetName()]) then
+					isAuraInUse = Auras.db.char.statusbars[curSpec].bars[obj:GetName()].isEnabled
 				else
 					isAuraInUse = false
 				end
 			else
-				isAuraInUse = Auras.db.char.statusbars[spec][obj:GetName()].isEnabled
+				isAuraInUse = Auras.db.char.statusbars[spec].bars[obj:GetName()].isEnabled
 			end
 		end
 		--[[if (spec == 0) then
@@ -428,14 +428,14 @@ function Auras:InitializeTimerBarFrameGroups(spec)
 	end
 end
 
-function Auras:InitializeProgressBar(bar1,bar2,db,text1,text2,spec)
+function Auras:InitializeProgressBar(bar1,bar2,text1,text2,spec)
 	local curSpec = GetSpecialization();
-	
+
 	if (Auras.db.char.elements[spec].isEnabled) then
 		if (curSpec == spec) then
 			local bar1 = SSA[bar1]
-			
-			local db = Auras.db.char.elements[spec].statusbars[db]
+
+			local db = Auras.db.char.statusbars[spec].bars[bar1:GetName()]
 			if (text1) then
 				if (db[text1].isDisplayText) then
 					bar1[text1]:SetAlpha(1)

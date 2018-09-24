@@ -1655,7 +1655,7 @@ function Auras:RefreshTimerBarGroupList(options,spec)
 		local _,_,icon = GetSpellInfo(timerbars.bars[sortTable[i]].data.spellID)
 	
 		-- If the bar is enabled, but not currently in use, show it in the "Available Bars" list
-		if (timerbars.bars[sortTable[i]].isEnabled and not timerbars.bar[sortTable[i]].isInUse) then
+		if (timerbars.bars[sortTable[i]].isEnabled and not timerbars.bars[sortTable[i]].isInUse) then
 			print("Inserting: ".."|T"..icon..":0|t "..timerbars.bars[sortTable[i]].layout.text..";"..sortTable[i])
 			tinsert(BAR_LIST,"|T"..icon..":0|t "..timerbars.bars[sortTable[i]].layout.text..";"..sortTable[i])
 		end

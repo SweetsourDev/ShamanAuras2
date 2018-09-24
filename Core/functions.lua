@@ -901,10 +901,10 @@ function Auras:UpdateTalents(isTalentChange)
 		
 		-- Initialize Progress Bars Upon Specialization Change
 		--Auras:InitializeProgressBar('HealthBar1',nil,'healthBar','numtext','perctext',1)
-		Auras:InitializeProgressBar('MaelstromBar',nil,'maelstromBar','text',nil,spec)
-		Auras:InitializeProgressBar('CastBar',nil,'castBar','nametext','timetext',spec)
-		Auras:InitializeProgressBar('ChannelBar',nil,'channelBar','nametext','timetext',spec)
-		Auras:InitializeProgressBar('IcefuryBar','Timer','icefuryBar','counttext','timetext',spec)
+		Auras:InitializeProgressBar('MaelstromBar',nil,'text',nil,spec)
+		Auras:InitializeProgressBar('CastBar',nil,'nametext','timetext',spec)
+		Auras:InitializeProgressBar('ChannelBar',nil,'nametext','timetext',spec)
+		Auras:InitializeProgressBar('IcefuryBar','Timer','counttext','timetext',spec)
 		
 		-- Initialize Frame Groups Upon Specialization Change
 		Auras:InitializeAuraFrameGroups(spec)
@@ -1119,9 +1119,9 @@ function Auras:UpdateTalents(isTalentChange)
 		
 		-- Initialize Progress Bars Upon Specialization Change
 		--Auras:InitializeProgressBar('HealthBar1',nil,'healthBar','numtext','perctext',1)
-		Auras:InitializeProgressBar('MaelstromBar',nil,'maelstromBar','text',nil,spec)
-		Auras:InitializeProgressBar('CastBar',nil,'castBar','nametext','timetext',spec)
-		Auras:InitializeProgressBar('ChannelBar',nil,'channelBar','nametext','timetext',spec)
+		Auras:InitializeProgressBar('MaelstromBar',nil,'text',nil,spec)
+		Auras:InitializeProgressBar('CastBar',nil,'nametext','timetext',spec)
+		Auras:InitializeProgressBar('ChannelBar',nil,'nametext','timetext',spec)
 		
 		-- Initialize Frame Groups Upon Specialization Change
 		Auras:InitializeAuraFrameGroups(spec)
@@ -1359,11 +1359,11 @@ function Auras:UpdateTalents(isTalentChange)
 		Auras:InitializeCooldowns(spec)
 		
 		-- Initialize Progress Bars Upon Specialization Change
-		Auras:InitializeProgressBar('CastBar',nil,'castBar','nametext','timetext',spec)
-		Auras:InitializeProgressBar('ChannelBar',nil,'channelBar','nametext','timetext',spec)
-		Auras:InitializeProgressBar('ManaBar',nil,'manaBar','text',nil,spec)
-		Auras:InitializeProgressBar('TidalWavesBar',nil,'tidalWavesBar',nil,nil,spec)
-		Auras:InitializeProgressBar('EarthenWallTotemBar','Timer','earthenWallBar','healthtext','timetext',spec)
+		Auras:InitializeProgressBar('CastBar',nil,'nametext','timetext',spec)
+		Auras:InitializeProgressBar('ChannelBar',nil,'nametext','timetext',spec)
+		Auras:InitializeProgressBar('ManaBar',nil,'text',nil,spec)
+		Auras:InitializeProgressBar('TidalWavesBar',nil,nil,nil,spec)
+		Auras:InitializeProgressBar('EarthenWallTotemBar','Timer','healthtext','timetext',spec)
 		
 		-- Initialize Frame Groups Upon Specialization Change
 		Auras:InitializeAuraFrameGroups(spec)

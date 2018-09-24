@@ -43,7 +43,7 @@ EarthenWallTotemBar:SetScript('OnUpdate',function(self,elapsed)
 		--SSA.DataFrame.text:SetText("ACTIVATE")
 		local db = Auras.db.char
 		--local bar = db.elements[3].statusbars.earthenWallBar
-		local bar = Auras.db.char.statusbars[3][self:GetName()]
+		local bar = Auras.db.char.statusbars[3].bars[self:GetName()]
 		local isMoving = db.elements.isMoving
 		local maxHealth = UnitHealthMax('player')
 		
@@ -196,7 +196,7 @@ EarthenWallTotemBar:SetScript('OnEvent',function(self,event)
 		local db = Auras.db.char
 		
 		local auras = db.auras[3]
-		local bar = Auras.db.char.statusbars[3][self:GetName()]
+		local bar = Auras.db.char.statusbars[3].bars[self:GetName()]
 		
 		
 		if (sGUID == UnitGUID('player')) then

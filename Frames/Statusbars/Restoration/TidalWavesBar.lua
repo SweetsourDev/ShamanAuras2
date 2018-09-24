@@ -68,7 +68,7 @@ TidalWavesBar.healTime = 0
 TidalWavesBar:SetScript('OnUpdate',function(self)
 	if (Auras:CharacterCheck(3)) then
 		local db = Auras.db.char
-		local bar = db.elements[3].statusbars.tidalWavesBar
+		local bar = Auras.db.char.statusbars[3].bars[self:GetName()]
 		local isMoving = db.elements.isMoving
 
 		if (isMoving or bar.adjust.isEnabled) then

@@ -1092,8 +1092,8 @@ local defaults = {
 				},
 			},
 			defaults = {
-				groupCount = 6,
-				templates = {
+				--groupCount = 6,
+				--[[templates = {
 					auras = {
 						auraCount = 0,
 						name = '',
@@ -1106,11 +1106,6 @@ local defaults = {
 					timerbars = {
 						barCount = 0,
 						name = "",
-						--length = 175,
-						--width = 17,
-						--orientation = "VERTICAL",
-						--spacing = 10,
-						--isAdjust = false,
 						layout = {
 							width = 175,
 							height = 17,
@@ -1184,8 +1179,8 @@ local defaults = {
 						alphaOoC = 0.5,
 						isAdjust = false,
 					},
-				},
-				groups = {
+				},]]
+				--[[groups = {
 					[1] = {
 						auraCount = 0,
 						name = '',
@@ -1224,7 +1219,7 @@ local defaults = {
 						charges = 13.5,
 						orientation = "Vertical",
 					},
-				},
+				},]]
 				LargeBar = {
 					width = 260,
 					height = 21,
@@ -1250,7 +1245,7 @@ local defaults = {
 			[1] = {
 				isEnabled = true,
 				isMoving = false,
-				cooldowns = {
+				--[[cooldowns = {
 					isEnabled = true,
 					text = true,
 					sweep = true,
@@ -1267,7 +1262,7 @@ local defaults = {
 					},
 					groups = {
 					},
-				},
+				},]]
 				--[[timerbars = {
 					buff = {
 						isEnabled = true,
@@ -1400,7 +1395,7 @@ local defaults = {
 						alphaOoC = 1,
 						alphaTar = 0.5,
 					},]]
-					maelstromBar = {
+					--[[maelstromBar = {
 						adjust = {
 							isEnabled = false,
 							showBG = false,
@@ -1789,21 +1784,21 @@ local defaults = {
 						alphaCombat = 1,
 						alphaOoC = 0,
 						alphaTar = 0.5,
-					},
+					},]]
 				},
 				frames = {
 					AuraBase = {
 						x = 0,
 						y = 0,
 					},
-					auras = {
+					--[[auras = {
 						groups = {
 						},
 					},
 					timerbars = {
 						groups = {
 						},
-					},
+					},]]
 					--[[BuffTimerBarGrp1 = {
 						isEnabled = true,
 						point = "CENTER",
@@ -1875,7 +1870,7 @@ local defaults = {
 			[2] = {
 				isEnabled = true,
 				isMoving = false,
-				cooldowns = {
+				--[[cooldowns = {
 					isEnabled = true,
 					text = true,
 					sweep = true,
@@ -1892,7 +1887,7 @@ local defaults = {
 					},
 					groups = {
 					},
-				},
+				},]]
 				--[[timerbars = {
 					buff = {
 						isEnabled = true,
@@ -1922,7 +1917,7 @@ local defaults = {
 				},]]
 				statusbars = {
 					defaultBar = false,
-					maelstromBar = {
+					--[[maelstromBar = {
 						adjust = {
 							isEnabled = false,
 							showBG = false,
@@ -2198,21 +2193,21 @@ local defaults = {
 						},
 						alphaCombat = 1,
 						alphaOoC = 1,
-					},
+					},]]
 				},
 				frames = {
 					AuraBase = {
 						x = 0,
 						y = 0,
 					},
-					auras = {
+					--[[auras = {
 						groups = {
 						},
 					},
 					timerbars = {
 						groups = {
 						},
-					},
+					},]]
 					--[[BuffTimerBarGrp2 = {
 						isEnabled = true,
 						point = "CENTER",
@@ -2278,7 +2273,7 @@ local defaults = {
 			[3] = {
 				isEnabled = true,
 				isMoving = false,
-				cooldowns = {
+				--[[cooldowns = {
 					isEnabled = true,
 					text = true,
 					sweep = true,
@@ -2295,7 +2290,7 @@ local defaults = {
 					},
 					groups = {
 					},
-				},
+				},]]
 				--[[timerbars = {
 					buff = {
 						isEnabled = true,
@@ -2325,7 +2320,7 @@ local defaults = {
 				},]]
 				statusbars = {
 					defaultBar = false,
-					earthenWallBar = {
+					--[[earthenWallBar = {
 						adjust = {
 							isEnabled = false,
 							showBG = false,
@@ -2757,21 +2752,21 @@ local defaults = {
 						alphaCombat = 1,
 						alphaOoC = 0,
 						alphaTar = 0.5,
-					},
+					},]]
 				},
 				frames = {
 					AuraBase = {
 						x = 0,
 						y = 0,
 					},
-					auras = {
+					--[[auras = {
 						groups = {
 						},
 					},
 					timerbars = {
 						groups = {
 						},
-					},
+					},]]
 					--[[BuffTimerBarGrp3 = {
 						isEnabled = true,
 						point = "CENTER",
@@ -6580,1124 +6575,1130 @@ local defaults = {
 		statusbars = {
 			[1] = {
 				defaultBar = false,
-				["MaelstromBar"] = {
-					adjust = {
-						isEnabled = false,
-						showBG = false,
-					},
-					isEnabled = true,
-					animate = true,
-					text = {
-						isDisplayText = true,
+				bars = {
+					["MaelstromBar"] = {
+						adjust = {
+							isEnabled = false,
+							showBG = false,
+						},
+						isEnabled = true,
+						animate = true,
+						text = {
+							isDisplayText = true,
+							justify = "CENTER",
+							x = 0,
+							y = 0,
+							font = {
+								name = "Friz Quadrata TT",
+								size = 12,
+								flag = "OUTLINE",
+								color = {
+									r = 1,
+									g = 1,
+									b = 1,
+									a = 1,
+								},
+								shadow = {
+									isEnabled = false,
+									offset = {
+										x = 2,
+										y = -2,
+									},
+									color = {
+										r = 0,
+										g = 0,
+										b = 0,
+										a = 1,
+									},
+								},
+							},
+						},
+						background = {
+							texture = 'Flat',
+							color = {
+								r = 0,
+								g = 0,
+								b = 0,
+								a = 0.5,
+							},
+						},
+						foreground = {
+							texture = 'Fifths',
+							color = {
+								r = 0,
+								g = 0.5,
+								b = 1,
+								a = 1,
+							},
+						},
+						layout = {
+							width = 260,
+							height = 21,
+							point = "CENTER",
+							relativeTo = 'AuraBase',
+							relativePoint = "CENTER",
+							x = 0,
+							y = -139,
+							strata = "LOW",
+						},
+						attachToHealth = {
+							isAttached = true,
+							x = 0,
+							y = 0,
+							point = "TOP",
+						},
 						justify = "CENTER",
-						x = 0,
-						y = 0,
-						font = {
-							name = "Friz Quadrata TT",
-							size = 12,
-							flag = "OUTLINE",
-							color = {
-								r = 1,
-								g = 1,
-								b = 1,
-								a = 1,
-							},
-							shadow = {
-								isEnabled = false,
-								offset = {
-									x = 2,
-									y = -2,
-								},
-								color = {
-									r = 0,
-									g = 0,
-									b = 0,
-									a = 1,
-								},
-							},
+						threshold = 90,
+						alphaCombat = 1,
+						alphaOoC = 0,
+						alphaTar = 0.5,
+					},
+					["CastBar"] = {
+						adjust = {
+							isEnabled = false,
+							showBG = false,
 						},
-					},
-					background = {
-						texture = 'Flat',
-						color = {
-							r = 0,
-							g = 0,
-							b = 0,
-							a = 0.5,
-						},
-					},
-					foreground = {
-						texture = 'Fifths',
-						color = {
-							r = 0,
-							g = 0.5,
-							b = 1,
-							a = 1,
-						},
-					},
-					layout = {
-						width = 260,
-						height = 21,
-						point = "CENTER",
-						relativeTo = 'AuraBase',
-						relativePoint = "CENTER",
-						x = 0,
-						y = -139,
-						strata = "LOW",
-					},
-					attachToHealth = {
-						isAttached = true,
-						x = 0,
-						y = 0,
-						point = "TOP",
-					},
-					justify = "CENTER",
-					threshold = 90,
-					alphaCombat = 1,
-					alphaOoC = 0,
-					alphaTar = 0.5,
-				},
-				["CastBar"] = {
-					adjust = {
-						isEnabled = false,
-						showBG = false,
-					},
-					isEnabled = true,
-					nametext = {
-						isDisplayText = true,
-						justify = "LEFT",
-						x = 5,
-						y = 0,
-						font = {
-							name = "Friz Quadrata TT",
-							size = 10,
-							flag = "OUTLINE",
-							color = {
-								r = 1,
-								g = 1,
-								b = 1,
-								a = 1,
-							},
-							shadow = {
-								isEnabled = false,
-								offset = {
-									x = 2,
-									y = -2,
-								},
-								color = {
-									r = 0,
-									g = 0,
-									b = 0,
-									a = 1,
-								},
-							},
-						},
-					},
-					timetext = {
-						isDisplayText = true,
-						justify = "RIGHT",
-						x = -5,
-						y = 0,
-						font = {
-							name = "Friz Quadrata TT",
-							size = 10,
-							flag = "OUTLINE",
-							color = {
-								r = 1,
-								g = 1,
-								b = 1,
-								a = 1,
-							},
-							shadow = {
-								isEnabled = false,
-								offset = {
-									x = 2,
-									y = -2,
-								},
-								color = {
-									r = 0,
-									g = 0,
-									b = 0,
-									a = 1,
-								},
-							},
-						},
-					},
-					background = {
-						texture = 'Flat',
-						color = {
-							r = 0,
-							g = 0,
-							b = 0,
-							a = 0.5,
-						},
-					},
-					icon = {
 						isEnabled = true,
-						justify = "LEFT",
-					},
-					spark = true,
-					foreground = {
-						texture = 'Glamour2',
-						color = {
-							r = 1,
-							g = 0.85,
-							b = 0,
-							a = 1,
-						},
-					},
-					layout = {
-						width = 260,
-						height = 13,
-						point = "CENTER",
-						relativeTo = 'AuraBase',
-						relativePoint = "CENTER",
-						x = 0,
-						y = -155,
-						strata = "LOW",
-					},
-					alphaCombat = 1,
-					alphaOoC = 1,
-				},
-				["ChannelBar"] = {
-					adjust = {
-						isEnabled = false,
-						showBG = false,
-					},
-					isEnabled = true,
-					selectedText = 'Name Text',
-					nametext = {
-						isDisplayText = true,
-						justify = "LEFT",
-						x = 5,
-						y = 0,
-						font = {
-							name = "Friz Quadrata TT",
-							size = 10,
-							flag = "OUTLINE",
-							color = {
-								r = 1,
-								g = 1,
-								b = 1,
-								a = 1,
-							},
-							shadow = {
-								isEnabled = false,
-								offset = {
-									x = 2,
-									y = -2,
-								},
+						nametext = {
+							isDisplayText = true,
+							justify = "LEFT",
+							x = 5,
+							y = 0,
+							font = {
+								name = "Friz Quadrata TT",
+								size = 10,
+								flag = "OUTLINE",
 								color = {
-									r = 0,
-									g = 0,
-									b = 0,
+									r = 1,
+									g = 1,
+									b = 1,
 									a = 1,
 								},
+								shadow = {
+									isEnabled = false,
+									offset = {
+										x = 2,
+										y = -2,
+									},
+									color = {
+										r = 0,
+										g = 0,
+										b = 0,
+										a = 1,
+									},
+								},
 							},
 						},
-					},
-					timetext = {
-						isDisplayText = true,
-						justify = "RIGHT",
-						x = -5,
-						y = 0,
-						font = {
-							name = "Friz Quadrata TT",
-							size = 10,
-							flag = "OUTLINE",
-							color = {
-								r = 1,
-								g = 1,
-								b = 1,
-								a = 1,
-							},
-							shadow = {
-								isEnabled = false,
-								offset = {
-									x = 2,
-									y = -2,
-								},
+						timetext = {
+							isDisplayText = true,
+							justify = "RIGHT",
+							x = -5,
+							y = 0,
+							font = {
+								name = "Friz Quadrata TT",
+								size = 10,
+								flag = "OUTLINE",
 								color = {
-									r = 0,
-									g = 0,
-									b = 0,
+									r = 1,
+									g = 1,
+									b = 1,
 									a = 1,
 								},
+								shadow = {
+									isEnabled = false,
+									offset = {
+										x = 2,
+										y = -2,
+									},
+									color = {
+										r = 0,
+										g = 0,
+										b = 0,
+										a = 1,
+									},
+								},
 							},
 						},
-					},
-					background = {
-						texture = 'Flat',
-						color = {
-							r = 0,
-							g = 0,
-							b = 0,
-							a = 0.5,
+						background = {
+							texture = 'Flat',
+							color = {
+								r = 0,
+								g = 0,
+								b = 0,
+								a = 0.5,
+							},
 						},
+						icon = {
+							isEnabled = true,
+							justify = "LEFT",
+						},
+						spark = true,
+						foreground = {
+							texture = 'Glamour2',
+							color = {
+								r = 1,
+								g = 0.85,
+								b = 0,
+								a = 1,
+							},
+						},
+						layout = {
+							width = 260,
+							height = 13,
+							point = "CENTER",
+							relativeTo = 'AuraBase',
+							relativePoint = "CENTER",
+							x = 0,
+							y = -155,
+							strata = "LOW",
+						},
+						alphaCombat = 1,
+						alphaOoC = 1,
 					},
-					icon = {
+					["ChannelBar"] = {
+						adjust = {
+							isEnabled = false,
+							showBG = false,
+						},
 						isEnabled = true,
-						justify = "LEFT",
-					},
-					spark = true,
-					foreground = {
-						texture = 'Glamour2',
-						color = {
-							r = 1,
-							g = 0.85,
-							b = 0,
-							a = 1,
+						selectedText = 'Name Text',
+						nametext = {
+							isDisplayText = true,
+							justify = "LEFT",
+							x = 5,
+							y = 0,
+							font = {
+								name = "Friz Quadrata TT",
+								size = 10,
+								flag = "OUTLINE",
+								color = {
+									r = 1,
+									g = 1,
+									b = 1,
+									a = 1,
+								},
+								shadow = {
+									isEnabled = false,
+									offset = {
+										x = 2,
+										y = -2,
+									},
+									color = {
+										r = 0,
+										g = 0,
+										b = 0,
+										a = 1,
+									},
+								},
+							},
 						},
+						timetext = {
+							isDisplayText = true,
+							justify = "RIGHT",
+							x = -5,
+							y = 0,
+							font = {
+								name = "Friz Quadrata TT",
+								size = 10,
+								flag = "OUTLINE",
+								color = {
+									r = 1,
+									g = 1,
+									b = 1,
+									a = 1,
+								},
+								shadow = {
+									isEnabled = false,
+									offset = {
+										x = 2,
+										y = -2,
+									},
+									color = {
+										r = 0,
+										g = 0,
+										b = 0,
+										a = 1,
+									},
+								},
+							},
+						},
+						background = {
+							texture = 'Flat',
+							color = {
+								r = 0,
+								g = 0,
+								b = 0,
+								a = 0.5,
+							},
+						},
+						icon = {
+							isEnabled = true,
+							justify = "LEFT",
+						},
+						spark = true,
+						foreground = {
+							texture = 'Glamour2',
+							color = {
+								r = 1,
+								g = 0.85,
+								b = 0,
+								a = 1,
+							},
+						},
+						layout = {
+							width = 260,
+							height = 13,
+							point = "CENTER",
+							relativeTo = 'AuraBase',
+							relativePoint = "CENTER",
+							x = 0,
+							y = -155,
+							strata = "LOW",
+						},
+						alphaCombat = 1,
+						alphaOoC = 1,
 					},
-					layout = {
-						width = 260,
-						height = 13,
-						point = "CENTER",
-						relativeTo = 'AuraBase',
-						relativePoint = "CENTER",
-						x = 0,
-						y = -155,
-						strata = "LOW",
-					},
-					alphaCombat = 1,
-					alphaOoC = 1,
-				},
-				["IcefuryBar"] = {
-					adjust = {
-						isEnabled = false,
-						showBG = false,
-						showTimer = false,
-					},
-					isEnabled = true,
-					counttext = {
-						isDisplayText = true,
-						justify = "LEFT",
-						x = 5,
-						y = 0,
-						font = {
-							name = "Friz Quadrata TT",
-							size = 12,
-							flag = "OUTLINE",
+					["IcefuryBar"] = {
+						adjust = {
+							isEnabled = false,
+							showBG = false,
+							showTimer = false,
+						},
+						isEnabled = true,
+						counttext = {
+							isDisplayText = true,
+							justify = "LEFT",
+							x = 5,
+							y = 0,
+							font = {
+								name = "Friz Quadrata TT",
+								size = 12,
+								flag = "OUTLINE",
+								color = {
+									r = 1,
+									g = 1,
+									b = 1,
+									a = 1,
+								},
+								shadow = {
+									isEnabled = false,
+									offset = {
+										x = 2,
+										y = -2,
+									},
+									color = {
+										r = 0,
+										g = 0,
+										b = 0,
+										a = 1,
+									},
+								},
+							},
+						},
+						timetext = {
+							isDisplayText = true,
+							justify = "RIGHT",
+							x = -5,
+							y = 0,
+							font = {
+								name = "Friz Quadrata TT",
+								size = 12,
+								flag = "OUTLINE",
+								color = {
+									r = 1,
+									g = 1,
+									b = 1,
+									a = 1,
+								},
+								shadow = {
+									isEnabled = false,
+									offset = {
+										x = 2,
+										y = -2,
+									},
+									color = {
+										r = 0,
+										g = 0,
+										b = 0,
+										a = 1,
+									},
+								},
+							},
+						},
+						background = {
+							texture = 'Flat',
+							color = {
+								r = 0,
+								g = 0,
+								b = 0,
+								a = 0.5,
+							},
+						},
+						timerBar = {
+							texture = 'Blizzard',
 							color = {
 								r = 1,
 								g = 1,
 								b = 1,
-								a = 1,
-							},
-							shadow = {
-								isEnabled = false,
-								offset = {
-									x = 2,
-									y = -2,
-								},
-								color = {
-									r = 0,
-									g = 0,
-									b = 0,
-									a = 1,
-								},
+								a = 0.35,
 							},
 						},
-					},
-					timetext = {
-						isDisplayText = true,
-						justify = "RIGHT",
-						x = -5,
-						y = 0,
-						font = {
-							name = "Friz Quadrata TT",
-							size = 12,
-							flag = "OUTLINE",
+						foreground = {
+							texture = 'Fourths',
 							color = {
-								r = 1,
-								g = 1,
+								r = 0.66,
+								g = 0.49,
 								b = 1,
 								a = 1,
 							},
-							shadow = {
-								isEnabled = false,
-								offset = {
-									x = 2,
-									y = -2,
-								},
-								color = {
-									r = 0,
-									g = 0,
-									b = 0,
-									a = 1,
-								},
-							},
 						},
-					},
-					background = {
-						texture = 'Flat',
-						color = {
-							r = 0,
-							g = 0,
-							b = 0,
-							a = 0.5,
+						layout = {
+							width = 260,
+							height = 21,
+							point = "CENTER",
+							relativeTo = 'AuraBase',
+							relativePoint = "CENTER",
+							x = 0,
+							y = -110,
+							strata = "LOW",
 						},
+						alphaCombat = 1,
+						alphaOoC = 0,
+						alphaTar = 0.5,
 					},
-					timerBar = {
-						texture = 'Blizzard',
-						color = {
-							r = 1,
-							g = 1,
-							b = 1,
-							a = 0.35,
-						},
-					},
-					foreground = {
-						texture = 'Fourths',
-						color = {
-							r = 0.66,
-							g = 0.49,
-							b = 1,
-							a = 1,
-						},
-					},
-					layout = {
-						width = 260,
-						height = 21,
-						point = "CENTER",
-						relativeTo = 'AuraBase',
-						relativePoint = "CENTER",
-						x = 0,
-						y = -110,
-						strata = "LOW",
-					},
-					alphaCombat = 1,
-					alphaOoC = 0,
-					alphaTar = 0.5,
 				},
 			},
 			[2] = {
 				defaultBar = false,
-				["MaelstromBar"] = {
-					adjust = {
-						isEnabled = false,
-						showBG = false,
-					},
-					isEnabled = true,
-					animate = true,
-					text = {
-						isDisplayText = true,
+				bars = {
+					["MaelstromBar"] = {
+						adjust = {
+							isEnabled = false,
+							showBG = false,
+						},
+						isEnabled = true,
+						animate = true,
+						text = {
+							isDisplayText = true,
+							justify = "CENTER",
+							x = 0,
+							y = 0,
+							font = {
+								name = "Friz Quadrata TT",
+								size = 12,
+								flag = "OUTLINE",
+								color = {
+									r = 1,
+									g = 1,
+									b = 1,
+									a = 1,
+								},
+								shadow = {
+									isEnabled = false,
+									offset = {
+										x = 2,
+										y = -2,
+									},
+									color = {
+										r = 0,
+										g = 0,
+										b = 0,
+										a = 1,
+									},
+								},
+							},
+						},
+						background = {
+							texture = 'Flat',
+							color = {
+								r = 0,
+								g = 0,
+								b = 0,
+								a = 0.5,
+							},
+						},
+						foreground = {
+							texture = 'Fifths',
+							color = {
+								r = 0,
+								g = 0.5,
+								b = 1,
+								a = 1,
+							},
+						},
+						layout = {
+							width = 260,
+							height = 21,
+							point = "CENTER",
+							relativeTo = 'AuraBase',
+							relativePoint = "CENTER",
+							x = 0,
+							y = -139,
+							strata = "LOW",
+						},
+						attachToHealth = {
+							isAttached = true,
+							x = 0,
+							y = 0,
+							point = "TOP",
+						},
 						justify = "CENTER",
-						x = 0,
-						y = 0,
-						font = {
-							name = "Friz Quadrata TT",
-							size = 12,
-							flag = "OUTLINE",
-							color = {
-								r = 1,
-								g = 1,
-								b = 1,
-								a = 1,
-							},
-							shadow = {
-								isEnabled = false,
-								offset = {
-									x = 2,
-									y = -2,
-								},
-								color = {
-									r = 0,
-									g = 0,
-									b = 0,
-									a = 1,
-								},
-							},
+						threshold = 90,
+						alphaCombat = 1,
+						alphaOoC = 0,
+						alphaTar = 0.5,
+					},
+					["CastBar"] = {
+						adjust = {
+							isEnabled = false,
+							showBG = false,
 						},
-					},
-					background = {
-						texture = 'Flat',
-						color = {
-							r = 0,
-							g = 0,
-							b = 0,
-							a = 0.5,
-						},
-					},
-					foreground = {
-						texture = 'Fifths',
-						color = {
-							r = 0,
-							g = 0.5,
-							b = 1,
-							a = 1,
-						},
-					},
-					layout = {
-						width = 260,
-						height = 21,
-						point = "CENTER",
-						relativeTo = 'AuraBase',
-						relativePoint = "CENTER",
-						x = 0,
-						y = -139,
-						strata = "LOW",
-					},
-					attachToHealth = {
-						isAttached = true,
-						x = 0,
-						y = 0,
-						point = "TOP",
-					},
-					justify = "CENTER",
-					threshold = 90,
-					alphaCombat = 1,
-					alphaOoC = 0,
-					alphaTar = 0.5,
-				},
-				["CastBar"] = {
-					adjust = {
-						isEnabled = false,
-						showBG = false,
-					},
-					isEnabled = true,
-					nametext = {
-						isDisplayText = true,
-						justify = "LEFT",
-						x = 5,
-						y = 0,
-						font = {
-							name = "Friz Quadrata TT",
-							size = 10,
-							flag = "OUTLINE",
-							color = {
-								r = 1,
-								g = 1,
-								b = 1,
-								a = 1,
-							},
-							shadow = {
-								isEnabled = false,
-								offset = {
-									x = 2,
-									y = -2,
-								},
-								color = {
-									r = 0,
-									g = 0,
-									b = 0,
-									a = 1,
-								},
-							},
-						},
-					},
-					timetext = {
-						isDisplayText = true,
-						justify = "RIGHT",
-						x = -5,
-						y = 0,
-						font = {
-							name = "Friz Quadrata TT",
-							size = 10,
-							flag = "OUTLINE",
-							color = {
-								r = 1,
-								g = 1,
-								b = 1,
-								a = 1,
-							},
-							shadow = {
-								isEnabled = false,
-								offset = {
-									x = 2,
-									y = -2,
-								},
-								color = {
-									r = 0,
-									g = 0,
-									b = 0,
-									a = 1,
-								},
-							},
-						},
-					},
-					background = {
-						texture = 'Flat',
-						color = {
-							r = 0,
-							g = 0,
-							b = 0,
-							a = 0.5,
-						},
-					},
-					icon = {
 						isEnabled = true,
-						justify = "LEFT",
-					},
-					spark = true,
-					foreground = {
-						texture = 'Glamour2',
-						color = {
-							r = 1,
-							g = 0.85,
-							b = 0,
-							a = 1,
-						},
-					},
-					layout = {
-						width = 260,
-						height = 13,
-						point = "CENTER",
-						relativeTo = 'AuraBase',
-						relativePoint = "CENTER",
-						x = 0,
-						y = -155,
-						strata = "LOW",
-					},
-					alphaCombat = 1,
-					alphaOoC = 1,
-				},
-				["ChannelBar"] = {
-					adjust = {
-						isEnabled = false,
-						showBG = false,
-					},
-					isEnabled = true,
-					selectedText = 'Name Text',
-					nametext = {
-						isDisplayText = true,
-						justify = "LEFT",
-						x = 5,
-						y = 0,
-						font = {
-							name = "Friz Quadrata TT",
-							size = 10,
-							flag = "OUTLINE",
-							color = {
-								r = 1,
-								g = 1,
-								b = 1,
-								a = 1,
-							},
-							shadow = {
-								isEnabled = false,
-								offset = {
-									x = 2,
-									y = -2,
-								},
+						nametext = {
+							isDisplayText = true,
+							justify = "LEFT",
+							x = 5,
+							y = 0,
+							font = {
+								name = "Friz Quadrata TT",
+								size = 10,
+								flag = "OUTLINE",
 								color = {
-									r = 0,
-									g = 0,
-									b = 0,
+									r = 1,
+									g = 1,
+									b = 1,
 									a = 1,
 								},
+								shadow = {
+									isEnabled = false,
+									offset = {
+										x = 2,
+										y = -2,
+									},
+									color = {
+										r = 0,
+										g = 0,
+										b = 0,
+										a = 1,
+									},
+								},
 							},
 						},
-					},
-					timetext = {
-						isDisplayText = true,
-						justify = "RIGHT",
-						x = -5,
-						y = 0,
-						font = {
-							name = "Friz Quadrata TT",
-							size = 10,
-							flag = "OUTLINE",
-							color = {
-								r = 1,
-								g = 1,
-								b = 1,
-								a = 1,
-							},
-							shadow = {
-								isEnabled = false,
-								offset = {
-									x = 2,
-									y = -2,
-								},
+						timetext = {
+							isDisplayText = true,
+							justify = "RIGHT",
+							x = -5,
+							y = 0,
+							font = {
+								name = "Friz Quadrata TT",
+								size = 10,
+								flag = "OUTLINE",
 								color = {
-									r = 0,
-									g = 0,
-									b = 0,
+									r = 1,
+									g = 1,
+									b = 1,
 									a = 1,
 								},
+								shadow = {
+									isEnabled = false,
+									offset = {
+										x = 2,
+										y = -2,
+									},
+									color = {
+										r = 0,
+										g = 0,
+										b = 0,
+										a = 1,
+									},
+								},
 							},
 						},
-					},
-					background = {
-						texture = 'Flat',
-						color = {
-							r = 0,
-							g = 0,
-							b = 0,
-							a = 0.5,
+						background = {
+							texture = 'Flat',
+							color = {
+								r = 0,
+								g = 0,
+								b = 0,
+								a = 0.5,
+							},
 						},
+						icon = {
+							isEnabled = true,
+							justify = "LEFT",
+						},
+						spark = true,
+						foreground = {
+							texture = 'Glamour2',
+							color = {
+								r = 1,
+								g = 0.85,
+								b = 0,
+								a = 1,
+							},
+						},
+						layout = {
+							width = 260,
+							height = 13,
+							point = "CENTER",
+							relativeTo = 'AuraBase',
+							relativePoint = "CENTER",
+							x = 0,
+							y = -155,
+							strata = "LOW",
+						},
+						alphaCombat = 1,
+						alphaOoC = 1,
 					},
-					icon = {
+					["ChannelBar"] = {
+						adjust = {
+							isEnabled = false,
+							showBG = false,
+						},
 						isEnabled = true,
-						justify = "LEFT",
-					},
-					spark = true,
-					foreground = {
-						texture = 'Glamour2',
-						color = {
-							r = 1,
-							g = 0.85,
-							b = 0,
-							a = 1,
+						selectedText = 'Name Text',
+						nametext = {
+							isDisplayText = true,
+							justify = "LEFT",
+							x = 5,
+							y = 0,
+							font = {
+								name = "Friz Quadrata TT",
+								size = 10,
+								flag = "OUTLINE",
+								color = {
+									r = 1,
+									g = 1,
+									b = 1,
+									a = 1,
+								},
+								shadow = {
+									isEnabled = false,
+									offset = {
+										x = 2,
+										y = -2,
+									},
+									color = {
+										r = 0,
+										g = 0,
+										b = 0,
+										a = 1,
+									},
+								},
+							},
 						},
+						timetext = {
+							isDisplayText = true,
+							justify = "RIGHT",
+							x = -5,
+							y = 0,
+							font = {
+								name = "Friz Quadrata TT",
+								size = 10,
+								flag = "OUTLINE",
+								color = {
+									r = 1,
+									g = 1,
+									b = 1,
+									a = 1,
+								},
+								shadow = {
+									isEnabled = false,
+									offset = {
+										x = 2,
+										y = -2,
+									},
+									color = {
+										r = 0,
+										g = 0,
+										b = 0,
+										a = 1,
+									},
+								},
+							},
+						},
+						background = {
+							texture = 'Flat',
+							color = {
+								r = 0,
+								g = 0,
+								b = 0,
+								a = 0.5,
+							},
+						},
+						icon = {
+							isEnabled = true,
+							justify = "LEFT",
+						},
+						spark = true,
+						foreground = {
+							texture = 'Glamour2',
+							color = {
+								r = 1,
+								g = 0.85,
+								b = 0,
+								a = 1,
+							},
+						},
+						layout = {
+							width = 260,
+							height = 13,
+							point = "CENTER",
+							relativeTo = 'AuraBase',
+							relativePoint = "CENTER",
+							x = 0,
+							y = -155,
+							strata = "LOW",
+						},
+						alphaCombat = 1,
+						alphaOoC = 1,
 					},
-					layout = {
-						width = 260,
-						height = 13,
-						point = "CENTER",
-						relativeTo = 'AuraBase',
-						relativePoint = "CENTER",
-						x = 0,
-						y = -155,
-						strata = "LOW",
-					},
-					alphaCombat = 1,
-					alphaOoC = 1,
 				},
 			},
 			[3] = {
 				defaultBar = false,
-				["ManaBar"] = {
-					adjust = {
-						isEnabled = false,
-						showBG = false,
-					},
-					isEnabled = true,
-					text = {
-						isDisplayText = true,
-						justify = "CENTER",
-						x = 0,
-						y = 0,
-						font = {
-							name = "Friz Quadrata TT",
-							size = 12,
-							flag = "OUTLINE",
-							color = {
-								r = 1,
-								g = 1,
-								b = 1,
-								a = 1,
-							},
-							shadow = {
-								isEnabled = false,
-								offset = {
-									x = 2,
-									y = -2,
-								},
-								color = {
-									r = 0,
-									g = 0,
-									b = 0,
-									a = 1,
-								},
-							},
+				bars = {
+					["ManaBar"] = {
+						adjust = {
+							isEnabled = false,
+							showBG = false,
 						},
-					},
-					background = {
-						texture = 'Flat',
-						color = {
-							r = 0,
-							g = 0,
-							b = 0,
-							a = 0.5,
-						},
-					},
-					foreground = {
-						texture = 'Fifths',
-						color = {
-							r = 0,
-							g = 0.5,
-							b = 1,
-							a = 1,
-						},
-					},
-					layout = {
-						width = 260,
-						height = 21,
-						point = "CENTER",
-						relativeTo = 'AuraBase',
-						relativePoint = "CENTER",
-						x = 0,
-						y = -139,
-						strata = "LOW",
-					},
-					precision = "Long",
-					grouping = true,
-					alphaCombat = 1,
-					alphaOoC = 0,
-					alphaTar = 0.5,
-				},
-				["CastBar"] = {
-					adjust = {
-						isEnabled = false,
-						showBG = false,
-					},
-					isEnabled = true,
-					selectedText = 'Name Text',
-					nametext = {
-						isDisplayText = true,
-						justify = "LEFT",
-						x = 5,
-						y = 0,
-						font = {
-							name = "Friz Quadrata TT",
-							size = 10,
-							flag = "OUTLINE",
-							color = {
-								r = 1,
-								g = 1,
-								b = 1,
-								a = 1,
-							},
-							shadow = {
-								isEnabled = false,
-								offset = {
-									x = 2,
-									y = -2,
-								},
-								color = {
-									r = 0,
-									g = 0,
-									b = 0,
-									a = 1,
-								},
-							},
-						},
-					},
-					timetext = {
-						isDisplayText = true,
-						justify = "RIGHT",
-						x = -5,
-						y = 0,
-						font = {
-							name = "Friz Quadrata TT",
-							size = 10,
-							flag = "OUTLINE",
-							color = {
-								r = 1,
-								g = 1,
-								b = 1,
-								a = 1,
-							},
-							shadow = {
-								isEnabled = false,
-								offset = {
-									x = 2,
-									y = -2,
-								},
-								color = {
-									r = 0,
-									g = 0,
-									b = 0,
-									a = 1,
-								},
-							},
-						},
-					},
-					background = {
-						texture = 'Flat',
-						color = {
-							r = 0,
-							g = 0,
-							b = 0,
-							a = 0.5,
-						},
-					},
-					icon = {
 						isEnabled = true,
-						justify = "LEFT",
-					},
-					spark = true,
-					foreground = {
-						texture = 'Glamour2',
-						color = {
-							r = 1,
-							g = 0.85,
-							b = 0,
-							a = 1,
+						text = {
+							isDisplayText = true,
+							justify = "CENTER",
+							x = 0,
+							y = 0,
+							font = {
+								name = "Friz Quadrata TT",
+								size = 12,
+								flag = "OUTLINE",
+								color = {
+									r = 1,
+									g = 1,
+									b = 1,
+									a = 1,
+								},
+								shadow = {
+									isEnabled = false,
+									offset = {
+										x = 2,
+										y = -2,
+									},
+									color = {
+										r = 0,
+										g = 0,
+										b = 0,
+										a = 1,
+									},
+								},
+							},
 						},
-					},
-					layout = {
-						width = 260,
-						height = 13,
-						point = "CENTER",
-						relativeTo = 'AuraBase',
-						relativePoint = "CENTER",
-						x = 0,
-						y = -155,
-						strata = "LOW",
-					},
-					alphaCombat = 1,
-					alphaOoC = 1,
-				},
-				["ChannelBar"] = {
-					adjust = {
-						isEnabled = false,
-						showBG = false,
-					},
-					isEnabled = true,
-					selectedText = 'Name Text',
-					nametext = {
-						isDisplayText = true,
-						justify = "LEFT",
-						x = 5,
-						y = 0,
-						font = {
-							name = "Friz Quadrata TT",
-							size = 10,
-							flag = "OUTLINE",
+						background = {
+							texture = 'Flat',
 							color = {
-								r = 1,
-								g = 1,
+								r = 0,
+								g = 0,
+								b = 0,
+								a = 0.5,
+							},
+						},
+						foreground = {
+							texture = 'Fifths',
+							color = {
+								r = 0,
+								g = 0.5,
 								b = 1,
 								a = 1,
 							},
-							shadow = {
-								isEnabled = false,
-								offset = {
-									x = 2,
-									y = -2,
-								},
-								color = {
-									r = 0,
-									g = 0,
-									b = 0,
-									a = 1,
-								},
-							},
 						},
-					},
-					timetext = {
-						isDisplayText = true,
-						justify = "RIGHT",
-						x = -5,
-						y = 0,
-						font = {
-							name = "Friz Quadrata TT",
-							size = 10,
-							flag = "OUTLINE",
-							color = {
-								r = 1,
-								g = 1,
-								b = 1,
-								a = 1,
-							},
-							shadow = {
-								isEnabled = false,
-								offset = {
-									x = 2,
-									y = -2,
-								},
-								color = {
-									r = 0,
-									g = 0,
-									b = 0,
-									a = 1,
-								},
-							},
+						layout = {
+							width = 260,
+							height = 21,
+							point = "CENTER",
+							relativeTo = 'AuraBase',
+							relativePoint = "CENTER",
+							x = 0,
+							y = -139,
+							strata = "LOW",
 						},
+						precision = "Long",
+						grouping = true,
+						alphaCombat = 1,
+						alphaOoC = 0,
+						alphaTar = 0.5,
 					},
-					background = {
-						texture = 'Flat',
-						color = {
-							r = 0,
-							g = 0,
-							b = 0,
-							a = 0.5,
+					["CastBar"] = {
+						adjust = {
+							isEnabled = false,
+							showBG = false,
 						},
-					},
-					icon = {
 						isEnabled = true,
-						justify = "LEFT",
-					},
-					spark = true,
-					foreground = {
-						texture = 'Glamour2',
-						color = {
-							r = 1,
-							g = 0.85,
-							b = 0,
-							a = 1,
+						selectedText = 'Name Text',
+						nametext = {
+							isDisplayText = true,
+							justify = "LEFT",
+							x = 5,
+							y = 0,
+							font = {
+								name = "Friz Quadrata TT",
+								size = 10,
+								flag = "OUTLINE",
+								color = {
+									r = 1,
+									g = 1,
+									b = 1,
+									a = 1,
+								},
+								shadow = {
+									isEnabled = false,
+									offset = {
+										x = 2,
+										y = -2,
+									},
+									color = {
+										r = 0,
+										g = 0,
+										b = 0,
+										a = 1,
+									},
+								},
+							},
 						},
+						timetext = {
+							isDisplayText = true,
+							justify = "RIGHT",
+							x = -5,
+							y = 0,
+							font = {
+								name = "Friz Quadrata TT",
+								size = 10,
+								flag = "OUTLINE",
+								color = {
+									r = 1,
+									g = 1,
+									b = 1,
+									a = 1,
+								},
+								shadow = {
+									isEnabled = false,
+									offset = {
+										x = 2,
+										y = -2,
+									},
+									color = {
+										r = 0,
+										g = 0,
+										b = 0,
+										a = 1,
+									},
+								},
+							},
+						},
+						background = {
+							texture = 'Flat',
+							color = {
+								r = 0,
+								g = 0,
+								b = 0,
+								a = 0.5,
+							},
+						},
+						icon = {
+							isEnabled = true,
+							justify = "LEFT",
+						},
+						spark = true,
+						foreground = {
+							texture = 'Glamour2',
+							color = {
+								r = 1,
+								g = 0.85,
+								b = 0,
+								a = 1,
+							},
+						},
+						layout = {
+							width = 260,
+							height = 13,
+							point = "CENTER",
+							relativeTo = 'AuraBase',
+							relativePoint = "CENTER",
+							x = 0,
+							y = -155,
+							strata = "LOW",
+						},
+						alphaCombat = 1,
+						alphaOoC = 1,
 					},
-					layout = {
-						width = 260,
-						height = 13,
-						point = "CENTER",
-						relativeTo = 'AuraBase',
-						relativePoint = "CENTER",
-						x = 0,
-						y = -155,
-						strata = "LOW",
+					["ChannelBar"] = {
+						adjust = {
+							isEnabled = false,
+							showBG = false,
+						},
+						isEnabled = true,
+						selectedText = 'Name Text',
+						nametext = {
+							isDisplayText = true,
+							justify = "LEFT",
+							x = 5,
+							y = 0,
+							font = {
+								name = "Friz Quadrata TT",
+								size = 10,
+								flag = "OUTLINE",
+								color = {
+									r = 1,
+									g = 1,
+									b = 1,
+									a = 1,
+								},
+								shadow = {
+									isEnabled = false,
+									offset = {
+										x = 2,
+										y = -2,
+									},
+									color = {
+										r = 0,
+										g = 0,
+										b = 0,
+										a = 1,
+									},
+								},
+							},
+						},
+						timetext = {
+							isDisplayText = true,
+							justify = "RIGHT",
+							x = -5,
+							y = 0,
+							font = {
+								name = "Friz Quadrata TT",
+								size = 10,
+								flag = "OUTLINE",
+								color = {
+									r = 1,
+									g = 1,
+									b = 1,
+									a = 1,
+								},
+								shadow = {
+									isEnabled = false,
+									offset = {
+										x = 2,
+										y = -2,
+									},
+									color = {
+										r = 0,
+										g = 0,
+										b = 0,
+										a = 1,
+									},
+								},
+							},
+						},
+						background = {
+							texture = 'Flat',
+							color = {
+								r = 0,
+								g = 0,
+								b = 0,
+								a = 0.5,
+							},
+						},
+						icon = {
+							isEnabled = true,
+							justify = "LEFT",
+						},
+						spark = true,
+						foreground = {
+							texture = 'Glamour2',
+							color = {
+								r = 1,
+								g = 0.85,
+								b = 0,
+								a = 1,
+							},
+						},
+						layout = {
+							width = 260,
+							height = 13,
+							point = "CENTER",
+							relativeTo = 'AuraBase',
+							relativePoint = "CENTER",
+							x = 0,
+							y = -155,
+							strata = "LOW",
+						},
+						alphaCombat = 1,
+						alphaOoC = 1,
 					},
-					alphaCombat = 1,
-					alphaOoC = 1,
-				},
-				["EarthenWallTotemBar"] = {
-					adjust = {
-						isEnabled = false,
-						showBG = false,
-						showTimer = false,
-					},
-					isEnabled = true,
-					data = {
-						spellID = 198838,
-						start = 0,
-						duration = 15,
-						GUID = '',
-						health = 0,
-						damage = 0,
-					},
-					healthtext = {
-						isDisplayText = true,
-						justify = "LEFT",
-						x = 5,
-						y = 0,
-						font = {
-							name = "Friz Quadrata TT",
-							size = 12,
-							flag = "OUTLINE",
+					["EarthenWallTotemBar"] = {
+						adjust = {
+							isEnabled = false,
+							showBG = false,
+							showTimer = false,
+						},
+						isEnabled = true,
+						data = {
+							spellID = 198838,
+							start = 0,
+							duration = 15,
+							GUID = '',
+							health = 0,
+							damage = 0,
+						},
+						healthtext = {
+							isDisplayText = true,
+							justify = "LEFT",
+							x = 5,
+							y = 0,
+							font = {
+								name = "Friz Quadrata TT",
+								size = 12,
+								flag = "OUTLINE",
+								color = {
+									r = 1,
+									g = 1,
+									b = 1,
+									a = 1,
+								},
+								shadow = {
+									isEnabled = false,
+									offset = {
+										x = 2,
+										y = -2,
+									},
+									color = {
+										r = 0,
+										g = 0,
+										b = 0,
+										a = 1,
+									},
+								},
+							},
+						},
+						timetext = {
+							isDisplayText = true,
+							justify = "RIGHT",
+							x = -5,
+							y = 0,
+							font = {
+								name = "Friz Quadrata TT",
+								size = 12,
+								flag = "OUTLINE",
+								color = {
+									r = 1,
+									g = 1,
+									b = 1,
+									a = 1,
+								},
+								shadow = {
+									isEnabled = false,
+									offset = {
+										x = 2,
+										y = -2,
+									},
+									color = {
+										r = 0,
+										g = 0,
+										b = 0,
+										a = 1,
+									},
+								},
+							},
+						},
+						background = {
+							texture = 'Flat',
+							color = {
+								r = 0,
+								g = 0,
+								b = 0,
+								a = 0.5,
+							},
+						},
+						timerBar = {
+							texture = 'Blizzard',
 							color = {
 								r = 1,
 								g = 1,
 								b = 1,
-								a = 1,
-							},
-							shadow = {
-								isEnabled = false,
-								offset = {
-									x = 2,
-									y = -2,
-								},
-								color = {
-									r = 0,
-									g = 0,
-									b = 0,
-									a = 1,
-								},
+								a = 0.35,
 							},
 						},
-					},
-					timetext = {
-						isDisplayText = true,
-						justify = "RIGHT",
-						x = -5,
-						y = 0,
-						font = {
-							name = "Friz Quadrata TT",
-							size = 12,
-							flag = "OUTLINE",
+						foreground = {
+							texture = 'Fifths',
 							color = {
-								r = 1,
-								g = 1,
+								r = 0.66,
+								g = 0.49,
 								b = 1,
 								a = 1,
 							},
-							shadow = {
-								isEnabled = false,
-								offset = {
-									x = 2,
-									y = -2,
-								},
-								color = {
-									r = 0,
-									g = 0,
-									b = 0,
-									a = 1,
-								},
+						},
+						layout = {
+							width = 260,
+							height = 21,
+							point = "CENTER",
+							relativeTo = 'AuraBase',
+							relativePoint = "CENTER",
+							x = 0,
+							y = -110,
+							strata = "LOW",
+						},
+						alphaCombat = 1,
+						alphaOoC = 0,
+						alphaTar = 0.5,
+					},
+					["TidalWavesBar"] = {
+						TidalWaveTime = 5,
+						combatDisplay = "Always",
+						OoCDisplay = "Target & On Heal",
+						OoCTime = 5,
+						emptyColor = {
+							r = 1,
+							g = 0,
+							b = 0,
+							a = 1,
+						},
+						adjust = {
+							isEnabled = false,
+							showBG = false,
+						},
+						isEnabled = true,
+						animate = true,
+						background = {
+							texture = 'Flat',
+							color = {
+								r = 0,
+								g = 0,
+								b = 0,
+								a = 0.5,
 							},
 						},
-					},
-					background = {
-						texture = 'Flat',
-						color = {
-							r = 0,
-							g = 0,
-							b = 0,
-							a = 0.5,
+						foreground = {
+							texture = 'Halves',
+							color = {
+								r = 0.35,
+								g = 0.76,
+								b = 1,
+								a = 1,
+							},
 						},
-					},
-					timerBar = {
-						texture = 'Blizzard',
-						color = {
-							r = 1,
-							g = 1,
-							b = 1,
-							a = 0.35,
+						layout = {
+							width = 225,
+							height = 7,
+							point = 'CENTER',
+							relativeTo = 'AuraBase',
+							relativePoint = "CENTER",
+							x = 0,
+							y = -202,
+							strata = "LOW",
 						},
+						alphaCombat = 1,
+						alphaOoC = 0,
+						alphaTar = 0.5,
 					},
-					foreground = {
-						texture = 'Fifths',
-						color = {
-							r = 0.66,
-							g = 0.49,
-							b = 1,
-							a = 1,
-						},
-					},
-					layout = {
-						width = 260,
-						height = 21,
-						point = "CENTER",
-						relativeTo = 'AuraBase',
-						relativePoint = "CENTER",
-						x = 0,
-						y = -110,
-						strata = "LOW",
-					},
-					alphaCombat = 1,
-					alphaOoC = 0,
-					alphaTar = 0.5,
-				},
-				["TidalWavesBar"] = {
-					TidalWaveTime = 5,
-					combatDisplay = "Always",
-					OoCDisplay = "Target & On Heal",
-					OoCTime = 5,
-					emptyColor = {
-						r = 1,
-						g = 0,
-						b = 0,
-						a = 1,
-					},
-					adjust = {
-						isEnabled = false,
-						showBG = false,
-					},
-					isEnabled = true,
-					animate = true,
-					background = {
-						texture = 'Flat',
-						color = {
-							r = 0,
-							g = 0,
-							b = 0,
-							a = 0.5,
-						},
-					},
-					foreground = {
-						texture = 'Halves',
-						color = {
-							r = 0.35,
-							g = 0.76,
-							b = 1,
-							a = 1,
-						},
-					},
-					layout = {
-						width = 225,
-						height = 7,
-						point = 'CENTER',
-						relativeTo = 'AuraBase',
-						relativePoint = "CENTER",
-						x = 0,
-						y = -202,
-						strata = "LOW",
-					},
-					alphaCombat = 1,
-					alphaOoC = 0,
-					alphaTar = 0.5,
 				},
 			},
 		},
