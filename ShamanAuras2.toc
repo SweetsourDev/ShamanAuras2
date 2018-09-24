@@ -1,0 +1,20 @@
+## Interface: 80000
+## Title: Sweetsour's Shaman Auras 2
+## Notes: A full package of auras for all 3 Shaman specializations
+## Author: Sweetsour
+## Version: r1-alpha1
+## SavedVariables: SSA_db
+
+## OptionalDeps: Ace3, LibAboutPanel
+
+
+
+
+Libs\load_libraries.xml
+Media\load_media.xml
+Locales\load_locales.xml
+init.lua
+defaults.lua
+Core\load_core.xml
+Frames\load_frames.xml
+Modules\load_modules.xml
