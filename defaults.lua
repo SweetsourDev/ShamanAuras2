@@ -1026,7 +1026,7 @@ local defaults = {
 			}
 		},
 		layout = {
-			[1] = {
+			--[[[1] = {
 				auras = {
 					groupCount = 6,
 					groups = {
@@ -1090,7 +1090,7 @@ local defaults = {
 					width = 225,
 					height = 7,
 				},
-			},
+			},]]
 			defaults = {
 				--groupCount = 6,
 				--[[templates = {

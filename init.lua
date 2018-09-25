@@ -901,8 +901,7 @@ Frame:HookScript("OnEvent",function(self,event,...)
 	
 	if (event == "UNIT_SPELLCAST_SENT" or event == "UNIT_SPELLCAST_START" or event == "UNIT_SPELLCAST_CHANNEL_START") then
 		if (event == "UNIT_SPELLCAST_SENT") then
-			local db = Auras.db.char
-			local cd = db.elements[spec].cooldowns
+			local cd = Auras.db.char.auras[spec].cooldowns
 			
 			local start,duration = GetSpellCooldown(Auras:GetSpellName(546))
 
@@ -913,7 +912,6 @@ Frame:HookScript("OnEvent",function(self,event,...)
 				cd.interrupted = false
 			end
 		elseif (event == "UNIT_SPELLCAST_START") then
-			local db = Auras.db.char
 			local bar = Auras.db.char.statusbars[spec].bars.CastBar
 			
 			local spellName,_,texture,startTime,endTime = UnitCastingInfo('player')
