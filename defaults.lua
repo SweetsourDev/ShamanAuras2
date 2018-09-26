@@ -892,28 +892,6 @@ local groupDefaults = {
 					isAdjust = false,
 				},
 			},
-			--[[timerbars = {
-				[1] = {
-					barCount = 3,
-					name = "Buff Timers",
-					length = 175,
-					width = 17,
-					anchor = "LEFT",
-					orientation = "VERTICAL",
-					spacing = 10,
-					isAdjust = false,
-				},
-				[2] = {
-					barCount = 13,
-					name = "Utility Timers",
-					length = 175,
-					width = 17,
-					anchor = "RIGHT",
-					orientation = "VERTICAL",
-					spacing = 10,
-					isAdjust = false,
-				},
-			},]]
 		},
 		frames = {
 			auras = {
@@ -1012,11 +990,11 @@ local defaults = {
 		version = nil,
 		name = nil,
 		isMoveGrid = true,
-		cooldowns = {
+		--[[cooldowns = {
 			numbers = true,
 			sweep = true,
-		},
-		info = {
+		},]]
+		--[[info = {
 			totems = {
 				eShield = {
 				},
@@ -1024,7 +1002,7 @@ local defaults = {
 					absorb = 0,
 				}
 			}
-		},
+		},]]
 		layout = {
 			--[[[1] = {
 				auras = {
@@ -2827,7 +2805,7 @@ local defaults = {
 				},
 			},
 			defaults = {
-				cooldowns = {
+				--[[cooldowns = {
 					isPreview = false,
 					text = {
 						justify = "CENTER",
@@ -2872,8 +2850,8 @@ local defaults = {
 							},
 						},
 					},
-				},
-				statusbars = {
+				},]]
+				--[[statusbars = {
 					castBar = {
 						nametext = {
 							justify = "LEFT",
@@ -3421,8 +3399,8 @@ local defaults = {
 						alphaOoC = 0,
 						alphaTar = 0.5,
 					}
-				},
-				templates = {
+				},]]
+				--[[templates = {
 					auras = {
 						isEnabled = true,
 						point = "CENTER",
@@ -3443,9 +3421,9 @@ local defaults = {
 						width = 17,
 						height = 175,
 					},
-				},
+				},]]
 				[1] = {
-					frames = {
+					--[[frames = {
 						AuraBase = {
 							point = "CENTER",
 							relativeTo = nil,
@@ -3532,10 +3510,10 @@ local defaults = {
 							x = 0,
 							y = -110,
 						},
-					},
+					},]]
 				},
 				[2] = {
-					frames = {
+					--[[frames = {
 						AuraBase = {
 							point = "CENTER",
 							relativeTo = nil,
@@ -3622,10 +3600,10 @@ local defaults = {
 							x = 0,
 							y = -100,
 						},
-					},
+					},]]
 				},
 				[3] = {
-					frames = {
+					--[[frames = {
 						AuraBase = {
 							point = "CENTER",
 							relativeTo = nil,
@@ -3721,7 +3699,7 @@ local defaults = {
 							x = 0,
 							y = -275,
 						},
-					},
+					},]]
 				},
 			},
 		},		
@@ -4882,12 +4860,6 @@ local defaults = {
 				frames = {},
 				bars = {
 					["AncestralGuidanceBar"] = {
-						data = {
-							spellID = 108281,
-							start = 0,
-							duration = 10,
-							condition = function() return select(4,GetTalentInfo(5,2,1)) end,
-						},
 						layout = {
 							group = 1,
 							text = "Ancestral Guidance",
@@ -4905,12 +4877,6 @@ local defaults = {
 						isShared = false,
 					},
 					["AscendanceBar"] = {
-						data = {
-							spellID = 114050,
-							start = 0,
-							duration = 15,
-							condition = function() return select(4,GetTalentInfo(7,3,1)) end,
-						},
 						layout = {
 							group = 1,
 							text = "Ascendance",
@@ -4928,12 +4894,6 @@ local defaults = {
 						isShared = true,
 					},
 					["AstralShiftBar"] = {
-						data = {
-							spellID = 108271,
-							start = 0,
-							duration = 8,
-							condition = function() return IsSpellKnown(108271) end,
-						},
 						layout = {
 							group = 1,
 							text = "Astral Shift",
@@ -4951,12 +4911,6 @@ local defaults = {
 						isShared = true,
 					},
 					["BloodlustBar"] = {
-						data = {
-							spellID = 2825,
-							start = 0,
-							duration = 40,
-							condition = function() return true end,
-						},
 						layout = {
 							group = 1,
 							text = "Bloodlust",
@@ -4974,13 +4928,6 @@ local defaults = {
 						isShared = true,
 					},
 					["CounterstrikeTotemBar"] = {
-						data = {
-							spellID = 204331,
-							icon = 511726,
-							start = 0,
-							duration = 15,
-							condition = function() return select(10,GetPvpTalentInfoByID(3490)) and IsPvPZone() end,
-						},
 						layout = {
 							group = 2,
 							text = "Counterstrike Totem",
@@ -4998,14 +4945,6 @@ local defaults = {
 						isShared = true,
 					},
 					["EarthElementalBar"] = {
-						data = {
-							spellID = 188616,
-							icon = 136024,
-							start = 0,
-							duration = 60,
-							GUID = '',
-							condition = function() return IsSpellKnown(198103) end,
-						},
 						layout = {
 							group = 2,
 							text = "Earth Elemental",
@@ -5023,13 +4962,6 @@ local defaults = {
 						isShared = true,
 					},
 					["EarthbindTotemBar"] = {
-						data = {
-							spellID = 2484,
-							icon = 136102,
-							start = 0,
-							duration = 20,
-							condition = function() return IsSpellKnown(2484) end,
-						},
 						layout = {
 							group = 2,
 							text = "Earthbind Totem",
@@ -5047,12 +4979,6 @@ local defaults = {
 						isShared = true,
 					},
 					["ElementalBlastBarCrit"] = {
-						data = {
-							spellID = 118522,
-							start = 0,
-							duration = 10,
-							condition = function() return select(4,GetTalentInfo(1,3,1)) end,
-						},
 						layout = {
 							group = 1,
 							text = "Critical Strike",
@@ -5070,12 +4996,6 @@ local defaults = {
 						isShared = false,
 					},
 					["ElementalBlastBarHaste"] = {
-						data = {
-							spellID = 173183,
-							start = 0,
-							duration = 10,
-							condition = function() return select(4,GetTalentInfo(1,3,1)) end,
-						},
 						layout = {
 							group = 1,
 							text = "Haste",
@@ -5093,12 +5013,6 @@ local defaults = {
 						isShared = false,
 					},
 					["ElementalBlastBarMastery"] = {
-						data = {
-							spellID = 173184,
-							start = 0,
-							duration = 10,
-							condition = function() return select(4,GetTalentInfo(1,3,1)) end,
-						},
 						layout = {
 							group = 1,
 							text = "Mastery",
@@ -5116,14 +5030,6 @@ local defaults = {
 						isShared = false,
 					},
 					["EmberElementalBar"] = {
-						data = {
-							spellID = 275385,
-							icon = 135790,
-							start = 0,
-							duration = 30,
-							GUID = '',
-							condition = function() return not select(4,GetTalentInfo(4,2,1)) and IsSpellKnown(198067) end,
-						},
 						layout = {
 							group = 2,
 							text = "Ember Elemental",
@@ -5141,14 +5047,6 @@ local defaults = {
 						isShared = false,
 					},
 					["FireElementalBar"] = {
-						data = {
-							spellID = 188592,
-							icon = 135790,
-							start = 0,
-							duration = 30,
-							GUID = '',
-							condition = function() return not select(4,GetTalentInfo(4,2,1)) and IsSpellKnown(198067) end,
-						},
 						layout = {
 							group = 2,
 							text = "Fire Elemental",
@@ -5166,13 +5064,6 @@ local defaults = {
 						isShared = false,
 					},
 					["GroundingTotemBar"] = {
-						data = {
-							spellID = 204336,
-							icon = 136039,
-							start = 0,
-							duration = 3,
-							condition = function() return select(10,GetPvpTalentInfoByID(3620)) and IsPvPZone() end,
-						},
 						layout = {
 							group = 2,
 							text = "Grounding Totem",
@@ -5190,12 +5081,6 @@ local defaults = {
 						isShared = true,
 					},
 					["HeroismBar"] = {
-						data = {
-							spellID = 32182,
-							start = 0,
-							duration = 40,
-							condition = function() return true end,
-						},
 						layout = {
 							group = 1,
 							text = "Heroism",
@@ -5213,12 +5098,6 @@ local defaults = {
 						isShared = true,
 					},
 					["HexBar"] = {
-						data = {
-							spellID = 51514,
-							start = 0,
-							duration = 60,
-							condition = function() return IsSpellKnown(51514) end,
-						},
 						layout = {
 							group = 2,
 							text = "Hex",
@@ -5236,13 +5115,6 @@ local defaults = {
 						isShared = true,
 					},
 					["LiquidMagmaTotemBar"] = {
-						data = {
-							spellID = 192222,
-							icon = 971079,
-							start = 0,
-							duration = 15,
-							condition = function() return select(4,GetTalentInfo(4,3,1)) end,
-						},
 						layout = {
 							group = 2,
 							text = "Liquid Magma Totem",
@@ -5260,14 +5132,6 @@ local defaults = {
 						isShared = false,
 					},
 					["PrimalEarthElementalBar"] = {
-						data = {
-							spellID = 118323,
-							start = 0,
-							duration = 60,
-							GUID = '',
-							isPrimal = true,
-							condition = function() return select(4,GetTalentInfo(6,2,1)) end,
-						},
 						layout = {
 							group = 2,
 							text = "Primal Earth Elemental",
@@ -5285,14 +5149,6 @@ local defaults = {
 						isShared = false,
 					},
 					["PrimalFireElementalBar"] = {
-						data = {
-							spellID = 118291,
-							start = 0,
-							duration = 30,
-							GUID = '',
-							isPrimal = true,
-							condition = function() return select(4,GetTalentInfo(6,2,1)) end,
-						},
 						layout = {
 							group = 2,
 							text = "Primal Fire Elemental",
@@ -5310,14 +5166,6 @@ local defaults = {
 						isShared = false,
 					},
 					["PrimalStormElementalBar"] = {
-						data = {
-							spellID = 157319,
-							start = 0,
-							duration = 30,
-							GUID = '',
-							isPrimal = true,
-							condition = function() return select(4,GetTalentInfo(6,2,1)) and select(4,GetTalentInfo(4,2,1)) end,
-						},
 						layout = {
 							group = 2,
 							text = "Primal Storm Elemental",
@@ -5335,13 +5183,6 @@ local defaults = {
 						isShared = false,
 					},
 					["SkyfuryTotemBar"] = {
-						data = {
-							spellID = 204330,
-							icon = 135829,
-							start = 0,
-							duration = 15,
-							condition = function() return select(10,GetPvpTalentInfoByID(3488)) and IsPvPZone() end,
-						},
 						layout = {
 							group = 2,
 							text = "Skyfury Totem",
@@ -5359,14 +5200,6 @@ local defaults = {
 						isShared = true,
 					},
 					["StormElementalBar"] = {
-						data = {
-							spellID = 157299,
-							icon = 2065626,
-							start = 0,
-							duration = 30,
-							GUID = '',
-							condition = function() return select(4,GetTalentInfo(4,2,1)) end,
-						},
 						layout = {
 							group = 2,
 							text = "Storm Elemental",
@@ -5384,12 +5217,6 @@ local defaults = {
 						isShared = false,
 					},
 					["TimeWarpBar"] = {
-						data = {
-							spellID = 80353,
-							start = 0,
-							duration = 40,
-							condition = function() return true end,
-						},
 						layout = {
 							group = 1,
 							text = "Time Warp",
@@ -5407,13 +5234,6 @@ local defaults = {
 						isShared = true,
 					},
 					["TremorTotemBar"] = {
-						data = {
-							spellID = 8143,
-							icon = 136108,
-							start = 0,
-							duration = 10,
-							condition = function() return IsSpellKnown(8143) end,
-						},
 						layout = {
 							group = 2,
 							text = "Tremor Totem",
@@ -5431,13 +5251,6 @@ local defaults = {
 						isShared = true,
 					},
 					["WindRushTotemBar"] = {
-						data = {
-							spellID = 192077,
-							icon = 538576,
-							start = 0,
-							duration = 15,
-							condition = function() return select(4,GetTalentInfo(5,3,1)) end,
-						},
 						layout = {
 							group = 2,
 							text = "Wind Rush Totem",
@@ -5461,12 +5274,6 @@ local defaults = {
 				frames = {},
 				bars = {
 					["AscendanceBar"] = {
-						data = {
-							spellID = 114051,
-							start = 0,
-							duration = 15,
-							condition = function() return select(4,GetTalentInfo(7,3,1)) end,
-						},
 						layout = {
 							group = 1,
 							text = "Ascendance",
@@ -5484,12 +5291,6 @@ local defaults = {
 						isShared = true,
 					},
 					["AstralShiftBar"] = {
-						data = {
-							spellID = 108271,
-							start = 0,
-							duration = 8,
-							condition = function() return IsSpellKnown(108271) end,
-						},
 						layout = {
 							group = 1,
 							text = "Astral Shift",
@@ -5507,12 +5308,6 @@ local defaults = {
 						isShared = true,
 					},
 					["BloodlustBar"] = {
-						data = {
-							spellID = 2825,
-							start = 0,
-							duration = 40,
-							condition = function() return true end,
-						},
 						layout = {
 							group = 1,
 							text = "Bloodlust",
@@ -5530,13 +5325,6 @@ local defaults = {
 						isShared = true,
 					},
 					["CounterstrikeTotemBar"] = {
-						data = {
-							spellID = 204331,
-							icon = 511726,
-							start = 0,
-							duration = 15,
-							condition = function() return select(10,GetPvpTalentInfoByID(3489)) and IsPvPZone() end,
-						},
 						layout = {
 							group = 2,
 							text = "Counterstrike Totem",
@@ -5554,12 +5342,6 @@ local defaults = {
 						isShared = true,
 					},
 					["CrashLightningBar"] = {
-						data = {
-							spellID = 187878,
-							start = 0,
-							duration = 10,
-							condition = function() return IsSpellKnown(187874) end,
-						},
 						layout = {
 							group = 2,
 							text = "Crash Lightning",
@@ -5577,14 +5359,6 @@ local defaults = {
 						isShared = false,
 					},
 					["EarthElementalBar"] = {
-						data = {
-							spellID = 188616,
-							icon = 136024,
-							start = 0,
-							duration = 60,
-							GUID = '',
-							condition = function() return IsSpellKnown(198103) end,
-						},
 						layout = {
 							group = 2,
 							text = "Earth Elemental",
@@ -5602,13 +5376,6 @@ local defaults = {
 						isShared = true,
 					},
 					["EarthbindTotemBar"] = {
-						data = {
-							spellID = 2484,
-							icon = 136102,
-							start = 0,
-							duration = 20,
-							condition = function() return IsSpellKnown(2484) end,
-						},
 						layout = {
 							group = 2,
 							text = "Earthbind Totem",
@@ -5626,12 +5393,6 @@ local defaults = {
 						isShared = true,
 					},
 					["EarthenSpikeBar"] = {
-						data = {
-							spellID = 188089,
-							start = 0,
-							duration = 10,
-							condition = function() return select(4,GetTalentInfo(7,2,1)) end,
-						},
 						layout = {
 							group = 2,
 							text = "Earthen Spike",
@@ -5649,12 +5410,6 @@ local defaults = {
 						isShared = false,
 					},
 					["EtherealFormBar"] = {
-						data = {
-							spellID = 210918,
-							start = 0,
-							duration = 15,
-							condition = function() return select(10,GetPvpTalentInfoByID(1944)) and IsPvPZone() end,
-						},
 						layout = {
 							group = 2,
 							text = "Ethereal Form",
@@ -5672,14 +5427,6 @@ local defaults = {
 						isShared = false,
 					},
 					["FeralSpiritBar"] = {
-						data = {
-							spellID = 228562,
-							icon = 237577,
-							start = 0,
-							duration = 15,
-							lives = 2,
-							condition = function() return IsSpellKnown(51533) end,
-						},
 						layout = {
 							group = 1,
 							text = "Feral Spirit",
@@ -5697,12 +5444,6 @@ local defaults = {
 						isShared = false,
 					},
 					["FlametongueBar"] = {
-						data = {
-							spellID = 194084,
-							start = 0,
-							duration = 16,
-							condition = function() return IsSpellKnown(193796) end,
-						},
 						layout = {
 							group = 2,
 							text = "Flametongue",
@@ -5720,12 +5461,6 @@ local defaults = {
 						isShared = false,
 					},
 					["ForcefulWindsBar"] = {
-						data = {
-							spellID = 262652,
-							start = 0,
-							duration = 15,
-							condition = function() return select(4,GetTalentInfo(2,2,1)) end,
-						},
 						layout = {
 							group = 2,
 							text = "Forceful Winds",
@@ -5743,12 +5478,6 @@ local defaults = {
 						isShared = false,
 					},
 					["FrostbrandBar"] = {
-						data = {
-							spellID = 196834,
-							start = 0,
-							duration = 16,
-							condition = function() return IsSpellKnown(196834) end,
-						},
 						layout = {
 							group = 2,
 							text = "Frostbrand",
@@ -5766,13 +5495,6 @@ local defaults = {
 						isShared = false,
 					},
 					["GroundingTotemBar"] = {
-						data = {
-							spellID = 204336,
-							icon = 136039,
-							start = 0,
-							duration = 3,
-							condition = function() return select(10,GetPvpTalentInfoByID(3622)) and IsPvPZone() end,
-						},
 						layout = {
 							group = 2,
 							text = "Grounding Totem",
@@ -5790,12 +5512,6 @@ local defaults = {
 						isShared = true,
 					},
 					["HeroismBar"] = {
-						data = {
-							spellID = 32182,
-							start = 0,
-							duration = 40,
-							condition = function() return true end,
-						},
 						layout = {
 							group = 1,
 							text = "Heroism",
@@ -5813,12 +5529,6 @@ local defaults = {
 						isShared = true,
 					},
 					["HexBar"] = {
-						data = {
-							spellID = 51514,
-							start = 0,
-							duration = 60,
-							condition = function() return IsSpellKnown(51514) end,
-						},
 						layout = {
 							group = 2,
 							text = "Hex",
@@ -5836,13 +5546,6 @@ local defaults = {
 						isShared = true,
 					},
 					["SkyfuryTotemBar"] = {
-						data = {
-							spellID = 204330,
-							icon = 135829,
-							start = 0,
-							duration = 15,
-							condition = function() return select(10,GetPvpTalentInfoByID(3487)) and IsPvPZone() end,
-						},
 						layout = {
 							group = 2,
 							text = "Skyfury Totem",
@@ -5860,12 +5563,6 @@ local defaults = {
 						isShared = true,
 					},
 					["SpiritWalkBar"] = {
-						data = {
-							spellID = 58875,
-							start = 0,
-							duration = 8,
-							condition = function() return IsSpellKnown(58875) end,
-						},
 						layout = {
 							group = 2,
 							text = "Spirit Walk",
@@ -5883,12 +5580,6 @@ local defaults = {
 						isShared = false,
 					},
 					["TimeWarpBar"] = {
-						data = {
-							spellID = 80353,
-							start = 0,
-							duration = 40,
-							condition = function() return true end,
-						},
 						layout = {
 							group = 1,
 							text = "Time Warp",
@@ -5906,13 +5597,6 @@ local defaults = {
 						isShared = true,
 					},
 					["TremorTotemBar"] = {
-						data = {
-							spellID = 8143,
-							icon = 136108,
-							start = 0,
-							duration = 10,
-							condition = function() return IsSpellKnown(8143) end,
-						},
 						layout = {
 							group = 2,
 							text = "Tremor Totem",
@@ -5930,13 +5614,6 @@ local defaults = {
 						isShared = true,
 					},
 					["WindRushTotemBar"] = {
-						data = {
-							spellID = 192077,
-							icon = 538576,
-							start = 0,
-							duration = 15,
-							condition = function() return select(4,GetTalentInfo(5,3,1)) end,
-						},
 						layout = {
 							group = 2,
 							text = "Wind Rush Totem",
@@ -5960,13 +5637,6 @@ local defaults = {
 				frames = {},
 				bars = {
 					["AncestralProtectionTotemBar"] = {
-						data = {
-							spellID = 207399,
-							icon = 136080,
-							start = 0,
-							duration = 30,
-							condition = function() return select(4,GetTalentInfo(4,3,1)) end,
-						},
 						layout = {
 							group = 2,
 							text = "Ancestral Protection",
@@ -5984,12 +5654,6 @@ local defaults = {
 						isShared = false,
 					},
 					["AscendanceBar"] = {
-						data = {
-							spellID = 114052,
-							start = 0,
-							duration = 15,
-							condition = function() return select(4,GetTalentInfo(7,3,1)) end,
-						},
 						layout = {
 							group = 1,
 							text = "Ascendance",
@@ -6007,12 +5671,6 @@ local defaults = {
 						isShared = true,
 					},
 					["AstralShiftBar"] = {
-						data = {
-							spellID = 108271,
-							start = 0,
-							duration = 8,
-							condition = function() return IsSpellKnown(108271) end,
-						},
 						layout = {
 							group = 1,
 							text = "Astral Shift",
@@ -6030,12 +5688,6 @@ local defaults = {
 						isShared = true,
 					},
 					["BloodlustBar"] = {
-						data = {
-							spellID = 2825,
-							start = 0,
-							duration = 40,
-							condition = function() return true end,
-						},
 						layout = {
 							group = 1,
 							text = "Bloodlust",
@@ -6053,13 +5705,6 @@ local defaults = {
 						isShared = true,
 					},
 					["CloudburstTotemBar"] = {
-						data = {
-							spellID = 157153,
-							icon = 971076,
-							start = 0,
-							duration = 15,
-							condition = function() return select(4,GetTalentInfo(6,3,1)) end,
-						},
 						layout = {
 							group = 2,
 							text = "Cloudburst Totem",
@@ -6077,13 +5722,6 @@ local defaults = {
 						isShared = false,
 					},
 					["CounterstrikeTotemBar"] = {
-						data = {
-							spellID = 204331,
-							icon = 511726,
-							start = 0,
-							duration = 15,
-							condition = function() return select(10,GetPvpTalentInfoByID(708)) and IsPvPZone() end,
-						},
 						layout = {
 							group = 2,
 							text = "Counterstrike Totem",
@@ -6101,14 +5739,6 @@ local defaults = {
 						isShared = true,
 					},
 					["EarthElementalBar"] = {
-						data = {
-							spellID = 188616,
-							icon = 136024,
-							start = 0,
-							duration = 60,
-							GUID = '',
-							condition = function() return IsSpellKnown(198103) end,
-						},
 						layout = {
 							group = 2,
 							text = "Earth Elemental",
@@ -6126,13 +5756,6 @@ local defaults = {
 						isShared = true,
 					},
 					["EarthbindTotemBar"] = {
-						data = {
-							spellID = 2484,
-							icon = 136102,
-							start = 0,
-							duration = 20,
-							condition = function() return IsSpellKnown(2484) end,
-						},
 						layout = {
 							group = 2,
 							text = "Earthbind Totem",
@@ -6150,13 +5773,6 @@ local defaults = {
 						isShared = true,
 					},
 					["EarthgrabTotemBar"] = {
-						data = {
-							spellID = 51485,
-							icon = 136100,
-							start = 0,
-							duration = 20,
-							condition = function() return select(4,GetTalentInfo(3,2,1)) end,
-						},
 						layout = {
 							group = 2,
 							text = "Earthgrab Totem",
@@ -6174,13 +5790,6 @@ local defaults = {
 						isShared = false,
 					},
 					["GroundingTotemBar"] = {
-						data = {
-							spellID = 204336,
-							icon = 136039,
-							start = 0,
-							duration = 3,
-							condition = function() return select(10,GetPvpTalentInfoByID(715)) and IsPvPZone() end,
-						},
 						layout = {
 							group = 2,
 							text = "Grounding Totem",
@@ -6198,14 +5807,6 @@ local defaults = {
 						isShared = true,
 					},
 					["HealingStreamTotemBarOne"] = {
-						data = {
-							spellID = 5394,
-							icon = 135127,
-							start = 0,
-							duration = 15,
-							numTotems = 0,
-							condition = function() return IsSpellKnown(5394) end,
-						},
 						layout = {
 							group = 2,
 							text = "Healing Stream Totem",
@@ -6223,13 +5824,6 @@ local defaults = {
 						isShared = false,
 					},
 					["HealingStreamTotemBarTwo"] = {
-						data = {
-							spellID = 5394,
-							icon = 135127,
-							start = 0,
-							duration = 15,
-							condition = function() return IsSpellKnown(5394) end,
-						},
 						layout = {
 							group = 2,
 							text = "Healing Stream Totem",
@@ -6247,13 +5841,6 @@ local defaults = {
 						isShared = false,
 					},
 					["HealingTideTotemBar"] = {
-						data = {
-							spellID = 108280,
-							icon = 538569,
-							start = 0,
-							duration = 10,
-							condition = function() return IsSpellKnown(108280) end,
-						},
 						layout = {
 							group = 2,
 							text = "Healing Tide Totem",
@@ -6271,12 +5858,6 @@ local defaults = {
 						isShared = false,
 					},
 					["HeroismBar"] = {
-						data = {
-							spellID = 32182,
-							start = 0,
-							duration = 40,
-							condition = function() return true end,
-						},
 						layout = {
 							group = 1,
 							text = "Heroism",
@@ -6294,12 +5875,6 @@ local defaults = {
 						isShared = true,
 					},
 					["HexBar"] = {
-						data = {
-							spellID = 51514,
-							start = 0,
-							duration = 60,
-							condition = function() return IsSpellKnown(51514) end,
-						},
 						layout = {
 							group = 2,
 							text = "Hex",
@@ -6317,13 +5892,6 @@ local defaults = {
 						isShared = true,
 					},
 					["SkyfuryTotemBar"] = {
-						data = {
-							spellID = 204330,
-							icon = 135829,
-							start = 0,
-							duration = 15,
-							condition = function() return select(10,GetPvpTalentInfoByID(707)) and IsPvPZone() end,
-						},
 						layout = {
 							group = 2,
 							text = "Skyfury Totem",
@@ -6341,13 +5909,6 @@ local defaults = {
 						isShared = true,
 					},
 					["SpiritLinkTotemBar"] = {
-						data = {
-							spellID = 98008,
-							icon = 237586,
-							start = 0,
-							duration = 6,
-							condition = function() return IsSpellKnown(98008) end,
-						},
 						layout = {
 							group = 2,
 							text = "Spirit Link Totem",
@@ -6365,12 +5926,6 @@ local defaults = {
 						isShared = false,
 					},
 					["SpiritwalkersGraceBar"] = {
-						data = {
-							spellID = 79206,
-							start = 0,
-							duration = 15,
-							condition = function() return IsSpellKnown(79206) end,
-						},
 						layout = {
 							group = 1,
 							text = "Spiritwalkers Grace",
@@ -6388,12 +5943,6 @@ local defaults = {
 						isShared = false,
 					},
 					["TimeWarpBar"] = {
-						data = {
-							spellID = 80353,
-							start = 0,
-							duration = 40,
-							condition = function() return true end,
-						},
 						layout = {
 							group = 1,
 							text = "Time Warp",
@@ -6411,13 +5960,6 @@ local defaults = {
 						isShared = true,
 					},
 					["TremorTotemBar"] = {
-						data = {
-							spellID = 8143,
-							icon = 136108,
-							start = 0,
-							duration = 10,
-							condition = function() return IsSpellKnown(8143) end,
-						},
 						layout = {
 							group = 2,
 							text = "Tremor Totem",
@@ -6435,12 +5977,6 @@ local defaults = {
 						isShared = true,
 					},
 					["UnleashLifeBar"] = {
-						data = {
-							spellID = 73685,
-							start = 0,
-							duration = 10,
-							condition = function() return select(4,GetTalentInfo(1,3,1)) end,
-						},
 						layout = {
 							group = 1,
 							text = "Unleash Life",
@@ -6458,13 +5994,6 @@ local defaults = {
 						isShared = false,
 					},
 					["WindRushTotemBar"] = {
-						data = {
-							spellID = 192077,
-							iconID = 538576,
-							start = 0,
-							duration = 15,
-							condition = function() return select(4,GetTalentInfo(5,3,1)) end,
-						},
 						layout = {
 							group = 2,
 							text = "Wind Rush Totem",
@@ -6967,6 +6496,193 @@ local defaults = {
 						alphaTar = 0.5,
 					},
 				},
+				defaults = {
+					["MaelstromBar"] = {
+						adjust = {
+							isEnabled = false,
+							showBG = false,
+						},
+						isEnabled = true,
+						animate = true,
+						text = {
+							isDisplayText = true,
+							justify = "CENTER",
+							x = 0,
+							y = 0,
+							font = {
+								name = "Friz Quadrata TT",
+								size = 12,
+								flag = "OUTLINE",
+								color = {
+									r = 1,
+									g = 1,
+									b = 1,
+									a = 1,
+								},
+								shadow = {
+									isEnabled = false,
+									offset = {
+										x = 2,
+										y = -2,
+									},
+									color = {
+										r = 0,
+										g = 0,
+										b = 0,
+										a = 1,
+									},
+								},
+							},
+						},
+						background = {
+							texture = 'Flat',
+							color = {
+								r = 0,
+								g = 0,
+								b = 0,
+								a = 0.5,
+							},
+						},
+						foreground = {
+							texture = 'Fifths',
+							color = {
+								r = 0,
+								g = 0.5,
+								b = 1,
+								a = 1,
+							},
+						},
+						layout = {
+							width = 260,
+							height = 21,
+							point = "CENTER",
+							relativeTo = 'AuraBase',
+							relativePoint = "CENTER",
+							x = 0,
+							y = -139,
+							strata = "LOW",
+						},
+						attachToHealth = {
+							isAttached = true,
+							x = 0,
+							y = 0,
+							point = "TOP",
+						},
+						justify = "CENTER",
+						threshold = 90,
+						alphaCombat = 1,
+						alphaOoC = 0,
+						alphaTar = 0.5,
+					},
+					["IcefuryBar"] = {
+						adjust = {
+							isEnabled = false,
+							showBG = false,
+							showTimer = false,
+						},
+						isEnabled = true,
+						counttext = {
+							isDisplayText = true,
+							justify = "LEFT",
+							x = 5,
+							y = 0,
+							font = {
+								name = "Friz Quadrata TT",
+								size = 12,
+								flag = "OUTLINE",
+								color = {
+									r = 1,
+									g = 1,
+									b = 1,
+									a = 1,
+								},
+								shadow = {
+									isEnabled = false,
+									offset = {
+										x = 2,
+										y = -2,
+									},
+									color = {
+										r = 0,
+										g = 0,
+										b = 0,
+										a = 1,
+									},
+								},
+							},
+						},
+						timetext = {
+							isDisplayText = true,
+							justify = "RIGHT",
+							x = -5,
+							y = 0,
+							font = {
+								name = "Friz Quadrata TT",
+								size = 12,
+								flag = "OUTLINE",
+								color = {
+									r = 1,
+									g = 1,
+									b = 1,
+									a = 1,
+								},
+								shadow = {
+									isEnabled = false,
+									offset = {
+										x = 2,
+										y = -2,
+									},
+									color = {
+										r = 0,
+										g = 0,
+										b = 0,
+										a = 1,
+									},
+								},
+							},
+						},
+						background = {
+							texture = 'Flat',
+							color = {
+								r = 0,
+								g = 0,
+								b = 0,
+								a = 0.5,
+							},
+						},
+						timerBar = {
+							texture = 'Blizzard',
+							color = {
+								r = 1,
+								g = 1,
+								b = 1,
+								a = 0.35,
+							},
+						},
+						foreground = {
+							texture = 'Fourths',
+							color = {
+								r = 0.66,
+								g = 0.49,
+								b = 1,
+								a = 1,
+							},
+						},
+						layout = {
+							width = 260,
+							height = 21,
+							point = "CENTER",
+							relativeTo = 'AuraBase',
+							relativePoint = "CENTER",
+							x = 0,
+							y = -110,
+							strata = "LOW",
+						},
+						alphaCombat = 1,
+						alphaOoC = 0,
+						alphaTar = 0.5,
+					},
+				},
 			},
 			[2] = {
 				defaultBar = false,
@@ -7252,6 +6968,85 @@ local defaults = {
 						},
 						alphaCombat = 1,
 						alphaOoC = 1,
+					},
+				},
+				defaults = {
+					["MaelstromBar"] = {
+						adjust = {
+							isEnabled = false,
+							showBG = false,
+						},
+						isEnabled = true,
+						animate = true,
+						text = {
+							isDisplayText = true,
+							justify = "CENTER",
+							x = 0,
+							y = 0,
+							font = {
+								name = "Friz Quadrata TT",
+								size = 12,
+								flag = "OUTLINE",
+								color = {
+									r = 1,
+									g = 1,
+									b = 1,
+									a = 1,
+								},
+								shadow = {
+									isEnabled = false,
+									offset = {
+										x = 2,
+										y = -2,
+									},
+									color = {
+										r = 0,
+										g = 0,
+										b = 0,
+										a = 1,
+									},
+								},
+							},
+						},
+						background = {
+							texture = 'Flat',
+							color = {
+								r = 0,
+								g = 0,
+								b = 0,
+								a = 0.5,
+							},
+						},
+						foreground = {
+							texture = 'Fifths',
+							color = {
+								r = 0,
+								g = 0.5,
+								b = 1,
+								a = 1,
+							},
+						},
+						layout = {
+							width = 260,
+							height = 21,
+							point = "CENTER",
+							relativeTo = 'AuraBase',
+							relativePoint = "CENTER",
+							x = 0,
+							y = -139,
+							strata = "LOW",
+						},
+						attachToHealth = {
+							isAttached = true,
+							x = 0,
+							y = 0,
+							point = "TOP",
+						},
+						justify = "CENTER",
+						threshold = 90,
+						alphaCombat = 1,
+						alphaOoC = 0,
+						alphaTar = 0.5,
 					},
 				},
 			},
@@ -7700,7 +7495,452 @@ local defaults = {
 						alphaTar = 0.5,
 					},
 				},
+				defaults = {
+					["ManaBar"] = {
+						adjust = {
+							isEnabled = false,
+							showBG = false,
+						},
+						isEnabled = true,
+						text = {
+							isDisplayText = true,
+							justify = "CENTER",
+							x = 0,
+							y = 0,
+							font = {
+								name = "Friz Quadrata TT",
+								size = 12,
+								flag = "OUTLINE",
+								color = {
+									r = 1,
+									g = 1,
+									b = 1,
+									a = 1,
+								},
+								shadow = {
+									isEnabled = false,
+									offset = {
+										x = 2,
+										y = -2,
+									},
+									color = {
+										r = 0,
+										g = 0,
+										b = 0,
+										a = 1,
+									},
+								},
+							},
+						},
+						background = {
+							texture = 'Flat',
+							color = {
+								r = 0,
+								g = 0,
+								b = 0,
+								a = 0.5,
+							},
+						},
+						foreground = {
+							texture = 'Fifths',
+							color = {
+								r = 0,
+								g = 0.5,
+								b = 1,
+								a = 1,
+							},
+						},
+						layout = {
+							width = 260,
+							height = 21,
+							point = "CENTER",
+							relativeTo = 'AuraBase',
+							relativePoint = "CENTER",
+							x = 0,
+							y = -139,
+							strata = "LOW",
+						},
+						precision = "Long",
+						grouping = true,
+						alphaCombat = 1,
+						alphaOoC = 0,
+						alphaTar = 0.5,
+					},
+					["EarthenWallTotemBar"] = {
+						adjust = {
+							isEnabled = false,
+							showBG = false,
+							showTimer = false,
+						},
+						isEnabled = true,
+						data = {
+							spellID = 198838,
+							start = 0,
+							duration = 15,
+							GUID = '',
+							health = 0,
+							damage = 0,
+						},
+						healthtext = {
+							isDisplayText = true,
+							justify = "LEFT",
+							x = 5,
+							y = 0,
+							font = {
+								name = "Friz Quadrata TT",
+								size = 12,
+								flag = "OUTLINE",
+								color = {
+									r = 1,
+									g = 1,
+									b = 1,
+									a = 1,
+								},
+								shadow = {
+									isEnabled = false,
+									offset = {
+										x = 2,
+										y = -2,
+									},
+									color = {
+										r = 0,
+										g = 0,
+										b = 0,
+										a = 1,
+									},
+								},
+							},
+						},
+						timetext = {
+							isDisplayText = true,
+							justify = "RIGHT",
+							x = -5,
+							y = 0,
+							font = {
+								name = "Friz Quadrata TT",
+								size = 12,
+								flag = "OUTLINE",
+								color = {
+									r = 1,
+									g = 1,
+									b = 1,
+									a = 1,
+								},
+								shadow = {
+									isEnabled = false,
+									offset = {
+										x = 2,
+										y = -2,
+									},
+									color = {
+										r = 0,
+										g = 0,
+										b = 0,
+										a = 1,
+									},
+								},
+							},
+						},
+						background = {
+							texture = 'Flat',
+							color = {
+								r = 0,
+								g = 0,
+								b = 0,
+								a = 0.5,
+							},
+						},
+						timerBar = {
+							texture = 'Blizzard',
+							color = {
+								r = 1,
+								g = 1,
+								b = 1,
+								a = 0.35,
+							},
+						},
+						foreground = {
+							texture = 'Fifths',
+							color = {
+								r = 0.66,
+								g = 0.49,
+								b = 1,
+								a = 1,
+							},
+						},
+						layout = {
+							width = 260,
+							height = 21,
+							point = "CENTER",
+							relativeTo = 'AuraBase',
+							relativePoint = "CENTER",
+							x = 0,
+							y = -110,
+							strata = "LOW",
+						},
+						alphaCombat = 1,
+						alphaOoC = 0,
+						alphaTar = 0.5,
+					},
+					["TidalWavesBar"] = {
+						TidalWaveTime = 5,
+						combatDisplay = "Always",
+						OoCDisplay = "Target & On Heal",
+						OoCTime = 5,
+						emptyColor = {
+							r = 1,
+							g = 0,
+							b = 0,
+							a = 1,
+						},
+						adjust = {
+							isEnabled = false,
+							showBG = false,
+						},
+						isEnabled = true,
+						animate = true,
+						background = {
+							texture = 'Flat',
+							color = {
+								r = 0,
+								g = 0,
+								b = 0,
+								a = 0.5,
+							},
+						},
+						foreground = {
+							texture = 'Halves',
+							color = {
+								r = 0.35,
+								g = 0.76,
+								b = 1,
+								a = 1,
+							},
+						},
+						layout = {
+							width = 225,
+							height = 7,
+							point = 'CENTER',
+							relativeTo = 'AuraBase',
+							relativePoint = "CENTER",
+							x = 0,
+							y = -202,
+							strata = "LOW",
+						},
+						alphaCombat = 1,
+						alphaOoC = 0,
+						alphaTar = 0.5,
+					},
+				},
 			},
+			defaults = {
+				["CastBar"] = {
+					adjust = {
+						isEnabled = false,
+						showBG = false,
+					},
+					isEnabled = true,
+					selectedText = 'Name Text',
+					nametext = {
+						isDisplayText = true,
+						justify = "LEFT",
+						x = 5,
+						y = 0,
+						font = {
+							name = "Friz Quadrata TT",
+							size = 10,
+							flag = "OUTLINE",
+							color = {
+								r = 1,
+								g = 1,
+								b = 1,
+								a = 1,
+							},
+							shadow = {
+								isEnabled = false,
+								offset = {
+									x = 2,
+									y = -2,
+								},
+								color = {
+									r = 0,
+									g = 0,
+									b = 0,
+									a = 1,
+								},
+							},
+						},
+					},
+					timetext = {
+						isDisplayText = true,
+						justify = "RIGHT",
+						x = -5,
+						y = 0,
+						font = {
+							name = "Friz Quadrata TT",
+							size = 10,
+							flag = "OUTLINE",
+							color = {
+								r = 1,
+								g = 1,
+								b = 1,
+								a = 1,
+							},
+							shadow = {
+								isEnabled = false,
+								offset = {
+									x = 2,
+									y = -2,
+								},
+								color = {
+									r = 0,
+									g = 0,
+									b = 0,
+									a = 1,
+								},
+							},
+						},
+					},
+					background = {
+						texture = 'Flat',
+						color = {
+							r = 0,
+							g = 0,
+							b = 0,
+							a = 0.5,
+						},
+					},
+					icon = {
+						isEnabled = true,
+						justify = "LEFT",
+					},
+					spark = true,
+					foreground = {
+						texture = 'Glamour2',
+						color = {
+							r = 1,
+							g = 0.85,
+							b = 0,
+							a = 1,
+						},
+					},
+					layout = {
+						width = 260,
+						height = 13,
+						point = "CENTER",
+						relativeTo = 'AuraBase',
+						relativePoint = "CENTER",
+						x = 0,
+						y = -155,
+						strata = "LOW",
+					},
+					alphaCombat = 1,
+					alphaOoC = 1,
+				},
+				["ChannelBar"] = {
+					adjust = {
+						isEnabled = false,
+						showBG = false,
+					},
+					isEnabled = true,
+					selectedText = 'Name Text',
+					nametext = {
+						isDisplayText = true,
+						justify = "LEFT",
+						x = 5,
+						y = 0,
+						font = {
+							name = "Friz Quadrata TT",
+							size = 10,
+							flag = "OUTLINE",
+							color = {
+								r = 1,
+								g = 1,
+								b = 1,
+								a = 1,
+							},
+							shadow = {
+								isEnabled = false,
+								offset = {
+									x = 2,
+									y = -2,
+								},
+								color = {
+									r = 0,
+									g = 0,
+									b = 0,
+									a = 1,
+								},
+							},
+						},
+					},
+					timetext = {
+						isDisplayText = true,
+						justify = "RIGHT",
+						x = -5,
+						y = 0,
+						font = {
+							name = "Friz Quadrata TT",
+							size = 10,
+							flag = "OUTLINE",
+							color = {
+								r = 1,
+								g = 1,
+								b = 1,
+								a = 1,
+							},
+							shadow = {
+								isEnabled = false,
+								offset = {
+									x = 2,
+									y = -2,
+								},
+								color = {
+									r = 0,
+									g = 0,
+									b = 0,
+									a = 1,
+								},
+							},
+						},
+					},
+					background = {
+						texture = 'Flat',
+						color = {
+							r = 0,
+							g = 0,
+							b = 0,
+							a = 0.5,
+						},
+					},
+					icon = {
+						isEnabled = true,
+						justify = "LEFT",
+					},
+					spark = true,
+					foreground = {
+						texture = 'Glamour2',
+						color = {
+							r = 1,
+							g = 0.85,
+							b = 0,
+							a = 1,
+						},
+					},
+					layout = {
+						width = 260,
+						height = 13,
+						point = "CENTER",
+						relativeTo = 'AuraBase',
+						relativePoint = "CENTER",
+						x = 0,
+						y = -155,
+						strata = "LOW",
+					},
+					alphaCombat = 1,
+					alphaOoC = 1,
+				},
+			}
 		},
 	}
 }

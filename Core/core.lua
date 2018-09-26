@@ -40,6 +40,16 @@ end
 ----- Global Functions
 -------------------------------------------------------------------------------------------------------
 
+-- Check if the player is PvP-ready
+function Auras:IsPvPZone()
+	local pvpType = GetZonePVPInfo()
+	if ((C_PvP.IsPVPMap() or (C_PvP.IsWarModeDesired() and not IsInInstance())) and pvpType ~= "sanctuary") then
+		return true
+	else
+		return false
+	end
+end
+
 -- Check Current Class
 function Auras:CharacterCheck(obj,spec,...)
 	local _,_,classIndex = UnitClass('player')

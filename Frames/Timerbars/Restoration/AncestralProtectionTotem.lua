@@ -3,6 +3,13 @@ local SSA, Auras = unpack(select(2,...))
 -- Cache Global Addon Variables
 local AncestralProtectionTotemBar = SSA.AncestralProtectionTotemBar
 
+-- Initialize Data Variables
+AncestralProtectionTotemBar.spellID = 207399
+AncestralProtectionTotemBar.icon = 136080
+AncestralProtectionTotemBar.start = 0
+AncestralProtectionTotemBar.duration = 30
+AncestralProtectionTotemBar.condition = function() return select(4,GetTalentInfo(4,3,1)) end
+
 AncestralProtectionTotemBar:SetScript('OnUpdate',function(self)
 	if (Auras:CharacterCheck(self,3,4,3)) then
 		Auras:RunTimerBarCode(self,spec,db)

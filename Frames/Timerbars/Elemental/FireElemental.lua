@@ -11,13 +11,20 @@ local FireElementalBar = SSA.FireElementalBar
 local EmberElementalBar = SSA.EmberElementalBar
 local PrimalFireElementalBar = SSA.PrimalFireElementalBar
 
+-- Initialize Data Variables
+FireElementalBar.spellID = 188592
+FireElementalBar.icon = 135790
+FireElementalBar.start = 0
+FireElementalBar.duration = 30
+FireElementalBar.GUID = ''
+FireElementalBar.condition = function() return not select(4,GetTalentInfo(4,2,1)) and IsSpellKnown(198067) end
+
 FireElementalBar:SetScript('OnUpdate',function(self)
 	if (Auras:CharacterCheck(self,1,198067) and not select(4,GetTalentInfo(4,2,1)) and not select(4,GetTalentInfo(6,2,1))) then
 		Auras:RunTimerBarCode(self)
 	end
 end)
 
---FireElementalBar:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 FireElementalBar:SetScript("OnEvent",function(self,event)
 	if (event ~= "COMBAT_LOG_EVENT_UNFILTERED") then
 		return
@@ -25,6 +32,14 @@ FireElementalBar:SetScript("OnEvent",function(self,event)
 	
 	Auras:RunTimerEvent_Elemental(self,nil,CombatLogGetCurrentEventInfo())
 end)
+
+-- Initialize Data Variables
+EmberElementalBar.spellID = 275385
+EmberElementalBar.icon = 135790
+EmberElementalBar.start = 0
+EmberElementalBar.duration = 30
+EmberElementalBar.GUID = ''
+EmberElementalBar.condition = function() return not select(4,GetTalentInfo(4,2,1)) and IsSpellKnown(198067) end
 
 EmberElementalBar:SetScript('OnUpdate',function(self)
 	if (Auras:CharacterCheck(self,1)) then
@@ -40,13 +55,20 @@ EmberElementalBar:SetScript("OnEvent",function(self,event)
 	Auras:RunTimerEvent_Elemental(self,nil,CombatLogGetCurrentEventInfo())
 end)
 
+-- Initialize Data Variables
+PrimalFireElementalBar.spellID = 118291
+PrimalFireElementalBar.start = 0
+PrimalFireElementalBar.duration = 30
+PrimalFireElementalBar.GUID = ''
+PrimalFireElementalBar.isPrimal = true
+PrimalFireElementalBar.condition = function() return select(4,GetTalentInfo(6,2,1)) end
+
 PrimalFireElementalBar:SetScript('OnUpdate',function(self)
 	if (Auras:CharacterCheck(self,1,6,2) and not select(4,GetTalentInfo(4,2,1))) then
 		Auras:RunTimerBarCode(self)
 	end
 end)
 
---PrimalFireElementalBar:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 PrimalFireElementalBar:SetScript("OnEvent",function(self,event)
 	if (event ~= "COMBAT_LOG_EVENT_UNFILTERED") then
 		return

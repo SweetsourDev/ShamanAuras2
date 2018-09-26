@@ -3,6 +3,14 @@ local SSA, Auras = unpack(select(2,...))
 -- Cache Global Addon Variables
 local SpiritwalkersGraceBar = SSA.SpiritwalkersGraceBar
 
+-- Initialize Data Variables
+SpiritwalkersGraceBar.spellID = 79206
+SpiritwalkersGraceBar.start = 0
+SpiritwalkersGraceBar.duration = 15
+SpiritwalkersGraceBar.condition = function()
+	return IsSpellKnown(79206)
+end
+
 SpiritwalkersGraceBar:SetScript('OnUpdate',function(self)
 	if (Auras:CharacterCheck(self,3,79206)) then
 		Auras:RunTimerBarCode(self)

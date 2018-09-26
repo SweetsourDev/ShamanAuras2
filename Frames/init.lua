@@ -337,7 +337,7 @@ function Auras:InitializeTimerBars(spec)
 			end)
 		end]]
 		
-		Auras:CreateVerticalStatusBar(SSA[k],spec,v,ctr)
+		Auras:CreateVerticalStatusBar(SSA[k],spec,ctr)
 		ctr = ctr + 1
 	end
 	--[[

@@ -11,6 +11,14 @@ local CombatLogGetCurrentEventInfo = CombatLogGetCurrentEventInfo
 local PrimalStormElementalBar = SSA.PrimalStormElementalBar
 local StormElementalBar = SSA.StormElementalBar
 
+-- Initialize Data Variables
+StormElementalBar.spellID = 157299
+StormElementalBar.icon = 2065626
+StormElementalBar.start = 0
+StormElementalBar.duration = 30
+StormElementalBar.GUID = ''
+StormElementalBar.condition = function() return select(4,GetTalentInfo(4,2,1)) end
+
 StormElementalBar:SetScript('OnUpdate',function(self)
 	if (Auras:CharacterCheck(self,1,4,2) and not select(4,GetTalentInfo(6,2,1))) then
 		Auras:RunTimerBarCode(self)
@@ -25,6 +33,14 @@ StormElementalBar:SetScript("OnEvent",function(self,event)
 	
 	Auras:RunTimerEvent_Elemental(self,nil,CombatLogGetCurrentEventInfo())
 end)
+
+-- Initialize Data Variables
+PrimalStormElementalBar.spellID = 157319
+PrimalStormElementalBar.start = 0
+PrimalStormElementalBar.duration = 30
+PrimalStormElementalBar.GUID = ''
+PrimalStormElementalBar.isPrimal = true
+PrimalStormElementalBar.condition = function() return select(4,GetTalentInfo(6,2,1)) and select(4,GetTalentInfo(4,2,1)) end
 
 PrimalStormElementalBar:SetScript('OnUpdate',function(self)
 	if (Auras:CharacterCheck(self,1,4,2) and select(4,GetTalentInfo(6,2,1))) then

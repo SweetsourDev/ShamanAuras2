@@ -7,6 +7,16 @@ local floor = math.floor
 local HealingStreamTotemBarOne = SSA.HealingStreamTotemBarOne
 local HealingStreamTotemBarTwo = SSA.HealingStreamTotemBarTwo
 
+-- Initialize Data Variables
+HealingStreamTotemBarOne.spellID = 5394
+HealingStreamTotemBarOne.icon = 135127
+HealingStreamTotemBarOne.start = 0
+HealingStreamTotemBarOne.duration = 15
+HealingStreamTotemBarOne.numTotems = 0
+HealingStreamTotemBarOne.condition = function()
+	return IsSpellKnown(5394)
+end
+
 HealingStreamTotemBarOne:SetScript('OnUpdate',function(self)
 	if (Auras:CharacterCheck(self,3,5394)) then
 		Auras:RunTimerBarCode(self)
@@ -22,31 +32,41 @@ HealingStreamTotemBarOne:SetScript('OnEvent',function(self,event)
 	if (event ~= "COMBAT_LOG_EVENT_UNFILTERED") then
 		return
 	end
+
 	
-	local streamOne = Auras.db.char.timerbars[3].bars[self:GetName()]
-	local streamTwo = Auras.db.char.timerbars[3].bars.HealingStreamTotemBarTwo
 	local _,subevent,_,srcGUID,_,_,_,destGUID,_,_,_,spellID = CombatLogGetCurrentEventInfo()
 	
-	if (subevent == "SPELL_SUMMON" and srcGUID == UnitGUID("player") and spellID == streamOne.data.spellID) then
-		if (streamOne.data.start == 0) then
+	if (subevent == "SPELL_SUMMON" and srcGUID == UnitGUID("player") and spellID == self.spellID) then
+		if (self.start == 0) then
 			
-			streamOne.data.start = floor(GetTime())
+			self.start = floor(GetTime())
 			--print("SUMMON TOTEM ONE: "..streamOne.startTime)
 			--SSA.activeTotems[streamOne.startTime] = self:GetName()
-			SSA.activeTotems[self:GetName()] = streamOne.data.start
+			SSA.activeTotems[self:GetName()] = self.start
 			--streamOne.info.isActive = true
 			self:Show()
-		elseif (streamOne.data.start > 0) then
-			streamTwo.data.start = floor(GetTime())
+		elseif (self.start > 0) then
+			local streamTwoBar = SSA.HealingStreamTotemBarTwo
+			
+			streamTwoBar.start = floor(GetTime())
 			--print("SUMMON TOTEM TWO:"..streamTwo.startTime)
 			--SSA.activeTotems[streamTwo.startTime] = "HealingStreamTotemBarTwo"
-			SSA.activeTotems["HealingStreamTotemBarTwo"] = streamTwo.data.start
+			SSA.activeTotems["HealingStreamTotemBarTwo"] = streamTwoBar.start
 			--streamTwo.info.isActive = true
-			HealingStreamTotemBarTwo:Show()
+			streamTwoBar:Show()
 		end
-		streamOne.data.numTotems = streamOne.data.numTotems + 1
+		self.numTotems = self.numTotems + 1
 	end
 end)
+
+-- Initialize Data Variables
+HealingStreamTotemBarTwo.spellID = 5394
+HealingStreamTotemBarTwo.icon = 135127
+HealingStreamTotemBarTwo.start = 0
+HealingStreamTotemBarTwo.duration = 15
+HealingStreamTotemBarTwo.condition = function()
+	return IsSpellKnown(5394)
+end
 
 HealingStreamTotemBarTwo:SetScript('OnUpdate',function(self)
 	if (Auras:CharacterCheck(self,3,5394)) then

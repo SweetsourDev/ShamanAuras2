@@ -431,7 +431,7 @@ end
 
 
 --function Auras:CreateVerticalStatusBar(statusbar,r1,g1,b1,text,duration,texture)
-function Auras:CreateVerticalStatusBar(statusbar,spec,db,ctr)
+function Auras:CreateVerticalStatusBar(statusbar,spec,ctr)
 	--local db = Auras.db.char.timerbars[spec][barName]
 	--SSA.DataFrame.text:SetText(Auras:CurText('DataFrame')..statusbar:GetName()..": "..tostring(db.layout.group).."\n")
 	
@@ -441,9 +441,9 @@ function Auras:CreateVerticalStatusBar(statusbar,spec,db,ctr)
 	--local layout = Auras.db.char.layout[spec].timerbars.groups[db.group].layout
 	
 	
-	if (not db) then
+	--[[if (not db) then
 		SSA.DataFrame.text:SetText("DB ERROR: Core\\functions.lua:443: "..tostring(barName)..", "..tostring(db.text)..", "..ctr)
-	end
+	end]]
 	
 
 	--SSA.DataFrame.text:SetText("TIMERBAR ERROR: "..tostring(statusbar:GetName()))
@@ -461,10 +461,10 @@ function Auras:CreateVerticalStatusBar(statusbar,spec,db,ctr)
 		statusbar:SetFrameStrata("LOW")
 		statusbar:SetStatusBarColor(timerbar.layout.color.r,timerbar.layout.color.g,timerbar.layout.color.b)
 		--statusbar:SetStatusBarColor(r,g,b)
-		statusbar:SetMinMaxValues(0,db.data.duration)
+		statusbar:SetMinMaxValues(0,statusbar.duration)
 		statusbar:Hide()
 
-		statusbar.duration = duration
+		--statusbar.duration = duration
 		if (not statusbar.bg) then
 			statusbar.bg = statusbar:CreateTexture(nil,"BACKGROUND")
 		end
@@ -496,7 +496,7 @@ function Auras:CreateVerticalStatusBar(statusbar,spec,db,ctr)
 		--statusbar.nametext:SetHeight(statusbar.nametext:GetParent():GetHeight())
 		--statusbar.nametext:ClearAllPoints()
 		--statusbar.nametext:SetPoint("LEFT",0,0)
-		statusbar.nametext:SetText(db.layout.text)
+		statusbar.nametext:SetText(timerbar.layout.text)
 		
 		if (not statusbar.rotatetime) then
 			statusbar.rotatetime = statusbar.timetext:CreateAnimationGroup()
@@ -616,7 +616,6 @@ local function BuildHorizontalIconRow(rowObj,rowList,rowVerify,spec,group)
 	
 	for i=1,#rowList do
 		if (rowList[i] and rowVerify[i]) then
-			SSA.DataFrame.text:SetText(Auras:CurText('DataFrame')..i..". "..rowObj[i]:GetName().." ("..tostring(rowList[i])..", "..tostring(rowVerify[i])..")\n")
 			rowCtr = rowCtr + 1
 			rowObj[i]:Show()
 		else
@@ -844,7 +843,11 @@ local function ToggleCombatEvent(spec)
 	for i=1,3 do
 		for k,v in pairs(Auras.db.char.timerbars[i].bars) do
 			if (i == spec) then
-				if (v.data.condition()) then
+				--if (v.data.condition()) then
+				if (not SSA[k].condition) then
+					SSA.DataFrame.text:SetText("BAD BAR: "..k)
+				end
+				if (SSA[k].condition()) then
 					--if (not SSA[k]:IsEventRegistered("COMBAT_LOG_EVENT_UNFILTERED")) then
 						SSA[k]:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 						--SSA.DataFrame.text:SetText(Auras:CurText('DataFrame')..k..": TRUE ("..tostring(SSA[k]:IsEventRegistered("COMBAT_LOG_EVENT_UNFILTERED"))..")\n")
@@ -878,6 +881,7 @@ function Auras:UpdateTalents(isTalentChange)
 		InterfaceOptionsFrame:Hide()
 	end
 	
+	SSA.AscendanceBar.spellID = (spec == 1 and 114050) or (spec == 2 and 114051) or (spec == 3 and 114052)
 	ToggleCombatEvent(spec)
 	
 	if (spec == 1) then -- Elemental
@@ -940,180 +944,7 @@ function Auras:UpdateTalents(isTalentChange)
 			twipe(rowObj)
 			twipe(rowList)
 			twipe(rowVerify)
-		end
-		
-		--[[
-		------------------------------------------------------------
-		---- Primary Aura Group #1
-		----
-		
-		rowObj = {
-			[1] = SSA.FlameShock,
-			[2] = SSA.EarthShock,
-			[3] = SSA.LavaBurst1,
-			[4] = SSA.Earthquake,
-			[5] = SSA.ElementalBlast,
-		}
-		
-		rowList = {
-			[1] = db.auras[1].FlameShock and IsSpellKnown(188389),
-			[2] = db.auras[1].EarthShock and IsSpellKnown(8042),
-			[3] = db.auras[1].LavaBurst and IsSpellKnown(51505),
-			[4] = db.auras[1].Earthquake and IsSpellKnown(61882),
-			[5] = db.auras[1].ElementalBlast and select(4,GetTalentInfo(1,3,1)),
-		}
-		
-		if (Auras.db.char.layout[1].orientation.top == "Horizontal") then
-			BuildHorizontalIconRow(rowObj,rowList,0,1,'primary','top')
-		else
-			BuildVerticalIconRow(rowObj,rowList,0,1,'primary','top')
-		end
-		
-		------------------------------------------------------------
-		---- Primary Aura Group #2
-		----
-		
-		rowObj = {
-			[1] = SSA.FireElemental,
-			[2] = SSA.StormElemental,
-			[3] = SSA.Stormkeeper,
-			[4] = SSA.Ascendance1,
-			[5] = SSA.LiquidMagmaTotem,
-			[6] = SSA.Icefury,
-		}
-
-		rowList = {
-			[1] = db.auras[1].FireElemental and not select(4,GetTalentInfo(4,2,1)) and IsSpellKnown(198067),
-			[2] = db.auras[1].StormElemental and select(4,GetTalentInfo(4,2,1)),
-			[3] = db.auras[1].Stormkeeper and select(4,GetTalentInfo(7,2,1)),
-			[4] = db.auras[1].Ascendance and select(4,GetTalentInfo(7,3,1)),
-			[5] = db.auras[1].LiquidMagmaTotem and select(4,GetTalentInfo(4,3,1)),
-			[6] = db.auras[1].Icefury and select(4,GetTalentInfo(6,3,1)),
-		}
-		
-		if (Auras.db.char.layout[1].orientation.bottom == "Horizontal") then
-			BuildHorizontalIconRow(rowObj,rowList,0,1,'primary','bottom')
-		else
-			BuildVerticalIconRow(rowObj,rowList,0,1,'primary','bottom')
-		end
-		
-		------------------------------------------------------------
-		---- Primary Aura Group #3 (ADDED IN 8.0)
-		----
-		
-		rowObj = {
-			[1] = SSA.UnlimitedPower,
-			[2] = SSA.EarthShield1,
-			[3] = SSA.ExposedElements,
-			[4] = SSA.NaturesGuardian1,
-			[5] = SSA.MasterOfElements,
-			[6] = SSA.EarthenStrength,
-		}
-		
-		rowList = {
-			[1] = db.auras[1].UnlimitedPower and select(4,GetTalentInfo(7,1,1)),
-			[2] = db.auras[1].EarthShield1 and select(4,GetTalentInfo(3,2,1)),
-			[3] = db.auras[1].ExposedElements and select(4,GetTalentInfo(1,1,1)),
-			[4] = db.auras[1].NaturesGuardian1 and select(4,GetTalentInfo(5,1,1)),
-			[5] = db.auras[1].MasterOfElements and select(4,GetTalentInfo(2,2,1)),
-			[6] = db.auras[1].EarthenStrength and Auras:GetEleT21SetCount() >= 2,
-		}
-
-		if (Auras.db.char.layout[1].orientation.extra == "Horizontal") then
-			BuildHorizontalIconRow(rowObj,rowList,0,1,'primary','extra')
-		else
-			BuildVerticalIconRow(rowObj,rowList,0,1,'primary','extra')
-		end
-		
-		------------------------------------------------------------
-		---- PvP Aura Group (ADDED IN 8.0)
-		----
-
-		local isPvpActive = Auras:IsPvPZone()
-
-		rowObj = {
-			[1] = SSA.Adaptation1,
-			[2] = SSA.GladiatorsMedallion1,
-			[3] = SSA.LightningLasso,
-			[4] = SSA.SkyfuryTotem1,
-			[5] = SSA.CounterstrikeTotem1,
-			[6] = SSA.GroundingTotem1,
-		}
-		
-		rowList = {
-			[1] = db.auras[1].Adaptation1 and select(10,GetPvpTalentInfoByID(3597)) and isPvpActive,
-			[2] = db.auras[1].GladiatorsMedallion1 and select(10,GetPvpTalentInfoByID(3598)) and isPvpActive,
-			[3] = db.auras[1].LightningLasso and select(10,GetPvpTalentInfoByID(731)) and isPvpActive,
-			[4] = db.auras[1].SkyfuryTotem1 and select(10,GetPvpTalentInfoByID(3488)) and isPvpActive,
-			[5] = db.auras[1].CounterstrikeTotem1 and select(10,GetPvpTalentInfoByID(3490)) and isPvpActive,
-			[6] = db.auras[1].GroundingTotem1 and select(10,GetPvpTalentInfoByID(3620)) and isPvpActive,
-		}
-
-		if (Auras.db.char.layout[1].orientation.pvp == "Horizontal") then
-			BuildHorizontalIconRow(rowObj,rowList,0,1,'primary','pvp')
-		else
-			BuildVerticalIconRow(rowObj,rowList,0,1,'primary','pvp')
-		end
-		
-		------------------------------------------------------------
-		---- Left Icon Row
-		----
-		
-		rowObj = {
-			[1] = SSA.WindShear1,
-			[2] = SSA.AstralShift1,
-			[3] = SSA.Hex1,
-			[4] = SSA.AncestralGuidance1,
-			[5] = SSA.WindRushTotem1,
-			[6] = SSA.CleanseSpirit1,
-		}
-		
-		rowList = {
-			[1] = db.auras[1].WindShear1 and IsSpellKnown(57994),
-			[2] = db.auras[1].AstralShift1 and IsSpellKnown(108271),
-			[3] = db.auras[1].Hex1 and IsSpellKnown(51514),
-			[4] = db.auras[1].AncestralGuidance1 and select(4,GetTalentInfo(5,2,1)),
-			[5] = db.auras[1].WindRushTotem1 and select(4,GetTalentInfo(5,3,1)),
-			[6] = db.auras[1].CleanseSpirit1 and IsSpellKnown(51886),
-		}
-		
-		if (Auras.db.char.layout[1].orientation.left == "Horizontal") then
-			BuildHorizontalIconRow(rowObj,rowList,0,1,'secondary','left')
-		else
-			BuildVerticalIconRow(rowObj,rowList,0,1,'secondary','left')
-		end
-		
-		------------------------------------------------------------
-		---- Right Icon Row
-		----
-		
-		rowObj = {
-			[1] = SSA.Thunderstorm,
-			[2] = SSA.EarthElemental,
-			[3] = SSA.CapacitorTotem1,
-			[4] = SSA.EarthbindTotem1,
-			[5] = SSA.TremorTotem1,
-		}
-		
-		rowList = {
-			[1] = db.auras[1].Thunderstorm and IsSpellKnown(51490),
-			[2] = db.auras[1].EarthElemental and IsSpellKnown(198103),
-			[3] = db.auras[1].CapacitorTotem1 and IsSpellKnown(192058),
-			[4] = db.auras[1].EarthbindTotem1 and IsSpellKnown(2484),
-			[5] = db.auras[1].TremorTotem1 and IsSpellKnown(8143),
-		}
-		
-		if (Auras.db.char.layout[1].orientation.right == "Horizontal") then
-			BuildHorizontalIconRow(rowObj,rowList,0,1,'secondary','right')
-		else
-			BuildVerticalIconRow(rowObj,rowList,0,1,'secondary','right')
-		end]]
-		
-		-- Show Elemental-only Objects
-		--[[SSA.FlameShockGlow:Show()
-		SSA.EarthShockGlow:Show()
-		SSA.LavaBurstGlow:Show()]]
-		
+		end		
 	elseif (spec == 2) then -- Enhancement
 		Auras:InitializeCooldowns(spec)
 		
@@ -1158,218 +989,23 @@ function Auras:UpdateTalents(isTalentChange)
 			twipe(rowList)
 			twipe(rowVerify)
 		end
-		--[[Auras:ToggleAuraVisibility(2)
-		if (db.elements[2].timerbars.buff.isEnabled) then
-			SSA.BuffTimerBarGrp2:Show()
-		else
-			SSA.BuffTimerBarGrp2:Hide()
-		end
-		if (db.elements[2].timerbars.main.isEnabled) then
-			SSA.MainTimerBarGrp2:Show()
-		else
-			SSA.MainTimerBarGrp2:Hide()
-		end
-		if (db.elements[2].timerbars.util.isEnabled) then
-			SSA.UtilTimerBarGrp2:Show()
-		else
-			SSA.UtilTimerBarGrp2:Hide()
-		end
-		
-		-- Initialize Progress Bars Upon Specialization Change
-		Auras:InitializeProgressBar('MaelstromBar2',nil,'maelstromBar','text',nil,2)
-		Auras:InitializeProgressBar('CastBar2',nil,'castBar','nametext','timetext',2)
-		Auras:InitializeProgressBar('ChannelBar2',nil,'channelBar','nametext','timetext',2)
-		
-		-- Initialize Frame Groups Upon Specialization Change
-		Auras:InitializeAuraFrameGroup(Auras.db.char.elements[2])
-
-		------------------------------------------------------------
-		---- Top Icon Row
-		----
-		
-		rowObj = {
-			[1] = SSA.Flametongue,
-			[2] = SSA.Frostbrand,
-			[3] = SSA.Stormstrike,
-			[4] = SSA.CrashLightning,
-			[5] = SSA.LavaLash
-		}
-		
-		rowList = {
-			[1] = db.auras[2].Flametongue and IsSpellKnown(193796),
-			[2] = db.auras[2].Frostbrand and IsSpellKnown(196834),
-			[3] = db.auras[2].Stormstrike and IsSpellKnown(17364),
-			[4] = db.auras[2].CrashLightning and IsSpellKnown(187874),
-			[5] = db.auras[2].LavaLash and IsSpellKnown(60103),
-		}
-		
-		--BuildHorizontalIconRow(rowObj,rowList,0,2,'top')
-		if (Auras.db.char.layout[2].orientation.top == "Horizontal") then
-			BuildHorizontalIconRow(rowObj,rowList,0,2,'primary','top')
-		else
-			BuildVerticalIconRow(rowObj,rowList,0,2,'primary','top')
-		end
-		
-		------------------------------------------------------------
-		---- Bottom Icon Row
-		----
-		
-		rowObj = {
-			[1] = SSA.Rockbiter,
-			[2] = SSA.Ascendance2,
-			[3] = SSA.EarthenSpike,
-			[4] = SSA.Sundering,
-			[5] = SSA.FeralSpirit,
-		}
-		
-		rowList = {
-			[1] = db.auras[2].Rockbiter and IsSpellKnown(193786),
-			[2] = db.auras[2].Ascendance2 and select(4,GetTalentInfo(7,3,1)),
-			[3] = db.auras[2].EarthenSpike and select(4,GetTalentInfo(7,2,1)),
-			[4] = db.auras[2].Sundering and select(4,GetTalentInfo(6,3,1)),
-			[5] = db.auras[2].FeralSpirit and IsSpellKnown(51533),
-		}
-		
-		--BuildHorizontalIconRow(rowObj,rowList,0,2,'bottom')
-		if (Auras.db.char.layout[2].orientation.bottom == "Horizontal") then
-			BuildHorizontalIconRow(rowObj,rowList,0,2,'primary','bottom')
-		else
-			BuildVerticalIconRow(rowObj,rowList,0,2,'primary','bottom')
-		end
-		
-		------------------------------------------------------------
-		---- Primary Aura Group #3
-		----
-		
-		--local _,_,name,_,_,rank = C_ArtifactUI.GetEquippedArtifactInfo()
-		
-		rowObj = {
-			--[1] = SSA.DoomWinds,
-			--[2] = SSA.UnleashDoom,
-			--[3] = SSA.Concordance2,
-			[1] = SSA.ForcefulWinds,
-			[2] = SSA.EarthShield2,
-			[3] = SSA.NaturesGuardian2,
-		}
-		
-		rowList = {
-			[1] = db.auras[2].ForcefulWinds and select(4,GetTalentInfo(2,2,1)),
-			[2] = db.auras[2].EarthShield2 and select(4,GetTalentInfo(3,2,1)),
-			[3] = db.auras[2].NaturesGuardian2 and select(4,GetTalentInfo(5,1,1)),
-			--[1] = db.auras[2].DoomWinds and name ~= nil,
-			--[2] = db.auras[2].UnleashDoom and name ~= nil,
-			--[3] = db.auras[2].Concordance2 and (rank or 0) >= 52,
-		}
-
-		if (Auras.db.char.layout[2].orientation.extra == "Horizontal") then
-			BuildHorizontalIconRow(rowObj,rowList,0,2,'primary','extra')
-		else
-			BuildVerticalIconRow(rowObj,rowList,0,2,'primary','extra')
-		end
-		
-		------------------------------------------------------------
-		---- PvP Aura Group (ADDED IN 8.0)
-		----
-
-		local isPvpActive = Auras:IsPvPZone()
-
-		rowObj = {
-			[1] = SSA.Adaptation2,
-			[2] = SSA.GladiatorsMedallion2,
-			[3] = SSA.SkyfuryTotem2,
-			[4] = SSA.CounterstrikeTotem2,
-			[5] = SSA.GroundingTotem2,
-			[6] = SSA.EtherealForm,
-			[7] = SSA.StaticCling,
-			[8] = SSA.Thundercharge,
-		}
-		
-		rowList = {
-			[1] = db.auras[2].Adaptation2 and select(10,GetPvpTalentInfoByID(3552)) and isPvpActive,
-			[2] = db.auras[2].GladiatorsMedallion2 and select(10,GetPvpTalentInfoByID(3551)) and isPvpActive,
-			[3] = db.auras[2].SkyfuryTotem2 and select(10,GetPvpTalentInfoByID(3487)) and isPvpActive,
-			[4] = db.auras[2].CounterstrikeTotem2 and select(10,GetPvpTalentInfoByID(3489)) and isPvpActive,
-			[5] = db.auras[2].GroundingTotem2 and select(10,GetPvpTalentInfoByID(3622)) and isPvpActive,
-			[6] = db.auras[2].EtherealForm and select(10,GetPvpTalentInfoByID(1944)) and isPvpActive,
-			[7] = db.auras[2].StaticCling and select(10,GetPvpTalentInfoByID(720)) and isPvpActive,
-			[8] = db.auras[2].Thundercharge and select(10,GetPvpTalentInfoByID(725)) and isPvpActive,
-		}
-
-		if (Auras.db.char.layout[1].orientation.pvp == "Horizontal") then
-			BuildHorizontalIconRow(rowObj,rowList,0,1,'primary','pvp')
-		else
-			BuildVerticalIconRow(rowObj,rowList,0,1,'primary','pvp')
-		end
-		
-		------------------------------------------------------------
-		---- Left Icon Row
-		----
-		
-		rowObj = {
-			[1] = SSA.WindShear2,
-			[2] = SSA.Hex2,
-			[3] = SSA.CleanseSpirit2,
-			[4] = SSA.SpiritWalk,
-			[5] = SSA.AstralShift2,
-		}
-		
-		rowList = {
-			[1] = db.auras[2].WindShear2 and IsSpellKnown(57994),
-			[2] = db.auras[2].Hex2 and IsSpellKnown(51514),
-			[3] = db.auras[2].CleanseSpirit2 and IsSpellKnown(51886),
-			[4] = db.auras[2].SpiritWalk and IsSpellKnown(58875),
-			[5] = db.auras[2].AstralShift2 and IsSpellKnown(108271),
-		}
-
-		--BuildVerticalIconRow(rowObj,rowList,0,2,'left')
-		if (Auras.db.char.layout[2].orientation.left == "Horizontal") then
-			BuildHorizontalIconRow(rowObj,rowList,0,2,'secondary','left')
-		else
-			BuildVerticalIconRow(rowObj,rowList,0,2,'secondary','left')
-		end
-		
-		------------------------------------------------------------
-		---- Right Icon Row
-		----
-		
-		rowObj = {
-			
-			[1] = SSA.CapacitorTotem2,
-			[2] = SSA.EarthbindTotem2,
-			[3] = SSA.TremorTotem2,
-			[4] = SSA.WindRushTotem2,
-			[5] = SSA.FeralLunge,
-		}
-		
-		rowList = {
-			[1] = db.auras[2].CapacitorTotem2 and IsSpellKnown(192058),
-			[2] = db.auras[2].EarthbindTotem2 and IsSpellKnown(2484),
-			[3] = db.auras[2].TremorTotem2 and IsSpellKnown(8143),
-			[4] = db.auras[2].WindRushTotem2 and select(4,GetTalentInfo(5,3,1)),
-			[5] = db.auras[2].FeralLunge and select(4,GetTalentInfo(5,2,1)),
-		}
-
-		--BuildVerticalIconRow(rowObj,rowList,0,2,'right')		
-		if (Auras.db.char.layout[2].orientation.right == "Horizontal") then
-			BuildHorizontalIconRow(rowObj,rowList,0,2,'secondary','right')
-		else
-			BuildVerticalIconRow(rowObj,rowList,0,2,'secondary','right')
-		end]]
 	else -- Restoration
 		Auras:InitializeCooldowns(spec)
-		
+
 		-- Initialize Progress Bars Upon Specialization Change
 		Auras:InitializeProgressBar('CastBar',nil,'nametext','timetext',spec)
 		Auras:InitializeProgressBar('ChannelBar',nil,'nametext','timetext',spec)
 		Auras:InitializeProgressBar('ManaBar',nil,'text',nil,spec)
 		Auras:InitializeProgressBar('TidalWavesBar',nil,nil,nil,spec)
 		Auras:InitializeProgressBar('EarthenWallTotemBar','Timer','healthtext','timetext',spec)
-		
+
 		-- Initialize Frame Groups Upon Specialization Change
 		Auras:InitializeAuraFrameGroups(spec)
 		Auras:InitializeTimerBarFrameGroups(spec)
 		Auras:InitializeTimerBars(spec)
-
+		--if (statusbar:GetName() == "AscendanceBar") then
+		SSA.DataFrame.text:SetText(Auras:CurText('DataFrame').."BAR DURATION #1: "..tostring(SSA.AscendanceBar.duration).."\n")
+		--end
 		local auras = Auras.db.char.auras[spec]
 		
 		for i=1,#auras.groups do
@@ -1404,197 +1040,6 @@ function Auras:UpdateTalents(isTalentChange)
 			twipe(rowList)
 			twipe(rowVerify)
 		end
-		--[[if (db.elements[3].timerbars.buff) then
-			SSA.BuffTimerBarGrp3:Show()
-		else
-			SSA.BuffTimerBarGrp3:Hide()
-		end
-		if (db.elements[3].timerbars.main) then
-			SSA.MainTimerBarGrp3:Show()
-		else
-			SSA.MainTimerBarGrp3:Hide()
-		end
-		if (db.elements[3].timerbars.util) then
-			SSA.UtilTimerBarGrp3:Show()
-		else
-			SSA.UtilTimerBarGrp3:Hide()
-		end
-
-		--local _,_,name,_,_,rank = C_ArtifactUI.GetEquippedArtifactInfo()
-		
-		-- Initialize Progress Bars Upon Specialization Change
-		Auras:InitializeProgressBar('CastBar3',nil,'castBar','nametext','timetext',3)
-		Auras:InitializeProgressBar('ChannelBar3',nil,'channelBar','nametext','timetext',3)
-		Auras:InitializeProgressBar('ManaBar',nil,'manaBar','text',nil,3)
-		Auras:InitializeProgressBar('TidalWavesBar',nil,'tidalWavesBar',nil,nil,3)
-		Auras:InitializeProgressBar('EarthenWallTotemBar','Timer','earthenWallBar','healthtext','timetext',3)
-		
-		-- Initialize Frame Groups Upon Specialization Change
-		Auras:InitializeAuraFrameGroup(Auras.db.char.elements[3])
-		
-		------------------------------------------------------------
-		---- Top Icon Row
-		----
-		
-		rowObj = {
-			[1] = SSA.Riptide,
-			[2] = SSA.HealingStreamTotem,
-			[3] = SSA.CloudburstTotem,
-			[4] = SSA.Downpour,
-			[5] = SSA.HealingRain,
-			[6] = SSA.UnleashLife
-		}
-		
-		rowList = {
-			[1] = db.auras[3].Riptide and IsSpellKnown(61295),
-			[2] = db.auras[3].HealingStreamTotem and IsSpellKnown(5394),
-			[3] = db.auras[3].CloudburstTotem and select(4,GetTalentInfo(6,3,1)),
-			[4] = db.auras[3].Downpour and select(4,GetTalentInfo(6,2,1)),
-			[5] = db.auras[3].HealingRain and IsSpellKnown(73920),
-			[6] = db.auras[3].UnleashLife and select(4,GetTalentInfo(1,3,1)),
-		}
-
-		if (Auras.db.char.layout[3].orientation.top == "Horizontal") then
-			BuildHorizontalIconRow(rowObj,rowList,0,3,'primary','top')
-		else
-			BuildVerticalIconRow(rowObj,rowList,0,3,'primary','top')
-		end
-		
-		------------------------------------------------------------
-		---- Bottom Icon Row
-		----
-		
-		rowObj = {
-			[1] = SSA.HealingTideTotem,
-			[2] = SSA.SpiritLinkTotem,
-			[3] = SSA.Ascendance3,
-			[4] = SSA.Wellspring,
-			[5] = SSA.EarthenWallTotem,
-			[6] = SSA.AncestralProtectionTotem,
-			[7] = SSA.WindRushTotem3,
-		}
-		
-		rowList = {
-			[1] = db.auras[3].HealingTideTotem and IsSpellKnown(108280),
-			[2] = db.auras[3].SpiritLinkTotem and IsSpellKnown(98008),
-			[3] = db.auras[3].Ascendance3 and select(4,GetTalentInfo(7,3,1)),
-			[4] = db.auras[3].Wellspring and select(4,GetTalentInfo(7,2,1)),
-			[5] = db.auras[3].EarthenWallTotem and select(4,GetTalentInfo(4,2,1)),
-			[6] = db.auras[3].AncestralProtectionTotem and select(4,GetTalentInfo(4,3,1)),
-			[7] = db.auras[3].WindRushTotem3 and select(4,GetTalentInfo(5,3,1)),
-		}
-		
-		if (Auras.db.char.layout[3].orientation.bottom == "Horizontal") then
-			BuildHorizontalIconRow(rowObj,rowList,0,3,'primary','bottom')
-		else
-			BuildVerticalIconRow(rowObj,rowList,0,3,'primary','bottom')
-		end
-		
-		------------------------------------------------------------
-		---- Primary Aura Group #3
-		----
-		
-		rowObj = {
-			[1] = SSA.EarthShield3,
-			[2] = SSA.FlashFlood,
-			[3] = SSA.NaturesGuardian3,
-		}
-		
-		rowList = {
-			[1] = db.auras[3].EarthShield3 and select(4,GetTalentInfo(2,3,1)),
-			[2] = db.auras[3].FlashFlood and select(4,GetTalentInfo(6,1,1)),
-			[3] = db.auras[3].NaturesGuardian3 and select(4,GetTalentInfo(5,1,1)),
-		}
-
-		if (Auras.db.char.layout[3].orientation.extra == "Horizontal") then
-			BuildHorizontalIconRow(rowObj,rowList,0,3,'primary','extra')
-		else
-			BuildVerticalIconRow(rowObj,rowList,0,3,'primary','extra')
-		end
-		
-		------------------------------------------------------------
-		---- PvP Aura Group (ADDED IN 8.0)
-		----
-
-		local isPvpActive = Auras:IsPvPZone()
-
-		rowObj = {
-			[1] = SSA.Adaptation3,
-			[2] = SSA.GladiatorsMedallion3,
-			[3] = SSA.SkyfuryTotem3,
-			[4] = SSA.CounterstrikeTotem3,
-			[5] = SSA.GroundingTotem3,
-			[6] = SSA.Tidebringer,
-		}
-		
-		rowList = {
-			[1] = db.auras[3].Adaptation3 and select(10,GetPvpTalentInfoByID(3485)) and isPvpActive,
-			[2] = db.auras[3].GladiatorsMedallion3 and select(10,GetPvpTalentInfoByID(3484)) and isPvpActive,
-			[3] = db.auras[3].SkyfuryTotem3 and select(10,GetPvpTalentInfoByID(707)) and isPvpActive,
-			[4] = db.auras[3].CounterstrikeTotem3 and select(10,GetPvpTalentInfoByID(708)) and isPvpActive,
-			[5] = db.auras[3].GroundingTotem3 and select(10,GetPvpTalentInfoByID(715)) and isPvpActive,
-			[6] = db.auras[3].Tidebringer and select(10,GetPvpTalentInfoByID(1930)) and isPvpActive,
-		}
-
-		if (Auras.db.char.layout[3].orientation.pvp == "Horizontal") then
-			BuildHorizontalIconRow(rowObj,rowList,0,3,'primary','pvp')
-		else
-			BuildVerticalIconRow(rowObj,rowList,0,3,'primary','pvp')
-		end
-		
-		------------------------------------------------------------
-		---- Left Icon Row
-		----
-		
-		rowObj = {
-			[1] = SSA.WindShear3,
-			[2] = SSA.Hex3,
-			[3] = SSA.AstralShift3,
-			[4] = SSA.PurifySpirit,
-			[5] = SSA.SpiritwalkersGrace,
-		}
-		
-		rowList = {
-			[1] = db.auras[3].WindShear3 and IsSpellKnown(57994),
-			[2] = db.auras[3].Hex3 and IsSpellKnown(51514),
-			[3] = db.auras[3].AstralShift3 and IsSpellKnown(108271),
-			[4] = db.auras[3].PurifySpirit and IsSpellKnown(77130),
-			[5] = db.auras[3].SpiritwalkersGrace and IsSpellKnown(79206),
-		}
-
-		--BuildVerticalIconRow(rowObj,rowList,0,3,'left')
-		if (Auras.db.char.layout[3].orientation.left == "Horizontal") then
-			BuildHorizontalIconRow(rowObj,rowList,0,3,'secondary','left')
-		else
-			BuildVerticalIconRow(rowObj,rowList,0,3,'secondary','left')
-		end
-		
-		------------------------------------------------------------
-		---- Right Icon Row
-		----
-		
-		rowObj = {
-			[1] = SSA.FlameShock3,
-			[2] = SSA.LavaBurst3,
-			[3] = SSA.CapacitorTotem3,
-			[4] = SSA.EarthbindTotem3,
-			[5] = SSA.EarthgrabTotem,
-		}
-		
-		rowList = {
-			[1] = db.auras[3].FlameShock3 and IsSpellKnown(188838),
-			[2] = db.auras[3].LavaBurst3 and IsSpellKnown(51505),
-			[3] = db.auras[3].CapacitorTotem3 and IsSpellKnown(192058),
-			[4] = db.auras[3].EarthbindTotem3 and IsSpellKnown(2484),
-			[5] = db.auras[3].EarthgrabTotem and select(4,GetTalentInfo(3,2,1)),
-		}
-
-		--BuildVerticalIconRow(rowObj,rowList,0,3,'right')	
-		if (Auras.db.char.layout[3].orientation.right == "Horizontal") then
-			BuildHorizontalIconRow(rowObj,rowList,0,3,'secondary','right')
-		else
-			BuildVerticalIconRow(rowObj,rowList,0,3,'secondary','right')
-		end]]
 	end
 	
 	--Auras:SetupCharges()

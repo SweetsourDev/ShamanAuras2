@@ -58,11 +58,12 @@ function Auras:SortTimerBars(spec)
 	local db = Auras.db.char
 	local timerbars = db.timerbars[spec]
 	local direction = 1
-	
+
 	-- Collect timer bars that have a start time that's greater than 0
 	for k,v in pairs(timerbars.bars) do
-		if (v.data.start > 0) then
-			tinsert(barsShowing,v.data.start)
+		local bar = SSA[k]
+		if (bar.start > 0) then
+			tinsert(barsShowing,bar.start)
 		elseif (v.isAdjust) then
 			--print("Inserting: "..k..";"..tostring(v.group))
 			tinsert(barsShowing,k..";"..v.layout.group)
@@ -74,7 +75,9 @@ function Auras:SortTimerBars(spec)
 	for i=1,#barsShowing do
 		if (type(barsShowing[i]) == "number") then
 			for k,v in pairs(timerbars.bars) do
-				if (v.data.start == barsShowing[i]) then
+				local bar = SSA[k]
+				
+				if (bar.start == barsShowing[i]) then
 					local layout = timerbars.groups[v.layout.group].layout
 					
 					if (layout.growth == "RIGHT" or layout.growth == "UP") then
@@ -172,12 +175,24 @@ function Auras:RunTimerBarCode(bar)
 	local spec = GetSpecialization()
 	local timerbar = Auras.db.char.timerbars[spec].bars[bar:GetName()]
 	
-	if (timerbar.data.start > 0) then
+	local duration = bar.duration
+	
+	--[[if (timerbar.data.start > 0) then
 		RunTimer(bar,timerbar,spec,timerbar.data.start,timerbar.data.duration)
 	elseif ((timerbar.isAdjust or timerbar.isCustomize) and timerbar.isInUse) then
 		PreviewTimerBar(bar,spec,timerbar.layout.group,timerbar.isAdjust)
 	else
 		HideTimerBar(bar)
+	end]]
+	local remains = (bar.start + bar.duration) - GetTime()
+	
+	if (remains > 0) then
+		RunTimer(bar,timerbar,spec,bar.start,duration)
+	elseif ((timerbar.isAdjust or timerbar.isCustomize) and timerbar.isInUse) then
+		PreviewTimerBar(bar,spec,timerbar.layout.group,timerbar.isAdjust)
+	elseif (remains <= 0) then
+		bar.start = 0
+		bar:Hide()
 	end
 end
 
@@ -189,15 +204,18 @@ function Auras:RunTimerEvent_Aura(bar,isAnyCaster,...)
 	--[[if (spellID == 193796) then
 		print("FLAMETONGUE BAR")
 	end]]
-	if (((not isAnyCaster and srcGUID == UnitGUID("player")) or (isAnyCaster and destGUID == UnitGUID("player"))) and timerbar.data.spellID == spellID) then
+	if (((not isAnyCaster and srcGUID == UnitGUID("player")) or (isAnyCaster and destGUID == UnitGUID("player"))) and bar.spellID == spellID) then
 		if (subevent == "SPELL_AURA_APPLIED" or subevent == "SPELL_AURA_REFRESH") then
 			local _,_,_,_,duration = AuraUtil.FindAuraByName(Auras:GetSpellName(spellID),"player")
-			timerbar.data.duration = duration
-			timerbar.data.start = GetTime()
+			--timerbar.data.duration = duration
+			--timerbar.data.start = GetTime()
+			bar.duration = duration
+			bar.start = GetTime()
 			bar:SetMinMaxValues(0,duration)
 			bar:Show()
 		elseif (subevent == "SPELL_AURA_REMOVED") then
-			timerbar.data.start = 0
+			--timerbar.data.start = 0
+			bar.start = 0
 		end
 	end
 end
@@ -207,11 +225,13 @@ function Auras:RunTimerEvent_Totem(bar,...)
 	local timerbar = Auras.db.char.timerbars[spec].bars[bar:GetName()]
 	local _,subevent,_,srcGUID,_,_,_,_,_,_,_,spellID = ...
 	
-	if (srcGUID == UnitGUID("player") and subevent == "SPELL_SUMMON" and timerbar.data.spellID == spellID) then
-		timerbar.data.start = floor(GetTime())
+	if (srcGUID == UnitGUID("player") and subevent == "SPELL_SUMMON" and bar.spellID == spellID) then
+		--timerbar.data.start = floor(GetTime())
+		bar.start = floor(GetTime())
 		--timerbar.info.isActive = true
 		--SSA.activeTotems[timerbar.startTime] = bar:GetName()
-		SSA.activeTotems[bar:GetName()] = timerbar.data.start
+		--SSA.activeTotems[bar:GetName()] = timerbar.data.start
+		SSA.activeTotems[bar:GetName()] = bar.start
 		bar:Show()
 	end
 end
@@ -224,36 +244,52 @@ function Auras:RunTimerEvent_Elemental(bar,primalIDs,...)
 	if (srcGUID == UnitGUID("player") and subevent == "SPELL_SUMMON") then
 		-- If the player casts Primal Earth Elemental while the Primal Fire Elemental is already active,
 		-- hide the timer bar for Primal Fire Elemental
-		if (primalIDs and timerbar.data.start > 0) then
+		if (primalIDs and bar.start > 0) then
 			if (type(primalIDs) == "table") then
 				for i=1,#primalIDs do
 					if (spellID == primalIDs[i]) then
-						timerbar.data.start = 0
+						bar.start = 0
 					end
 				end
 			elseif (spellID == primalIDs) then
-				timerbar.data.start = 0
+				--timerbar.data.start = 0
+				bar.start = 0
 			end
-			timerbar.data.GUID = descGUID
+			--timerbar.data.GUID = descGUID
+			bar.GUID = descGUID
 		elseif (spellID == timerbar.spellID) then
 			-- Only Enhancement's "Feral Spirit" ability uses "lives"
-			if (timerbar.data.lives) then
+			--[[if (timerbar.data.lives) then
 				timerbar.data.lives = 2
 			else
 				timerbar.data.GUID = destGUID
+			end]]
+			if (bar.lives) then
+				bar.lives = 2
+			else
+				bar.GUID = destGUID
 			end
 
-			timerbar.data.start = floor(GetTime())
+			--timerbar.data.start = floor(GetTime())
+			bar.start = floor(GetTime())
 			--SSA.activeTotems[timerbar.startTime] = bar:GetName()
-			SSA.activeTotems[bar:GetName()] = timerbar.data.start
+			--SSA.activeTotems[bar:GetName()] = timerbar.data.start
+			SSA.activeTotems[bar:GetName()] = bar.start
 			bar:Show()
 		end
-	elseif (subevent == "UNIT_DIED" and timerbar.data.lives) then
-		timerbar.data.lives = timerbar.data.lives - 1
-		if (timerbar.data.lives <= 0) then
+	--elseif (subevent == "UNIT_DIED" and timerbar.data.lives) then
+	elseif (subevent == "UNIT_DIED" and bar.lives) then
+		--timerbar.data.lives = timerbar.data.lives - 1
+		bar.lives = bar.lives - 1
+		--[[if (timerbar.data.lives <= 0) then
 			timerbar.data.start = 0
+		end]]
+		if (bar.lives <= 0) then
+			bar.start = 0
 		end
-	elseif (subevent == "UNIT_DIED" and destGUID == timerbar.data.GUID) then
-		timerbar.data.start = 0
+	--elseif (subevent == "UNIT_DIED" and destGUID == timerbar.data.GUID) then
+	elseif (subevent == "UNIT_DIED" and destGUID == bar.GUID) then
+		--timerbar.data.start = 0
+		bar.start = 0
 	end
 end

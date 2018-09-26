@@ -1454,8 +1454,9 @@ local function BuildCurrentBarList(db,spec,grp)
 	
 	for i=1,#sortTable do
 		local barTitle = sortTable[i]
+		local bar = SSA[barTitle]
 		
-		if ((timerbars.bars[barTitle].data.spellID == 2825 and UnitFactionGroup("player") ~= "Horde") or (timerbars.bars[barTitle].data.spellID == 32182 and UnitFactionGroup("player") ~= "Alliance")) then
+		if ((bar.spellID == 2825 and UnitFactionGroup("player") ~= "Horde") or (bar.spellID == 32182 and UnitFactionGroup("player") ~= "Alliance")) then
 			-- Bloodlust is for Horde only
 			-- Heroism is for Alliance only
 		else
@@ -1469,7 +1470,7 @@ local function BuildCurrentBarList(db,spec,grp)
 						order = 1,
 						type = "description",
 						name = function()
-							local _,_,icon = GetSpellInfo(timerbars.bars[barTitle].data.spellID)
+							local _,_,icon = GetSpellInfo(bar.spellID)
 							
 							--if (name) then
 								return "|T"..icon..":20|t "..timerbars.bars[barTitle].layout.text
@@ -1504,7 +1505,7 @@ local function BuildCurrentBarList(db,spec,grp)
 						end,
 						width = "normal",
 					},
-					--[[filler_1 = {
+					--[[filler_1 = { data
 						order = 3,
 						type = "description",
 						name = " ",
@@ -1649,15 +1650,18 @@ function Auras:RefreshTimerBarGroupList(options,spec)
 	table.sort(sortTable)
 	
 	for i=1,#sortTable do
-		if (not timerbars.bars[sortTable[i]]) then
-			print("Bad Index: "..tostring(sortTable[i]))
+		local barTitle = sortTable[i]
+		local bar = SSA[barTitle]
+		
+		if (not timerbars.bars[barTitle]) then
+			print("Bad Index: "..tostring(barTitle))
 		end
-		local _,_,icon = GetSpellInfo(timerbars.bars[sortTable[i]].data.spellID)
+		local _,_,icon = GetSpellInfo(bar.spellID)
 	
 		-- If the bar is enabled, but not currently in use, show it in the "Available Bars" list
-		if (timerbars.bars[sortTable[i]].isEnabled and not timerbars.bars[sortTable[i]].isInUse) then
-			print("Inserting: ".."|T"..icon..":0|t "..timerbars.bars[sortTable[i]].layout.text..";"..sortTable[i])
-			tinsert(BAR_LIST,"|T"..icon..":0|t "..timerbars.bars[sortTable[i]].layout.text..";"..sortTable[i])
+		if (timerbars.bars[barTitle].isEnabled and not timerbars.bars[barTitle].isInUse) then
+			print("Inserting: ".."|T"..icon..":0|t "..timerbars.bars[barTitle].layout.text..";"..barTitle)
+			tinsert(BAR_LIST,"|T"..icon..":0|t "..timerbars.bars[barTitle].layout.text..";"..barTitle)
 		end
 	end
 	

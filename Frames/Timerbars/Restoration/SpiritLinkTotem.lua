@@ -3,6 +3,15 @@ local SSA, Auras = unpack(select(2,...))
 -- Cache Global Addon Variables
 local SpiritLinkTotemBar = SSA.SpiritLinkTotemBar
 
+-- Initialize Data Variables
+SpiritLinkTotemBar.spellID = 98008
+SpiritLinkTotemBar.icon = 237586
+SpiritLinkTotemBar.start = 0
+SpiritLinkTotemBar.duration = 6
+SpiritLinkTotemBar.condition = function()
+	return IsSpellKnown(98008)
+end
+
 SpiritLinkTotemBar:SetScript('OnUpdate',function(self)
 	if (Auras:CharacterCheck(self,3,108280)) then
 		Auras:RunTimerBarCode(self)

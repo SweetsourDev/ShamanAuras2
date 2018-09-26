@@ -375,9 +375,9 @@ function Auras:OnEnable()
 	
 	
 	-- Check if cooldowns value is table
-	if (type(db.cooldowns.numbers) == "table") then
+	--[[if (type(db.cooldowns.numbers) == "table") then
 		db.cooldowns.numbers = true
-	end
+	end]]
 			
 	InterfaceOptionsFrame:EnableMouse(true)
 	InterfaceOptionsFrame:SetMovable(true)
@@ -527,8 +527,11 @@ function Auras:UNIT_PET()
 	local spec = GetSpecialization()
 	
 	for k,v in pairs(Auras.db.char.timerbars[spec].bars) do
-		if (v.data.isPrimal and not UnitExists("pet") and v.data.start > 0) then
-			v.data.start = 0
+		local bar = SSA[k]
+		
+		if (bar.isPrimal and not UnitExists("pet") and bar.start > 0) then
+			--v.data.start = 0
+			bar.start = 0
 		end
 	end
 end
@@ -538,29 +541,32 @@ end
 ]]
 local function HealingStreamTotemHandler()
 	local isStreamOne,isStreamTwo = false,false
-	local streamOne = Auras.db.char.timerbars[3].bars.HealingStreamTotemBarOne
-	local streamTwo = Auras.db.char.timerbars[3].bars.HealingStreamTotemBarTwo
+	--local streamOne = Auras.db.char.timerbars[3].bars.HealingStreamTotemBarOne
+	local streamOne = SSA.HealingStreamTotemBarOne
+	--local streamTwo = Auras.db.char.timerbars[3].bars.HealingStreamTotemBarTwo
+	local streamTwo = SSA.HealingStreamTotemBarTwo
 	
 	for i=1,4 do
 		local _,_,totemStart = GetTotemInfo(i)
 		
-		if (streamOne.data.start == totemStart) then
+		if (streamOne.start == totemStart) then
 			isStreamOne = true
-		elseif (streamTwo.data.start == totemStart) then
+		elseif (streamTwo.start == totemStart) then
 			isStreamTwo = true
 		end
 	end
-	if (streamOne.data.start > 0 and not isStreamOne) then
-		streamOne.data.start = 0
+	if (streamOne.start > 0 and not isStreamOne) then
+		streamOne.start = 0
 		SSA.activeTotems["HealingStreamTotemBarOne"] = nil
-	elseif (streamTwo.data.start > 0 and not isStreamTwo) then
-		streamTwo.data.start = 0
+	elseif (streamTwo.start > 0 and not isStreamTwo) then
+		streamTwo.start = 0
 		SSA.activeTotems["HealingStreamTotemBarTwo"] = nil
 	end
 end
 
 local function FeralSpiritHandler()
-	local timerbar = Auras.db.char.timerbars[2].bars.FeralSpiritBar
+	--local timerbar = Auras.db.char.timerbars[2].bars.FeralSpiritBar
+	local bar = SSA.FeralSpiritBar
 	local numSpirits = 0
 	
 	for i=1,4 do
@@ -571,8 +577,8 @@ local function FeralSpiritHandler()
 		end
 	end
 	
-	if (timerbar.data.start > 0 and numSpirits == 0) then
-		timerbar.data.start = 0
+	if (bar.start > 0 and numSpirits == 0) then
+		bar.start = 0
 		SSA.activeTotems["FeralSpiritBar"] = nil
 	end
 end
@@ -582,7 +588,9 @@ TotemFrameTotem1:HookScript("OnClick",function(self,button)
 		local icon = TotemFrameTotem1IconTexture:GetTexture()
 		local spec = GetSpecialization()
 		for k,v in pairs(Auras.db.char.timerbars[spec].bars) do
-			if (v.data.icon == icon) then
+			local bar = SSA[k]
+			
+			if (bar.icon == icon) then
 				--[[if (k == "HealingStreamTotemBarOne" or k == "HealingStreamTotemBarTwo") then
 					local _,_,totemStart = GetTotemInfo(1)
 					
@@ -600,7 +608,7 @@ TotemFrameTotem1:HookScript("OnClick",function(self,button)
 					FeralSpiritHandler()
 				else
 					SSA.activeTotems[k] = nil
-					v.data.start = 0
+					bar.start = 0
 				end
 			end
 		end
@@ -612,7 +620,9 @@ TotemFrameTotem2:HookScript("OnClick",function(self,button)
 		local icon = TotemFrameTotem2IconTexture:GetTexture()
 		local spec = GetSpecialization()
 		for k,v in pairs(Auras.db.char.timerbars[spec].bars) do
-			if (v.data.icon == icon) then
+			local bar = SSA[k]
+			
+			if (bar.icon == icon) then
 				if (match(k,"HealingStreamTotem")) then
 					HealingStreamTotemHandler()
 					--[[local isStreamOne,isStreamTwo = false,false
@@ -639,7 +649,7 @@ TotemFrameTotem2:HookScript("OnClick",function(self,button)
 					FeralSpiritHandler()
 				else
 					SSA.activeTotems[k] = nil
-					v.data.start = 0
+					bar.start = 0
 				end
 			end
 			--[[if (v.info.icon == icon) then
@@ -700,7 +710,9 @@ TotemFrameTotem3:HookScript("OnClick",function(self,button)
 		local icon = TotemFrameTotem3IconTexture:GetTexture()
 		local spec = GetSpecialization()
 		for k,v in pairs(Auras.db.char.timerbars[spec].bars) do
-			if (v.data.icon == icon) then
+			local bar = SSA[k]
+			
+			if (bar.icon == icon) then
 				--[[if (k == "HealingStreamTotemBarOne" or k == "HealingStreamTotemBarTwo") then
 					local _,_,totemStart = GetTotemInfo(3)
 					
@@ -718,7 +730,7 @@ TotemFrameTotem3:HookScript("OnClick",function(self,button)
 					FeralSpiritHandler()
 				else
 					SSA.activeTotems[k] = nil
-					v.data.start = 0
+					bar.start = 0
 				end
 			end
 		end
@@ -730,7 +742,8 @@ TotemFrameTotem4:HookScript("OnClick",function(self,button)
 		local icon = TotemFrameTotem4IconTexture:GetTexture()
 		local spec = GetSpecialization()
 		for k,v in pairs(Auras.db.char.timerbars[spec].bars) do
-			if (v.data.icon == icon) then
+			local bar = SSA[k]
+			if (bar.icon == icon) then
 				--[[if (k == "HealingStreamTotemBarOne" or k == "HealingStreamTotemBarTwo") then
 					local _,_,totemStart = GetTotemInfo(4)
 					
@@ -748,7 +761,7 @@ TotemFrameTotem4:HookScript("OnClick",function(self,button)
 					FeralSpiritHandler()
 				else
 					SSA.activeTotems[k] = nil
-					v.data.start = 0
+					bar.start = 0
 				end
 			end
 		end
@@ -776,7 +789,8 @@ function Auras:PLAYER_TOTEM_UPDATE()
 		SSA.DataFrame.text:SetText(Auras:CurText('DataFrame')..k..". "..tostring(v).."\n")
 	end]]
 	for k,v in pairs(timerbars.bars) do
-		local remains = (v.data.start + v.data.duration) - GetTime()
+		local bar = SSA[k]
+		local remains = (bar.start + bar.duration) - GetTime()
 		
 		if (k == "HealingStreamTotemBarOne" and remains > 0) then
 			--if (SSA.activeTotems[k]) then
@@ -788,7 +802,7 @@ function Auras:PLAYER_TOTEM_UPDATE()
 			--end
 		--elseif (v.info.type == "totem" and v.startTime > 0 and not activeTotems[(v.startTime + v.duration)]) then
 		elseif (remains <= 0 and SSA.activeTotems[k]) then
-			v.data.start = 0
+			bar.start = 0
 			SSA.activeTotems[k] = nil
 			--print("Other Totem ("..(v.startTime + v.duration)..")")
 			--v.startTime = 0
@@ -798,11 +812,11 @@ function Auras:PLAYER_TOTEM_UPDATE()
 	
 	--print("One: "..tostring(isHealingStreamOne)..", Two: "..tostring(isHealingStreamTwo))
 	if (spec == 3) then
-		if (timerbars.bars.HealingStreamTotemBarOne.data.start > 0 and not isHealingStreamOne) then
-			timerbars.bars.HealingStreamTotemBarOne.data.start = 0
+		if (SSA.HealingStreamTotemBarOne.start > 0 and not isHealingStreamOne) then
+			SSA.HealingStreamTotemBarOne.start = 0
 			--Auras.db.char.timerbars[spec].HealingStreamTotemBarOne.info.isActive = false
-		elseif (timerbars.bars.HealingStreamTotemBarTwo.data.start > 0 and not isHealingStreamTwo) then
-			timerbars.bars.HealingStreamTotemBarTwo.data.start = 0
+		elseif (SSA.HealingStreamTotemBarTwo.start > 0 and not isHealingStreamTwo) then
+			SSA.HealingStreamTotemBarTwo.start = 0
 			--Auras.db.char.timerbars[spec].HealingStreamTotemBarTwo.info.isActive = false
 		end
 	end
@@ -912,7 +926,7 @@ Frame:HookScript("OnEvent",function(self,event,...)
 				cd.interrupted = false
 			end
 		elseif (event == "UNIT_SPELLCAST_START") then
-			local bar = Auras.db.char.statusbars[spec].bars.CastBar
+			--[[local bar = Auras.db.char.statusbars[spec].bars.CastBar
 			
 			local spellName,_,texture,startTime,endTime = UnitCastingInfo('player')
 
@@ -962,9 +976,9 @@ Frame:HookScript("OnEvent",function(self,event,...)
 				castBar.nametext:SetText('')
 			end
 			
-			castBar:SetAlpha(1);
+			castBar:SetAlpha(1);]]
 		else
-			local bar = Auras.db.char.statusbars[spec].bars.ChannelBar
+			--[[local bar = Auras.db.char.statusbars[spec].bars.ChannelBar
 			local spellName,_,texture,startTime,endTime = UnitChannelInfo('player')
 
 			endTime = endTime / 1e3
@@ -1016,12 +1030,12 @@ Frame:HookScript("OnEvent",function(self,event,...)
 			
 			if (castBar:GetAlpha(1)) then
 				castBar:SetAlpha(0)
-			end
+			end]]
 		end
 	elseif (event == "UNIT_SPELLCAST_CHANNEL_STOP") then
-		if (not Auras.db.char.statusbars[spec].bars.ChannelBar.adjust.isEnabled) then
+		--[[if (not Auras.db.char.statusbars[spec].bars.ChannelBar.adjust.isEnabled) then
 			channelBar:SetAlpha(0)
-		end
+		end]]
 	elseif (event == "UNIT_SPELLCAST_INTERRUPTED" or event == "UNIT_SPELLCAST_SUCCEEDED") then
 		local cd = Auras.db.char.auras[spec].cooldowns
 		if (event == "UNIT_SPELLCAST_INTERRUPTED") then

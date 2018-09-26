@@ -4,13 +4,20 @@ local SSA, Auras = unpack(select(2,...))
 local EarthElementalBar = SSA.EarthElementalBar
 local PrimalEarthElementalBar = SSA.PrimalEarthElementalBar
 
+-- Initialize Data Variables
+EarthElementalBar.spellID = 188616
+EarthElementalBar.icon = 136024
+EarthElementalBar.start = 0
+EarthElementalBar.duration = 60
+EarthElementalBar.GUID = ''
+EarthElementalBar.condition = function() return IsSpellKnown(198103) end
+
 EarthElementalBar:SetScript('OnUpdate',function(self)
 	if (Auras:CharacterCheck(self,0,198103)) then
 		Auras:RunTimerBarCode(self)
 	end
 end)
 
---EarthElementalBar:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 EarthElementalBar:SetScript("OnEvent",function(self,event)
 	if (event ~= "COMBAT_LOG_EVENT_UNFILTERED") then
 		return
@@ -19,13 +26,20 @@ EarthElementalBar:SetScript("OnEvent",function(self,event)
 	Auras:RunTimerEvent_Elemental(self,nil,CombatLogGetCurrentEventInfo())
 end)
 
+-- Initialize Data Variables
+PrimalEarthElementalBar.spellID = 118323
+PrimalEarthElementalBar.start = 0
+PrimalEarthElementalBar.duration = 60
+PrimalEarthElementalBar.GUID = ''
+PrimalEarthElementalBar.isPrimal = true
+PrimalEarthElementalBar.condition = function() return select(4,GetTalentInfo(6,2,1)) end
+
 PrimalEarthElementalBar:SetScript('OnUpdate',function(self)
 	if (Auras:CharacterCheck(self,1,6,2)) then
 		Auras:RunTimerBarCode(self)
 	end
 end)
 
---PrimalEarthElementalBar:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 PrimalEarthElementalBar:SetScript("OnEvent",function(self,event)
 	if (event ~= "COMBAT_LOG_EVENT_UNFILTERED") then
 		return

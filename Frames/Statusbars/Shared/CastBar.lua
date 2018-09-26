@@ -48,6 +48,8 @@ CastBar.safezone:SetAlpha(0)
 CastBar.timetext = CastBar:CreateFontString(nil, 'OVERLAY', 'GameFontHighlightLarge')
 CastBar.nametext = CastBar:CreateFontString(nil, 'OVERLAY', 'GameFontHighlightLarge')
 
+CastBar:RegisterUnitEvent("UNIT_SPELLCAST_START","player")
+
 CastBar.startTime = 0
 CastBar.endTime = 0
 CastBar.duration = 0
@@ -171,6 +173,65 @@ CastBar:SetScript('OnMouseUp',function(self,button)
 		Auras:MoveOnMouseUp(self,button)
 		Auras:UpdateLayout(self,Auras.db.char.elements[GetSpecialization()].statusbars.castBar)
 	end
+end)
+
+CastBar:SetScript("OnEvent",function(self,event,...)
+	if (event ~= "UNIT_SPELLCAST_START") then
+		return
+	end
+	
+	local spec = GetSpecialization()
+	local bar = Auras.db.char.statusbars[spec].bars[self:GetName()]
+	local spellName,_,texture,startTime,endTime = UnitCastingInfo('player')
+
+	--local duration = (endTime - startTime) / 1000
+	endTime = endTime / 1e3
+	startTime = startTime / 1e3
+	
+	self.HideTime = 0
+	
+	self.startTime = startTime
+	self.endTime = endTime
+	self.duration = endTime - startTime
+	self.spellName = spellName
+	self.isCast = true
+	
+	if (bar.icon.isEnabled) then
+		if (not self.icon:IsShown()) then
+			self.icon:Show()
+		end
+		
+		self.icon:SetTexture(texture)
+		self:SetWidth(bar.layout.width - bar.layout.height)
+	else
+		if (self.icon:IsShown()) then
+			self.icon:Hide()
+		end
+		
+		self:SetWidth(bar.layout.width)
+	end
+	
+	if (bar.spark) then
+		if (not self.spark:IsShown()) then
+			self.spark:Show()
+		end
+		
+		self.spark:SetSize(20,(self:GetHeight() * 2.5))
+	else
+		if (self.spark:IsShown()) then
+			self.spark:Hide()
+		end
+	end
+	
+	self:SetMinMaxValues(0,self.duration)
+	if (bar.nametext.isDisplayText) then
+		self.nametext:SetText(spellName)
+	else
+		self.nametext:SetText('')
+	end
+	
+	self:Show();
+	
 end)
 
 SSA.CastBar = CastBar

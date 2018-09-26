@@ -31,6 +31,9 @@ ChannelBar.bg:SetAllPoints(true)
 ChannelBar.timetext = ChannelBar:CreateFontString(nil, 'OVERLAY', 'GameFontHighlightLarge')
 ChannelBar.nametext = ChannelBar:CreateFontString(nil, 'OVERLAY', 'GameFontHighlightLarge')
 
+ChannelBar:RegisterUnitEvent("UNIT_SPELLCAST_CHANNEL_START","player")
+ChannelBar:RegisterUnitEvent("UNIT_SPELLCAST_CHANNEL_STOP","player")
+	
 ChannelBar.startTime = 0
 ChannelBar.endTime = 0
 ChannelBar.isChannel = false
@@ -136,6 +139,76 @@ ChannelBar:SetScript('OnMouseUp',function(self,button)
 	if (Auras.db.char.elements.isMoving) then
 		Auras:MoveOnMouseUp(self,button)
 		Auras:UpdateLayout(self,Auras.db.char.elements[GetSpecialization()].statusbars.channelBar)
+	end
+end)
+
+
+ChannelBar:SetScript("OnEvent",function(self,event,...)
+	if (event ~= "UNIT_SPELLCAST_CHANNEL_START" and event ~= "UNIT_SPELLCAST_CHANNEL_STOP") then
+		return
+	end
+	
+	local spec = GetSpecialization()
+	local castBar = SSA.CastBar
+	local bar = Auras.db.char.statusbars[spec].bars[self:GetName()]
+	
+	if (event == "UNIT_SPELLCAST_CHANNEL_START") then
+		local spellName,_,texture,startTime,endTime = UnitChannelInfo('player')
+
+		endTime = endTime / 1e3
+		startTime = startTime / 1e3
+		
+		self.duration = endTime - startTime
+		self.HideTime = 0
+		
+		self.startTime = startTime
+		self.endTime = endTime
+		
+		self:SetMinMaxValues(0,self.duration)
+		self.nametext:SetText(spellName)
+		self.isChannel = true
+		self:Show()
+
+		if (bar.icon.isEnabled) then
+			if (not self.icon:IsShown()) then
+				self.icon:Show()
+			end
+			
+			self.icon:SetTexture(texture)
+			self:SetWidth(bar.layout.width - bar.layout.height)
+		else
+			if (self.icon:IsShown()) then
+				self.icon:Hide()
+			end
+			
+			self:SetWidth(bar.layout.width)
+		end
+		
+		if (bar.spark) then
+			if (not self.spark:IsShown()) then
+				self.spark:Show()
+			end
+			
+			self.spark:SetSize(20,(self:GetHeight() * 2.5))
+		else
+			if (self.spark:IsShown()) then
+				self.spark:Hide()
+			end
+		end
+		
+		if (bar.timetext.isDisplayText) then
+			self.timetext:SetText(spellName)
+		else
+			self.timetext:SetText('')
+		end
+		
+		if (castBar:IsShown()) then
+			castBar:Hide()
+		end
+	else
+		if (not bar.adjust.isEnabled) then
+			self:Hide()
+		end
 	end
 end)
 
