@@ -148,6 +148,10 @@ function Auras:Toggle_VerifyDefaults(db,order,spec,name,desc,width,disabled,dbKe
 end
 
 function Auras:Toggle_Statusbar(db,order,name,desc,dbKey,barName)
+	if (not db) then
+		print("Bad Bar: "..tostring(barName))
+	end
+	
 	local toggle = {
 		order = order,
 		type = "toggle",

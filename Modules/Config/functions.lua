@@ -496,17 +496,17 @@ function Auras:SetCooldownOptions(spec,options)
 	end]]
 end
 
-function Auras:VerifyDefaultValues(spec,options,group,subgroup)
+function Auras:VerifyDefaultValues(spec,options,group)
 	if (group == "Cooldowns") then
 		print("Options: "..tostring(options))
 		Auras:SetCooldownOptions(spec,options)
 		Auras:RefreshCooldownList(options,spec,Auras.db.char.auras[spec].cooldowns)
 	elseif (group == "Cast" or group == "Channel") then
 		local db = Auras.db.char
-		local bar = db.elements[spec].statusbars[subgroup]
-		local default = db.elements.defaults.statusbars[subgroup]
+		local bar = db.statusbars[spec].bars[group.."Bar"]
+		local default = db.statusbars.defaults[group.."Bar"]
 		
-		local option = options.args.bars.args[subgroup].args
+		local option = options.args.bars.args[group.."Bar"].args
 		
 		Auras:SetBarOptions(bar,option,'nametext','timetext',true)
 		
@@ -526,16 +526,16 @@ function Auras:VerifyDefaultValues(spec,options,group,subgroup)
 		end
 	elseif (group == "Maelstrom") then
 		local db = Auras.db.char
-		local bar = db.elements[spec].statusbars.maelstromBar
-		local default = db.elements.defaults.statusbars.maelstromBar
-		local option = options.args.bars.args.maelstromBar.args
+		local bar = db.statusbars[spec].bars.MaelstromBar
+		local default = db.statusbars[spec].defaults.MaelstromBar
+		local option = options.args.bars.args.MaelstromBar.args
 		
 		Auras:SetBarOptions(bar,option,'text')
 
 		if (bar.isEnabled) then
-			options.args.bars.args.maelstromBar.disabled = false
+			options.args.bars.args.MaelstromBar.disabled = false
 		else
-			options.args.bars.args.maelstromBar.disabled = true
+			options.args.bars.args.MaelstromBar.disabled = true
 		end
 
 		option.general.args.threshold.max = UnitPowerMax('player',POWER_MAELSTROM_ID)
@@ -578,8 +578,8 @@ function Auras:VerifyDefaultValues(spec,options,group,subgroup)
 		end
 	elseif (group == "Timerbar") then
 		local db = Auras.db.char
-		local layout = db.layout[spec].timerbars.groups[subgroup]
-		local defaults = SSA.groupDefaults[spec].layout.timerbars[1]
+		local layout = db.timerbars[spec].groups[subgroup]
+		local defaults = SSA.groupDefaults[spec].layout.timerbars[spec]
 		
 		if (layout.alphaOoC ~= defaults.alphaOoC or
 			layout.alphaCombat ~= defaults.alphaCombat or
@@ -628,17 +628,17 @@ function Auras:VerifyDefaultValues(spec,options,group,subgroup)
 		end]]
 	elseif (group == "Icefury") then
 		local db = Auras.db.char
-		local bar = db.elements[spec].statusbars.icefuryBar
-		local default = db.elements.defaults.statusbars.icefuryBar
+		local bar = db.statusbars[spec].bars.IcefuryBar
+		local default = db.statusbars[spec].defaults.IcefuryBar
 
-		local option = options.args.bars.args.icefuryBar.args
+		local option = options.args.bars.args.IcefuryBar.args
 		
 		Auras:SetBarOptions(bar,option,'counttext','timetext',false,true)
 
 		if (bar.isEnabled) then
-			options.args.bars.args.icefuryBar.disabled = false
+			options.args.bars.args.IcefuryBar.disabled = false
 		else
-			options.args.bars.args.icefuryBar.disabled = true
+			options.args.bars.args.IcefuryBar.disabled = true
 		end
 		
 		if (bar.alphaCombat ~= default.alphaCombat or
@@ -654,17 +654,17 @@ function Auras:VerifyDefaultValues(spec,options,group,subgroup)
 		end
 	elseif (group == "Earthen Wall") then
 		local db = Auras.db.char
-		local bar = db.elements[spec].statusbars.earthenWallBar
-		local default = db.elements.defaults.statusbars.earthenWallBar
+		local bar = db.statusbars[spec].bars.EarthenWallTotemBar
+		local default = db.statusbars[spec].defaults.EarthenWallTotemBar
 		
-		local option = options.args.bars.args.earthenWallBar.args
+		local option = options.args.bars.args.EarthenWallTotemBar.args
 		
 		Auras:SetBarOptions(bar,option,'healthtext','timetext',false,true)
 		
 		if (bar.isEnabled) then
-			options.args.bars.args.earthenWallBar.disabled = false
+			options.args.bars.args.EarthenWallTotemBar.disabled = false
 		else
-			options.args.bars.args.earthenWallBar.disabled = true
+			options.args.bars.args.EarthenWallTotemBar.disabled = true
 		end
 		
 		if (bar.alphaCombat ~= default.alphaCombat or
@@ -680,16 +680,16 @@ function Auras:VerifyDefaultValues(spec,options,group,subgroup)
 		end
 	elseif (group == "Mana") then
 		local db = Auras.db.char
-		local bar = db.elements[spec].statusbars.manaBar
-		local default = db.elements.defaults.statusbars.manaBar
-		local option = options.args.bars.args.manaBar.args
+		local bar = db.statusbars[spec].bars.ManaBar
+		local default = db.statusbars[spec].defaults.ManaBar
+		local option = options.args.bars.args.ManaBar.args
 		
 		Auras:SetBarOptions(bar,option,'text')
 
 		if (bar.isEnabled) then
-			options.args.bars.args.manaBar.disabled = false
+			options.args.bars.args.ManaBar.disabled = false
 		else
-			options.args.bars.args.manaBar.disabled = true
+			options.args.bars.args.ManaBar.disabled = true
 		end
 
 		if (bar.alphaCombat ~= default.alphaCombat or
@@ -708,9 +708,9 @@ function Auras:VerifyDefaultValues(spec,options,group,subgroup)
 		end
 	elseif (group == "Tidal Waves") then
 		local db = Auras.db.char
-		local bar = db.elements[spec].statusbars.tidalWavesBar
-		local default = db.elements.defaults.statusbars.tidalWavesBar
-		local option = options.args.bars.args.tidalWavesBar.args
+		local bar = db.statusbars[spec].bars.TidalWavesBar
+		local default = db.statusbars[spec].defaults.TidalWavesBar
+		local option = options.args.bars.args.TidalWavesBar.args
 
 		if (bar.adjust.isEnabled) then
 			if (bar.adjust.showBG) then
@@ -729,9 +729,9 @@ function Auras:VerifyDefaultValues(spec,options,group,subgroup)
 		end
 
 		if (bar.isEnabled) then
-			options.args.bars.args.tidalWavesBar.disabled = false
+			options.args.bars.args.TidalWavesBar.disabled = false
 		else
-			options.args.bars.args.tidalWavesBar.disabled = true
+			options.args.bars.args.TidalWavesBar.disabled = true
 		end
 
 		if (not bar.animate or
@@ -852,7 +852,7 @@ function Auras:RefreshCooldownList(options,spec,cooldownDB)
 		end
 	end
 	options.args.cooldowns.args.cdGroups.args = args
-	options.args.cooldowns.args.cdGroups.name = "Group "..Auras.db.char.elements[spec].cooldowns.selected.." Cooldown Settings"
+	options.args.cooldowns.args.cdGroups.name = "Group "..Auras.db.char.auras[spec].cooldowns.selected.." Cooldown Settings"
 end
 
 local function UpdateSpellAuraInfo(spec,group)

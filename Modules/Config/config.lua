@@ -130,14 +130,14 @@ local function GetElementalOptions()
 		local auras = db.auras[1]
 		
 		-- Layout Table
-		local layout = db.layout[1]
-		local layoutDefaults = db.layout.defaults
+		--local layout = db.layout[1]
+		--local layoutDefaults = db.layout.defaults
 		
 		-- Element Defaults Tables
-		local timerbarDefaults = db.elements.defaults[1].timerbars
+		--[[local timerbarDefaults = db.elements.defaults[1].timerbars
 		local cooldownDefaults = db.elements.defaults.cooldowns
 		local statusbarDefaults = db.elements.defaults[1].statusbars
-		local frameDefaults = db.elements.defaults[1].frames
+		local frameDefaults = db.elements.defaults[1].frames]]
 		
 		-- Misc Vars
 		local group,subgroup
@@ -356,11 +356,11 @@ local function GetElementalOptions()
 									guiInline = true,
 									args = {
 										defaultBarToggle = Auras:Toggle_Basic(statusbars,1,L["LABEL_STATUSBAR_BLIZZARD"],L["TOOLTIP_TOGGLE_BLIZZARD_BAR"],false,'defaultBar'),
-										castBarToggle = Auras:Toggle_Statusbar(statusbars.bars.CastBar,2,L["TOGGLE_CAST_BAR"],L["TOOLTIP_TOGGLE_CAST_BAR"],'isEnabled','castBar'),
-										channelToggle = Auras:Toggle_Statusbar(statusbars.bars.ChannelBar,3,L["TOGGLE_CHANNEL_BAR"],L["TOOLTIP_TOGGLE_CHANNEL_BAR"],'isEnabled','channelBar'),
+										castBarToggle = Auras:Toggle_Statusbar(statusbars.bars.CastBar,2,L["TOGGLE_CAST_BAR"],L["TOOLTIP_TOGGLE_CAST_BAR"],'isEnabled','CastBar'),
+										channelToggle = Auras:Toggle_Statusbar(statusbars.bars.ChannelBar,3,L["TOGGLE_CHANNEL_BAR"],L["TOOLTIP_TOGGLE_CHANNEL_BAR"],'isEnabled','ChannelBar'),
 										--healthToggle = Auras:Toggle_Statusbar(statusbars.healthBar,4,L["TOGGLE_HEALTH_BAR"],L["TOOLTIP_TOGGLE_HEALTH_BAR"],'isEnabled','healthBar'),
-										maelstromToggle = Auras:Toggle_Statusbar(statusbars.bars.MaelstromBar,5,L["TOGGLE_MAELSTROM_BAR"],L["TOOLTIP_TOGGLE_MAELSTROM_BAR"],'isEnabled','maelstromBar'),
-										icefuryToggle = Auras:Toggle_Statusbar(statusbars.bars.IcefuryBar,6,L["TOGGLE_ICEFURY_BAR"],L["TOOLTIP_TOGGLE_ICEFURY_BAR"],'isEnabled','icefuryBar'),
+										maelstromToggle = Auras:Toggle_Statusbar(statusbars.bars.MaelstromBar,5,L["TOGGLE_MAELSTROM_BAR"],L["TOOLTIP_TOGGLE_MAELSTROM_BAR"],'isEnabled','MaelstromBar'),
+										icefuryToggle = Auras:Toggle_Statusbar(statusbars.bars.IcefuryBar,6,L["TOGGLE_ICEFURY_BAR"],L["TOOLTIP_TOGGLE_ICEFURY_BAR"],'isEnabled','IcefuryBar'),
 									},
 								},
 							},
@@ -511,7 +511,7 @@ local function GetElementalOptions()
 								},
 							},
 						},]]
-						maelstromBar = {
+						MaelstromBar = {
 							name = L["LABEL_STATUSBAR_MAELSTROM"],
 							order = 6,
 							type = "group",
@@ -595,8 +595,8 @@ local function GetElementalOptions()
 										Auras:ResetForeground(bar,default)
 										Auras:ResetLayout(bar,default)
 
-										ele_options.args.bars.args.maelstromBar.args.reset.disabled = true
-										ele_options.args.bars.args.maelstromBar.args.reset.name = "|cFF666666"..L["BUTTON_RESET_STATUSBAR_MAELSTROM"].."|r"
+										ele_options.args.bars.args.MaelstromBar.args.reset.disabled = true
+										ele_options.args.bars.args.MaelstromBar.args.reset.name = "|cFF666666"..L["BUTTON_RESET_STATUSBAR_MAELSTROM"].."|r"
 										Auras:VerifyDefaultValues(1,ele_options,'Maelstrom')
 										
 										if (not bar.adjust.isEnabled) then
@@ -606,23 +606,23 @@ local function GetElementalOptions()
 								},
 							},
 						},
-						castBar = {
+						CastBar = {
 							name = L["LABEL_STATUSBAR_CAST"],
 							order = 7,
 							inline = false,
 							type = "group",
 							args = {
-								adjust = Auras:Toggle_VerifyDefaults(statusbars.bars.CastBar.adjust,1,1,L["LABEL_STATUSBAR_MODIFY_CAST"],L["TOOLTIP_TOGGLE_STATUSBAR_CUSTOMIZATON"],nil,false,'isEnabled','Cast','castBar'),
-								nametextToggle = Auras:Toggle_VerifyDefaults(statusbars.bars.CastBar.nametext,2,1,L["TOGGLE_SPELL_TEXT"],L["TOOLTIP_TOGGLE_SPELL_TEXT"],nil,false,'isDisplayText','Cast','castBar'),
-								timetextToggle = Auras:Toggle_VerifyDefaults(statusbars.bars.CastBar.timetext,3,1,L["TOGGLE_TIME_TEXT"],L["TOOLTIP_TOGGLE_TIME_TEXT"],nil,false,'isDisplayText','Cast','castBar'),
+								adjust = Auras:Toggle_VerifyDefaults(statusbars.bars.CastBar.adjust,1,1,L["LABEL_STATUSBAR_MODIFY_CAST"],L["TOOLTIP_TOGGLE_STATUSBAR_CUSTOMIZATON"],nil,false,'isEnabled','Cast'),
+								nametextToggle = Auras:Toggle_VerifyDefaults(statusbars.bars.CastBar.nametext,2,1,L["TOGGLE_SPELL_TEXT"],L["TOOLTIP_TOGGLE_SPELL_TEXT"],nil,false,'isDisplayText','Cast'),
+								timetextToggle = Auras:Toggle_VerifyDefaults(statusbars.bars.CastBar.timetext,3,1,L["TOGGLE_TIME_TEXT"],L["TOOLTIP_TOGGLE_TIME_TEXT"],nil,false,'isDisplayText','Cast'),
 								general = {
 									name = "|cFFFFFFFF"..SETTINGS.."|r",
 									order = 4,
 									type = "group",
 									guiInline = true,
 									args = {
-										alphaCombat = Auras:Slider_VerifyDefaults(statusbars.bars.CastBar,1,1,L["LABEL_ALPHA_COMBAT"],L["TOOLTIP_STATUSBAR_ALPHA_COMBAT"],0,1,nil,false,'alphaCombat','Cast','castBar'),
-										alphaOoC = Auras:Slider_VerifyDefaults(statusbars.bars.CastBar,2,1,L["LABEL_ALPHA_NO_TARGET_NO_COMBAT"],L["TOOLTIP_STATUSBAR_ALPHA_NO_COMBAT"],0,1,nil,false,'alphaOoC','Cast','castBar'),
+										alphaCombat = Auras:Slider_VerifyDefaults(statusbars.bars.CastBar,1,1,L["LABEL_ALPHA_COMBAT"],L["TOOLTIP_STATUSBAR_ALPHA_COMBAT"],0,1,nil,false,'alphaCombat','Cast'),
+										alphaOoC = Auras:Slider_VerifyDefaults(statusbars.bars.CastBar,2,1,L["LABEL_ALPHA_NO_TARGET_NO_COMBAT"],L["TOOLTIP_STATUSBAR_ALPHA_NO_COMBAT"],0,1,nil,false,'alphaOoC','Cast'),
 									},
 								},
 								iconSpark = {
@@ -632,9 +632,9 @@ local function GetElementalOptions()
 									disabled = true,
 									guiInline = true,
 									args = {
-										sparkToggle = Auras:Toggle_VerifyDefaults(statusbars.bars.CastBar,1,1,L["TOGGLE_SPARK"],nil,nil,false,'spark','Cast','castBar'),
-										iconToggle = Auras:Toggle_VerifyDefaults(statusbars.bars.CastBar.icon,2,1,L["TOGGLE_ICON"],nil,nil,false,'isEnabled','Cast','castBar'),
-										iconJustify = Auras:Select_VerifyDefaults(statusbars.bars.CastBar.icon,3,1,L["LABEL_ICON_JUSTIFY"],L["TOOLTIP_STATUSBAR_ICON_LOCATION"],nil,ICON_JUSTIFY,nil,false,'justify','Cast','castBar'),
+										sparkToggle = Auras:Toggle_VerifyDefaults(statusbars.bars.CastBar,1,1,L["TOGGLE_SPARK"],nil,nil,false,'spark','Cast'),
+										iconToggle = Auras:Toggle_VerifyDefaults(statusbars.bars.CastBar.icon,2,1,L["TOGGLE_ICON"],nil,nil,false,'isEnabled','Cast'),
+										iconJustify = Auras:Select_VerifyDefaults(statusbars.bars.CastBar.icon,3,1,L["LABEL_ICON_JUSTIFY"],L["TOOLTIP_STATUSBAR_ICON_LOCATION"],nil,ICON_JUSTIFY,nil,false,'justify','Cast'),
 									},
 								},
 								nametext = {
@@ -644,13 +644,13 @@ local function GetElementalOptions()
 									disabled = true,
 									guiInline = true,
 									args = {
-										color = Auras:Color_VerifyDefaults(statusbars.bars.CastBar.nametext.font,1,1,L["LABEL_FONT_COLOR"],L["TOOLTIP_FONT_COLOR"],true,"full",false,'color','Cast','castBar'),
-										fontName = Auras:Select_VerifyDefaults(statusbars.bars.CastBar.nametext.font,2,1,L["LABEL_FONT"],L["TOOLTIP_FONT_NAME"],"LSM30_Font",LSM:HashTable("font"),nil,false,'name','Cast','castBar'),
-										fontSize = Auras:Slider_VerifyDefaults(statusbars.bars.CastBar.nametext.font,3,1,FONT_SIZE,L["TOOLTIP_COOLDOWN_FONT_SIZE"],5,40,nil,false,'size','Cast','castBar'),
-										fontOutline = Auras:Select_VerifyDefaults(statusbars.bars.CastBar.nametext.font,4,1,L["LABEL_FONT_OUTLINE"],L["TOOLTIP_FONT_OUTLINE"],nil,FONT_OUTLINES,nil,false,'flag','Cast','castBar'),
-										nametextAnchor = Auras:Select_VerifyDefaults(statusbars.bars.CastBar.nametext,5,1,L["LABEL_FONT_ANCHOR"],L["TOOLTIP_FONT_ANCHOR_POINT"],nil,FRAME_ANCHOR_OPTIONS,nil,false,'justify','Cast','castBar'),
-										nametextX = Auras:Slider_VerifyDefaults(statusbars.bars.CastBar.nametext,6,1,"X",L["TOOLTIP_FONT_X_OFFSET"],-500,500,nil,false,'x','Cast','castBar'),
-										nametextY = Auras:Slider_VerifyDefaults(statusbars.bars.CastBar.nametext,7,1,"Y",L["TOOLTIP_FONT_Y_OFFSET"],-100,100,nil,false,'y','Cast','castBar'),
+										color = Auras:Color_VerifyDefaults(statusbars.bars.CastBar.nametext.font,1,1,L["LABEL_FONT_COLOR"],L["TOOLTIP_FONT_COLOR"],true,"full",false,'color','Cast'),
+										fontName = Auras:Select_VerifyDefaults(statusbars.bars.CastBar.nametext.font,2,1,L["LABEL_FONT"],L["TOOLTIP_FONT_NAME"],"LSM30_Font",LSM:HashTable("font"),nil,false,'name','Cast'),
+										fontSize = Auras:Slider_VerifyDefaults(statusbars.bars.CastBar.nametext.font,3,1,FONT_SIZE,L["TOOLTIP_COOLDOWN_FONT_SIZE"],5,40,nil,false,'size','Cast'),
+										fontOutline = Auras:Select_VerifyDefaults(statusbars.bars.CastBar.nametext.font,4,1,L["LABEL_FONT_OUTLINE"],L["TOOLTIP_FONT_OUTLINE"],nil,FONT_OUTLINES,nil,false,'flag','Cast'),
+										nametextAnchor = Auras:Select_VerifyDefaults(statusbars.bars.CastBar.nametext,5,1,L["LABEL_FONT_ANCHOR"],L["TOOLTIP_FONT_ANCHOR_POINT"],nil,FRAME_ANCHOR_OPTIONS,nil,false,'justify','Cast'),
+										nametextX = Auras:Slider_VerifyDefaults(statusbars.bars.CastBar.nametext,6,1,"X",L["TOOLTIP_FONT_X_OFFSET"],-500,500,nil,false,'x','Cast'),
+										nametextY = Auras:Slider_VerifyDefaults(statusbars.bars.CastBar.nametext,7,1,"Y",L["TOOLTIP_FONT_Y_OFFSET"],-100,100,nil,false,'y','Cast'),
 										shadow = {
 											name = '|cFFFFFFFF'..L["LABEL_FONT_SHADOW"]..'|r',
 											type = "group",
@@ -658,10 +658,10 @@ local function GetElementalOptions()
 											hidden = false,
 											guiInline = true,
 											args = {
-												shadowToggle = Auras:Toggle_VerifyDefaults(statusbars.bars.CastBar.nametext.font.shadow,1,1,L["TOGGLE"],nil,nil,false,'isEnabled','Cast','castBar'),
-												shadowColor = Auras:Color_VerifyDefaults(statusbars.bars.CastBar.nametext.font.shadow,2,1,L["LABEL_FONT_SHADOW_COLOR"],L["TOOLTIP_FONT_SHADOW_COLOR"],true,nil,false,'color','Cast','castBar'),
-												shadowX = Auras:Slider_VerifyDefaults(statusbars.bars.CastBar.nametext.font.shadow.offset,3,1,"X",L["TOOLTIP_FONT_SHADOW_X_OFFSET"],-10,10,nil,false,'x','Cast','castBar'),
-												shadowY = Auras:Slider_VerifyDefaults(statusbars.bars.CastBar.nametext.font.shadow.offset,4,1,"Y",L["TOOLTIP_FONT_SHADOW_Y_OFFSET"],-10,10,nil,false,'y','Cast','castBar'),
+												shadowToggle = Auras:Toggle_VerifyDefaults(statusbars.bars.CastBar.nametext.font.shadow,1,1,L["TOGGLE"],nil,nil,false,'isEnabled','Cast'),
+												shadowColor = Auras:Color_VerifyDefaults(statusbars.bars.CastBar.nametext.font.shadow,2,1,L["LABEL_FONT_SHADOW_COLOR"],L["TOOLTIP_FONT_SHADOW_COLOR"],true,nil,false,'color','Cast'),
+												shadowX = Auras:Slider_VerifyDefaults(statusbars.bars.CastBar.nametext.font.shadow.offset,3,1,"X",L["TOOLTIP_FONT_SHADOW_X_OFFSET"],-10,10,nil,false,'x','Cast'),
+												shadowY = Auras:Slider_VerifyDefaults(statusbars.bars.CastBar.nametext.font.shadow.offset,4,1,"Y",L["TOOLTIP_FONT_SHADOW_Y_OFFSET"],-10,10,nil,false,'y','Cast'),
 											},
 										},
 									},
@@ -673,13 +673,13 @@ local function GetElementalOptions()
 									disabled = true,
 									guiInline = true,
 									args = {
-										color = Auras:Color_VerifyDefaults(statusbars.bars.CastBar.timetext.font,1,1,L["LABEL_FONT_COLOR"],L["TOOLTIP_FONT_COLOR"],true,"full",false,'color','Cast','castBar'),
-										timeFontName = Auras:Select_VerifyDefaults(statusbars.bars.CastBar.timetext.font,2,1,L["LABEL_FONT"],L["TOOLTIP_FONT_NAME"],"LSM30_Font",LSM:HashTable("font"),nil,false,'name','Cast','castBar'),
-										timeFontSize = Auras:Slider_VerifyDefaults(statusbars.bars.CastBar.timetext.font,3,1,FONT_SIZE,L["TOOLTIP_COOLDOWN_FONT_SIZE"],5,40,nil,false,'size','Cast','castBar'),
-										timeFontOutline = Auras:Select_VerifyDefaults(statusbars.bars.CastBar.timetext.font,4,1,L["LABEL_FONT_OUTLINE"],L["TOOLTIP_FONT_OUTLINE"],nil,FONT_OUTLINES,nil,false,'flag','Cast','castBar'),
-										timeTextAnchor = Auras:Select_VerifyDefaults(statusbars.bars.CastBar.timetext,5,1,L["LABEL_FONT_ANCHOR"],L["TOOLTIP_FONT_ANCHOR_POINT"],nil,FRAME_ANCHOR_OPTIONS,nil,false,'justify','Cast','castBar'),
-										timeTextX = Auras:Slider_VerifyDefaults(statusbars.bars.CastBar.timetext,6,1,"X",L["TOOLTIP_FONT_X_OFFSET"],-500,500,nil,false,'x','Cast','castBar'),
-										timeTextY = Auras:Slider_VerifyDefaults(statusbars.bars.CastBar.timetext,7,1,"Y",L["TOOLTIP_FONT_Y_OFFSET"],-100,100,nil,false,'y','Cast','castBar'),
+										color = Auras:Color_VerifyDefaults(statusbars.bars.CastBar.timetext.font,1,1,L["LABEL_FONT_COLOR"],L["TOOLTIP_FONT_COLOR"],true,"full",false,'color','Cast'),
+										timeFontName = Auras:Select_VerifyDefaults(statusbars.bars.CastBar.timetext.font,2,1,L["LABEL_FONT"],L["TOOLTIP_FONT_NAME"],"LSM30_Font",LSM:HashTable("font"),nil,false,'name','Cast'),
+										timeFontSize = Auras:Slider_VerifyDefaults(statusbars.bars.CastBar.timetext.font,3,1,FONT_SIZE,L["TOOLTIP_COOLDOWN_FONT_SIZE"],5,40,nil,false,'size','Cast'),
+										timeFontOutline = Auras:Select_VerifyDefaults(statusbars.bars.CastBar.timetext.font,4,1,L["LABEL_FONT_OUTLINE"],L["TOOLTIP_FONT_OUTLINE"],nil,FONT_OUTLINES,nil,false,'flag','Cast'),
+										timeTextAnchor = Auras:Select_VerifyDefaults(statusbars.bars.CastBar.timetext,5,1,L["LABEL_FONT_ANCHOR"],L["TOOLTIP_FONT_ANCHOR_POINT"],nil,FRAME_ANCHOR_OPTIONS,nil,false,'justify','Cast'),
+										timeTextX = Auras:Slider_VerifyDefaults(statusbars.bars.CastBar.timetext,6,1,"X",L["TOOLTIP_FONT_X_OFFSET"],-500,500,nil,false,'x','Cast'),
+										timeTextY = Auras:Slider_VerifyDefaults(statusbars.bars.CastBar.timetext,7,1,"Y",L["TOOLTIP_FONT_Y_OFFSET"],-100,100,nil,false,'y','Cast'),
 										shadow = {
 											name = '|cFFFFFFFF'..L["LABEL_FONT_SHADOW"]..'|r',
 											type = "group",
@@ -687,10 +687,10 @@ local function GetElementalOptions()
 											hidden = false,
 											guiInline = true,
 											args = {
-												shadowToggle = Auras:Toggle_VerifyDefaults(statusbars.bars.CastBar.timetext.font.shadow,1,1,L["TOGGLE"],nil,nil,false,'isEnabled','Cast','castBar'),
-												shadowColor = Auras:Color_VerifyDefaults(statusbars.bars.CastBar.timetext.font.shadow,2,1,L["LABEL_FONT_SHADOW_COLOR"],L["TOOLTIP_FONT_SHADOW_COLOR"],true,nil,false,'color','Cast','castBar'),
-												shadowX = Auras:Slider_VerifyDefaults(statusbars.bars.CastBar.timetext.font.shadow.offset,3,1,"X",L["TOOLTIP_FONT_SHADOW_X_OFFSET"],-10,10,nil,false,'x','Cast','castBar'),
-												shadowY = Auras:Slider_VerifyDefaults(statusbars.bars.CastBar.timetext.font.shadow.offset,4,1,"Y",L["TOOLTIP_FONT_SHADOW_Y_OFFSET"],-10,10,nil,false,'y','Cast','castBar'),
+												shadowToggle = Auras:Toggle_VerifyDefaults(statusbars.bars.CastBar.timetext.font.shadow,1,1,L["TOGGLE"],nil,nil,false,'isEnabled','Cast'),
+												shadowColor = Auras:Color_VerifyDefaults(statusbars.bars.CastBar.timetext.font.shadow,2,1,L["LABEL_FONT_SHADOW_COLOR"],L["TOOLTIP_FONT_SHADOW_COLOR"],true,nil,false,'color','Cast'),
+												shadowX = Auras:Slider_VerifyDefaults(statusbars.bars.CastBar.timetext.font.shadow.offset,3,1,"X",L["TOOLTIP_FONT_SHADOW_X_OFFSET"],-10,10,nil,false,'x','Cast'),
+												shadowY = Auras:Slider_VerifyDefaults(statusbars.bars.CastBar.timetext.font.shadow.offset,4,1,"Y",L["TOOLTIP_FONT_SHADOW_Y_OFFSET"],-10,10,nil,false,'y','Cast'),
 											},
 										},
 									},
@@ -701,13 +701,13 @@ local function GetElementalOptions()
 									order = 8,
 									guiInline = true,
 									args = {
-										texture = Auras:Select_VerifyDefaults(statusbars.bars.CastBar.foreground,1,1,L["LABEL_STATUSBAR_TEXTURE"],L["TOOLTIP_STATUSBAR_TEXTURE"],"LSM30_Statusbar",LSM:HashTable(LSM.MediaType.STATUSBAR),nil,false,'texture','Cast','castBar'),
-										textureColor = Auras:Color_VerifyDefaults(statusbars.bars.CastBar.foreground,2,1,L["LABEL_STATUSBAR_COLOR"],nil,false,"double",false,'color','Cast','castBar'),
-										backgroundTexture = Auras:Select_VerifyDefaults(statusbars.bars.CastBar.background,3,1,L["LABEL_STATUSBAR_BG_TEXTURE"],L["TOOLTIP_STATUSBAR_BG_TEXTURE"],"LSM30_Statusbar",LSM:HashTable(LSM.MediaType.STATUSBAR),nil,false,'texture','Cast','castBar'),
-										backgroundColor = Auras:Color_VerifyDefaults(statusbars.bars.CastBar.background,4,1,L["LABEL_STATUSBAR_BG_COLOR"],L["TOOLTIP_STATUSBAR_BG_COLOR"],true,nil,false,'color','Cast','castBar'),
-										backgroundToggle = Auras:Toggle_VerifyDefaults(statusbars.bars.CastBar.adjust,5,1,L["LABEL_STATUSBAR_MODIFY_BACKGROUND"],L["TOOLTIP_TOGGLE_STATUSBAR_BG_CUSTOMIZATON"],nil,false,'showBG','Cast','castBar'),
-										width = Auras:Slider_VerifyDefaults(statusbars.bars.CastBar.layout,6,1,L["LABEL_WIDTH"],nil,100,500,nil,false,'width','Cast','castBar'),
-										height = Auras:Slider_VerifyDefaults(statusbars.bars.CastBar.layout,7,1,L["LABEL_HEIGHT"],nil,10,100,nil,false,'height','Cast','castBar'),
+										texture = Auras:Select_VerifyDefaults(statusbars.bars.CastBar.foreground,1,1,L["LABEL_STATUSBAR_TEXTURE"],L["TOOLTIP_STATUSBAR_TEXTURE"],"LSM30_Statusbar",LSM:HashTable(LSM.MediaType.STATUSBAR),nil,false,'texture','Cast'),
+										textureColor = Auras:Color_VerifyDefaults(statusbars.bars.CastBar.foreground,2,1,L["LABEL_STATUSBAR_COLOR"],nil,false,"double",false,'color','Cast'),
+										backgroundTexture = Auras:Select_VerifyDefaults(statusbars.bars.CastBar.background,3,1,L["LABEL_STATUSBAR_BG_TEXTURE"],L["TOOLTIP_STATUSBAR_BG_TEXTURE"],"LSM30_Statusbar",LSM:HashTable(LSM.MediaType.STATUSBAR),nil,false,'texture','Cast'),
+										backgroundColor = Auras:Color_VerifyDefaults(statusbars.bars.CastBar.background,4,1,L["LABEL_STATUSBAR_BG_COLOR"],L["TOOLTIP_STATUSBAR_BG_COLOR"],true,nil,false,'color','Cast'),
+										backgroundToggle = Auras:Toggle_VerifyDefaults(statusbars.bars.CastBar.adjust,5,1,L["LABEL_STATUSBAR_MODIFY_BACKGROUND"],L["TOOLTIP_TOGGLE_STATUSBAR_BG_CUSTOMIZATON"],nil,false,'showBG','Cast'),
+										width = Auras:Slider_VerifyDefaults(statusbars.bars.CastBar.layout,6,1,L["LABEL_WIDTH"],nil,100,500,nil,false,'width','Cast'),
+										height = Auras:Slider_VerifyDefaults(statusbars.bars.CastBar.layout,7,1,L["LABEL_HEIGHT"],nil,10,100,nil,false,'height','Cast'),
 									},
 								},
 								reset = {
@@ -732,9 +732,9 @@ local function GetElementalOptions()
 										Auras:ResetForeground(bar,default)
 										Auras:ResetLayout(bar,default)
 
-										ele_options.args.bars.args.castBar.args.reset.disabled = true
-										ele_options.args.bars.args.castBar.args.reset.name = "|cFF666666"..L["BUTTON_RESET_STATUSBAR_CAST"].."|r"
-										Auras:VerifyDefaultValues(1,ele_options,'Cast','CastBar')
+										ele_options.args.bars.args.CastBar.args.reset.disabled = true
+										ele_options.args.bars.args.CastBar.args.reset.name = "|cFF666666"..L["BUTTON_RESET_STATUSBAR_CAST"].."|r"
+										Auras:VerifyDefaultValues(1,ele_options,'Cast')
 										
 										if (not bar.adjust.isEnabled) then
 											Auras:InitializeProgressBar('CastBar',nil,'nametext','timetext',1)
@@ -743,23 +743,23 @@ local function GetElementalOptions()
 								},
 							},
 						},
-						channelBar = {
+						ChannelBar = {
 							name = L["LABEL_STATUSBAR_CHANNEL"],
 							order = 8,
 							inline = false,
 							type = "group",
 							args = {
-								adjust = Auras:Toggle_VerifyDefaults(statusbars.bars.ChannelBar.adjust,1,1,L["LABEL_STATUSBAR_MODIFY_CAST"],L["TOOLTIP_TOGGLE_STATUSBAR_CUSTOMIZATON"],nil,false,'isEnabled','Channel','channelBar'),
-								nametextToggle = Auras:Toggle_VerifyDefaults(statusbars.bars.ChannelBar.nametext,2,1,L["TOGGLE_SPELL_TEXT"],L["TOOLTIP_TOGGLE_SPELL_TEXT"],nil,false,'isDisplayText','Channel','channelBar'),
-								timetextToggle = Auras:Toggle_VerifyDefaults(statusbars.bars.ChannelBar.timetext,3,1,L["TOGGLE_TIME_TEXT"],L["TOOLTIP_TOGGLE_TIME_TEXT"],nil,false,'isDisplayText','Channel','channelBar'),
+								adjust = Auras:Toggle_VerifyDefaults(statusbars.bars.ChannelBar.adjust,1,1,L["LABEL_STATUSBAR_MODIFY_CAST"],L["TOOLTIP_TOGGLE_STATUSBAR_CUSTOMIZATON"],nil,false,'isEnabled','Channel'),
+								nametextToggle = Auras:Toggle_VerifyDefaults(statusbars.bars.ChannelBar.nametext,2,1,L["TOGGLE_SPELL_TEXT"],L["TOOLTIP_TOGGLE_SPELL_TEXT"],nil,false,'isDisplayText','Channel'),
+								timetextToggle = Auras:Toggle_VerifyDefaults(statusbars.bars.ChannelBar.timetext,3,1,L["TOGGLE_TIME_TEXT"],L["TOOLTIP_TOGGLE_TIME_TEXT"],nil,false,'isDisplayText','Channel'),
 								general = {
 									name = "|cFFFFFFFF"..SETTINGS.."|r",
 									order = 4,
 									type = "group",
 									guiInline = true,
 									args = {
-										alphaCombat = Auras:Slider_VerifyDefaults(statusbars.bars.ChannelBar,1,1,L["LABEL_ALPHA_COMBAT"],L["TOOLTIP_STATUSBAR_ALPHA_COMBAT"],0,1,nil,false,'alphaCombat','Channel','channelBar'),
-										alphaOoC = Auras:Slider_VerifyDefaults(statusbars.bars.ChannelBar,2,1,L["LABEL_ALPHA_NO_TARGET_NO_COMBAT"],L["TOOLTIP_STATUSBAR_ALPHA_NO_COMBAT"],0,1,nil,false,'alphaOoC','Channel','channelBar'),
+										alphaCombat = Auras:Slider_VerifyDefaults(statusbars.bars.ChannelBar,1,1,L["LABEL_ALPHA_COMBAT"],L["TOOLTIP_STATUSBAR_ALPHA_COMBAT"],0,1,nil,false,'alphaCombat','Channel'),
+										alphaOoC = Auras:Slider_VerifyDefaults(statusbars.bars.ChannelBar,2,1,L["LABEL_ALPHA_NO_TARGET_NO_COMBAT"],L["TOOLTIP_STATUSBAR_ALPHA_NO_COMBAT"],0,1,nil,false,'alphaOoC','Channel'),
 									},
 								},
 								iconSpark = {
@@ -769,9 +769,9 @@ local function GetElementalOptions()
 									disabled = true,
 									guiInline = true,
 									args = {
-										sparkToggle = Auras:Toggle_VerifyDefaults(statusbars.bars.ChannelBar,1,1,L["TOGGLE_SPARK"],nil,nil,false,'spark','Channel','channelBar'),
-										iconToggle = Auras:Toggle_VerifyDefaults(statusbars.bars.ChannelBar.icon,2,1,L["TOGGLE_ICON"],nil,nil,false,'isEnabled','Channel','channelBar'),
-										iconJustify = Auras:Select_VerifyDefaults(statusbars.bars.ChannelBar.icon,3,1,L["LABEL_ICON_JUSTIFY"],L["TOOLTIP_STATUSBAR_ICON_LOCATION"],nil,ICON_JUSTIFY,nil,false,'justify','Channel','channelBar'),
+										sparkToggle = Auras:Toggle_VerifyDefaults(statusbars.bars.ChannelBar,1,1,L["TOGGLE_SPARK"],nil,nil,false,'spark','Channel'),
+										iconToggle = Auras:Toggle_VerifyDefaults(statusbars.bars.ChannelBar.icon,2,1,L["TOGGLE_ICON"],nil,nil,false,'isEnabled','Channel'),
+										iconJustify = Auras:Select_VerifyDefaults(statusbars.bars.ChannelBar.icon,3,1,L["LABEL_ICON_JUSTIFY"],L["TOOLTIP_STATUSBAR_ICON_LOCATION"],nil,ICON_JUSTIFY,nil,false,'justify','Channel'),
 									},
 								},
 								nametext = {
@@ -781,13 +781,13 @@ local function GetElementalOptions()
 									disabled = true,
 									guiInline = true,
 									args = {
-										color = Auras:Color_VerifyDefaults(statusbars.bars.ChannelBar.nametext.font,1,1,L["LABEL_FONT_COLOR"],L["TOOLTIP_FONT_COLOR"],true,"full",false,'color','Channel','channelBar'),
-										fontName = Auras:Select_VerifyDefaults(statusbars.bars.ChannelBar.nametext.font,2,1,L["LABEL_FONT"],L["TOOLTIP_FONT_NAME"],"LSM30_Font",LSM:HashTable("font"),nil,false,'name','Channel','channelBar'),
-										fontSize = Auras:Slider_VerifyDefaults(statusbars.bars.ChannelBar.nametext.font,3,1,FONT_SIZE,L["TOOLTIP_COOLDOWN_FONT_SIZE"],5,40,nil,false,'size','Channel','channelBar'),
-										fontOutline = Auras:Select_VerifyDefaults(statusbars.bars.ChannelBar.nametext.font,4,1,L["LABEL_FONT_OUTLINE"],L["TOOLTIP_FONT_OUTLINE"],nil,FONT_OUTLINES,nil,false,'flag','Channel','channelBar'),
-										nametextAnchor = Auras:Select_VerifyDefaults(statusbars.bars.ChannelBar.nametext,5,1,L["LABEL_FONT_ANCHOR"],L["TOOLTIP_FONT_ANCHOR_POINT"],nil,FRAME_ANCHOR_OPTIONS,nil,false,'justify','Channel','channelBar'),
-										nametextX = Auras:Slider_VerifyDefaults(statusbars.bars.ChannelBar.nametext,6,1,"X",L["TOOLTIP_FONT_X_OFFSET"],-500,500,nil,false,'x','Channel','channelBar'),
-										nametextY = Auras:Slider_VerifyDefaults(statusbars.bars.ChannelBar.nametext,7,1,"Y",L["TOOLTIP_FONT_Y_OFFSET"],-100,100,nil,false,'y','Channel','channelBar'),
+										color = Auras:Color_VerifyDefaults(statusbars.bars.ChannelBar.nametext.font,1,1,L["LABEL_FONT_COLOR"],L["TOOLTIP_FONT_COLOR"],true,"full",false,'color','Channel'),
+										fontName = Auras:Select_VerifyDefaults(statusbars.bars.ChannelBar.nametext.font,2,1,L["LABEL_FONT"],L["TOOLTIP_FONT_NAME"],"LSM30_Font",LSM:HashTable("font"),nil,false,'name','Channel'),
+										fontSize = Auras:Slider_VerifyDefaults(statusbars.bars.ChannelBar.nametext.font,3,1,FONT_SIZE,L["TOOLTIP_COOLDOWN_FONT_SIZE"],5,40,nil,false,'size','Channel'),
+										fontOutline = Auras:Select_VerifyDefaults(statusbars.bars.ChannelBar.nametext.font,4,1,L["LABEL_FONT_OUTLINE"],L["TOOLTIP_FONT_OUTLINE"],nil,FONT_OUTLINES,nil,false,'flag','Channel'),
+										nametextAnchor = Auras:Select_VerifyDefaults(statusbars.bars.ChannelBar.nametext,5,1,L["LABEL_FONT_ANCHOR"],L["TOOLTIP_FONT_ANCHOR_POINT"],nil,FRAME_ANCHOR_OPTIONS,nil,false,'justify','Channel'),
+										nametextX = Auras:Slider_VerifyDefaults(statusbars.bars.ChannelBar.nametext,6,1,"X",L["TOOLTIP_FONT_X_OFFSET"],-500,500,nil,false,'x','Channel'),
+										nametextY = Auras:Slider_VerifyDefaults(statusbars.bars.ChannelBar.nametext,7,1,"Y",L["TOOLTIP_FONT_Y_OFFSET"],-100,100,nil,false,'y','Channel'),
 										shadow = {
 											name = '|cFFFFFFFF'..L["LABEL_FONT_SHADOW"]..'|r',
 											type = "group",
@@ -795,10 +795,10 @@ local function GetElementalOptions()
 											hidden = false,
 											guiInline = true,
 											args = {
-												shadowToggle = Auras:Toggle_VerifyDefaults(statusbars.bars.ChannelBar.nametext.font.shadow,1,1,L["TOGGLE"],nil,nil,false,'isEnabled','Channel','channelBar'),
-												shadowColor = Auras:Color_VerifyDefaults(statusbars.bars.ChannelBar.nametext.font.shadow,2,1,L["LABEL_FONT_SHADOW_COLOR"],L["TOOLTIP_FONT_SHADOW_COLOR"],true,nil,false,'color','Channel','channelBar'),
-												shadowX = Auras:Slider_VerifyDefaults(statusbars.bars.ChannelBar.nametext.font.shadow.offset,3,1,"X",L["TOOLTIP_FONT_SHADOW_X_OFFSET"],-10,10,nil,false,'x','Channel','channelBar'),
-												shadowY = Auras:Slider_VerifyDefaults(statusbars.bars.ChannelBar.nametext.font.shadow.offset,4,1,"Y",L["TOOLTIP_FONT_SHADOW_Y_OFFSET"],-10,10,nil,false,'y','Channel','channelBar'),
+												shadowToggle = Auras:Toggle_VerifyDefaults(statusbars.bars.ChannelBar.nametext.font.shadow,1,1,L["TOGGLE"],nil,nil,false,'isEnabled','Channel'),
+												shadowColor = Auras:Color_VerifyDefaults(statusbars.bars.ChannelBar.nametext.font.shadow,2,1,L["LABEL_FONT_SHADOW_COLOR"],L["TOOLTIP_FONT_SHADOW_COLOR"],true,nil,false,'color','Channel'),
+												shadowX = Auras:Slider_VerifyDefaults(statusbars.bars.ChannelBar.nametext.font.shadow.offset,3,1,"X",L["TOOLTIP_FONT_SHADOW_X_OFFSET"],-10,10,nil,false,'x','Channel'),
+												shadowY = Auras:Slider_VerifyDefaults(statusbars.bars.ChannelBar.nametext.font.shadow.offset,4,1,"Y",L["TOOLTIP_FONT_SHADOW_Y_OFFSET"],-10,10,nil,false,'y','Channel'),
 											},
 										},
 									},
@@ -810,13 +810,13 @@ local function GetElementalOptions()
 									disabled = true,
 									guiInline = true,
 									args = {
-										color = Auras:Color_VerifyDefaults(statusbars.bars.ChannelBar.timetext.font,1,1,L["LABEL_FONT_COLOR"],L["TOOLTIP_FONT_COLOR"],true,"full",false,'color','Channel','channelBar'),
-										timeFontName = Auras:Select_VerifyDefaults(statusbars.bars.ChannelBar.timetext.font,2,1,L["LABEL_FONT"],L["TOOLTIP_FONT_NAME"],"LSM30_Font",LSM:HashTable("font"),nil,false,'name','Channel','channelBar'),
-										timeFontSize = Auras:Slider_VerifyDefaults(statusbars.bars.ChannelBar.timetext.font,3,1,FONT_SIZE,L["TOOLTIP_COOLDOWN_FONT_SIZE"],5,40,nil,false,'size','Channel','channelBar'),
-										timeFontOutline = Auras:Select_VerifyDefaults(statusbars.bars.ChannelBar.timetext.font,4,1,L["LABEL_FONT_OUTLINE"],L["TOOLTIP_FONT_OUTLINE"],nil,FONT_OUTLINES,nil,false,'flag','Channel','channelBar'),
-										timeTextAnchor = Auras:Select_VerifyDefaults(statusbars.bars.ChannelBar.timetext,5,1,L["LABEL_FONT_ANCHOR"],L["TOOLTIP_FONT_ANCHOR_POINT"],nil,FRAME_ANCHOR_OPTIONS,nil,false,'justify','Channel','channelBar'),
-										timeTextX = Auras:Slider_VerifyDefaults(statusbars.bars.ChannelBar.timetext,6,1,"X",L["TOOLTIP_FONT_X_OFFSET"],-500,500,nil,false,'x','Channel','channelBar'),
-										timeTextY = Auras:Slider_VerifyDefaults(statusbars.bars.ChannelBar.timetext,7,1,"Y",L["TOOLTIP_FONT_Y_OFFSET"],-100,100,nil,false,'y','Channel','channelBar'),
+										color = Auras:Color_VerifyDefaults(statusbars.bars.ChannelBar.timetext.font,1,1,L["LABEL_FONT_COLOR"],L["TOOLTIP_FONT_COLOR"],true,"full",false,'color','Channel'),
+										timeFontName = Auras:Select_VerifyDefaults(statusbars.bars.ChannelBar.timetext.font,2,1,L["LABEL_FONT"],L["TOOLTIP_FONT_NAME"],"LSM30_Font",LSM:HashTable("font"),nil,false,'name','Channel'),
+										timeFontSize = Auras:Slider_VerifyDefaults(statusbars.bars.ChannelBar.timetext.font,3,1,FONT_SIZE,L["TOOLTIP_COOLDOWN_FONT_SIZE"],5,40,nil,false,'size','Channel'),
+										timeFontOutline = Auras:Select_VerifyDefaults(statusbars.bars.ChannelBar.timetext.font,4,1,L["LABEL_FONT_OUTLINE"],L["TOOLTIP_FONT_OUTLINE"],nil,FONT_OUTLINES,nil,false,'flag','Channel'),
+										timeTextAnchor = Auras:Select_VerifyDefaults(statusbars.bars.ChannelBar.timetext,5,1,L["LABEL_FONT_ANCHOR"],L["TOOLTIP_FONT_ANCHOR_POINT"],nil,FRAME_ANCHOR_OPTIONS,nil,false,'justify','Channel'),
+										timeTextX = Auras:Slider_VerifyDefaults(statusbars.bars.ChannelBar.timetext,6,1,"X",L["TOOLTIP_FONT_X_OFFSET"],-500,500,nil,false,'x','Channel'),
+										timeTextY = Auras:Slider_VerifyDefaults(statusbars.bars.ChannelBar.timetext,7,1,"Y",L["TOOLTIP_FONT_Y_OFFSET"],-100,100,nil,false,'y','Channel'),
 										shadow = {
 											name = '|cFFFFFFFF'..L["LABEL_FONT_SHADOW"]..'|r',
 											type = "group",
@@ -824,10 +824,10 @@ local function GetElementalOptions()
 											hidden = false,
 											guiInline = true,
 											args = {
-												shadowToggle = Auras:Toggle_VerifyDefaults(statusbars.bars.ChannelBar.timetext.font.shadow,1,1,L["TOGGLE"],nil,nil,false,'isEnabled','Channel','channelBar'),
-												shadowColor = Auras:Color_VerifyDefaults(statusbars.bars.ChannelBar.timetext.font.shadow,2,1,L["LABEL_FONT_SHADOW_COLOR"],L["TOOLTIP_FONT_SHADOW_COLOR"],true,nil,false,'color','Channel','channelBar'),
-												shadowX = Auras:Slider_VerifyDefaults(statusbars.bars.ChannelBar.timetext.font.shadow.offset,3,1,"X",L["TOOLTIP_FONT_SHADOW_X_OFFSET"],-10,10,nil,false,'x','Channel','channelBar'),
-												shadowY = Auras:Slider_VerifyDefaults(statusbars.bars.ChannelBar.timetext.font.shadow.offset,4,1,"Y",L["TOOLTIP_FONT_SHADOW_Y_OFFSET"],-10,10,nil,false,'y','Channel','channelBar'),
+												shadowToggle = Auras:Toggle_VerifyDefaults(statusbars.bars.ChannelBar.timetext.font.shadow,1,1,L["TOGGLE"],nil,nil,false,'isEnabled','Channel'),
+												shadowColor = Auras:Color_VerifyDefaults(statusbars.bars.ChannelBar.timetext.font.shadow,2,1,L["LABEL_FONT_SHADOW_COLOR"],L["TOOLTIP_FONT_SHADOW_COLOR"],true,nil,false,'color','Channel'),
+												shadowX = Auras:Slider_VerifyDefaults(statusbars.bars.ChannelBar.timetext.font.shadow.offset,3,1,"X",L["TOOLTIP_FONT_SHADOW_X_OFFSET"],-10,10,nil,false,'x','Channel'),
+												shadowY = Auras:Slider_VerifyDefaults(statusbars.bars.ChannelBar.timetext.font.shadow.offset,4,1,"Y",L["TOOLTIP_FONT_SHADOW_Y_OFFSET"],-10,10,nil,false,'y','Channel'),
 											},
 										},
 									},
@@ -838,13 +838,13 @@ local function GetElementalOptions()
 									order = 7,
 									guiInline = true,
 									args = {
-										texture = Auras:Select_VerifyDefaults(statusbars.bars.ChannelBar.foreground,1,1,L["LABEL_STATUSBAR_TEXTURE"],L["TOOLTIP_STATUSBAR_TEXTURE"],"LSM30_Statusbar",LSM:HashTable(LSM.MediaType.STATUSBAR),nil,false,'texture','Channel','channelBar'),
-										textureColor = Auras:Color_VerifyDefaults(statusbars.bars.ChannelBar.foreground,2,1,L["LABEL_STATUSBAR_COLOR"],nil,false,"double",false,'color','Channel','channelBar'),
-										backgroundTexture = Auras:Select_VerifyDefaults(statusbars.bars.ChannelBar.background,3,1,L["LABEL_STATUSBAR_BG_TEXTURE"],L["TOOLTIP_STATUSBAR_BG_TEXTURE"],"LSM30_Statusbar",LSM:HashTable(LSM.MediaType.STATUSBAR),nil,false,'texture','Channel','channelBar'),
-										backgroundColor = Auras:Color_VerifyDefaults(statusbars.bars.ChannelBar.background,4,1,L["LABEL_STATUSBAR_BG_COLOR"],L["TOOLTIP_STATUSBAR_BG_COLOR"],true,nil,false,'color','Channel','channelBar'),
-										backgroundToggle = Auras:Toggle_VerifyDefaults(statusbars.bars.ChannelBar.adjust,5,1,L["LABEL_STATUSBAR_MODIFY_BACKGROUND"],L["TOOLTIP_TOGGLE_STATUSBAR_BG_CUSTOMIZATON"],nil,false,'showBG','Channel','channelBar'),
-										width = Auras:Slider_VerifyDefaults(statusbars.bars.ChannelBar.layout,6,1,L["LABEL_WIDTH"],nil,100,500,nil,false,'width','Channel','channelBar'),
-										height = Auras:Slider_VerifyDefaults(statusbars.bars.ChannelBar.layout,7,1,L["LABEL_HEIGHT"],nil,10,100,nil,false,'height','Channel','channelBar'),
+										texture = Auras:Select_VerifyDefaults(statusbars.bars.ChannelBar.foreground,1,1,L["LABEL_STATUSBAR_TEXTURE"],L["TOOLTIP_STATUSBAR_TEXTURE"],"LSM30_Statusbar",LSM:HashTable(LSM.MediaType.STATUSBAR),nil,false,'texture','Channel'),
+										textureColor = Auras:Color_VerifyDefaults(statusbars.bars.ChannelBar.foreground,2,1,L["LABEL_STATUSBAR_COLOR"],nil,false,"double",false,'color','Channel'),
+										backgroundTexture = Auras:Select_VerifyDefaults(statusbars.bars.ChannelBar.background,3,1,L["LABEL_STATUSBAR_BG_TEXTURE"],L["TOOLTIP_STATUSBAR_BG_TEXTURE"],"LSM30_Statusbar",LSM:HashTable(LSM.MediaType.STATUSBAR),nil,false,'texture','Channel'),
+										backgroundColor = Auras:Color_VerifyDefaults(statusbars.bars.ChannelBar.background,4,1,L["LABEL_STATUSBAR_BG_COLOR"],L["TOOLTIP_STATUSBAR_BG_COLOR"],true,nil,false,'color','Channel'),
+										backgroundToggle = Auras:Toggle_VerifyDefaults(statusbars.bars.ChannelBar.adjust,5,1,L["LABEL_STATUSBAR_MODIFY_BACKGROUND"],L["TOOLTIP_TOGGLE_STATUSBAR_BG_CUSTOMIZATON"],nil,false,'showBG','Channel'),
+										width = Auras:Slider_VerifyDefaults(statusbars.bars.ChannelBar.layout,6,1,L["LABEL_WIDTH"],nil,100,500,nil,false,'width','Channel'),
+										height = Auras:Slider_VerifyDefaults(statusbars.bars.ChannelBar.layout,7,1,L["LABEL_HEIGHT"],nil,10,100,nil,false,'height','Channel'),
 									},
 								},
 								reset = {
@@ -869,18 +869,18 @@ local function GetElementalOptions()
 										Auras:ResetForeground(bar,default)
 										Auras:ResetLayout(bar,default)
 										
-										ele_options.args.bars.args.channelBar.args.reset.disabled = true
-										ele_options.args.bars.args.channelBar.args.reset.name = "|cFF666666"..L["BUTTON_RESET_STATUSBAR_CHANNEL"].."|r"
-										Auras:VerifyDefaultValues(1,ele_options,'Channel','channelBar')
+										ele_options.args.bars.args.ChannelBar.args.reset.disabled = true
+										ele_options.args.bars.args.ChannelBar.args.reset.name = "|cFF666666"..L["BUTTON_RESET_STATUSBAR_CHANNEL"].."|r"
+										Auras:VerifyDefaultValues(1,ele_options,'Channel')
 										
 										if (not bar.adjust.isEnabled) then
-											Auras:InitializeProgressBar('ChannelBar1',nil,'channelBar','nametext','timetext',1)
+											Auras:InitializeProgressBar('ChannelBar',nil,'nametext','timetext',1)
 										end
 									end,
 								},
 							},
 						},
-						icefuryBar = {
+						IcefuryBar = {
 							name = L["LABEL_STATUSBAR_ICEFURY"],
 							order = 9,
 							inline = false,
@@ -985,8 +985,8 @@ local function GetElementalOptions()
 										Auras:ResetForeground(bar,default)
 										Auras:ResetLayout(bar,default)
 										
-										ele_options.args.bars.args.icefuryBar.args.reset.disabled = true
-										ele_options.args.bars.args.icefuryBar.args.reset.name = "|cFF666666"..L["BUTTON_RESET_STATUSBAR_ICEFURY"].."|r"
+										ele_options.args.bars.args.IcefuryBar.args.reset.disabled = true
+										ele_options.args.bars.args.IcefuryBar.args.reset.name = "|cFF666666"..L["BUTTON_RESET_STATUSBAR_ICEFURY"].."|r"
 										Auras:VerifyDefaultValues(1,ele_options,'Icefury')
 										
 										if (not bar.adjust.isEnabled) then
@@ -1362,14 +1362,14 @@ local function GetEnhancementOptions()
 									guiInline = true,
 									args = {
 										defaultBarToggle = Auras:Toggle_Basic(statusbars,1,L["LABEL_STATUSBAR_BLIZZARD"],L["TOOLTIP_TOGGLE_BLIZZARD_BAR"],false,'defaultBar'),
-										castBarToggle = Auras:Toggle_Statusbar(statusbars.bars.CastBar,2,L["TOGGLE_CAST_BAR"],L["TOOLTIP_TOGGLE_CAST_BAR"],'isEnabled','castBar'),
-										channelToggle = Auras:Toggle_Statusbar(statusbars.bars.ChannelBar,3,L["TOGGLE_CHANNEL_BAR"],L["TOOLTIP_TOGGLE_CHANNEL_BAR"],'isEnabled','channelBar'),
-										maelstromToggle = Auras:Toggle_Statusbar(statusbars.bars.MaelstromBar,5,L["TOGGLE_MAELSTROM_BAR"],L["TOOLTIP_TOGGLE_MAELSTROM_BAR"],'isEnabled','maelstromBar'),
+										castBarToggle = Auras:Toggle_Statusbar(statusbars.bars.CastBar,2,L["TOGGLE_CAST_BAR"],L["TOOLTIP_TOGGLE_CAST_BAR"],'isEnabled','CastBar'),
+										channelToggle = Auras:Toggle_Statusbar(statusbars.bars.ChannelBar,3,L["TOGGLE_CHANNEL_BAR"],L["TOOLTIP_TOGGLE_CHANNEL_BAR"],'isEnabled','ChannelBar'),
+										maelstromToggle = Auras:Toggle_Statusbar(statusbars.bars.MaelstromBar,5,L["TOGGLE_MAELSTROM_BAR"],L["TOOLTIP_TOGGLE_MAELSTROM_BAR"],'isEnabled','MaelstromBar'),
 									},
 								},
 							},
 						},
-						maelstromBar = {
+						MaelstromBar = {
 							name = L["LABEL_STATUSBAR_MAELSTROM"],
 							order = 2,
 							type = "group",
@@ -1453,8 +1453,8 @@ local function GetEnhancementOptions()
 										Auras:ResetForeground(bar,default)
 										Auras:ResetLayout(bar,default)
 										
-										enh_options.args.bars.args.maelstromBar.args.reset.disabled = true
-										enh_options.args.bars.args.maelstromBar.args.reset.name = "|cFF666666"..L["BUTTON_RESET_STATUSBAR_MAELSTROM"].."|r"
+										enh_options.args.bars.args.MaelstromBar.args.reset.disabled = true
+										enh_options.args.bars.args.MaelstromBar.args.reset.name = "|cFF666666"..L["BUTTON_RESET_STATUSBAR_MAELSTROM"].."|r"
 										Auras:VerifyDefaultValues(2,enh_options,'Maelstrom')
 										
 										if (not bar.adjust.isEnabled) then
@@ -1464,23 +1464,23 @@ local function GetEnhancementOptions()
 								},
 							},
 						},
-						castBar = {
+						CastBar = {
 							name = L["LABEL_STATUSBAR_CAST"],
 							order = 3,
 							inline = false,
 							type = "group",
 							args = {
-								adjust = Auras:Toggle_VerifyDefaults(statusbars.bars.CastBar.adjust,1,2,L["LABEL_STATUSBAR_MODIFY_CAST"],L["TOOLTIP_TOGGLE_STATUSBAR_CUSTOMIZATON"],nil,false,'isEnabled','Cast','castBar'),
-								nametextToggle = Auras:Toggle_VerifyDefaults(statusbars.bars.CastBar.nametext,2,2,L["TOGGLE_SPELL_TEXT"],L["TOOLTIP_TOGGLE_SPELL_TEXT"],nil,false,'isDisplayText','Cast','castBar'),
-								timetextToggle = Auras:Toggle_VerifyDefaults(statusbars.bars.CastBar.timetext,3,2,L["TOGGLE_TIME_TEXT"],L["TOOLTIP_TOGGLE_TIME_TEXT"],nil,false,'isDisplayText','Cast','castBar'),
+								adjust = Auras:Toggle_VerifyDefaults(statusbars.bars.CastBar.adjust,1,2,L["LABEL_STATUSBAR_MODIFY_CAST"],L["TOOLTIP_TOGGLE_STATUSBAR_CUSTOMIZATON"],nil,false,'isEnabled','Cast'),
+								nametextToggle = Auras:Toggle_VerifyDefaults(statusbars.bars.CastBar.nametext,2,2,L["TOGGLE_SPELL_TEXT"],L["TOOLTIP_TOGGLE_SPELL_TEXT"],nil,false,'isDisplayText','Cast'),
+								timetextToggle = Auras:Toggle_VerifyDefaults(statusbars.bars.CastBar.timetext,3,2,L["TOGGLE_TIME_TEXT"],L["TOOLTIP_TOGGLE_TIME_TEXT"],nil,false,'isDisplayText','Cast'),
 								general = {
 									name = "|cFFFFFFFF"..SETTINGS.."|r",
 									order = 4,
 									type = "group",
 									guiInline = true,
 									args = {
-										alphaCombat = Auras:Slider_VerifyDefaults(statusbars.bars.CastBar,1,2,L["LABEL_ALPHA_COMBAT"],L["TOOLTIP_STATUSBAR_ALPHA_COMBAT"],0,1,nil,false,'alphaCombat','Cast','castBar'),
-										alphaOoC = Auras:Slider_VerifyDefaults(statusbars.bars.CastBar,2,2,L["LABEL_ALPHA_NO_TARGET_NO_COMBAT"],L["TOOLTIP_STATUSBAR_ALPHA_NO_COMBAT"],0,1,nil,false,'alphaOoC','Cast','castBar'),
+										alphaCombat = Auras:Slider_VerifyDefaults(statusbars.bars.CastBar,1,2,L["LABEL_ALPHA_COMBAT"],L["TOOLTIP_STATUSBAR_ALPHA_COMBAT"],0,1,nil,false,'alphaCombat','Cast'),
+										alphaOoC = Auras:Slider_VerifyDefaults(statusbars.bars.CastBar,2,2,L["LABEL_ALPHA_NO_TARGET_NO_COMBAT"],L["TOOLTIP_STATUSBAR_ALPHA_NO_COMBAT"],0,1,nil,false,'alphaOoC','Cast'),
 									},
 								},
 								iconSpark = {
@@ -1490,9 +1490,9 @@ local function GetEnhancementOptions()
 									disabled = true,
 									guiInline = true,
 									args = {
-										sparkToggle = Auras:Toggle_VerifyDefaults(statusbars.bars.CastBar,1,2,L["TOGGLE_SPARK"],nil,nil,false,'spark','Cast','castBar'),
-										iconToggle = Auras:Toggle_VerifyDefaults(statusbars.bars.CastBar.icon,2,2,L["TOGGLE_ICON"],nil,nil,false,'isEnabled','Cast','castBar'),
-										iconJustify = Auras:Select_VerifyDefaults(statusbars.bars.CastBar.icon,3,2,L["LABEL_ICON_JUSTIFY"],L["TOOLTIP_STATUSBAR_ICON_LOCATION"],nil,ICON_JUSTIFY,false,'justify','Cast','castBar'),
+										sparkToggle = Auras:Toggle_VerifyDefaults(statusbars.bars.CastBar,1,2,L["TOGGLE_SPARK"],nil,nil,false,'spark','Cast'),
+										iconToggle = Auras:Toggle_VerifyDefaults(statusbars.bars.CastBar.icon,2,2,L["TOGGLE_ICON"],nil,nil,false,'isEnabled','Cast'),
+										iconJustify = Auras:Select_VerifyDefaults(statusbars.bars.CastBar.icon,3,2,L["LABEL_ICON_JUSTIFY"],L["TOOLTIP_STATUSBAR_ICON_LOCATION"],nil,ICON_JUSTIFY,false,'justify','Cast'),
 									},
 								},
 								nametext = {
@@ -1502,13 +1502,13 @@ local function GetEnhancementOptions()
 									disabled = true,
 									guiInline = true,
 									args = {
-										color = Auras:Color_VerifyDefaults(statusbars.bars.CastBar.nametext.font,1,2,L["LABEL_FONT_COLOR"],L["TOOLTIP_FONT_COLOR"],true,"full",false,'color','Cast','castBar'),
-										fontName = Auras:Select_VerifyDefaults(statusbars.bars.CastBar.nametext.font,2,2,L["LABEL_FONT"],L["TOOLTIP_FONT_NAME"],"LSM30_Font",LSM:HashTable("font"),false,nil,'name','Cast','castBar'),
-										fontSize = Auras:Slider_VerifyDefaults(statusbars.bars.CastBar.nametext.font,3,2,FONT_SIZE,L["TOOLTIP_COOLDOWN_FONT_SIZE"],5,40,nil,false,'size','Cast','castBar'),
-										fontOutline = Auras:Select_VerifyDefaults(statusbars.bars.CastBar.nametext.font,4,2,L["LABEL_FONT_OUTLINE"],L["TOOLTIP_FONT_OUTLINE"],nil,FONT_OUTLINES,false,nil,'flag','Cast','castBar'),
-										nametextAnchor = Auras:Select_VerifyDefaults(statusbars.bars.CastBar.nametext,5,2,L["LABEL_FONT_ANCHOR"],L["TOOLTIP_FONT_ANCHOR_POINT"],nil,FRAME_ANCHOR_OPTIONS,false,nil,'justify','Cast','castBar'),
-										nametextX = Auras:Slider_VerifyDefaults(statusbars.bars.CastBar.nametext,6,2,"X",L["TOOLTIP_FONT_X_OFFSET"],-500,500,nil,false,'x','Cast','castBar'),
-										nametextY = Auras:Slider_VerifyDefaults(statusbars.bars.CastBar.nametext,7,2,"Y",L["TOOLTIP_FONT_Y_OFFSET"],-100,100,nil,false,'y','Cast','castBar'),
+										color = Auras:Color_VerifyDefaults(statusbars.bars.CastBar.nametext.font,1,2,L["LABEL_FONT_COLOR"],L["TOOLTIP_FONT_COLOR"],true,"full",false,'color','Cast'),
+										fontName = Auras:Select_VerifyDefaults(statusbars.bars.CastBar.nametext.font,2,2,L["LABEL_FONT"],L["TOOLTIP_FONT_NAME"],"LSM30_Font",LSM:HashTable("font"),false,nil,'name','Cast'),
+										fontSize = Auras:Slider_VerifyDefaults(statusbars.bars.CastBar.nametext.font,3,2,FONT_SIZE,L["TOOLTIP_COOLDOWN_FONT_SIZE"],5,40,nil,false,'size','Cast'),
+										fontOutline = Auras:Select_VerifyDefaults(statusbars.bars.CastBar.nametext.font,4,2,L["LABEL_FONT_OUTLINE"],L["TOOLTIP_FONT_OUTLINE"],nil,FONT_OUTLINES,false,nil,'flag','Cast'),
+										nametextAnchor = Auras:Select_VerifyDefaults(statusbars.bars.CastBar.nametext,5,2,L["LABEL_FONT_ANCHOR"],L["TOOLTIP_FONT_ANCHOR_POINT"],nil,FRAME_ANCHOR_OPTIONS,false,nil,'justify','Cast'),
+										nametextX = Auras:Slider_VerifyDefaults(statusbars.bars.CastBar.nametext,6,2,"X",L["TOOLTIP_FONT_X_OFFSET"],-500,500,nil,false,'x','Cast'),
+										nametextY = Auras:Slider_VerifyDefaults(statusbars.bars.CastBar.nametext,7,2,"Y",L["TOOLTIP_FONT_Y_OFFSET"],-100,100,nil,false,'y','Cast'),
 										shadow = {
 											name = '|cFFFFFFFF'..L["LABEL_FONT_SHADOW"]..'|r',
 											type = "group",
@@ -1516,10 +1516,10 @@ local function GetEnhancementOptions()
 											hidden = false,
 											guiInline = true,
 											args = {
-												shadowToggle = Auras:Toggle_VerifyDefaults(statusbars.bars.CastBar.nametext.font.shadow,1,2,L["TOGGLE"],nil,nil,false,'isEnabled','Cast','castBar'),
-												shadowColor = Auras:Color_VerifyDefaults(statusbars.bars.CastBar.nametext.font.shadow,2,2,L["LABEL_FONT_SHADOW_COLOR"],L["TOOLTIP_FONT_SHADOW_COLOR"],true,nil,false,'color','Cast','castBar'),
-												shadowX = Auras:Slider_VerifyDefaults(statusbars.bars.CastBar.nametext.font.shadow.offset,3,2,"X",L["TOOLTIP_FONT_SHADOW_X_OFFSET"],-10,10,nil,false,'x','Cast','castBar'),
-												shadowY = Auras:Slider_VerifyDefaults(statusbars.bars.CastBar.nametext.font.shadow.offset,4,2,"Y",L["TOOLTIP_FONT_SHADOW_Y_OFFSET"],-10,10,nil,false,'y','Cast','castBar'),
+												shadowToggle = Auras:Toggle_VerifyDefaults(statusbars.bars.CastBar.nametext.font.shadow,1,2,L["TOGGLE"],nil,nil,false,'isEnabled','Cast'),
+												shadowColor = Auras:Color_VerifyDefaults(statusbars.bars.CastBar.nametext.font.shadow,2,2,L["LABEL_FONT_SHADOW_COLOR"],L["TOOLTIP_FONT_SHADOW_COLOR"],true,nil,false,'color','Cast'),
+												shadowX = Auras:Slider_VerifyDefaults(statusbars.bars.CastBar.nametext.font.shadow.offset,3,2,"X",L["TOOLTIP_FONT_SHADOW_X_OFFSET"],-10,10,nil,false,'x','Cast'),
+												shadowY = Auras:Slider_VerifyDefaults(statusbars.bars.CastBar.nametext.font.shadow.offset,4,2,"Y",L["TOOLTIP_FONT_SHADOW_Y_OFFSET"],-10,10,nil,false,'y','Cast'),
 											},
 										},
 									},
@@ -1531,13 +1531,13 @@ local function GetEnhancementOptions()
 									disabled = true,
 									guiInline = true,
 									args = {
-										color = Auras:Color_VerifyDefaults(statusbars.bars.CastBar.timetext.font,1,2,L["LABEL_FONT_COLOR"],L["TOOLTIP_FONT_COLOR"],true,"full",false,'color','Cast','castBar'),
-										timeFontName = Auras:Select_VerifyDefaults(statusbars.bars.CastBar.timetext.font,2,2,L["LABEL_FONT"],L["TOOLTIP_FONT_NAME"],"LSM30_Font",LSM:HashTable("font"),false,nil,'name','Cast','castBar'),
-										timeFontSize = Auras:Slider_VerifyDefaults(statusbars.bars.CastBar.timetext.font,3,2,FONT_SIZE,L["TOOLTIP_COOLDOWN_FONT_SIZE"],5,40,nil,false,'size','Cast','castBar'),
-										timeFontOutline = Auras:Select_VerifyDefaults(statusbars.bars.CastBar.timetext.font,4,2,L["LABEL_FONT_OUTLINE"],L["TOOLTIP_FONT_OUTLINE"],nil,FONT_OUTLINES,false,nil,'flag','Cast','castBar'),
-										timeTextAnchor = Auras:Select_VerifyDefaults(statusbars.bars.CastBar.timetext,5,2,L["LABEL_FONT_ANCHOR"],L["TOOLTIP_FONT_ANCHOR_POINT"],nil,FRAME_ANCHOR_OPTIONS,false,nil,'justify','Cast','castBar'),
-										timeTextX = Auras:Slider_VerifyDefaults(statusbars.bars.CastBar.timetext,6,2,"X",L["TOOLTIP_FONT_X_OFFSET"],-500,500,nil,false,'x','Cast','castBar'),
-										timeTextY = Auras:Slider_VerifyDefaults(statusbars.bars.CastBar.timetext,7,2,"Y",L["TOOLTIP_FONT_Y_OFFSET"],-100,100,nil,false,'y','Cast','castBar'),
+										color = Auras:Color_VerifyDefaults(statusbars.bars.CastBar.timetext.font,1,2,L["LABEL_FONT_COLOR"],L["TOOLTIP_FONT_COLOR"],true,"full",false,'color','Cast'),
+										timeFontName = Auras:Select_VerifyDefaults(statusbars.bars.CastBar.timetext.font,2,2,L["LABEL_FONT"],L["TOOLTIP_FONT_NAME"],"LSM30_Font",LSM:HashTable("font"),false,nil,'name','Cast'),
+										timeFontSize = Auras:Slider_VerifyDefaults(statusbars.bars.CastBar.timetext.font,3,2,FONT_SIZE,L["TOOLTIP_COOLDOWN_FONT_SIZE"],5,40,nil,false,'size','Cast'),
+										timeFontOutline = Auras:Select_VerifyDefaults(statusbars.bars.CastBar.timetext.font,4,2,L["LABEL_FONT_OUTLINE"],L["TOOLTIP_FONT_OUTLINE"],nil,FONT_OUTLINES,false,nil,'flag','Cast'),
+										timeTextAnchor = Auras:Select_VerifyDefaults(statusbars.bars.CastBar.timetext,5,2,L["LABEL_FONT_ANCHOR"],L["TOOLTIP_FONT_ANCHOR_POINT"],nil,FRAME_ANCHOR_OPTIONS,false,nil,'justify','Cast'),
+										timeTextX = Auras:Slider_VerifyDefaults(statusbars.bars.CastBar.timetext,6,2,"X",L["TOOLTIP_FONT_X_OFFSET"],-500,500,nil,false,'x','Cast'),
+										timeTextY = Auras:Slider_VerifyDefaults(statusbars.bars.CastBar.timetext,7,2,"Y",L["TOOLTIP_FONT_Y_OFFSET"],-100,100,nil,false,'y','Cast'),
 										shadow = {
 											name = '|cFFFFFFFF'..L["LABEL_FONT_SHADOW"]..'|r',
 											type = "group",
@@ -1545,10 +1545,10 @@ local function GetEnhancementOptions()
 											hidden = false,
 											guiInline = true,
 											args = {
-												shadowToggle = Auras:Toggle_VerifyDefaults(statusbars.bars.CastBar.timetext.font.shadow,1,2,L["TOGGLE"],nil,nil,false,'isEnabled','Cast','castBar'),
-												shadowColor = Auras:Color_VerifyDefaults(statusbars.bars.CastBar.timetext.font.shadow,2,2,L["LABEL_FONT_SHADOW_COLOR"],L["TOOLTIP_FONT_SHADOW_COLOR"],true,nil,false,'color','Cast','castBar'),
-												shadowX = Auras:Slider_VerifyDefaults(statusbars.bars.CastBar.timetext.font.shadow.offset,3,2,"X",L["TOOLTIP_FONT_SHADOW_X_OFFSET"],-10,10,nil,false,'x','Cast','castBar'),
-												shadowY = Auras:Slider_VerifyDefaults(statusbars.bars.CastBar.timetext.font.shadow.offset,4,2,"Y",L["TOOLTIP_FONT_SHADOW_Y_OFFSET"],-10,10,nil,false,'y','Cast','castBar'),
+												shadowToggle = Auras:Toggle_VerifyDefaults(statusbars.bars.CastBar.timetext.font.shadow,1,2,L["TOGGLE"],nil,nil,false,'isEnabled','Cast'),
+												shadowColor = Auras:Color_VerifyDefaults(statusbars.bars.CastBar.timetext.font.shadow,2,2,L["LABEL_FONT_SHADOW_COLOR"],L["TOOLTIP_FONT_SHADOW_COLOR"],true,nil,false,'color','Cast'),
+												shadowX = Auras:Slider_VerifyDefaults(statusbars.bars.CastBar.timetext.font.shadow.offset,3,2,"X",L["TOOLTIP_FONT_SHADOW_X_OFFSET"],-10,10,nil,false,'x','Cast'),
+												shadowY = Auras:Slider_VerifyDefaults(statusbars.bars.CastBar.timetext.font.shadow.offset,4,2,"Y",L["TOOLTIP_FONT_SHADOW_Y_OFFSET"],-10,10,nil,false,'y','Cast'),
 											},
 										},
 									},
@@ -1559,13 +1559,13 @@ local function GetEnhancementOptions()
 									order = 8,
 									guiInline = true,
 									args = {
-										texture = Auras:Select_VerifyDefaults(statusbars.bars.CastBar.foreground,1,2,L["LABEL_STATUSBAR_TEXTURE"],L["TOOLTIP_STATUSBAR_TEXTURE"],"LSM30_Statusbar",LSM:HashTable(LSM.MediaType.STATUSBAR),false,nil,'texture','Cast','castBar'),
-										textureColor = Auras:Color_VerifyDefaults(statusbars.bars.CastBar.foreground,2,2,L["LABEL_STATUSBAR_COLOR"],nil,false,"double",false,'color','Cast','castBar'),
-										backgroundTexture = Auras:Select_VerifyDefaults(statusbars.bars.CastBar.background,3,2,L["LABEL_STATUSBAR_BG_TEXTURE"],L["TOOLTIP_STATUSBAR_BG_TEXTURE"],"LSM30_Statusbar",LSM:HashTable(LSM.MediaType.STATUSBAR),false,nil,'texture','Cast','castBar'),
-										backgroundColor = Auras:Color_VerifyDefaults(statusbars.bars.CastBar.background,4,2,L["LABEL_STATUSBAR_BG_COLOR"],L["TOOLTIP_STATUSBAR_BG_COLOR"],true,nil,false,'color','Cast','castBar'),
-										backgroundToggle = Auras:Toggle_VerifyDefaults(statusbars.bars.CastBar.adjust,5,2,L["LABEL_STATUSBAR_MODIFY_BACKGROUND"],L["TOOLTIP_TOGGLE_STATUSBAR_BG_CUSTOMIZATON"],nil,false,'showBG','Cast','castBar'),
-										width = Auras:Slider_VerifyDefaults(statusbars.bars.CastBar.layout,6,2,L["LABEL_WIDTH"],nil,100,500,nil,false,'width','Cast','castBar'),
-										height = Auras:Slider_VerifyDefaults(statusbars.bars.CastBar.layout,7,2,L["LABEL_HEIGHT"],nil,10,100,nil,false,'height','Cast','castBar'),
+										texture = Auras:Select_VerifyDefaults(statusbars.bars.CastBar.foreground,1,2,L["LABEL_STATUSBAR_TEXTURE"],L["TOOLTIP_STATUSBAR_TEXTURE"],"LSM30_Statusbar",LSM:HashTable(LSM.MediaType.STATUSBAR),false,nil,'texture','Cast'),
+										textureColor = Auras:Color_VerifyDefaults(statusbars.bars.CastBar.foreground,2,2,L["LABEL_STATUSBAR_COLOR"],nil,false,"double",false,'color','Cast'),
+										backgroundTexture = Auras:Select_VerifyDefaults(statusbars.bars.CastBar.background,3,2,L["LABEL_STATUSBAR_BG_TEXTURE"],L["TOOLTIP_STATUSBAR_BG_TEXTURE"],"LSM30_Statusbar",LSM:HashTable(LSM.MediaType.STATUSBAR),false,nil,'texture','Cast'),
+										backgroundColor = Auras:Color_VerifyDefaults(statusbars.bars.CastBar.background,4,2,L["LABEL_STATUSBAR_BG_COLOR"],L["TOOLTIP_STATUSBAR_BG_COLOR"],true,nil,false,'color','Cast'),
+										backgroundToggle = Auras:Toggle_VerifyDefaults(statusbars.bars.CastBar.adjust,5,2,L["LABEL_STATUSBAR_MODIFY_BACKGROUND"],L["TOOLTIP_TOGGLE_STATUSBAR_BG_CUSTOMIZATON"],nil,false,'showBG','Cast'),
+										width = Auras:Slider_VerifyDefaults(statusbars.bars.CastBar.layout,6,2,L["LABEL_WIDTH"],nil,100,500,nil,false,'width','Cast'),
+										height = Auras:Slider_VerifyDefaults(statusbars.bars.CastBar.layout,7,2,L["LABEL_HEIGHT"],nil,10,100,nil,false,'height','Cast'),
 									},
 								},
 								reset = {
@@ -1590,9 +1590,9 @@ local function GetEnhancementOptions()
 										Auras:ResetForeground(bar,default)
 										Auras:ResetLayout(bar,default)
 										
-										enh_options.args.bars.args.castBar.args.reset.disabled = true
-										enh_options.args.bars.args.castBar.args.reset.name = "|cFF666666"..L["BUTTON_RESET_STATUSBAR_CAST"].."|r"
-										Auras:VerifyDefaultValues(2,enh_options,'Cast','castBar')
+										enh_options.args.bars.args.CastBar.args.reset.disabled = true
+										enh_options.args.bars.args.CastBar.args.reset.name = "|cFF666666"..L["BUTTON_RESET_STATUSBAR_CAST"].."|r"
+										Auras:VerifyDefaultValues(2,enh_options,'Cast')
 										
 										if (not bar.adjust.isEnabled) then
 											Auras:InitializeProgressBar('CastBar',nil,'nametext','timetext',2)
@@ -1601,23 +1601,23 @@ local function GetEnhancementOptions()
 								},
 							},
 						},
-						channelBar = {
+						ChannelBar = {
 							name = L["LABEL_STATUSBAR_CHANNEL"],
 							order = 4,
 							inline = false,
 							type = "group",
 							args = {
-								adjust = Auras:Toggle_VerifyDefaults(statusbars.bars.ChannelBar.adjust,1,2,L["LABEL_STATUSBAR_MODIFY_CAST"],L["TOOLTIP_TOGGLE_STATUSBAR_CUSTOMIZATON"],nil,false,'isEnabled','Channel','channelBar'),
-								nametextToggle = Auras:Toggle_VerifyDefaults(statusbars.bars.ChannelBar.nametext,2,2,L["TOGGLE_SPELL_TEXT"],L["TOOLTIP_TOGGLE_SPELL_TEXT"],nil,false,'isDisplayText','Channel','channelBar'),
-								timetextToggle = Auras:Toggle_VerifyDefaults(statusbars.bars.ChannelBar.timetext,3,2,L["TOGGLE_TIME_TEXT"],L["TOOLTIP_TOGGLE_TIME_TEXT"],nil,false,'isDisplayText','Channel','channelBar'),
+								adjust = Auras:Toggle_VerifyDefaults(statusbars.bars.ChannelBar.adjust,1,2,L["LABEL_STATUSBAR_MODIFY_CAST"],L["TOOLTIP_TOGGLE_STATUSBAR_CUSTOMIZATON"],nil,false,'isEnabled','Channel'),
+								nametextToggle = Auras:Toggle_VerifyDefaults(statusbars.bars.ChannelBar.nametext,2,2,L["TOGGLE_SPELL_TEXT"],L["TOOLTIP_TOGGLE_SPELL_TEXT"],nil,false,'isDisplayText','Channel'),
+								timetextToggle = Auras:Toggle_VerifyDefaults(statusbars.bars.ChannelBar.timetext,3,2,L["TOGGLE_TIME_TEXT"],L["TOOLTIP_TOGGLE_TIME_TEXT"],nil,false,'isDisplayText','Channel'),
 								general = {
 									name = "|cFFFFFFFF"..SETTINGS.."|r",
 									order = 4,
 									type = "group",
 									guiInline = true,
 									args = {
-										alphaCombat = Auras:Slider_VerifyDefaults(statusbars.bars.ChannelBar,1,2,L["LABEL_ALPHA_COMBAT"],L["TOOLTIP_STATUSBAR_ALPHA_COMBAT"],0,1,nil,false,'alphaCombat','Channel','channelBar'),
-										alphaOoC = Auras:Slider_VerifyDefaults(statusbars.bars.ChannelBar,2,2,L["LABEL_ALPHA_NO_TARGET_NO_COMBAT"],L["TOOLTIP_STATUSBAR_ALPHA_NO_COMBAT"],0,1,nil,false,'alphaOoC','Channel','channelBar'),
+										alphaCombat = Auras:Slider_VerifyDefaults(statusbars.bars.ChannelBar,1,2,L["LABEL_ALPHA_COMBAT"],L["TOOLTIP_STATUSBAR_ALPHA_COMBAT"],0,1,nil,false,'alphaCombat','Channel'),
+										alphaOoC = Auras:Slider_VerifyDefaults(statusbars.bars.ChannelBar,2,2,L["LABEL_ALPHA_NO_TARGET_NO_COMBAT"],L["TOOLTIP_STATUSBAR_ALPHA_NO_COMBAT"],0,1,nil,false,'alphaOoC','Channel'),
 									},
 								},
 								iconSpark = {
@@ -1627,9 +1627,9 @@ local function GetEnhancementOptions()
 									disabled = true,
 									guiInline = true,
 									args = {
-										sparkToggle = Auras:Toggle_VerifyDefaults(statusbars.bars.ChannelBar,1,2,L["TOGGLE_SPARK"],nil,nil,false,'spark','Channel','channelBar'),
-										iconToggle = Auras:Toggle_VerifyDefaults(statusbars.bars.ChannelBar.icon,2,2,L["TOGGLE_ICON"],nil,nil,false,'isEnabled','Channel','channelBar'),
-										iconJustify = Auras:Select_VerifyDefaults(statusbars.bars.ChannelBar.icon,3,2,L["LABEL_ICON_JUSTIFY"],L["TOOLTIP_STATUSBAR_ICON_LOCATION"],nil,ICON_JUSTIFY,false,'justify','Channel','channelBar'),
+										sparkToggle = Auras:Toggle_VerifyDefaults(statusbars.bars.ChannelBar,1,2,L["TOGGLE_SPARK"],nil,nil,false,'spark','Channel'),
+										iconToggle = Auras:Toggle_VerifyDefaults(statusbars.bars.ChannelBar.icon,2,2,L["TOGGLE_ICON"],nil,nil,false,'isEnabled','Channel'),
+										iconJustify = Auras:Select_VerifyDefaults(statusbars.bars.ChannelBar.icon,3,2,L["LABEL_ICON_JUSTIFY"],L["TOOLTIP_STATUSBAR_ICON_LOCATION"],nil,ICON_JUSTIFY,false,'justify','Channel'),
 									},
 								},
 								nametext = {
@@ -1639,13 +1639,13 @@ local function GetEnhancementOptions()
 									disabled = true,
 									guiInline = true,
 									args = {
-										color = Auras:Color_VerifyDefaults(statusbars.bars.ChannelBar.nametext.font,1,2,L["LABEL_FONT_COLOR"],L["TOOLTIP_FONT_COLOR"],true,"full",false,'color','Channel','channelBar'),
-										fontName = Auras:Select_VerifyDefaults(statusbars.bars.ChannelBar.nametext.font,2,2,L["LABEL_FONT"],L["TOOLTIP_FONT_NAME"],"LSM30_Font",LSM:HashTable("font"),false,nil,'name','Channel','channelBar'),
-										fontSize = Auras:Slider_VerifyDefaults(statusbars.bars.ChannelBar.nametext.font,3,2,FONT_SIZE,L["TOOLTIP_COOLDOWN_FONT_SIZE"],5,40,nil,false,'size','Channel','channelBar'),
-										fontOutline = Auras:Select_VerifyDefaults(statusbars.bars.ChannelBar.nametext.font,4,2,L["LABEL_FONT_OUTLINE"],L["TOOLTIP_FONT_OUTLINE"],nil,FONT_OUTLINES,false,nil,'flag','Channel','channelBar'),
-										nametextAnchor = Auras:Select_VerifyDefaults(statusbars.bars.ChannelBar.nametext,5,2,L["LABEL_FONT_ANCHOR"],L["TOOLTIP_FONT_ANCHOR_POINT"],nil,FRAME_ANCHOR_OPTIONS,false,nil,'justify','Channel','channelBar'),
-										nametextX = Auras:Slider_VerifyDefaults(statusbars.bars.ChannelBar.nametext,6,2,"X",L["TOOLTIP_FONT_X_OFFSET"],-500,500,nil,false,'x','Channel','channelBar'),
-										nametextY = Auras:Slider_VerifyDefaults(statusbars.bars.ChannelBar.nametext,7,2,"Y",L["TOOLTIP_FONT_Y_OFFSET"],-100,100,nil,false,'y','Channel','channelBar'),
+										color = Auras:Color_VerifyDefaults(statusbars.bars.ChannelBar.nametext.font,1,2,L["LABEL_FONT_COLOR"],L["TOOLTIP_FONT_COLOR"],true,"full",false,'color','Channel'),
+										fontName = Auras:Select_VerifyDefaults(statusbars.bars.ChannelBar.nametext.font,2,2,L["LABEL_FONT"],L["TOOLTIP_FONT_NAME"],"LSM30_Font",LSM:HashTable("font"),false,nil,'name','Channel'),
+										fontSize = Auras:Slider_VerifyDefaults(statusbars.bars.ChannelBar.nametext.font,3,2,FONT_SIZE,L["TOOLTIP_COOLDOWN_FONT_SIZE"],5,40,nil,false,'size','Channel'),
+										fontOutline = Auras:Select_VerifyDefaults(statusbars.bars.ChannelBar.nametext.font,4,2,L["LABEL_FONT_OUTLINE"],L["TOOLTIP_FONT_OUTLINE"],nil,FONT_OUTLINES,false,nil,'flag','Channel'),
+										nametextAnchor = Auras:Select_VerifyDefaults(statusbars.bars.ChannelBar.nametext,5,2,L["LABEL_FONT_ANCHOR"],L["TOOLTIP_FONT_ANCHOR_POINT"],nil,FRAME_ANCHOR_OPTIONS,false,nil,'justify','Channel'),
+										nametextX = Auras:Slider_VerifyDefaults(statusbars.bars.ChannelBar.nametext,6,2,"X",L["TOOLTIP_FONT_X_OFFSET"],-500,500,nil,false,'x','Channel'),
+										nametextY = Auras:Slider_VerifyDefaults(statusbars.bars.ChannelBar.nametext,7,2,"Y",L["TOOLTIP_FONT_Y_OFFSET"],-100,100,nil,false,'y','Channel'),
 										shadow = {
 											name = '|cFFFFFFFF'..L["LABEL_FONT_SHADOW"]..'|r',
 											type = "group",
@@ -1653,10 +1653,10 @@ local function GetEnhancementOptions()
 											hidden = false,
 											guiInline = true,
 											args = {
-												shadowToggle = Auras:Toggle_VerifyDefaults(statusbars.bars.ChannelBar.nametext.font.shadow,1,2,L["TOGGLE"],nil,nil,false,'isEnabled','Channel','channelBar'),
-												shadowColor = Auras:Color_VerifyDefaults(statusbars.bars.ChannelBar.nametext.font.shadow,2,2,L["LABEL_FONT_SHADOW_COLOR"],L["TOOLTIP_FONT_SHADOW_COLOR"],true,nil,false,'color','Channel','channelBar'),
-												shadowX = Auras:Slider_VerifyDefaults(statusbars.bars.ChannelBar.nametext.font.shadow.offset,3,2,"X",L["TOOLTIP_FONT_SHADOW_X_OFFSET"],-10,10,nil,false,'x','Channel','channelBar'),
-												shadowY = Auras:Slider_VerifyDefaults(statusbars.bars.ChannelBar.nametext.font.shadow.offset,4,2,"Y",L["TOOLTIP_FONT_SHADOW_Y_OFFSET"],-10,10,nil,false,'y','Channel','channelBar'),
+												shadowToggle = Auras:Toggle_VerifyDefaults(statusbars.bars.ChannelBar.nametext.font.shadow,1,2,L["TOGGLE"],nil,nil,false,'isEnabled','Channel'),
+												shadowColor = Auras:Color_VerifyDefaults(statusbars.bars.ChannelBar.nametext.font.shadow,2,2,L["LABEL_FONT_SHADOW_COLOR"],L["TOOLTIP_FONT_SHADOW_COLOR"],true,nil,false,'color','Channel'),
+												shadowX = Auras:Slider_VerifyDefaults(statusbars.bars.ChannelBar.nametext.font.shadow.offset,3,2,"X",L["TOOLTIP_FONT_SHADOW_X_OFFSET"],-10,10,nil,false,'x','Channel'),
+												shadowY = Auras:Slider_VerifyDefaults(statusbars.bars.ChannelBar.nametext.font.shadow.offset,4,2,"Y",L["TOOLTIP_FONT_SHADOW_Y_OFFSET"],-10,10,nil,false,'y','Channel'),
 											},
 										},
 									},
@@ -1668,13 +1668,13 @@ local function GetEnhancementOptions()
 									disabled = true,
 									guiInline = true,
 									args = {
-										color = Auras:Color_VerifyDefaults(statusbars.bars.ChannelBar.timetext.font,1,2,L["LABEL_FONT_COLOR"],L["TOOLTIP_FONT_COLOR"],true,"full",false,'color','Channel','channelBar'),
-										timeFontName = Auras:Select_VerifyDefaults(statusbars.bars.ChannelBar.timetext.font,2,2,L["LABEL_FONT"],L["TOOLTIP_FONT_NAME"],"LSM30_Font",LSM:HashTable("font"),false,nil,'name','Channel','channelBar'),
-										timeFontSize = Auras:Slider_VerifyDefaults(statusbars.bars.ChannelBar.timetext.font,3,2,FONT_SIZE,L["TOOLTIP_COOLDOWN_FONT_SIZE"],5,40,nil,false,'size','Channel','channelBar'),
-										timeFontOutline = Auras:Select_VerifyDefaults(statusbars.bars.ChannelBar.timetext.font,4,2,L["LABEL_FONT_OUTLINE"],L["TOOLTIP_FONT_OUTLINE"],nil,FONT_OUTLINES,false,nil,'flag','Channel','channelBar'),
-										timeTextAnchor = Auras:Select_VerifyDefaults(statusbars.bars.ChannelBar.timetext,5,2,L["LABEL_FONT_ANCHOR"],L["TOOLTIP_FONT_ANCHOR_POINT"],nil,FRAME_ANCHOR_OPTIONS,false,nil,'justify','Channel','channelBar'),
-										timeTextX = Auras:Slider_VerifyDefaults(statusbars.bars.ChannelBar.timetext,6,2,"X",L["TOOLTIP_FONT_X_OFFSET"],-500,500,nil,false,'x','Channel','channelBar'),
-										timeTextY = Auras:Slider_VerifyDefaults(statusbars.bars.ChannelBar.timetext,7,2,"Y",L["TOOLTIP_FONT_Y_OFFSET"],-100,100,nil,false,'y','Channel','channelBar'),
+										color = Auras:Color_VerifyDefaults(statusbars.bars.ChannelBar.timetext.font,1,2,L["LABEL_FONT_COLOR"],L["TOOLTIP_FONT_COLOR"],true,"full",false,'color','Channel'),
+										timeFontName = Auras:Select_VerifyDefaults(statusbars.bars.ChannelBar.timetext.font,2,2,L["LABEL_FONT"],L["TOOLTIP_FONT_NAME"],"LSM30_Font",LSM:HashTable("font"),false,nil,'name','Channel'),
+										timeFontSize = Auras:Slider_VerifyDefaults(statusbars.bars.ChannelBar.timetext.font,3,2,FONT_SIZE,L["TOOLTIP_COOLDOWN_FONT_SIZE"],5,40,nil,false,'size','Channel'),
+										timeFontOutline = Auras:Select_VerifyDefaults(statusbars.bars.ChannelBar.timetext.font,4,2,L["LABEL_FONT_OUTLINE"],L["TOOLTIP_FONT_OUTLINE"],nil,FONT_OUTLINES,false,nil,'flag','Channel'),
+										timeTextAnchor = Auras:Select_VerifyDefaults(statusbars.bars.ChannelBar.timetext,5,2,L["LABEL_FONT_ANCHOR"],L["TOOLTIP_FONT_ANCHOR_POINT"],nil,FRAME_ANCHOR_OPTIONS,false,nil,'justify','Channel'),
+										timeTextX = Auras:Slider_VerifyDefaults(statusbars.bars.ChannelBar.timetext,6,2,"X",L["TOOLTIP_FONT_X_OFFSET"],-500,500,nil,false,'x','Channel'),
+										timeTextY = Auras:Slider_VerifyDefaults(statusbars.bars.ChannelBar.timetext,7,2,"Y",L["TOOLTIP_FONT_Y_OFFSET"],-100,100,nil,false,'y','Channel'),
 										shadow = {
 											name = '|cFFFFFFFF'..L["LABEL_FONT_SHADOW"]..'|r',
 											type = "group",
@@ -1682,10 +1682,10 @@ local function GetEnhancementOptions()
 											hidden = false,
 											guiInline = true,
 											args = {
-												shadowToggle = Auras:Toggle_VerifyDefaults(statusbars.bars.ChannelBar.timetext.font.shadow,1,2,L["TOGGLE"],nil,nil,false,'isEnabled','Channel','channelBar'),
-												shadowColor = Auras:Color_VerifyDefaults(statusbars.bars.ChannelBar.timetext.font.shadow,2,2,L["LABEL_FONT_SHADOW_COLOR"],L["TOOLTIP_FONT_SHADOW_COLOR"],true,nil,false,'color','Channel','channelBar'),
-												shadowX = Auras:Slider_VerifyDefaults(statusbars.bars.ChannelBar.timetext.font.shadow.offset,3,2,"X",L["TOOLTIP_FONT_SHADOW_X_OFFSET"],-10,10,nil,false,'x','Channel','channelBar'),
-												shadowY = Auras:Slider_VerifyDefaults(statusbars.bars.ChannelBar.timetext.font.shadow.offset,4,2,"Y",L["TOOLTIP_FONT_SHADOW_Y_OFFSET"],-10,10,nil,false,'y','Channel','channelBar'),
+												shadowToggle = Auras:Toggle_VerifyDefaults(statusbars.bars.ChannelBar.timetext.font.shadow,1,2,L["TOGGLE"],nil,nil,false,'isEnabled','Channel'),
+												shadowColor = Auras:Color_VerifyDefaults(statusbars.bars.ChannelBar.timetext.font.shadow,2,2,L["LABEL_FONT_SHADOW_COLOR"],L["TOOLTIP_FONT_SHADOW_COLOR"],true,nil,false,'color','Channel'),
+												shadowX = Auras:Slider_VerifyDefaults(statusbars.bars.ChannelBar.timetext.font.shadow.offset,3,2,"X",L["TOOLTIP_FONT_SHADOW_X_OFFSET"],-10,10,nil,false,'x','Channel'),
+												shadowY = Auras:Slider_VerifyDefaults(statusbars.bars.ChannelBar.timetext.font.shadow.offset,4,2,"Y",L["TOOLTIP_FONT_SHADOW_Y_OFFSET"],-10,10,nil,false,'y','Channel'),
 											},
 										},
 									},
@@ -1696,13 +1696,13 @@ local function GetEnhancementOptions()
 									order = 7,
 									guiInline = true,
 									args = {
-										texture = Auras:Select_VerifyDefaults(statusbars.bars.ChannelBar.foreground,1,2,L["LABEL_STATUSBAR_TEXTURE"],L["TOOLTIP_STATUSBAR_TEXTURE"],"LSM30_Statusbar",LSM:HashTable(LSM.MediaType.STATUSBAR),false,nil,'texture','Channel','channelBar'),
-										textureColor = Auras:Color_VerifyDefaults(statusbars.bars.ChannelBar.foreground,2,2,L["LABEL_STATUSBAR_COLOR"],nil,false,"double",false,'color','Channel','channelBar'),
-										backgroundTexture = Auras:Select_VerifyDefaults(statusbars.bars.ChannelBar.background,3,2,L["LABEL_STATUSBAR_BG_TEXTURE"],L["TOOLTIP_STATUSBAR_BG_TEXTURE"],"LSM30_Statusbar",LSM:HashTable(LSM.MediaType.STATUSBAR),false,nil,'texture','Channel','channelBar'),
-										backgroundColor = Auras:Color_VerifyDefaults(statusbars.bars.ChannelBar.background,4,2,L["LABEL_STATUSBAR_BG_COLOR"],L["TOOLTIP_STATUSBAR_BG_COLOR"],true,nil,false,'color','Channel','channelBar'),
-										backgroundToggle = Auras:Toggle_VerifyDefaults(statusbars.bars.ChannelBar.adjust,5,2,L["LABEL_STATUSBAR_MODIFY_BACKGROUND"],L["TOOLTIP_TOGGLE_STATUSBAR_BG_CUSTOMIZATON"],nil,false,'showBG','Channel','channelBar'),
-										width = Auras:Slider_VerifyDefaults(statusbars.bars.ChannelBar.layout,6,2,L["LABEL_WIDTH"],nil,100,500,nil,false,'width','Channel','channelBar'),
-										height = Auras:Slider_VerifyDefaults(statusbars.bars.ChannelBar.layout,7,2,L["LABEL_HEIGHT"],nil,10,100,nil,false,'height','Channel','channelBar'),
+										texture = Auras:Select_VerifyDefaults(statusbars.bars.ChannelBar.foreground,1,2,L["LABEL_STATUSBAR_TEXTURE"],L["TOOLTIP_STATUSBAR_TEXTURE"],"LSM30_Statusbar",LSM:HashTable(LSM.MediaType.STATUSBAR),false,nil,'texture','Channel'),
+										textureColor = Auras:Color_VerifyDefaults(statusbars.bars.ChannelBar.foreground,2,2,L["LABEL_STATUSBAR_COLOR"],nil,false,"double",false,'color','Channel'),
+										backgroundTexture = Auras:Select_VerifyDefaults(statusbars.bars.ChannelBar.background,3,2,L["LABEL_STATUSBAR_BG_TEXTURE"],L["TOOLTIP_STATUSBAR_BG_TEXTURE"],"LSM30_Statusbar",LSM:HashTable(LSM.MediaType.STATUSBAR),false,nil,'texture','Channel'),
+										backgroundColor = Auras:Color_VerifyDefaults(statusbars.bars.ChannelBar.background,4,2,L["LABEL_STATUSBAR_BG_COLOR"],L["TOOLTIP_STATUSBAR_BG_COLOR"],true,nil,false,'color','Channel'),
+										backgroundToggle = Auras:Toggle_VerifyDefaults(statusbars.bars.ChannelBar.adjust,5,2,L["LABEL_STATUSBAR_MODIFY_BACKGROUND"],L["TOOLTIP_TOGGLE_STATUSBAR_BG_CUSTOMIZATON"],nil,false,'showBG','Channel'),
+										width = Auras:Slider_VerifyDefaults(statusbars.bars.ChannelBar.layout,6,2,L["LABEL_WIDTH"],nil,100,500,nil,false,'width','Channel'),
+										height = Auras:Slider_VerifyDefaults(statusbars.bars.ChannelBar.layout,7,2,L["LABEL_HEIGHT"],nil,10,100,nil,false,'height','Channel'),
 									},
 								},
 								reset = {
@@ -1727,12 +1727,12 @@ local function GetEnhancementOptions()
 										Auras:ResetForeground(bar,default)
 										Auras:ResetLayout(bar,default)
 
-										enh_options.args.bars.args.channelBar.args.reset.disabled = true
-										enh_options.args.bars.args.channelBar.args.reset.name = "|cFF666666"..L["BUTTON_RESET_STATUSBAR_CHANNEL"].."|r"
-										Auras:VerifyDefaultValues(2,enh_options,'Channel','channelBar')
+										enh_options.args.bars.args.ChannelBar.args.reset.disabled = true
+										enh_options.args.bars.args.ChannelBar.args.reset.name = "|cFF666666"..L["BUTTON_RESET_STATUSBAR_CHANNEL"].."|r"
+										Auras:VerifyDefaultValues(2,enh_options,'Channel')
 										
 										if (not bar.adjust.isEnabled) then
-											Auras:InitializeProgressBar('ChannelBar2',nil,'channelBar','nametext','timetext',2)
+											Auras:InitializeProgressBar('ChannelBar',nil,'nametext','timetext',2)
 										end
 									end,
 								},
@@ -2092,16 +2092,16 @@ local function GetRestorationOptions()
 									guiInline = true,
 									args = {
 										defaultBarToggle = Auras:Toggle_Basic(statusbars,1,L["LABEL_STATUSBAR_BLIZZARD"],L["TOOLTIP_TOGGLE_BLIZZARD_BAR"],nil,'defaultBar'),
-										castBarToggle = Auras:Toggle_Statusbar(statusbars.bars.CastBar,2,L["TOGGLE_CAST_BAR"],L["TOOLTIP_TOGGLE_CAST_BAR"],'isEnabled','castBar'),
-										channelToggle = Auras:Toggle_Statusbar(statusbars.bars.ChannelBar,3,L["TOGGLE_CHANNEL_BAR"],L["TOOLTIP_TOGGLE_CHANNEL_BAR"],'isEnabled','channelBar'),
-										manaToggle = Auras:Toggle_Statusbar(statusbars.bars.ManaBar,4,L["TOGGLE_MANA_BAR"],L["TOOLTIP_TOGGLE_MANA_BAR"],'isEnabled','manaBar'),
-										earthenWallToggle = Auras:Toggle_Statusbar(statusbars.bars.EarthenWallBar,5,L["TOGGLE_EARTHEN_WALL_BAR"],L["TOOLTIP_TOGGLE_EARTHEN_WALL_BAR"],'isEnabled','earthenWallBar'),
-										tidalWavesToggle = Auras:Toggle_Statusbar(statusbars.bars.TidalWavesBar,6,L["TOGGLE_TIDAL_WAVES_BAR"],L["TOOLTIP_TOGGLE_TIDAL_WAVES_BAR"],'isEnabled','tidalWavesBar'),
+										castBarToggle = Auras:Toggle_Statusbar(statusbars.bars.CastBar,2,L["TOGGLE_CAST_BAR"],L["TOOLTIP_TOGGLE_CAST_BAR"],'isEnabled','CastBar'),
+										channelToggle = Auras:Toggle_Statusbar(statusbars.bars.ChannelBar,3,L["TOGGLE_CHANNEL_BAR"],L["TOOLTIP_TOGGLE_CHANNEL_BAR"],'isEnabled','ChannelBar'),
+										manaToggle = Auras:Toggle_Statusbar(statusbars.bars.ManaBar,4,L["TOGGLE_MANA_BAR"],L["TOOLTIP_TOGGLE_MANA_BAR"],'isEnabled','ManaBar'),
+										earthenWallToggle = Auras:Toggle_Statusbar(statusbars.bars.EarthenWallTotemBar,5,L["TOGGLE_EARTHEN_WALL_BAR"],L["TOOLTIP_TOGGLE_EARTHEN_WALL_BAR"],'isEnabled','EarthenWallTotemBar'),
+										tidalWavesToggle = Auras:Toggle_Statusbar(statusbars.bars.TidalWavesBar,6,L["TOGGLE_TIDAL_WAVES_BAR"],L["TOOLTIP_TOGGLE_TIDAL_WAVES_BAR"],'isEnabled','TidalWavesBar'),
 									},
 								},
 							},
 						},
-						manaBar = {
+						ManaBar = {
 							name = L["LABEL_STATUSBAR_MANA"],
 							order = 2,
 							type = "group",
@@ -2130,7 +2130,7 @@ local function GetRestorationOptions()
 												statusbars.bars.ManaBar.grouping = value
 												Auras:VerifyDefaultValues(3,res_options,'Mana')
 												if (value) then
-													res_options.args.bars.args.manaBar.args.general.args.ManaBarPrecision.values = {
+													res_options.args.bars.args.ManaBar.args.general.args.ManaBarPrecision.values = {
 														--[[[tostring(ManaPrecision("Full"))] = "Full",
 														[tostring(ManaPrecision("Thousand"))] = "Thousand",
 														[tostring(ManaPrecision("Million"))] = "Million",]]
@@ -2138,7 +2138,7 @@ local function GetRestorationOptions()
 														["Short"] = tostring(Auras:ManaPrecision("Short")),
 													}
 												else
-													res_options.args.bars.args.manaBar.args.general.args.ManaBarPrecision.values = {
+													res_options.args.bars.args.ManaBar.args.general.args.ManaBarPrecision.values = {
 														--[[[tostring(ManaPrecision("Full"))] = "Full",
 														[tostring(ManaPrecision("Thousand"))] = "Thousand",
 														[tostring(ManaPrecision("Million"))] = "Million",]]
@@ -2156,7 +2156,7 @@ local function GetRestorationOptions()
 											name = L["LABEL_PRECISION_MANA"],
 											desc = L["TOOLTIP_AURAS_ORIENTATION"],
 											get = function()
-												res_options.args.bars.args.manaBar.args.general.args.ManaBarPrecision.values = {
+												res_options.args.bars.args.ManaBar.args.general.args.ManaBarPrecision.values = {
 													["Long"] = tostring(Auras:ManaPrecision("Long")),
 													["Short"] = tostring(Auras:ManaPrecision("Short")),
 												}
@@ -2239,34 +2239,34 @@ local function GetRestorationOptions()
 										Auras:ResetForeground(bar,default)
 										Auras:ResetLayout(bar,default)
 										
-										res_options.args.bars.args.manaBar.args.reset.disabled = true
-										res_options.args.bars.args.manaBar.args.reset.name = "|cFF666666"..L["BUTTON_RESET_STATUSBAR_MANA"].."|r"
+										res_options.args.bars.args.ManaBar.args.reset.disabled = true
+										res_options.args.bars.args.ManaBar.args.reset.name = "|cFF666666"..L["BUTTON_RESET_STATUSBAR_MANA"].."|r"
 										Auras:VerifyDefaultValues(3,res_options,"Mana")
 										
 										if (not bar.adjust.isEnabled) then
-											Auras:InitializeProgressBar('ManaBar',nil,'manaBar','text',nil,3)
+											Auras:InitializeProgressBar('ManaBar',nil,'text',nil,3)
 										end
 									end,
 								},
 							},
 						},
-						castBar = {
+						CastBar = {
 							name = L["LABEL_STATUSBAR_CAST"],
 							order = 3,
 							inline = false,
 							type = "group",
 							args = {
-								adjust = Auras:Toggle_VerifyDefaults(statusbars.castBar.adjust,1,3,L["LABEL_STATUSBAR_MODIFY_CAST"],L["TOOLTIP_TOGGLE_STATUSBAR_CUSTOMIZATON"],nil,nil,'isEnabled','Cast','castBar'),
-								nametextToggle = Auras:Toggle_VerifyDefaults(statusbars.castBar.nametext,2,3,L["TOGGLE_SPELL_TEXT"],L["TOOLTIP_TOGGLE_SPELL_TEXT"],nil,nil,'isDisplayText','Cast','castBar'),
-								timetextToggle = Auras:Toggle_VerifyDefaults(statusbars.castBar.timetext,3,3,L["TOGGLE_TIME_TEXT"],L["TOOLTIP_TOGGLE_TIME_TEXT"],nil,nil,'isDisplayText','Cast','castBar'),
+								adjust = Auras:Toggle_VerifyDefaults(statusbars.bars.CastBar.adjust,1,3,L["LABEL_STATUSBAR_MODIFY_CAST"],L["TOOLTIP_TOGGLE_STATUSBAR_CUSTOMIZATON"],nil,nil,'isEnabled','Cast','castBar'),
+								nametextToggle = Auras:Toggle_VerifyDefaults(statusbars.bars.CastBar.nametext,2,3,L["TOGGLE_SPELL_TEXT"],L["TOOLTIP_TOGGLE_SPELL_TEXT"],nil,nil,'isDisplayText','Cast','castBar'),
+								timetextToggle = Auras:Toggle_VerifyDefaults(statusbars.bars.CastBar.timetext,3,3,L["TOGGLE_TIME_TEXT"],L["TOOLTIP_TOGGLE_TIME_TEXT"],nil,nil,'isDisplayText','Cast','castBar'),
 								general = {
 									name = "|cFFFFFFFF"..SETTINGS.."|r",
 									order = 4,
 									type = "group",
 									guiInline = true,
 									args = {
-										alphaCombat = Auras:Slider_VerifyDefaults(statusbars.castBar,1,3,L["LABEL_ALPHA_COMBAT"],L["TOOLTIP_STATUSBAR_ALPHA_COMBAT"],0,1,nil,nil,'alphaCombat','Cast','castBar'),
-										alphaOoC = Auras:Slider_VerifyDefaults(statusbars.castBar,2,3,L["LABEL_ALPHA_NO_TARGET_NO_COMBAT"],L["TOOLTIP_STATUSBAR_ALPHA_NO_COMBAT"],0,1,nil,nil,'alphaOoC','Cast','castBar'),
+										alphaCombat = Auras:Slider_VerifyDefaults(statusbars.bars.CastBar,1,3,L["LABEL_ALPHA_COMBAT"],L["TOOLTIP_STATUSBAR_ALPHA_COMBAT"],0,1,nil,nil,'alphaCombat','Cast','castBar'),
+										alphaOoC = Auras:Slider_VerifyDefaults(statusbars.bars.CastBar,2,3,L["LABEL_ALPHA_NO_TARGET_NO_COMBAT"],L["TOOLTIP_STATUSBAR_ALPHA_NO_COMBAT"],0,1,nil,nil,'alphaOoC','Cast','castBar'),
 									},
 								},
 								iconSpark = {
@@ -2276,9 +2276,9 @@ local function GetRestorationOptions()
 									disabled = true,
 									guiInline = true,
 									args = {
-										sparkToggle = Auras:Toggle_VerifyDefaults(statusbars.castBar,1,3,L["TOGGLE_SPARK"],nil,nil,nil,'spark','Cast','castBar'),
-										iconToggle = Auras:Toggle_VerifyDefaults(statusbars.castBar.icon,2,3,L["TOGGLE_ICON"],nil,nil,nil,'isEnabled','Cast','castBar'),
-										iconJustify = Auras:Select_VerifyDefaults(statusbars.castBar.icon,3,3,L["LABEL_ICON_JUSTIFY"],L["TOOLTIP_STATUSBAR_ICON_LOCATION"],nil,ICON_JUSTIFY,nil,nil,'justify','Cast','castBar'),
+										sparkToggle = Auras:Toggle_VerifyDefaults(statusbars.bars.CastBar,1,3,L["TOGGLE_SPARK"],nil,nil,nil,'spark','Cast','castBar'),
+										iconToggle = Auras:Toggle_VerifyDefaults(statusbars.bars.CastBar.icon,2,3,L["TOGGLE_ICON"],nil,nil,nil,'isEnabled','Cast','castBar'),
+										iconJustify = Auras:Select_VerifyDefaults(statusbars.bars.CastBar.icon,3,3,L["LABEL_ICON_JUSTIFY"],L["TOOLTIP_STATUSBAR_ICON_LOCATION"],nil,ICON_JUSTIFY,nil,nil,'justify','Cast','castBar'),
 									},
 								},
 								nametext = {
@@ -2288,13 +2288,13 @@ local function GetRestorationOptions()
 									disabled = true,
 									guiInline = true,
 									args = {
-										color = Auras:Color_VerifyDefaults(statusbars.castBar.nametext.font,1,3,L["LABEL_FONT_COLOR"],L["TOOLTIP_FONT_COLOR"],true,"full",nil,'color','Cast','castBar'),
-										fontName = Auras:Select_VerifyDefaults(statusbars.castBar.nametext.font,2,3,L["LABEL_FONT"],L["TOOLTIP_FONT_NAME"],"LSM30_Font",LSM:HashTable("font"),nil,nil,'name','Cast','castBar'),
-										fontSize = Auras:Slider_VerifyDefaults(statusbars.castBar.nametext.font,3,3,FONT_SIZE,L["TOOLTIP_COOLDOWN_FONT_SIZE"],5,40,nil,nil,'size','Cast','castBar'),
-										fontOutline = Auras:Select_VerifyDefaults(statusbars.castBar.nametext.font,4,3,L["LABEL_FONT_OUTLINE"],L["TOOLTIP_FONT_OUTLINE"],nil,FONT_OUTLINES,nil,nil,'flag','Cast','castBar'),
-										nametextAnchor = Auras:Select_VerifyDefaults(statusbars.castBar.nametext,5,3,L["LABEL_FONT_ANCHOR"],L["TOOLTIP_FONT_ANCHOR_POINT"],nil,FRAME_ANCHOR_OPTIONS,nil,nil,'justify','Cast','castBar'),
-										nametextX = Auras:Slider_VerifyDefaults(statusbars.castBar.nametext,6,3,"X",L["TOOLTIP_FONT_X_OFFSET"],-500,500,nil,nil,'x','Cast','castBar'),
-										nametextY = Auras:Slider_VerifyDefaults(statusbars.castBar.nametext,7,3,"Y",L["TOOLTIP_FONT_Y_OFFSET"],-100,100,nil,nil,'y','Cast','castBar'),
+										color = Auras:Color_VerifyDefaults(statusbars.bars.CastBar.nametext.font,1,3,L["LABEL_FONT_COLOR"],L["TOOLTIP_FONT_COLOR"],true,"full",nil,'color','Cast','castBar'),
+										fontName = Auras:Select_VerifyDefaults(statusbars.bars.CastBar.nametext.font,2,3,L["LABEL_FONT"],L["TOOLTIP_FONT_NAME"],"LSM30_Font",LSM:HashTable("font"),nil,nil,'name','Cast','castBar'),
+										fontSize = Auras:Slider_VerifyDefaults(statusbars.bars.CastBar.nametext.font,3,3,FONT_SIZE,L["TOOLTIP_COOLDOWN_FONT_SIZE"],5,40,nil,nil,'size','Cast','castBar'),
+										fontOutline = Auras:Select_VerifyDefaults(statusbars.bars.CastBar.nametext.font,4,3,L["LABEL_FONT_OUTLINE"],L["TOOLTIP_FONT_OUTLINE"],nil,FONT_OUTLINES,nil,nil,'flag','Cast','castBar'),
+										nametextAnchor = Auras:Select_VerifyDefaults(statusbars.bars.CastBar.nametext,5,3,L["LABEL_FONT_ANCHOR"],L["TOOLTIP_FONT_ANCHOR_POINT"],nil,FRAME_ANCHOR_OPTIONS,nil,nil,'justify','Cast','castBar'),
+										nametextX = Auras:Slider_VerifyDefaults(statusbars.bars.CastBar.nametext,6,3,"X",L["TOOLTIP_FONT_X_OFFSET"],-500,500,nil,nil,'x','Cast','castBar'),
+										nametextY = Auras:Slider_VerifyDefaults(statusbars.bars.CastBar.nametext,7,3,"Y",L["TOOLTIP_FONT_Y_OFFSET"],-100,100,nil,nil,'y','Cast','castBar'),
 										shadow = {
 											name = '|cFFFFFFFF'..L["LABEL_FONT_SHADOW"]..'|r',
 											type = "group",
@@ -2302,10 +2302,10 @@ local function GetRestorationOptions()
 											hidden = false,
 											guiInline = true,
 											args = {
-												shadowToggle = Auras:Toggle_VerifyDefaults(statusbars.castBar.nametext.font.shadow,1,3,L["TOGGLE"],nil,nil,nil,'isEnabled','Cast','castBar'),
-												shadowColor = Auras:Color_VerifyDefaults(statusbars.castBar.nametext.font.shadow,2,3,L["LABEL_FONT_SHADOW_COLOR"],L["TOOLTIP_FONT_SHADOW_COLOR"],true,nil,nil,'color','Cast','castBar'),
-												shadowX = Auras:Slider_VerifyDefaults(statusbars.castBar.nametext.font.shadow.offset,3,3,"X",L["TOOLTIP_FONT_SHADOW_X_OFFSET"],-10,10,nil,nil,'x','Cast','castBar'),
-												shadowY = Auras:Slider_VerifyDefaults(statusbars.castBar.nametext.font.shadow.offset,4,3,"Y",L["TOOLTIP_FONT_SHADOW_Y_OFFSET"],-10,10,nil,nil,'y','Cast','castBar'),
+												shadowToggle = Auras:Toggle_VerifyDefaults(statusbars.bars.CastBar.nametext.font.shadow,1,3,L["TOGGLE"],nil,nil,nil,'isEnabled','Cast','castBar'),
+												shadowColor = Auras:Color_VerifyDefaults(statusbars.bars.CastBar.nametext.font.shadow,2,3,L["LABEL_FONT_SHADOW_COLOR"],L["TOOLTIP_FONT_SHADOW_COLOR"],true,nil,nil,'color','Cast','castBar'),
+												shadowX = Auras:Slider_VerifyDefaults(statusbars.bars.CastBar.nametext.font.shadow.offset,3,3,"X",L["TOOLTIP_FONT_SHADOW_X_OFFSET"],-10,10,nil,nil,'x','Cast','castBar'),
+												shadowY = Auras:Slider_VerifyDefaults(statusbars.bars.CastBar.nametext.font.shadow.offset,4,3,"Y",L["TOOLTIP_FONT_SHADOW_Y_OFFSET"],-10,10,nil,nil,'y','Cast','castBar'),
 											},
 										},
 									},
@@ -2317,13 +2317,13 @@ local function GetRestorationOptions()
 									disabled = true,
 									guiInline = true,
 									args = {
-										color = Auras:Color_VerifyDefaults(statusbars.castBar.timetext.font,1,3,L["LABEL_FONT_COLOR"],L["TOOLTIP_FONT_COLOR"],true,"full",nil,'color','Cast','castBar'),
-										timeFontName = Auras:Select_VerifyDefaults(statusbars.castBar.timetext.font,2,3,L["LABEL_FONT"],L["TOOLTIP_FONT_NAME"],"LSM30_Font",LSM:HashTable("font"),nil,nil,'name','Cast','castBar'),
-										timeFontSize = Auras:Slider_VerifyDefaults(statusbars.castBar.timetext.font,3,3,FONT_SIZE,L["TOOLTIP_COOLDOWN_FONT_SIZE"],5,40,nil,nil,'size','Cast','castBar'),
-										timeFontOutline = Auras:Select_VerifyDefaults(statusbars.castBar.timetext.font,4,3,L["LABEL_FONT_OUTLINE"],L["TOOLTIP_FONT_OUTLINE"],nil,FONT_OUTLINES,nil,nil,'flag','Cast','castBar'),
-										timeTextAnchor = Auras:Select_VerifyDefaults(statusbars.castBar.timetext,5,3,L["LABEL_FONT_ANCHOR"],L["TOOLTIP_FONT_ANCHOR_POINT"],nil,FRAME_ANCHOR_OPTIONS,nil,nil,'justify','Cast','castBar'),
-										timeTextX = Auras:Slider_VerifyDefaults(statusbars.castBar.timetext,6,3,"X",L["TOOLTIP_FONT_X_OFFSET"],-500,500,nil,nil,'x','Cast','castBar'),
-										timeTextY = Auras:Slider_VerifyDefaults(statusbars.castBar.timetext,7,3,"Y",L["TOOLTIP_FONT_Y_OFFSET"],-100,100,nil,nil,'y','Cast','castBar'),
+										color = Auras:Color_VerifyDefaults(statusbars.bars.CastBar.timetext.font,1,3,L["LABEL_FONT_COLOR"],L["TOOLTIP_FONT_COLOR"],true,"full",nil,'color','Cast','castBar'),
+										timeFontName = Auras:Select_VerifyDefaults(statusbars.bars.CastBar.timetext.font,2,3,L["LABEL_FONT"],L["TOOLTIP_FONT_NAME"],"LSM30_Font",LSM:HashTable("font"),nil,nil,'name','Cast','castBar'),
+										timeFontSize = Auras:Slider_VerifyDefaults(statusbars.bars.CastBar.timetext.font,3,3,FONT_SIZE,L["TOOLTIP_COOLDOWN_FONT_SIZE"],5,40,nil,nil,'size','Cast','castBar'),
+										timeFontOutline = Auras:Select_VerifyDefaults(statusbars.bars.CastBar.timetext.font,4,3,L["LABEL_FONT_OUTLINE"],L["TOOLTIP_FONT_OUTLINE"],nil,FONT_OUTLINES,nil,nil,'flag','Cast','castBar'),
+										timeTextAnchor = Auras:Select_VerifyDefaults(statusbars.bars.CastBar.timetext,5,3,L["LABEL_FONT_ANCHOR"],L["TOOLTIP_FONT_ANCHOR_POINT"],nil,FRAME_ANCHOR_OPTIONS,nil,nil,'justify','Cast','castBar'),
+										timeTextX = Auras:Slider_VerifyDefaults(statusbars.bars.CastBar.timetext,6,3,"X",L["TOOLTIP_FONT_X_OFFSET"],-500,500,nil,nil,'x','Cast','castBar'),
+										timeTextY = Auras:Slider_VerifyDefaults(statusbars.bars.CastBar.timetext,7,3,"Y",L["TOOLTIP_FONT_Y_OFFSET"],-100,100,nil,nil,'y','Cast','castBar'),
 										shadow = {
 											name = '|cFFFFFFFF'..L["LABEL_FONT_SHADOW"]..'|r',
 											type = "group",
@@ -2331,10 +2331,10 @@ local function GetRestorationOptions()
 											hidden = false,
 											guiInline = true,
 											args = {
-												shadowToggle = Auras:Toggle_VerifyDefaults(statusbars.castBar.timetext.font.shadow,1,3,L["TOGGLE"],nil,nil,nil,'isEnabled','Cast','castBar'),
-												shadowColor = Auras:Color_VerifyDefaults(statusbars.castBar.timetext.font.shadow,2,3,L["LABEL_FONT_SHADOW_COLOR"],L["TOOLTIP_FONT_SHADOW_COLOR"],true,nil,nil,'color','Cast','castBar'),
-												shadowX = Auras:Slider_VerifyDefaults(statusbars.castBar.timetext.font.shadow.offset,3,3,"X",L["TOOLTIP_FONT_SHADOW_X_OFFSET"],-10,10,nil,nil,'x','Cast','castBar'),
-												shadowY = Auras:Slider_VerifyDefaults(statusbars.castBar.timetext.font.shadow.offset,4,3,"Y",L["TOOLTIP_FONT_SHADOW_Y_OFFSET"],-10,10,nil,nil,'y','Cast','castBar'),
+												shadowToggle = Auras:Toggle_VerifyDefaults(statusbars.bars.CastBar.timetext.font.shadow,1,3,L["TOGGLE"],nil,nil,nil,'isEnabled','Cast','castBar'),
+												shadowColor = Auras:Color_VerifyDefaults(statusbars.bars.CastBar.timetext.font.shadow,2,3,L["LABEL_FONT_SHADOW_COLOR"],L["TOOLTIP_FONT_SHADOW_COLOR"],true,nil,nil,'color','Cast','castBar'),
+												shadowX = Auras:Slider_VerifyDefaults(statusbars.bars.CastBar.timetext.font.shadow.offset,3,3,"X",L["TOOLTIP_FONT_SHADOW_X_OFFSET"],-10,10,nil,nil,'x','Cast','castBar'),
+												shadowY = Auras:Slider_VerifyDefaults(statusbars.bars.CastBar.timetext.font.shadow.offset,4,3,"Y",L["TOOLTIP_FONT_SHADOW_Y_OFFSET"],-10,10,nil,nil,'y','Cast','castBar'),
 											},
 										},
 									},
@@ -2345,13 +2345,13 @@ local function GetRestorationOptions()
 									order = 8,
 									guiInline = true,
 									args = {
-										texture = Auras:Select_VerifyDefaults(statusbars.castBar.foreground,1,3,L["LABEL_STATUSBAR_TEXTURE"],L["TOOLTIP_STATUSBAR_TEXTURE"],"LSM30_Statusbar",LSM:HashTable(LSM.MediaType.STATUSBAR),nil,nil,'texture','Cast','castBar'),
-										textureColor = Auras:Color_VerifyDefaults(statusbars.castBar.foreground,2,3,L["LABEL_STATUSBAR_COLOR"],nil,false,"double",nil,'color','Cast','castBar'),
-										backgroundTexture = Auras:Select_VerifyDefaults(statusbars.castBar.background,3,3,L["LABEL_STATUSBAR_BG_TEXTURE"],L["TOOLTIP_STATUSBAR_BG_TEXTURE"],"LSM30_Statusbar",LSM:HashTable(LSM.MediaType.STATUSBAR),nil,nil,'texture','Cast','castBar'),
-										backgroundColor = Auras:Color_VerifyDefaults(statusbars.castBar.background,4,3,L["LABEL_STATUSBAR_BG_COLOR"],L["TOOLTIP_STATUSBAR_BG_COLOR"],true,nil,nil,'color','Cast','castBar'),
-										backgroundToggle = Auras:Toggle_VerifyDefaults(statusbars.castBar.adjust,5,3,L["LABEL_STATUSBAR_MODIFY_BACKGROUND"],L["TOOLTIP_TOGGLE_STATUSBAR_BG_CUSTOMIZATON"],nil,nil,'showBG','Cast','castBar'),
-										width = Auras:Slider_VerifyDefaults(statusbars.castBar.layout,6,3,L["LABEL_WIDTH"],nil,100,500,nil,nil,'width','Cast','castBar'),
-										height = Auras:Slider_VerifyDefaults(statusbars.castBar.layout,7,3,L["LABEL_HEIGHT"],nil,10,100,nil,nil,'height','Cast','castBar'),
+										texture = Auras:Select_VerifyDefaults(statusbars.bars.CastBar.foreground,1,3,L["LABEL_STATUSBAR_TEXTURE"],L["TOOLTIP_STATUSBAR_TEXTURE"],"LSM30_Statusbar",LSM:HashTable(LSM.MediaType.STATUSBAR),nil,nil,'texture','Cast','castBar'),
+										textureColor = Auras:Color_VerifyDefaults(statusbars.bars.CastBar.foreground,2,3,L["LABEL_STATUSBAR_COLOR"],nil,false,"double",nil,'color','Cast','castBar'),
+										backgroundTexture = Auras:Select_VerifyDefaults(statusbars.bars.CastBar.background,3,3,L["LABEL_STATUSBAR_BG_TEXTURE"],L["TOOLTIP_STATUSBAR_BG_TEXTURE"],"LSM30_Statusbar",LSM:HashTable(LSM.MediaType.STATUSBAR),nil,nil,'texture','Cast','castBar'),
+										backgroundColor = Auras:Color_VerifyDefaults(statusbars.bars.CastBar.background,4,3,L["LABEL_STATUSBAR_BG_COLOR"],L["TOOLTIP_STATUSBAR_BG_COLOR"],true,nil,nil,'color','Cast','castBar'),
+										backgroundToggle = Auras:Toggle_VerifyDefaults(statusbars.bars.CastBar.adjust,5,3,L["LABEL_STATUSBAR_MODIFY_BACKGROUND"],L["TOOLTIP_TOGGLE_STATUSBAR_BG_CUSTOMIZATON"],nil,nil,'showBG','Cast','castBar'),
+										width = Auras:Slider_VerifyDefaults(statusbars.bars.CastBar.layout,6,3,L["LABEL_WIDTH"],nil,100,500,nil,nil,'width','Cast','castBar'),
+										height = Auras:Slider_VerifyDefaults(statusbars.bars.CastBar.layout,7,3,L["LABEL_HEIGHT"],nil,10,100,nil,nil,'height','Cast','castBar'),
 									},
 								},
 								reset = {
@@ -2359,8 +2359,8 @@ local function GetRestorationOptions()
 									type = "execute",
 									name = L["BUTTON_RESET_STATUSBAR_CAST"],
 									func = function()
-										local bar = statusbars.castBar
-										local default = statusbarDefaults.castBar
+										local bar = statusbars.bars.CastBar
+										local default = Auras.db.char.statusbars.defaults.CastBar
 										
 										bar.alphaCombat = default.alphaCombat
 										bar.alphaOoC = default.alphaOoC
@@ -2376,34 +2376,34 @@ local function GetRestorationOptions()
 										Auras:ResetForeground(bar,default)
 										Auras:ResetLayout(bar,default)
 
-										res_options.args.bars.args.castBar.args.reset.disabled = true
-										res_options.args.bars.args.castBar.args.reset.name = "|cFF666666"..L["BUTTON_RESET_STATUSBAR_CAST"].."|r"
-										Auras:VerifyDefaultValues(3,res_options,'Cast','castBar')
+										res_options.args.bars.args.CastBar.args.reset.disabled = true
+										res_options.args.bars.args.CastBar.args.reset.name = "|cFF666666"..L["BUTTON_RESET_STATUSBAR_CAST"].."|r"
+										Auras:VerifyDefaultValues(3,res_options,'Cast')
 										
 										if (not bar.adjust.isEnabled) then
-											Auras:InitializeProgressBar('CastBar3',nil,'castBar','nametext','timetext',3)
+											Auras:InitializeProgressBar('CastBar',nil,'nametext','timetext',3)
 										end
 									end,
 								},
 							},
 						},
-						channelBar = {
+						ChannelBar = {
 							name = L["LABEL_STATUSBAR_CHANNEL"],
 							order = 4,
 							inline = false,
 							type = "group",
 							args = {
-								adjust = Auras:Toggle_VerifyDefaults(statusbars.channelBar.adjust,1,3,L["LABEL_STATUSBAR_MODIFY_CAST"],L["TOOLTIP_TOGGLE_STATUSBAR_CUSTOMIZATON"],nil,nil,'isEnabled','Channel','channelBar'),
-								nametextToggle = Auras:Toggle_VerifyDefaults(statusbars.channelBar.nametext,2,3,L["TOGGLE_SPELL_TEXT"],L["TOOLTIP_TOGGLE_SPELL_TEXT"],nil,nil,'isDisplayText','Channel','channelBar'),
-								timetextToggle = Auras:Toggle_VerifyDefaults(statusbars.channelBar.timetext,3,3,L["TOGGLE_TIME_TEXT"],L["TOOLTIP_TOGGLE_TIME_TEXT"],nil,nil,'isDisplayText','Channel','channelBar'),
+								adjust = Auras:Toggle_VerifyDefaults(statusbars.bars.ChannelBar.adjust,1,3,L["LABEL_STATUSBAR_MODIFY_CAST"],L["TOOLTIP_TOGGLE_STATUSBAR_CUSTOMIZATON"],nil,nil,'isEnabled','Channel','channelBar'),
+								nametextToggle = Auras:Toggle_VerifyDefaults(statusbars.bars.ChannelBar.nametext,2,3,L["TOGGLE_SPELL_TEXT"],L["TOOLTIP_TOGGLE_SPELL_TEXT"],nil,nil,'isDisplayText','Channel','channelBar'),
+								timetextToggle = Auras:Toggle_VerifyDefaults(statusbars.bars.ChannelBar.timetext,3,3,L["TOGGLE_TIME_TEXT"],L["TOOLTIP_TOGGLE_TIME_TEXT"],nil,nil,'isDisplayText','Channel','channelBar'),
 								general = {
 									name = "|cFFFFFFFF"..SETTINGS.."|r",
 									order = 4,
 									type = "group",
 									guiInline = true,
 									args = {
-										alphaCombat = Auras:Slider_VerifyDefaults(statusbars.channelBar,1,3,L["LABEL_ALPHA_COMBAT"],L["TOOLTIP_STATUSBAR_ALPHA_COMBAT"],0,1,nil,nil,'alphaCombat','Channel','channelBar'),
-										alphaOoC = Auras:Slider_VerifyDefaults(statusbars.channelBar,2,3,L["LABEL_ALPHA_NO_TARGET_NO_COMBAT"],L["TOOLTIP_STATUSBAR_ALPHA_NO_COMBAT"],0,1,nil,nil,'alphaOoC','Channel','channelBar'),
+										alphaCombat = Auras:Slider_VerifyDefaults(statusbars.bars.ChannelBar,1,3,L["LABEL_ALPHA_COMBAT"],L["TOOLTIP_STATUSBAR_ALPHA_COMBAT"],0,1,nil,nil,'alphaCombat','Channel','channelBar'),
+										alphaOoC = Auras:Slider_VerifyDefaults(statusbars.bars.ChannelBar,2,3,L["LABEL_ALPHA_NO_TARGET_NO_COMBAT"],L["TOOLTIP_STATUSBAR_ALPHA_NO_COMBAT"],0,1,nil,nil,'alphaOoC','Channel','channelBar'),
 									},
 								},
 								iconSpark = {
@@ -2413,9 +2413,9 @@ local function GetRestorationOptions()
 									disabled = true,
 									guiInline = true,
 									args = {
-										sparkToggle = Auras:Toggle_VerifyDefaults(statusbars.channelBar,1,3,L["TOGGLE_SPARK"],nil,nil,nil,'spark','Channel','channelBar'),
-										iconToggle = Auras:Toggle_VerifyDefaults(statusbars.channelBar.icon,2,3,L["TOGGLE_ICON"],nil,nil,nil,'isEnabled','Channel','channelBar'),
-										iconJustify = Auras:Select_VerifyDefaults(statusbars.channelBar.icon,3,3,L["LABEL_ICON_JUSTIFY"],L["TOOLTIP_STATUSBAR_ICON_LOCATION"],nil,ICON_JUSTIFY,nil,nil,'justify','Channel','channelBar'),
+										sparkToggle = Auras:Toggle_VerifyDefaults(statusbars.bars.ChannelBar,1,3,L["TOGGLE_SPARK"],nil,nil,nil,'spark','Channel','channelBar'),
+										iconToggle = Auras:Toggle_VerifyDefaults(statusbars.bars.ChannelBar.icon,2,3,L["TOGGLE_ICON"],nil,nil,nil,'isEnabled','Channel','channelBar'),
+										iconJustify = Auras:Select_VerifyDefaults(statusbars.bars.ChannelBar.icon,3,3,L["LABEL_ICON_JUSTIFY"],L["TOOLTIP_STATUSBAR_ICON_LOCATION"],nil,ICON_JUSTIFY,nil,nil,'justify','Channel','channelBar'),
 									},
 								},
 								nametext = {
@@ -2425,13 +2425,13 @@ local function GetRestorationOptions()
 									disabled = true,
 									guiInline = true,
 									args = {
-										color = Auras:Color_VerifyDefaults(statusbars.channelBar.nametext.font,1,3,L["LABEL_FONT_COLOR"],L["TOOLTIP_FONT_COLOR"],true,"full",nil,'color','Channel','channelBar'),
-										fontName = Auras:Select_VerifyDefaults(statusbars.channelBar.nametext.font,2,3,L["LABEL_FONT"],L["TOOLTIP_FONT_NAME"],"LSM30_Font",LSM:HashTable("font"),nil,nil,'name','Channel','channelBar'),
-										fontSize = Auras:Slider_VerifyDefaults(statusbars.channelBar.nametext.font,3,3,FONT_SIZE,L["TOOLTIP_COOLDOWN_FONT_SIZE"],5,40,nil,nil,'size','Channel','channelBar'),
-										fontOutline = Auras:Select_VerifyDefaults(statusbars.channelBar.nametext.font,4,3,L["LABEL_FONT_OUTLINE"],L["TOOLTIP_FONT_OUTLINE"],nil,FONT_OUTLINES,nil,nil,'flag','Channel','channelBar'),
-										nametextAnchor = Auras:Select_VerifyDefaults(statusbars.channelBar.nametext,5,3,L["LABEL_FONT_ANCHOR"],L["TOOLTIP_FONT_ANCHOR_POINT"],nil,FRAME_ANCHOR_OPTIONS,nil,nil,'justify','Channel','channelBar'),
-										nametextX = Auras:Slider_VerifyDefaults(statusbars.channelBar.nametext,6,3,"X",L["TOOLTIP_FONT_X_OFFSET"],-500,500,nil,nil,'x','Channel','channelBar'),
-										nametextY = Auras:Slider_VerifyDefaults(statusbars.channelBar.nametext,7,3,"Y",L["TOOLTIP_FONT_Y_OFFSET"],-100,100,nil,nil,'y','Channel','channelBar'),
+										color = Auras:Color_VerifyDefaults(statusbars.bars.ChannelBar.nametext.font,1,3,L["LABEL_FONT_COLOR"],L["TOOLTIP_FONT_COLOR"],true,"full",nil,'color','Channel','channelBar'),
+										fontName = Auras:Select_VerifyDefaults(statusbars.bars.ChannelBar.nametext.font,2,3,L["LABEL_FONT"],L["TOOLTIP_FONT_NAME"],"LSM30_Font",LSM:HashTable("font"),nil,nil,'name','Channel','channelBar'),
+										fontSize = Auras:Slider_VerifyDefaults(statusbars.bars.ChannelBar.nametext.font,3,3,FONT_SIZE,L["TOOLTIP_COOLDOWN_FONT_SIZE"],5,40,nil,nil,'size','Channel','channelBar'),
+										fontOutline = Auras:Select_VerifyDefaults(statusbars.bars.ChannelBar.nametext.font,4,3,L["LABEL_FONT_OUTLINE"],L["TOOLTIP_FONT_OUTLINE"],nil,FONT_OUTLINES,nil,nil,'flag','Channel','channelBar'),
+										nametextAnchor = Auras:Select_VerifyDefaults(statusbars.bars.ChannelBar.nametext,5,3,L["LABEL_FONT_ANCHOR"],L["TOOLTIP_FONT_ANCHOR_POINT"],nil,FRAME_ANCHOR_OPTIONS,nil,nil,'justify','Channel','channelBar'),
+										nametextX = Auras:Slider_VerifyDefaults(statusbars.bars.ChannelBar.nametext,6,3,"X",L["TOOLTIP_FONT_X_OFFSET"],-500,500,nil,nil,'x','Channel','channelBar'),
+										nametextY = Auras:Slider_VerifyDefaults(statusbars.bars.ChannelBar.nametext,7,3,"Y",L["TOOLTIP_FONT_Y_OFFSET"],-100,100,nil,nil,'y','Channel','channelBar'),
 										shadow = {
 											name = '|cFFFFFFFF'..L["LABEL_FONT_SHADOW"]..'|r',
 											type = "group",
@@ -2439,10 +2439,10 @@ local function GetRestorationOptions()
 											hidden = false,
 											guiInline = true,
 											args = {
-												shadowToggle = Auras:Toggle_VerifyDefaults(statusbars.channelBar.nametext.font.shadow,1,3,L["TOGGLE"],nil,nil,nil,'isEnabled','Channel','channelBar'),
-												shadowColor = Auras:Color_VerifyDefaults(statusbars.channelBar.nametext.font.shadow,2,3,L["LABEL_FONT_SHADOW_COLOR"],L["TOOLTIP_FONT_SHADOW_COLOR"],true,nil,nil,'color','Channel','channelBar'),
-												shadowX = Auras:Slider_VerifyDefaults(statusbars.channelBar.nametext.font.shadow.offset,3,3,"X",L["TOOLTIP_FONT_SHADOW_X_OFFSET"],-10,10,nil,nil,'x','Channel','channelBar'),
-												shadowY = Auras:Slider_VerifyDefaults(statusbars.channelBar.nametext.font.shadow.offset,4,3,"Y",L["TOOLTIP_FONT_SHADOW_Y_OFFSET"],-10,10,nil,nil,'y','Channel','channelBar'),
+												shadowToggle = Auras:Toggle_VerifyDefaults(statusbars.bars.ChannelBar.nametext.font.shadow,1,3,L["TOGGLE"],nil,nil,nil,'isEnabled','Channel','channelBar'),
+												shadowColor = Auras:Color_VerifyDefaults(statusbars.bars.ChannelBar.nametext.font.shadow,2,3,L["LABEL_FONT_SHADOW_COLOR"],L["TOOLTIP_FONT_SHADOW_COLOR"],true,nil,nil,'color','Channel','channelBar'),
+												shadowX = Auras:Slider_VerifyDefaults(statusbars.bars.ChannelBar.nametext.font.shadow.offset,3,3,"X",L["TOOLTIP_FONT_SHADOW_X_OFFSET"],-10,10,nil,nil,'x','Channel','channelBar'),
+												shadowY = Auras:Slider_VerifyDefaults(statusbars.bars.ChannelBar.nametext.font.shadow.offset,4,3,"Y",L["TOOLTIP_FONT_SHADOW_Y_OFFSET"],-10,10,nil,nil,'y','Channel','channelBar'),
 											},
 										},
 									},
@@ -2454,13 +2454,13 @@ local function GetRestorationOptions()
 									disabled = true,
 									guiInline = true,
 									args = {
-										color = Auras:Color_VerifyDefaults(statusbars.channelBar.timetext.font,1,3,L["LABEL_FONT_COLOR"],L["TOOLTIP_FONT_COLOR"],true,"full",nil,'color','Channel','channelBar'),
-										timeFontName = Auras:Select_VerifyDefaults(statusbars.channelBar.timetext.font,2,3,L["LABEL_FONT"],L["TOOLTIP_FONT_NAME"],"LSM30_Font",LSM:HashTable("font"),nil,nil,'name','Channel','channelBar'),
-										timeFontSize = Auras:Slider_VerifyDefaults(statusbars.channelBar.timetext.font,3,3,FONT_SIZE,L["TOOLTIP_COOLDOWN_FONT_SIZE"],5,40,nil,nil,'size','Channel','channelBar'),
-										timeFontOutline = Auras:Select_VerifyDefaults(statusbars.channelBar.timetext.font,4,3,L["LABEL_FONT_OUTLINE"],L["TOOLTIP_FONT_OUTLINE"],nil,FONT_OUTLINES,nil,nil,'flag','Channel','channelBar'),
-										timeTextAnchor = Auras:Select_VerifyDefaults(statusbars.channelBar.timetext,5,3,L["LABEL_FONT_ANCHOR"],L["TOOLTIP_FONT_ANCHOR_POINT"],nil,FRAME_ANCHOR_OPTIONS,nil,nil,'justify','Channel','channelBar'),
-										timeTextX = Auras:Slider_VerifyDefaults(statusbars.channelBar.timetext,6,3,"X",L["TOOLTIP_FONT_X_OFFSET"],-500,500,nil,nil,'x','Channel','channelBar'),
-										timeTextY = Auras:Slider_VerifyDefaults(statusbars.channelBar.timetext,7,3,"Y",L["TOOLTIP_FONT_Y_OFFSET"],-100,100,nil,nil,'y','Channel','channelBar'),
+										color = Auras:Color_VerifyDefaults(statusbars.bars.ChannelBar.timetext.font,1,3,L["LABEL_FONT_COLOR"],L["TOOLTIP_FONT_COLOR"],true,"full",nil,'color','Channel','channelBar'),
+										timeFontName = Auras:Select_VerifyDefaults(statusbars.bars.ChannelBar.timetext.font,2,3,L["LABEL_FONT"],L["TOOLTIP_FONT_NAME"],"LSM30_Font",LSM:HashTable("font"),nil,nil,'name','Channel','channelBar'),
+										timeFontSize = Auras:Slider_VerifyDefaults(statusbars.bars.ChannelBar.timetext.font,3,3,FONT_SIZE,L["TOOLTIP_COOLDOWN_FONT_SIZE"],5,40,nil,nil,'size','Channel','channelBar'),
+										timeFontOutline = Auras:Select_VerifyDefaults(statusbars.bars.ChannelBar.timetext.font,4,3,L["LABEL_FONT_OUTLINE"],L["TOOLTIP_FONT_OUTLINE"],nil,FONT_OUTLINES,nil,nil,'flag','Channel','channelBar'),
+										timeTextAnchor = Auras:Select_VerifyDefaults(statusbars.bars.ChannelBar.timetext,5,3,L["LABEL_FONT_ANCHOR"],L["TOOLTIP_FONT_ANCHOR_POINT"],nil,FRAME_ANCHOR_OPTIONS,nil,nil,'justify','Channel','channelBar'),
+										timeTextX = Auras:Slider_VerifyDefaults(statusbars.bars.ChannelBar.timetext,6,3,"X",L["TOOLTIP_FONT_X_OFFSET"],-500,500,nil,nil,'x','Channel','channelBar'),
+										timeTextY = Auras:Slider_VerifyDefaults(statusbars.bars.ChannelBar.timetext,7,3,"Y",L["TOOLTIP_FONT_Y_OFFSET"],-100,100,nil,nil,'y','Channel','channelBar'),
 										shadow = {
 											name = '|cFFFFFFFF'..L["LABEL_FONT_SHADOW"]..'|r',
 											type = "group",
@@ -2468,10 +2468,10 @@ local function GetRestorationOptions()
 											hidden = false,
 											guiInline = true,
 											args = {
-												shadowToggle = Auras:Toggle_VerifyDefaults(statusbars.channelBar.timetext.font.shadow,1,3,L["TOGGLE"],nil,nil,nil,'isEnabled','Channel','channelBar'),
-												shadowColor = Auras:Color_VerifyDefaults(statusbars.channelBar.timetext.font.shadow,2,3,L["LABEL_FONT_SHADOW_COLOR"],L["TOOLTIP_FONT_SHADOW_COLOR"],true,nil,nil,'color','Channel','channelBar'),
-												shadowX = Auras:Slider_VerifyDefaults(statusbars.channelBar.timetext.font.shadow.offset,3,3,"X",L["TOOLTIP_FONT_SHADOW_X_OFFSET"],-10,10,nil,nil,'x','Channel','channelBar'),
-												shadowY = Auras:Slider_VerifyDefaults(statusbars.channelBar.timetext.font.shadow.offset,4,3,"Y",L["TOOLTIP_FONT_SHADOW_Y_OFFSET"],-10,10,nil,nil,'y','Channel','channelBar'),
+												shadowToggle = Auras:Toggle_VerifyDefaults(statusbars.bars.ChannelBar.timetext.font.shadow,1,3,L["TOGGLE"],nil,nil,nil,'isEnabled','Channel','channelBar'),
+												shadowColor = Auras:Color_VerifyDefaults(statusbars.bars.ChannelBar.timetext.font.shadow,2,3,L["LABEL_FONT_SHADOW_COLOR"],L["TOOLTIP_FONT_SHADOW_COLOR"],true,nil,nil,'color','Channel','channelBar'),
+												shadowX = Auras:Slider_VerifyDefaults(statusbars.bars.ChannelBar.timetext.font.shadow.offset,3,3,"X",L["TOOLTIP_FONT_SHADOW_X_OFFSET"],-10,10,nil,nil,'x','Channel','channelBar'),
+												shadowY = Auras:Slider_VerifyDefaults(statusbars.bars.ChannelBar.timetext.font.shadow.offset,4,3,"Y",L["TOOLTIP_FONT_SHADOW_Y_OFFSET"],-10,10,nil,nil,'y','Channel','channelBar'),
 											},
 										},
 									},
@@ -2482,13 +2482,13 @@ local function GetRestorationOptions()
 									order = 8,
 									guiInline = true,
 									args = {
-										texture = Auras:Select_VerifyDefaults(statusbars.channelBar.foreground,1,3,L["LABEL_STATUSBAR_TEXTURE"],L["TOOLTIP_STATUSBAR_TEXTURE"],"LSM30_Statusbar",LSM:HashTable(LSM.MediaType.STATUSBAR),nil,nil,'texture','Channel','channelBar'),
-										textureColor = Auras:Color_VerifyDefaults(statusbars.channelBar.foreground,2,3,L["LABEL_STATUSBAR_COLOR"],nil,false,"double",nil,'color','Channel','channelBar'),
-										backgroundTexture = Auras:Select_VerifyDefaults(statusbars.channelBar.background,3,3,L["LABEL_STATUSBAR_BG_TEXTURE"],L["TOOLTIP_STATUSBAR_BG_TEXTURE"],"LSM30_Statusbar",LSM:HashTable(LSM.MediaType.STATUSBAR),nil,nil,'texture','Channel','channelBar'),
-										backgroundColor = Auras:Color_VerifyDefaults(statusbars.channelBar.background,4,3,L["LABEL_STATUSBAR_BG_COLOR"],L["TOOLTIP_STATUSBAR_BG_COLOR"],true,nil,nil,'color','Channel','channelBar'),
-										backgroundToggle = Auras:Toggle_VerifyDefaults(statusbars.channelBar.adjust,5,3,L["LABEL_STATUSBAR_MODIFY_BACKGROUND"],L["TOOLTIP_TOGGLE_STATUSBAR_BG_CUSTOMIZATON"],nil,nil,'showBG','Channel','channelBar'),
-										width = Auras:Slider_VerifyDefaults(statusbars.channelBar.layout,6,3,L["LABEL_WIDTH"],nil,100,500,nil,nil,'width','Channel','channelBar'),
-										height = Auras:Slider_VerifyDefaults(statusbars.channelBar.layout,7,3,L["LABEL_HEIGHT"],nil,10,100,nil,nil,'height','Channel','channelBar'),
+										texture = Auras:Select_VerifyDefaults(statusbars.bars.ChannelBar.foreground,1,3,L["LABEL_STATUSBAR_TEXTURE"],L["TOOLTIP_STATUSBAR_TEXTURE"],"LSM30_Statusbar",LSM:HashTable(LSM.MediaType.STATUSBAR),nil,nil,'texture','Channel','channelBar'),
+										textureColor = Auras:Color_VerifyDefaults(statusbars.bars.ChannelBar.foreground,2,3,L["LABEL_STATUSBAR_COLOR"],nil,false,"double",nil,'color','Channel','channelBar'),
+										backgroundTexture = Auras:Select_VerifyDefaults(statusbars.bars.ChannelBar.background,3,3,L["LABEL_STATUSBAR_BG_TEXTURE"],L["TOOLTIP_STATUSBAR_BG_TEXTURE"],"LSM30_Statusbar",LSM:HashTable(LSM.MediaType.STATUSBAR),nil,nil,'texture','Channel','channelBar'),
+										backgroundColor = Auras:Color_VerifyDefaults(statusbars.bars.ChannelBar.background,4,3,L["LABEL_STATUSBAR_BG_COLOR"],L["TOOLTIP_STATUSBAR_BG_COLOR"],true,nil,nil,'color','Channel','channelBar'),
+										backgroundToggle = Auras:Toggle_VerifyDefaults(statusbars.bars.ChannelBar.adjust,5,3,L["LABEL_STATUSBAR_MODIFY_BACKGROUND"],L["TOOLTIP_TOGGLE_STATUSBAR_BG_CUSTOMIZATON"],nil,nil,'showBG','Channel','channelBar'),
+										width = Auras:Slider_VerifyDefaults(statusbars.bars.ChannelBar.layout,6,3,L["LABEL_WIDTH"],nil,100,500,nil,nil,'width','Channel','channelBar'),
+										height = Auras:Slider_VerifyDefaults(statusbars.bars.ChannelBar.layout,7,3,L["LABEL_HEIGHT"],nil,10,100,nil,nil,'height','Channel','channelBar'),
 									},
 								},
 								reset = {
@@ -2496,8 +2496,8 @@ local function GetRestorationOptions()
 									type = "execute",
 									name = L["BUTTON_RESET_STATUSBAR_CHANNEL"],
 									func = function()
-										local bar = statusbars.channelBar
-										local default = statusbarDefaults.channelBar
+										local bar = statusbars.bars.ChannelBar
+										local default = Auras.db.char.statusbars.defaults.ChannelBar
 										
 										bar.alphaCombat = default.alphaCombat
 										bar.alphaOoC = default.alphaOoC
@@ -2513,35 +2513,35 @@ local function GetRestorationOptions()
 										Auras:ResetForeground(bar,default)
 										Auras:ResetLayout(bar,default)
 										
-										res_options.args.bars.args.channelBar.args.reset.disabled = true
-										res_options.args.bars.args.channelBar.args.reset.name = "|cFF666666"..L["BUTTON_RESET_STATUSBAR_CHANNEL"].."|r"
-										Auras:VerifyDefaultValues(3,res_options,'Channel','channelBar')
+										res_options.args.bars.args.ChannelBar.args.reset.disabled = true
+										res_options.args.bars.args.ChannelBar.args.reset.name = "|cFF666666"..L["BUTTON_RESET_STATUSBAR_CHANNEL"].."|r"
+										Auras:VerifyDefaultValues(3,res_options,'Channel')
 										
 										if (not bar.adjust.isEnabled) then
-											Auras:InitializeProgressBar('ChannelBar3',nil,'channelBar','nametext','timetext',3)
+											Auras:InitializeProgressBar('ChannelBar',nil,'nametext','timetext',3)
 										end
 									end,
 								},
 							},
 						},
-						earthenWallBar = {
+						EarthenWallTotemBar = {
 							name = L["LABEL_STATUSBAR_EARTHEN_WALL"],
 							type = "group",
 							order = 5,
 							inline = false,
 							args = {
-								adjust = Auras:Toggle_VerifyDefaults(statusbars.earthenWallBar.adjust,1,3,L["LABEL_STATUSBAR_MODIFY_EARTHEN_WALL"],L["TOOLTIP_TOGGLE_STATUSBAR_CUSTOMIZATON"],nil,nil,'isEnabled','Earthen Wall'),
-								healthtextToggle = Auras:Toggle_VerifyDefaults(statusbars.earthenWallBar.healthtext,2,3,L["TOGGLE_HEALTH_TEXT"],L["TOOLTIP_TOGGLE_HEALTH_TEXT"],nil,nil,'isDisplayText','Earthen Wall'),
-								timetextToggle = Auras:Toggle_VerifyDefaults(statusbars.earthenWallBar.timetext,2,3,L["TOGGLE_TIME_TEXT"],L["TOOLTIP_TOGGLE_TIME_TEXT"],nil,nil,'isDisplayText','Earthen Wall'),
+								adjust = Auras:Toggle_VerifyDefaults(statusbars.bars.EarthenWallTotemBar.adjust,1,3,L["LABEL_STATUSBAR_MODIFY_EARTHEN_WALL"],L["TOOLTIP_TOGGLE_STATUSBAR_CUSTOMIZATON"],nil,nil,'isEnabled','Earthen Wall'),
+								healthtextToggle = Auras:Toggle_VerifyDefaults(statusbars.bars.EarthenWallTotemBar.healthtext,2,3,L["TOGGLE_HEALTH_TEXT"],L["TOOLTIP_TOGGLE_HEALTH_TEXT"],nil,nil,'isDisplayText','Earthen Wall'),
+								timetextToggle = Auras:Toggle_VerifyDefaults(statusbars.bars.EarthenWallTotemBar.timetext,2,3,L["TOGGLE_TIME_TEXT"],L["TOOLTIP_TOGGLE_TIME_TEXT"],nil,nil,'isDisplayText','Earthen Wall'),
 								general = {
 									name = "|cFFFFFFFF"..SETTINGS.."|r",
 									order = 4,
 									type = "group",
 									guiInline = true,
 									args = {
-										alphaCombat = Auras:Slider_VerifyDefaults(statusbars.earthenWallBar,1,3,L["LABEL_ALPHA_COMBAT"],L["TOOLTIP_STATUSBAR_ALPHA_COMBAT"],0,1,nil,nil,'alphaCombat','Earthen Wall'),
-										alphaOoC = Auras:Slider_VerifyDefaults(statusbars.earthenWallBar,2,3,L["LABEL_ALPHA_NO_TARGET_NO_COMBAT"],L["TOOLTIP_STATUSBAR_ALPHA_NO_COMBAT"],0,1,nil,nil,'alphaOoC','Earthen Wall'),
-										alphaTarget = Auras:Slider_VerifyDefaults(statusbars.earthenWallBar,3,3,L["LABEL_ALPHA_TARGET_NO_COMBAT"],L["TOOLTIP_STATUSBAR_ALPHA_TARGET_NO_COMBAT"],0,1,nil,nil,'alphaTar','Earthen Wall'),
+										alphaCombat = Auras:Slider_VerifyDefaults(statusbars.bars.EarthenWallTotemBar,1,3,L["LABEL_ALPHA_COMBAT"],L["TOOLTIP_STATUSBAR_ALPHA_COMBAT"],0,1,nil,nil,'alphaCombat','Earthen Wall'),
+										alphaOoC = Auras:Slider_VerifyDefaults(statusbars.bars.EarthenWallTotemBar,2,3,L["LABEL_ALPHA_NO_TARGET_NO_COMBAT"],L["TOOLTIP_STATUSBAR_ALPHA_NO_COMBAT"],0,1,nil,nil,'alphaOoC','Earthen Wall'),
+										alphaTarget = Auras:Slider_VerifyDefaults(statusbars.bars.EarthenWallTotemBar,3,3,L["LABEL_ALPHA_TARGET_NO_COMBAT"],L["TOOLTIP_STATUSBAR_ALPHA_TARGET_NO_COMBAT"],0,1,nil,nil,'alphaTar','Earthen Wall'),
 									},
 								},
 								healthtext = {
@@ -2551,13 +2551,13 @@ local function GetRestorationOptions()
 									disabled = true,
 									guiInline = true,
 									args = {
-										color = Auras:Color_VerifyDefaults(statusbars.earthenWallBar.healthtext.font,1,3,L["LABEL_FONT_COLOR"],L["TOOLTIP_FONT_COLOR"],true,"full",nil,'color','Earthen Wall'),
-										fontName = Auras:Select_VerifyDefaults(statusbars.earthenWallBar.healthtext.font,2,3,L["LABEL_FONT"],L["TOOLTIP_FONT_NAME"],"LSM30_Font",LSM:HashTable("font"),nil,nil,'name','Earthen Wall'),
-										fontSize = Auras:Slider_VerifyDefaults(statusbars.earthenWallBar.healthtext.font,3,3,FONT_SIZE,L["TOOLTIP_COOLDOWN_FONT_SIZE"],5,40,nil,nil,'size','Earthen Wall'),
-										fontOutline = Auras:Select_VerifyDefaults(statusbars.earthenWallBar.healthtext.font,4,3,L["LABEL_FONT_OUTLINE"],L["TOOLTIP_FONT_OUTLINE"],nil,FONT_OUTLINES,nil,nil,'flag','Earthen Wall'),
-										textAnchor = Auras:Select_VerifyDefaults(statusbars.earthenWallBar.healthtext,5,3,L["LABEL_FONT_ANCHOR"],L["TOOLTIP_FONT_ANCHOR_POINT"],nil,FRAME_ANCHOR_OPTIONS,nil,nil,'justify','Earthen Wall'),
-										textX = Auras:Slider_VerifyDefaults(statusbars.earthenWallBar.healthtext,6,3,"X",L["TOOLTIP_FONT_X_OFFSET"],-500,500,nil,nil,'x','Earthen Wall'),
-										textY = Auras:Slider_VerifyDefaults(statusbars.earthenWallBar.healthtext,7,3,"Y",L["TOOLTIP_FONT_Y_OFFSET"],-100,100,nil,nil,'y','Earthen Wall'),
+										color = Auras:Color_VerifyDefaults(statusbars.bars.EarthenWallTotemBar.healthtext.font,1,3,L["LABEL_FONT_COLOR"],L["TOOLTIP_FONT_COLOR"],true,"full",nil,'color','Earthen Wall'),
+										fontName = Auras:Select_VerifyDefaults(statusbars.bars.EarthenWallTotemBar.healthtext.font,2,3,L["LABEL_FONT"],L["TOOLTIP_FONT_NAME"],"LSM30_Font",LSM:HashTable("font"),nil,nil,'name','Earthen Wall'),
+										fontSize = Auras:Slider_VerifyDefaults(statusbars.bars.EarthenWallTotemBar.healthtext.font,3,3,FONT_SIZE,L["TOOLTIP_COOLDOWN_FONT_SIZE"],5,40,nil,nil,'size','Earthen Wall'),
+										fontOutline = Auras:Select_VerifyDefaults(statusbars.bars.EarthenWallTotemBar.healthtext.font,4,3,L["LABEL_FONT_OUTLINE"],L["TOOLTIP_FONT_OUTLINE"],nil,FONT_OUTLINES,nil,nil,'flag','Earthen Wall'),
+										textAnchor = Auras:Select_VerifyDefaults(statusbars.bars.EarthenWallTotemBar.healthtext,5,3,L["LABEL_FONT_ANCHOR"],L["TOOLTIP_FONT_ANCHOR_POINT"],nil,FRAME_ANCHOR_OPTIONS,nil,nil,'justify','Earthen Wall'),
+										textX = Auras:Slider_VerifyDefaults(statusbars.bars.EarthenWallTotemBar.healthtext,6,3,"X",L["TOOLTIP_FONT_X_OFFSET"],-500,500,nil,nil,'x','Earthen Wall'),
+										textY = Auras:Slider_VerifyDefaults(statusbars.bars.EarthenWallTotemBar.healthtext,7,3,"Y",L["TOOLTIP_FONT_Y_OFFSET"],-100,100,nil,nil,'y','Earthen Wall'),
 										shadow = {
 											name = '|cFFFFFFFF'..L["LABEL_FONT_SHADOW"]..'|r',
 											type = "group",
@@ -2565,10 +2565,10 @@ local function GetRestorationOptions()
 											hidden = false,
 											guiInline = true,
 											args = {
-												shadowToggle = Auras:Toggle_VerifyDefaults(statusbars.earthenWallBar.healthtext.font.shadow,1,3,L["TOGGLE"],nil,nil,nil,'isEnabled','Earthen Wall'),
-												shadowColor = Auras:Color_VerifyDefaults(statusbars.earthenWallBar.healthtext.font.shadow,2,3,L["LABEL_FONT_SHADOW_COLOR"],L["TOOLTIP_FONT_SHADOW_COLOR"],true,nil,nil,'color','Earthen Wall'),
-												shadowX = Auras:Slider_VerifyDefaults(statusbars.earthenWallBar.healthtext.font.shadow.offset,3,3,"X",L["TOOLTIP_FONT_SHADOW_X_OFFSET"],-10,10,nil,nil,'x','Earthen Wall'),
-												shadowY = Auras:Slider_VerifyDefaults(statusbars.earthenWallBar.healthtext.font.shadow.offset,4,3,"Y",L["TOOLTIP_FONT_SHADOW_Y_OFFSET"],-10,10,nil,nil,'y','Earthen Wall'),
+												shadowToggle = Auras:Toggle_VerifyDefaults(statusbars.bars.EarthenWallTotemBar.healthtext.font.shadow,1,3,L["TOGGLE"],nil,nil,nil,'isEnabled','Earthen Wall'),
+												shadowColor = Auras:Color_VerifyDefaults(statusbars.bars.EarthenWallTotemBar.healthtext.font.shadow,2,3,L["LABEL_FONT_SHADOW_COLOR"],L["TOOLTIP_FONT_SHADOW_COLOR"],true,nil,nil,'color','Earthen Wall'),
+												shadowX = Auras:Slider_VerifyDefaults(statusbars.bars.EarthenWallTotemBar.healthtext.font.shadow.offset,3,3,"X",L["TOOLTIP_FONT_SHADOW_X_OFFSET"],-10,10,nil,nil,'x','Earthen Wall'),
+												shadowY = Auras:Slider_VerifyDefaults(statusbars.bars.EarthenWallTotemBar.healthtext.font.shadow.offset,4,3,"Y",L["TOOLTIP_FONT_SHADOW_Y_OFFSET"],-10,10,nil,nil,'y','Earthen Wall'),
 											},
 										},
 									},
@@ -2580,13 +2580,13 @@ local function GetRestorationOptions()
 									disabled = true,
 									guiInline = true,
 									args = {
-										color = Auras:Color_VerifyDefaults(statusbars.earthenWallBar.timetext.font,1,3,L["LABEL_FONT_COLOR"],L["TOOLTIP_FONT_COLOR"],true,"full",nil,'color','Earthen Wall'),
-										timeFontName = Auras:Select_VerifyDefaults(statusbars.earthenWallBar.timetext.font,2,3,L["LABEL_FONT"],L["TOOLTIP_FONT_NAME"],"LSM30_Font",LSM:HashTable("font"),nil,nil,'name','Earthen Wall'),
-										timeFontSize = Auras:Slider_VerifyDefaults(statusbars.earthenWallBar.timetext.font,3,3,FONT_SIZE,L["TOOLTIP_COOLDOWN_FONT_SIZE"],5,40,nil,nil,'size','Earthen Wall'),
-										timeFontOutline = Auras:Select_VerifyDefaults(statusbars.earthenWallBar.timetext.font,4,3,L["LABEL_FONT_OUTLINE"],L["TOOLTIP_FONT_OUTLINE"],nil,FONT_OUTLINES,nil,nil,'flag','Earthen Wall'),
-										timeTextAnchor = Auras:Select_VerifyDefaults(statusbars.earthenWallBar.timetext,5,3,L["LABEL_FONT_ANCHOR"],L["TOOLTIP_FONT_ANCHOR_POINT"],nil,FRAME_ANCHOR_OPTIONS,nil,nil,'justify','Earthen Wall'),
-										timeTextX = Auras:Slider_VerifyDefaults(statusbars.earthenWallBar.timetext,6,3,"X",L["TOOLTIP_FONT_X_OFFSET"],-500,500,nil,nil,'x','Earthen Wall'),
-										timeTextY = Auras:Slider_VerifyDefaults(statusbars.earthenWallBar.timetext,7,3,"Y",L["TOOLTIP_FONT_Y_OFFSET"],-100,100,nil,nil,'y','Earthen Wall'),
+										color = Auras:Color_VerifyDefaults(statusbars.bars.EarthenWallTotemBar.timetext.font,1,3,L["LABEL_FONT_COLOR"],L["TOOLTIP_FONT_COLOR"],true,"full",nil,'color','Earthen Wall'),
+										timeFontName = Auras:Select_VerifyDefaults(statusbars.bars.EarthenWallTotemBar.timetext.font,2,3,L["LABEL_FONT"],L["TOOLTIP_FONT_NAME"],"LSM30_Font",LSM:HashTable("font"),nil,nil,'name','Earthen Wall'),
+										timeFontSize = Auras:Slider_VerifyDefaults(statusbars.bars.EarthenWallTotemBar.timetext.font,3,3,FONT_SIZE,L["TOOLTIP_COOLDOWN_FONT_SIZE"],5,40,nil,nil,'size','Earthen Wall'),
+										timeFontOutline = Auras:Select_VerifyDefaults(statusbars.bars.EarthenWallTotemBar.timetext.font,4,3,L["LABEL_FONT_OUTLINE"],L["TOOLTIP_FONT_OUTLINE"],nil,FONT_OUTLINES,nil,nil,'flag','Earthen Wall'),
+										timeTextAnchor = Auras:Select_VerifyDefaults(statusbars.bars.EarthenWallTotemBar.timetext,5,3,L["LABEL_FONT_ANCHOR"],L["TOOLTIP_FONT_ANCHOR_POINT"],nil,FRAME_ANCHOR_OPTIONS,nil,nil,'justify','Earthen Wall'),
+										timeTextX = Auras:Slider_VerifyDefaults(statusbars.bars.EarthenWallTotemBar.timetext,6,3,"X",L["TOOLTIP_FONT_X_OFFSET"],-500,500,nil,nil,'x','Earthen Wall'),
+										timeTextY = Auras:Slider_VerifyDefaults(statusbars.bars.EarthenWallTotemBar.timetext,7,3,"Y",L["TOOLTIP_FONT_Y_OFFSET"],-100,100,nil,nil,'y','Earthen Wall'),
 										shadow = {
 											name = '|cFFFFFFFF'..L["LABEL_FONT_SHADOW"]..'|r',
 											type = "group",
@@ -2594,10 +2594,10 @@ local function GetRestorationOptions()
 											hidden = false,
 											guiInline = true,
 											args = {
-												shadowToggle = Auras:Toggle_VerifyDefaults(statusbars.earthenWallBar.timetext.font.shadow,1,3,L["TOGGLE"],nil,nil,nil,'isEnabled','Earthen Wall'),
-												shadowColor = Auras:Color_VerifyDefaults(statusbars.earthenWallBar.timetext.font.shadow,2,3,L["LABEL_FONT_SHADOW_COLOR"],L["TOOLTIP_FONT_SHADOW_COLOR"],true,nil,nil,'color','Earthen Wall'),
-												shadowX = Auras:Slider_VerifyDefaults(statusbars.earthenWallBar.timetext.font.shadow.offset,3,3,"X",L["TOOLTIP_FONT_SHADOW_X_OFFSET"],-10,10,nil,nil,'x','Earthen Wall'),
-												shadowY = Auras:Slider_VerifyDefaults(statusbars.earthenWallBar.timetext.font.shadow.offset,4,3,"Y",L["TOOLTIP_FONT_SHADOW_Y_OFFSET"],-10,10,nil,nil,'y','Earthen Wall'),
+												shadowToggle = Auras:Toggle_VerifyDefaults(statusbars.bars.EarthenWallTotemBar.timetext.font.shadow,1,3,L["TOGGLE"],nil,nil,nil,'isEnabled','Earthen Wall'),
+												shadowColor = Auras:Color_VerifyDefaults(statusbars.bars.EarthenWallTotemBar.timetext.font.shadow,2,3,L["LABEL_FONT_SHADOW_COLOR"],L["TOOLTIP_FONT_SHADOW_COLOR"],true,nil,nil,'color','Earthen Wall'),
+												shadowX = Auras:Slider_VerifyDefaults(statusbars.bars.EarthenWallTotemBar.timetext.font.shadow.offset,3,3,"X",L["TOOLTIP_FONT_SHADOW_X_OFFSET"],-10,10,nil,nil,'x','Earthen Wall'),
+												shadowY = Auras:Slider_VerifyDefaults(statusbars.bars.EarthenWallTotemBar.timetext.font.shadow.offset,4,3,"Y",L["TOOLTIP_FONT_SHADOW_Y_OFFSET"],-10,10,nil,nil,'y','Earthen Wall'),
 											},
 										},
 									},
@@ -2608,16 +2608,16 @@ local function GetRestorationOptions()
 									order = 7,
 									guiInline = true,
 									args = {
-										texture = Auras:Select_VerifyDefaults(statusbars.earthenWallBar.foreground,1,3,L["LABEL_STATUSBAR_TEXTURE"],L["TOOLTIP_STATUSBAR_TEXTURE"],"LSM30_Statusbar",LSM:HashTable(LSM.MediaType.STATUSBAR),nil,nil,'texture','Earthen Wall'),
-										textureColor = Auras:Color_VerifyDefaults(statusbars.earthenWallBar.foreground,2,3,L["LABEL_STATUSBAR_COLOR"],nil,false,"double",nil,'color','Earthen Wall'),
-										timerTexture = Auras:Select_VerifyDefaults(statusbars.earthenWallBar.timerBar,3,3,L["LABEL_TIME_BAR_TEXTURE"],L["TOOLTIP_STATUSBAR_TEXTURE"],"LSM30_Statusbar",LSM:HashTable(LSM.MediaType.STATUSBAR),nil,nil,'texture','Earthen Wall'),
-										timerColor = Auras:Color_VerifyDefaults(statusbars.earthenWallBar.timerBar,4,3,L["LABEL_STATUSBAR_COLOR"],nil,true,nil,nil,'color','Earthen Wall'),
-										timerToggle = Auras:Toggle_VerifyDefaults(statusbars.earthenWallBar.adjust,5,3,L["LABEL_STATUSBAR_MODIFY_TIMER"],L["TOOLTIP_TOGGLE_STATUSBAR_CUSTOMIZATON"],nil,nil,'showTimer','Earthen Wall'),
-										backgroundTexture = Auras:Select_VerifyDefaults(statusbars.earthenWallBar.background,6,3,L["LABEL_STATUSBAR_BG_TEXTURE"],L["TOOLTIP_STATUSBAR_BG_TEXTURE"],"LSM30_Statusbar",LSM:HashTable(LSM.MediaType.STATUSBAR),nil,nil,'texture','Earthen Wall'),
-										backgroundColor = Auras:Color_VerifyDefaults(statusbars.earthenWallBar.background,7,3,L["LABEL_STATUSBAR_BG_COLOR"],L["TOOLTIP_STATUSBAR_BG_COLOR"],true,nil,nil,'color','Earthen Wall'),
-										backgroundToggle = Auras:Toggle_VerifyDefaults(statusbars.earthenWallBar.adjust,8,3,L["LABEL_STATUSBAR_MODIFY_BACKGROUND"],L["TOOLTIP_TOGGLE_STATUSBAR_BG_CUSTOMIZATON"],nil,nil,'showBG','Earthen Wall'),
-										width = Auras:Slider_VerifyDefaults(statusbars.earthenWallBar.layout,9,3,L["LABEL_WIDTH"],nil,100,500,nil,nil,'width','Earthen Wall'),
-										height = Auras:Slider_VerifyDefaults(statusbars.earthenWallBar.layout,10,3,L["LABEL_HEIGHT"],nil,10,100,nil,nil,'height','Earthen Wall'),
+										texture = Auras:Select_VerifyDefaults(statusbars.bars.EarthenWallTotemBar.foreground,1,3,L["LABEL_STATUSBAR_TEXTURE"],L["TOOLTIP_STATUSBAR_TEXTURE"],"LSM30_Statusbar",LSM:HashTable(LSM.MediaType.STATUSBAR),nil,nil,'texture','Earthen Wall'),
+										textureColor = Auras:Color_VerifyDefaults(statusbars.bars.EarthenWallTotemBar.foreground,2,3,L["LABEL_STATUSBAR_COLOR"],nil,false,"double",nil,'color','Earthen Wall'),
+										timerTexture = Auras:Select_VerifyDefaults(statusbars.bars.EarthenWallTotemBar.timerBar,3,3,L["LABEL_TIME_BAR_TEXTURE"],L["TOOLTIP_STATUSBAR_TEXTURE"],"LSM30_Statusbar",LSM:HashTable(LSM.MediaType.STATUSBAR),nil,nil,'texture','Earthen Wall'),
+										timerColor = Auras:Color_VerifyDefaults(statusbars.bars.EarthenWallTotemBar.timerBar,4,3,L["LABEL_STATUSBAR_COLOR"],nil,true,nil,nil,'color','Earthen Wall'),
+										timerToggle = Auras:Toggle_VerifyDefaults(statusbars.bars.EarthenWallTotemBar.adjust,5,3,L["LABEL_STATUSBAR_MODIFY_TIMER"],L["TOOLTIP_TOGGLE_STATUSBAR_CUSTOMIZATON"],nil,nil,'showTimer','Earthen Wall'),
+										backgroundTexture = Auras:Select_VerifyDefaults(statusbars.bars.EarthenWallTotemBar.background,6,3,L["LABEL_STATUSBAR_BG_TEXTURE"],L["TOOLTIP_STATUSBAR_BG_TEXTURE"],"LSM30_Statusbar",LSM:HashTable(LSM.MediaType.STATUSBAR),nil,nil,'texture','Earthen Wall'),
+										backgroundColor = Auras:Color_VerifyDefaults(statusbars.bars.EarthenWallTotemBar.background,7,3,L["LABEL_STATUSBAR_BG_COLOR"],L["TOOLTIP_STATUSBAR_BG_COLOR"],true,nil,nil,'color','Earthen Wall'),
+										backgroundToggle = Auras:Toggle_VerifyDefaults(statusbars.bars.EarthenWallTotemBar.adjust,8,3,L["LABEL_STATUSBAR_MODIFY_BACKGROUND"],L["TOOLTIP_TOGGLE_STATUSBAR_BG_CUSTOMIZATON"],nil,nil,'showBG','Earthen Wall'),
+										width = Auras:Slider_VerifyDefaults(statusbars.bars.EarthenWallTotemBar.layout,9,3,L["LABEL_WIDTH"],nil,100,500,nil,nil,'width','Earthen Wall'),
+										height = Auras:Slider_VerifyDefaults(statusbars.bars.EarthenWallTotemBar.layout,10,3,L["LABEL_HEIGHT"],nil,10,100,nil,nil,'height','Earthen Wall'),
 									},
 								},
 								reset = {
@@ -2625,8 +2625,8 @@ local function GetRestorationOptions()
 									type = "execute",
 									name = L["BUTTON_RESET_STATUSBAR_EARTHEN_WALL"],
 									func = function()
-										local bar = statusbars.earthenWallBar
-										local default = statusbarDefaults.earthenWallBar
+										local bar = statusbars.bars.EarthenWallTotemBar
+										local default = statusbars.defaults.EarthenWallTotemBar
 										
 										bar.alphaCombat = default.alphaCombat
 										bar.alphaOoC = default.alphaOoC
@@ -2640,18 +2640,18 @@ local function GetRestorationOptions()
 										Auras:ResetForeground(bar,default)
 										Auras:ResetLayout(bar,default)
 										
-										res_options.args.bars.args.earthenWallBar.args.reset.disabled = true
-										res_options.args.bars.args.earthenWallBar.args.reset.name = "|cFF666666"..L["BUTTON_RESET_STATUSBAR_EARTHEN_WALL"].."|r"
+										res_options.args.bars.args.EarthenWallTotemBar.args.reset.disabled = true
+										res_options.args.bars.args.EarthenWallTotemBar.args.reset.name = "|cFF666666"..L["BUTTON_RESET_STATUSBAR_EARTHEN_WALL"].."|r"
 										Auras:VerifyDefaultValues(3,res_options,'Earthen Wall')
 										
 										if (not bar.adjust.isEnabled) then
-											Auras:InitializeProgressBar('EarthenWallTotemBar','Timer','earthenWallBar','healthtext','timetext',3)
+											Auras:InitializeProgressBar('EarthenWallTotemBar','Timer','healthtext','timetext',3)
 										end
 									end,
 								},
 							},
 						},
-						tidalWavesBar = {
+						TidalWavesBar = {
 							name = L["LABEL_TIDAL_WAVES_BAR"],
 							type = "group",
 							order = 6,
@@ -2663,10 +2663,10 @@ local function GetRestorationOptions()
 									desc = L["TOOLTIP_TOGGLE_STATUSBAR_CUSTOMIZATON"],
 									type = "toggle",
 									get = function()
-										return statusbars.tidalWavesBar.adjust.isEnabled
+										return statusbars.bars.TidalWavesBar.adjust.isEnabled
 									end,
 									set = function(self,value)
-										statusbars.tidalWavesBar.adjust.isEnabled = value
+										statusbars.bars.TidalWavesBar.adjust.isEnabled = value
 										Auras:VerifyDefaultValues(3,res_options,'Tidal Waves')
 									end,
 								},
@@ -2676,11 +2676,11 @@ local function GetRestorationOptions()
 									type = "group",
 									guiInline = true,
 									args = {
-										animate = Auras:Toggle_VerifyDefaults(statusbars.tidalWavesBar,1,3,L["LABEL_STATUSBAR_TIDAL_WAVES_ANIMATE"],nil,nil,nil,'animate','Tidal Waves'),
-										emptyColor = Auras:Color_VerifyDefaults(statusbars.tidalWavesBar,2,3,L["LABEL_STATUSBAR_TIDAL_WAVES_EMPTY"],L["TOOLTIP_STATUSBAR_TIDAL_WAVES_EMPTY"],false,"double",nil,'emptyColor',"Tidal Waves"),
-										combatDisplay = Auras:Select_VerifyDefaults(statusbars.tidalWavesBar,3,3,L["LABEL_TIDAL_WAVES_DISPLAY_COMBAT"],L["TOOLTIP_TIDAL_WAVES_DISPLAY_METHOD_COMBAT"],nil,TIDAL_WAVES_OPTIONS,nil,nil,'combatDisplay','Tidal Waves'),
-										OoCDisplay = Auras:Select_VerifyDefaults(statusbars.tidalWavesBar,4,3,L["LABEL_TIDAL_WAVES_DISPLAY_NO_COMBAT"],L["TOOLTIP_TIDAL_WAVES_DISPLAY_METHOD_NO_COMBAT"],nil,TIDAL_WAVES_OPTIONS,nil,nil,'OoCDisplay','Tidal Waves'),
-										OoCTime = Auras:Slider_VerifyDefaults(statusbars.tidalWavesBar,5,3,L["LABEL_TIDAL_WAVES_DURATION_NO_COMBAT"],L["TOOLTIP_TIDAL_WAVES_TIMER_NO_TARGET_NO_COMBAT"],1,15,nil,nil,'OoCTime',"Tidal Waves"),
+										animate = Auras:Toggle_VerifyDefaults(statusbars.bars.TidalWavesBar,1,3,L["LABEL_STATUSBAR_TIDAL_WAVES_ANIMATE"],nil,nil,nil,'animate','Tidal Waves'),
+										emptyColor = Auras:Color_VerifyDefaults(statusbars.bars.TidalWavesBar,2,3,L["LABEL_STATUSBAR_TIDAL_WAVES_EMPTY"],L["TOOLTIP_STATUSBAR_TIDAL_WAVES_EMPTY"],false,"double",nil,'emptyColor',"Tidal Waves"),
+										combatDisplay = Auras:Select_VerifyDefaults(statusbars.bars.TidalWavesBar,3,3,L["LABEL_TIDAL_WAVES_DISPLAY_COMBAT"],L["TOOLTIP_TIDAL_WAVES_DISPLAY_METHOD_COMBAT"],nil,TIDAL_WAVES_OPTIONS,nil,nil,'combatDisplay','Tidal Waves'),
+										OoCDisplay = Auras:Select_VerifyDefaults(statusbars.bars.TidalWavesBar,4,3,L["LABEL_TIDAL_WAVES_DISPLAY_NO_COMBAT"],L["TOOLTIP_TIDAL_WAVES_DISPLAY_METHOD_NO_COMBAT"],nil,TIDAL_WAVES_OPTIONS,nil,nil,'OoCDisplay','Tidal Waves'),
+										OoCTime = Auras:Slider_VerifyDefaults(statusbars.bars.TidalWavesBar,5,3,L["LABEL_TIDAL_WAVES_DURATION_NO_COMBAT"],L["TOOLTIP_TIDAL_WAVES_TIMER_NO_TARGET_NO_COMBAT"],1,15,nil,nil,'OoCTime',"Tidal Waves"),
 									},
 								},
 								layout = {
@@ -2689,13 +2689,13 @@ local function GetRestorationOptions()
 									order = 3,
 									guiInline = true,
 									args = {
-										texture = Auras:Select_VerifyDefaults(statusbars.tidalWavesBar.foreground,1,3,L["LABEL_STATUSBAR_TEXTURE"],L["TOOLTIP_STATUSBAR_TEXTURE"],"LSM30_Statusbar",LSM:HashTable(LSM.MediaType.STATUSBAR),nil,nil,'texture','Tidal Waves'),
-										textureColor = Auras:Color_VerifyDefaults(statusbars.tidalWavesBar.foreground,2,3,L["LABEL_STATUSBAR_COLOR"],nil,false,"double",nil,'color','Tidal Waves'),
-										backgroundTexture = Auras:Select_VerifyDefaults(statusbars.tidalWavesBar.background,3,3,L["LABEL_STATUSBAR_BG_TEXTURE"],L["TOOLTIP_STATUSBAR_BG_TEXTURE"],"LSM30_Statusbar",LSM:HashTable(LSM.MediaType.STATUSBAR),nil,nil,'texture','Tidal Waves'),
-										backgroundColor = Auras:Color_VerifyDefaults(statusbars.tidalWavesBar.background,4,3,L["LABEL_STATUSBAR_BG_COLOR"],L["TOOLTIP_STATUSBAR_BG_COLOR"],true,nil,nil,'color','Tidal Waves'),
-										backgroundToggle = Auras:Toggle_VerifyDefaults(statusbars.tidalWavesBar.adjust,5,3,L["LABEL_STATUSBAR_MODIFY_BACKGROUND"],L["TOOLTIP_TOGGLE_STATUSBAR_BG_CUSTOMIZATON"],nil,nil,'showBG','Tidal Waves'),
-										width = Auras:Slider_VerifyDefaults(statusbars.tidalWavesBar.layout,6,3,L["LABEL_WIDTH"],nil,100,500,nil,nil,'width','Tidal Waves'),
-										height = Auras:Slider_VerifyDefaults(statusbars.tidalWavesBar.layout,7,3,L["LABEL_HEIGHT"],nil,10,100,nil,nil,'height','Tidal Waves'),
+										texture = Auras:Select_VerifyDefaults(statusbars.bars.TidalWavesBar.foreground,1,3,L["LABEL_STATUSBAR_TEXTURE"],L["TOOLTIP_STATUSBAR_TEXTURE"],"LSM30_Statusbar",LSM:HashTable(LSM.MediaType.STATUSBAR),nil,nil,'texture','Tidal Waves'),
+										textureColor = Auras:Color_VerifyDefaults(statusbars.bars.TidalWavesBar.foreground,2,3,L["LABEL_STATUSBAR_COLOR"],nil,false,"double",nil,'color','Tidal Waves'),
+										backgroundTexture = Auras:Select_VerifyDefaults(statusbars.bars.TidalWavesBar.background,3,3,L["LABEL_STATUSBAR_BG_TEXTURE"],L["TOOLTIP_STATUSBAR_BG_TEXTURE"],"LSM30_Statusbar",LSM:HashTable(LSM.MediaType.STATUSBAR),nil,nil,'texture','Tidal Waves'),
+										backgroundColor = Auras:Color_VerifyDefaults(statusbars.bars.TidalWavesBar.background,4,3,L["LABEL_STATUSBAR_BG_COLOR"],L["TOOLTIP_STATUSBAR_BG_COLOR"],true,nil,nil,'color','Tidal Waves'),
+										backgroundToggle = Auras:Toggle_VerifyDefaults(statusbars.bars.TidalWavesBar.adjust,5,3,L["LABEL_STATUSBAR_MODIFY_BACKGROUND"],L["TOOLTIP_TOGGLE_STATUSBAR_BG_CUSTOMIZATON"],nil,nil,'showBG','Tidal Waves'),
+										width = Auras:Slider_VerifyDefaults(statusbars.bars.TidalWavesBar.layout,6,3,L["LABEL_WIDTH"],nil,100,500,nil,nil,'width','Tidal Waves'),
+										height = Auras:Slider_VerifyDefaults(statusbars.bars.TidalWavesBar.layout,7,3,L["LABEL_HEIGHT"],nil,10,100,nil,nil,'height','Tidal Waves'),
 									},
 								},
 								reset = {
@@ -2703,8 +2703,8 @@ local function GetRestorationOptions()
 									type = "execute",
 									name = L["BUTTON_RESET_STATUSBAR_TIDAL_WAVES"],
 									func = function()
-										local bar = statusbars.tidalWavesBar
-										local default = statusbarDefaults.tidalWavesBar
+										local bar = statusbars.bars.TidalWavesBar
+										local default = statusbars.defaults.TidalWavesBar
 										
 										bar.combatDisplay = default.combatDisplay
 										bar.OoCDisplay = default.OoCDisplay
@@ -2716,8 +2716,8 @@ local function GetRestorationOptions()
 										Auras:ResetForeground(bar,default)
 										Auras:ResetLayout(db,default)
 										
-										res_options.args.bars.args.tidalWavesBar.args.reset.disabled = true
-										res_options.args.bars.args.tidalWavesBar.args.reset.name = "|cFF666666"..L["BUTTON_RESET_STATUSBAR_TIDAL_WAVES"].."|r"
+										res_options.args.bars.args.TidalWavesBar.args.reset.disabled = true
+										res_options.args.bars.args.TidalWavesBar.args.reset.name = "|cFF666666"..L["BUTTON_RESET_STATUSBAR_TIDAL_WAVES"].."|r"
 									end,
 								},
 							},
@@ -2887,14 +2887,14 @@ _G["SSA_ele_options"] = GetElementalOptions()
 	local enh_options = GetEnhancementOptions()
 	local res_options = GetRestorationOptions()
 	if (spec == 1) then
-		Auras:RefreshCooldownList(ele_options,1,Auras.db.char.elements[1].cooldowns,Auras.db.char.elements.defaults.cooldowns)
+		Auras:RefreshCooldownList(ele_options,1,Auras.db.char.auras[1].cooldowns,SSA.groupDefaults.cooldowns)
 		Auras:RefreshAuraGroupList(ele_options,1)
 		Auras:RefreshTimerBarGroupList(ele_options,1)
 		
 		Auras:VerifyDefaultValues(1,ele_options,'Cooldowns')
 		Auras:VerifyDefaultValues(1,ele_options,'Maelstrom')
-		Auras:VerifyDefaultValues(1,ele_options,'Cast','castBar')
-		Auras:VerifyDefaultValues(1,ele_options,'Channel','channelBar')
+		Auras:VerifyDefaultValues(1,ele_options,'Cast')
+		Auras:VerifyDefaultValues(1,ele_options,'Channel')
 		Auras:VerifyDefaultValues(1,ele_options,'Settings')
 		Auras:VerifyDefaultValues(1,ele_options,'Primary')
 		Auras:VerifyDefaultValues(1,ele_options,'Secondary')
@@ -2913,14 +2913,14 @@ _G["SSA_ele_options"] = GetElementalOptions()
 		res_options.args.cooldowns.disabled = true
 		--res_options.args.layout.disabled = true
 	elseif (spec == 2) then
-		Auras:RefreshCooldownList(enh_options,2,Auras.db.char.elements[2].cooldowns,Auras.db.char.elements.defaults.cooldowns)
+		Auras:RefreshCooldownList(enh_options,2,Auras.db.char.auras[2].cooldowns,SSA.groupDefaults.cooldowns)
 		Auras:RefreshAuraGroupList(enh_options,2)
 		Auras:RefreshTimerBarGroupList(enh_options,2)
 		
 		Auras:VerifyDefaultValues(2,enh_options,'Cooldowns')
 		Auras:VerifyDefaultValues(2,enh_options,'Maelstrom','All')
-		Auras:VerifyDefaultValues(2,enh_options,'Cast','castBar')
-		Auras:VerifyDefaultValues(2,enh_options,'Channel','channelBar')
+		Auras:VerifyDefaultValues(2,enh_options,'Cast')
+		Auras:VerifyDefaultValues(2,enh_options,'Channel')
 		Auras:VerifyDefaultValues(2,enh_options,'Settings')
 		Auras:VerifyDefaultValues(2,enh_options,'Primary')
 		Auras:VerifyDefaultValues(2,enh_options,'Secondary')
@@ -2938,7 +2938,7 @@ _G["SSA_ele_options"] = GetElementalOptions()
 		res_options.args.cooldowns.disabled = true
 		--res_options.args.layout.disabled = true
 	elseif (spec == 3) then
-		Auras:RefreshCooldownList(res_options,3,Auras.db.char.elements[3].cooldowns,Auras.db.char.elements.defaults.cooldowns)
+		Auras:RefreshCooldownList(res_options,3,Auras.db.char.auras[3].cooldowns,SSA.groupDefaults.cooldowns)
 		Auras:RefreshAuraGroupList(res_options,3)
 		Auras:RefreshTimerBarGroupList(res_options,3)
 		
@@ -2948,8 +2948,8 @@ _G["SSA_ele_options"] = GetElementalOptions()
 		Auras:VerifyDefaultValues(3,res_options,'Secondary')
 		Auras:VerifyDefaultValues(3,res_options,'Earthen Wall')
 		Auras:VerifyDefaultValues(3,res_options,'Mana Bar')
-		Auras:VerifyDefaultValues(3,res_options,'Cast','castBar')
-		Auras:VerifyDefaultValues(3,res_options,'Channel','channelBar')
+		Auras:VerifyDefaultValues(3,res_options,'Cast')
+		Auras:VerifyDefaultValues(3,res_options,'Channel')
 		Auras:VerifyDefaultValues(3,res_options,'Tidal Waves')
 		
 		ele_options.args.general.disabled = true
@@ -2975,16 +2975,16 @@ end)
 InterfaceOptionsFrame:HookScript("OnHide",function(self)
 	local db = Auras.db.char
 	
-	db.elements[1].statusbars.maelstromBar.adjust.isEnabled = false
-	db.elements[1].statusbars.castBar.adjust.isEnabled = false
-	db.elements[1].statusbars.channelBar.adjust.isEnabled = false
-	db.elements[1].statusbars.icefuryBar.adjust.isEnabled = false
+	db.statusbars[1].bars.MaelstromBar.adjust.isEnabled = false
+	db.statusbars[1].bars.CastBar.adjust.isEnabled = false
+	db.statusbars[1].bars.ChannelBar.adjust.isEnabled = false
+	db.statusbars[1].bars.IcefuryBar.adjust.isEnabled = false
 	
-	for k,v in pairs(db.timerbars[1]) do
+	for k,v in pairs(db.timerbars[1].bars) do
 		if (v.isAdjust) then
 			v.isAdjust = false
-			if (db.layout[1].timerbars.groups[v.group].isAdjust) then
-				db.layout[1].timerbars.groups[v.group].isAdjust = false
+			if (db.timerbars[1].groups[v.group].isAdjust) then
+				db.timerbars[1].groups[v.group].isAdjust = false
 			end
 		end
 	end

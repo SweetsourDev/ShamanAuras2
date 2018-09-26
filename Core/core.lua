@@ -253,7 +253,7 @@ function Auras:ManaPrecision(precision,isNotMax,override)
 	if (power > 1000) then
 		--local power = UnitPowerMax('player',19)
 		if (precision == 'Long') then
-			if (Auras.db.char.elements[3].statusbars.manaBar.grouping) then
+			if (Auras.db.char.statusbars[3].bars.ManaBar.grouping) then
 				return BreakUpLargeNumbers(power)
 			else
 				return power
@@ -262,7 +262,7 @@ function Auras:ManaPrecision(precision,isNotMax,override)
 			if (power > 1000000) then
 				return format('%.1f',power / 1000000)..'M'
 			elseif (power > 1000) then
-				if (Auras.db.char.elements[3].statusbars.manaBar.grouping) then
+				if (Auras.db.char.statusbars[3].bars.ManaBar.grouping) then
 					return format('%.1f',BreakUpLargeNumbers(power / 1000))..'K'
 				else
 					return format('%.1f',power / 1000)..'K'
