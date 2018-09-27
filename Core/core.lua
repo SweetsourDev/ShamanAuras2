@@ -557,7 +557,9 @@ function Auras:IsTargetFriendly()
 end
 
 -- FIX THIS
-function Auras:SpellRangeCheck(self,spellID,flag,spec)
+function Auras:SpellRangeCheck(self,spellID,flag)
+	local spec = SSA.spec
+	
 	if (Auras:IsTargetEnemy() and flag) then
 		if (IsSpellInRange(Auras:GetSpellName(spellID)) == 1) then
 			self.texture:SetDesaturated(false);

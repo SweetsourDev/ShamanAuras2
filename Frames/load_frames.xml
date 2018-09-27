@@ -9,6 +9,7 @@
 	<Script file="Auras\Shared\CapacitorTotem.lua"/>
 	<Script file="Auras\Shared\CleanseSpirit.lua"/>
 	<Script file="Auras\Shared\CounterstrikeTotem.lua"/>
+	<Script file="Auras\Shared\EarthElemental.lua"/>
 	<Script file="Auras\Shared\EarthShield.lua"/>
 	<Script file="Auras\Shared\EarthbindTotem.lua"/>
 	<Script file="Auras\Shared\FlameShock.lua"/>
@@ -22,7 +23,6 @@
 	<Script file="Auras\Shared\WindRushTotem.lua"/>
 	<Script file="Auras\Shared\WindShear.lua"/>
 	<Script file="Auras\Elemental\AncestralGuidance.lua"/>
-	<Script file="Auras\Elemental\EarthElemental.lua"/>
 	<Script file="Auras\Elemental\EarthenStrength.lua"/>
 	<Script file="Auras\Elemental\Earthquake.lua"/>
 	<Script file="Auras\Elemental\EarthShock.lua"/>

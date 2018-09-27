@@ -7,6 +7,7 @@ local twipe = table.wipe
 
 -- Cache Global WoW API Functions
 local CreateFrame = CreateFrame
+local Enum = Enum
 local GetSpellCooldown, GetSpellInfo = GetSpellCooldown, GetSpellInfo
 local IsEquippedItem = IsEquippedItem
 local UnitPower = UnitPower
@@ -14,7 +15,11 @@ local UnitPower = UnitPower
 -- Cache Global Addon Variables
 local CrashLightning = SSA.CrashLightning
 
-local function GetT21SetCount()
+-- Initialize Data Variables
+CrashLightning.spellID = 187874
+CrashLightning.auraID = 242286
+CrashLightning.condition = function() return IsSpellKnown(187874) end
+CrashLightning.GetT21SetCount = function()
 	local numSetPieces = 0
 	local setPieces = {
 		[147178] = true, -- Helm
@@ -37,14 +42,14 @@ local function GetT21SetCount()
 end
 
 CrashLightning:SetScript('OnUpdate', function(self)
-	if (Auras:CharacterCheck(self,2,187874)) then
-		local spec,groupID = Auras:GetAuraInfo(self,'CrashLightning')
-		local start,duration = GetSpellCooldown(Auras:GetSpellName(187874))
-		local power = UnitPower('player',11)
-		local buff,_,count,_,dur,expire = Auras:RetrieveBuffInfo('player',Auras:GetSpellName(242286))
+	if (Auras:CharacterCheck(self,2,self.spellID)) then
+		local groupID = Auras:GetAuraGroupID(self,self:GetName())
+		local start,duration = GetSpellCooldown(Auras:GetSpellName(self.spellID))
+		local power = UnitPower('player',Enum.PowerType.Maelstrom)
+		local buff,_,count,_,dur,expire = Auras:RetrieveAuraInfo('player', self.auraID)
 		
-		if (GetT21SetCount() >= 4) then
-			local name,_,icon = GetSpellInfo(242286)
+		if (self.GetT21SetCount() >= 4) then
+			local name,_,icon = GetSpellInfo(self.auraID)
 			
 			if (not self.T21) then
 				local T21Frame = CreateFrame('Frame','LightningCrash',self)
@@ -76,7 +81,7 @@ CrashLightning:SetScript('OnUpdate', function(self)
 				T21Frame:Show()
 				self.T21 = T21Frame
 			else
-				local size = floor(Auras.db.char.layout[2].primary.top.icon * 0.78125)
+				local size = floor(Auras.db.char.auras[2].groups[groupID].icon * 0.78125)
 				
 				self.T21:SetSize(size,size)
 				self.T21.glow:SetSize((size+10),(size+10))
@@ -99,7 +104,7 @@ CrashLightning:SetScript('OnUpdate', function(self)
 		end
 	
 		Auras:ToggleAuraVisibility(self,true,'showhide')
-		Auras:CooldownHandler(self,spec,groupID,start,duration)
+		Auras:CooldownHandler(self,groupID,start,duration)
 		
 		if (Auras:IsPlayerInCombat(true)) then
 			if (power >= 20) then
@@ -108,7 +113,7 @@ CrashLightning:SetScript('OnUpdate', function(self)
 				self.texture:SetVertexColor(1,1,1,0.5)
 			end
 		else
-			Auras:NoCombatDisplay(self,spec,groupID)
+			Auras:NoCombatDisplay(self,groupID)
 		end
 	else
 		Auras:ToggleAuraVisibility(self,false,'showhide')

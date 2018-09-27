@@ -10,27 +10,7 @@ local function IsPvPZone()
 	end
 end
 
-local function GetEleT21SetCount()
-	local numSetPieces = 0
-	local setPieces = {
-		[152169] = true, -- Helm
-		[152171] = true, -- Shoulders
-		[152167] = true, -- Cloak
-		[152166] = true, -- Chest
-		[152168] = true, -- Hands
-		[152170] = true, -- Legs
-	}
-	
-	for setID in pairs(setPieces) do
-		if (IsEquippedItem(setID)) then
-			numSetPieces = numSetPieces + 1
-		end
-	end
-	
-	table.wipe(setPieces)
-	
-	return numSetPieces
-end
+
 
 local groupDefaults = {
 	cooldowns = {
@@ -3859,324 +3839,821 @@ local defaults = {
 				},
 				auras = {
 					["Adaptation"] = {
-						condition = function() return select(10,GetPvpTalentInfoByID(3597)) and IsPvPZone() end,
-						spellID = 214027,
+						--condition = function() return select(10,GetPvpTalentInfoByID(3597)) and IsPvPZone() end,
+						--spellID = 214027,
 						group = 4,
 						order = 1,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["AncestralGuidance"] = {
-						condition = function() return select(4,GetTalentInfo(5,2,1)) end,
-						spellID = 108281,
+						--condition = function() return select(4,GetTalentInfo(5,2,1)) end,
+						--spellID = 108281,
 						group = 5,
 						order = 4,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 120,
+								},
+							},
+							
+						},
 					},
 					["Ascendance"] = {
-						condition = function() return select(4,GetTalentInfo(7,3,1)) end,
-						spellID = 114050,
+						--condition = function() return select(4,GetTalentInfo(7,3,1)) end,
+						--spellID = 114050,
 						group = 2,
 						order = 4,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 180,
+								},
+							},
+							
+						},
 					},
 					["AstralShift"] = {
-						condition = function() return IsSpellKnown(108271) end,
-						spellID = 108271,
+						--condition = function() return IsSpellKnown(108271) end,
+						--spellID = 108271,
 						group = 5,
 						order = 2,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 90,
+								},
+							},
+							
+						},
 					},
 					["CapacitorTotem"] = {
-						condition = function() return IsSpellKnown(192058) end,
-						spellID = 192058,
+						--condition = function() return IsSpellKnown(192058) end,
+						--spellID = 192058,
 						group = 6,
 						order = 3,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["CleanseSpirit"] = {
-						condition = function() return IsSpellKnown(51886) end,
-						spellID = 51886,
+						--condition = function() return IsSpellKnown(51886) end,
+						--spellID = 51886,
 						group = 5,
 						order = 6,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["CounterstrikeTotem"] = {
-						condition = function() return select(10,GetPvpTalentInfoByID(3490)) and IsPvPZone() end,
-						spellID = 204331,
+						--condition = function() return select(10,GetPvpTalentInfoByID(3490)) and IsPvPZone() end,
+						--spellID = 204331,
 						group = 4,
 						order = 5,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["EarthElemental"] = {
-						condition = function() return IsSpellKnown(198103) end,
-						spellID = 198103,
+						--condition = function() return IsSpellKnown(198103) end,
+						--spellID = 198103,
 						group = 6,
 						order = 2,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["EarthShield"] = {
-						condition = function() return select(4,GetTalentInfo(3,2,1)) end,
-						spellID = 974,
+						--condition = function() return select(4,GetTalentInfo(3,2,1)) end,
+						--spellID = 974,
 						group = 3,
 						order = 2,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["EarthShock"] = {
-						condition = function() return IsSpellKnown(8042) end,
-						spellID = 8042,
+						--condition = function() return IsSpellKnown(8042) end,
+						--spellID = 8042,
 						group = 1,
 						order = 2,
 						isEnabled = true,
 						isInUse = true,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["EarthbindTotem"] = {
-						condition = function() return IsSpellKnown(2484) end,
-						spellID = 2484,
+						--condition = function() return IsSpellKnown(2484) end,
+						--spellID = 2484,
 						group = 6,
 						order = 4,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["EarthenStrength"] = {
-						condition = function() return GetEleT21SetCount() >= 2 end,
-						spellID = 252141,
+						--condition = function() return GetEleT21SetCount() >= 2 end,
+						--spellID = 252141,
 						group = 3,
 						order = 6,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["Earthquake"] = {
-						condition = function() return IsSpellKnown(61882) end,
-						spellID = 61882,
+						--condition = function() return IsSpellKnown(61882) end,
+						--spellID = 61882,
 						group = 1,
 						order = 4,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["ElementalBlast"] = {
-						condition = function() return select(4,GetTalentInfo(1,3,1)) end,
-						spellID = 117014,
+						--condition = function() return select(4,GetTalentInfo(1,3,1)) end,
+						--spellID = 117014,
 						group = 1,
 						order = 5,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["ExposedElements"] = {
-						condition = function() return select(4,GetTalentInfo(1,1,1)) end,
-						spellID = 260694,
+						--condition = function() return select(4,GetTalentInfo(1,1,1)) end,
+						--spellID = 260694,
 						group = 3,
 						order = 3,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["FireElemental"] = {
-						condition = function() return not select(4,GetTalentInfo(4,2,1)) and IsSpellKnown(198067) end,
-						spellID = 198067,
+						--condition = function() return not select(4,GetTalentInfo(4,2,1)) and IsSpellKnown(198067) end,
+						--spellID = 198067,
 						group = 2,
 						order = 1,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["FlameShock"] = {
-						condition = function() return IsSpellKnown(188389) end,
-						spellID = 188389,
+						--condition = function() return IsSpellKnown(188389) end,
+						--spellID = 188389,
 						group = 1,
 						order = 1,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["GladiatorsMedallion"] = {
-						condition = function() return select(10,GetPvpTalentInfoByID(3598)) and IsPvPZone() end,
-						spellID = 208683,
+						--condition = function() return select(10,GetPvpTalentInfoByID(3598)) and IsPvPZone() end,
+						--spellID = 208683,
 						group = 4,
 						order = 2,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["GroundingTotem"] = {
-						condition = function() return select(10,GetPvpTalentInfoByID(3620)) and IsPvPZone() end,
-						spellID = 204336,
+						--condition = function() return select(10,GetPvpTalentInfoByID(3620)) and IsPvPZone() end,
+						--spellID = 204336,
 						group = 4,
 						order = 6,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["Hex"] = {
-						condition = function() return IsSpellKnown(51514) end,
-						spellID = 51514,
+						--condition = function() return IsSpellKnown(51514) end,
+						--spellID = 51514,
 						group = 5,
 						order = 3,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["Icefury"] = {
-						condition = function() return select(4,GetTalentInfo(6,3,1)) end,
-						spellID = 210714,
+						--condition = function() return select(4,GetTalentInfo(6,3,1)) end,
+						--spellID = 210714,
 						group = 2,
 						order = 6,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["LavaBurst"]  = {
-						condition = function() return IsSpellKnown(51505) end,
-						spellID = 51505,
+						--condition = function() return IsSpellKnown(51505) end,
+						--spellID = 51505,
 						group = 1,
 						order = 3,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["LightningLasso"] = {
-						condition = function() return select(10,GetPvpTalentInfoByID(731)) and IsPvPZone() end,
-						spellID = 204437,
+						--condition = function() return select(10,GetPvpTalentInfoByID(731)) and IsPvPZone() end,
+						--spellID = 204437,
 						group = 4,
 						order = 3,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["LiquidMagmaTotem"] = {
-						condition = function() return select(4,GetTalentInfo(4,3,1)) end,
-						spellID = 192222,
+						--condition = function() return select(4,GetTalentInfo(4,3,1)) end,
+						--spellID = 192222,
 						group = 2,
 						order = 5,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["MasterOfElements"] = {
-						condition = function() return select(4,GetTalentInfo(2,2,1)) end,
-						spellID = 16166,
+						--condition = function() return select(4,GetTalentInfo(2,2,1)) end,
+						--spellID = 16166,
 						group = 3,
 						order = 5,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["NaturesGuardian"] = {
-						condition = function() return select(4,GetTalentInfo(5,1,1)) end,
-						spellID = 30884,
+						--condition = function() return select(4,GetTalentInfo(5,1,1)) end,
+						--spellID = 30884,
 						group = 3,
 						order = 4,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["SkyfuryTotem"] = {
-						condition = function() return select(10,GetPvpTalentInfoByID(3488)) and IsPvPZone() end,
-						spellID = 204330,
+						--condition = function() return select(10,GetPvpTalentInfoByID(3488)) and IsPvPZone() end,
+						--spellID = 204330,
 						group = 4,
 						order = 4,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["StormElemental"] = {
-						condition = function() return select(4,GetTalentInfo(4,2,1)) end,
-						spellID = 192249,
+						--condition = function() return select(4,GetTalentInfo(4,2,1)) end,
+						--spellID = 192249,
 						group = 2,
 						order = 2,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["Stormkeeper"] = {
-						condition = function() return select(4,GetTalentInfo(7,2,1)) end,
-						spellID = 191634,
+						--condition = function() return select(4,GetTalentInfo(7,2,1)) end,
+						--spellID = 191634,
 						group = 2,
 						order = 3,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["Thunderstorm"] = {
-						condition = function() return IsSpellKnown(51490) end,
-						spellID = 51490,
+						--condition = function() return IsSpellKnown(51490) end,
+						--spellID = 51490,
 						group = 6,
 						order = 1,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["TremorTotem"] = {
-						condition = function() return IsSpellKnown(8143) end,
-						spellID = 8143,
+						--condition = function() return IsSpellKnown(8143) end,
+						--spellID = 8143,
 						group = 6,
 						order = 5,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["UnlimitedPower"] = {
-						condition = function() return select(4,GetTalentInfo(7,1,1)) end,
-						spellID = 260895,
+						--condition = function() return select(4,GetTalentInfo(7,1,1)) end,
+						--spellID = 260895,
 						group = 3,
 						order = 1,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["WindRushTotem"] = {
-						condition = function() return select(4,GetTalentInfo(5,3,1)) end,
-						spellID = 192077,
+						--condition = function() return select(4,GetTalentInfo(5,3,1)) end,
+						--spellID = 192077,
 						group = 5,
 						order = 5,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["WindShear"] = {
-						condition = function() return IsSpellKnown(57994) end,
-						spellID = 57994,
+						--condition = function() return IsSpellKnown(57994) end,
+						--spellID = 57994,
 						group = 5,
 						order = 1,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 				},
-				--[[toggle = {
-					Adaptation = true,
-					AncestralGuidance = true,
-					Ascendance = true,
-					AstralShift = true,
-					AuraBase = true,
-					Bloodlust = true,
-					CapacitorTotem = true,
-					CleanseSpirit = true,
-					CounterstrikeTotem = true,
-					EarthElemental = true,
-					EarthbindTotem = true,
-					EarthenStrength = true,
-					Earthquake = true,
-					EarthShield = true,
-					EarthShock = true,
-					EarthShockGlow = true,
-					ElementalBlast = true,
-					ElementalMastery = true,
-					ExposedElements = true,
-					FireElemental = true,
-					FlameShock = true,
-					FlameShockGlow = true,
-					FrostShock = true,
-					GladiatorsMedallion = true,
-					GroundingTotem = true,
-					Hex = true,
-					Icefury = true,
-					LavaBurst = true,
-					LavaBurstGlow = true,
-					LavaBurstCharges = true,
-					LavaSurge = true,
-					LightningLasso = true,
-					LiquidMagmaTotem = true,
-					MasterOfElements = true,
-					NaturesGuardian = true,
-					SkyfuryTotem = true,
-					StormElemental = true,
-					Stormkeeper = true,
-					Thunderstorm = true,
-					TotemMasteryTexture = true,
-					TremorTotem = true,
-					UnlimitedPower = true,
-					WindRushTotem = true,
-					WindShear = true
-				},]]
 			},
 			[2] = {
 				groups = {},
@@ -4201,302 +4678,774 @@ local defaults = {
 				},
 				auras = {
 					["Adaptation"] = {
-						condition = function() return select(10,GetPvpTalentInfoByID(3552)) and IsPvPZone() end,
-						spellID = 214027,
+						--condition = function() return select(10,GetPvpTalentInfoByID(3552)) and IsPvPZone() end,
+						--spellID = 214027,
 						group = 3,
 						order = 1,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["Ascendance"] = {
-						condition = function() return select(4,GetTalentInfo(7,3,1)) end,
-						spellID = 114051,
+						--condition = function() return select(4,GetTalentInfo(7,3,1)) end,
+						--spellID = 114051,
 						group = 2,
 						order = 2,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["AstralShift"] = {
-						condition = function() return IsSpellKnown(108271) end,
-						spellID = 108271,
+						--condition = function() return IsSpellKnown(108271) end,
+						--spellID = 108271,
 						group = 5,
 						order = 5,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["CapacitorTotem"] = {
-						condition = function() return IsSpellKnown(192058) end,
-						spellID = 192058,
+						--condition = function() return IsSpellKnown(192058) end,
+						--spellID = 192058,
 						group = 6,
 						order = 1,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["CleanseSpirit"] = {
-						condition = function() return IsSpellKnown(51886) end,
-						spellID = 51886,
+						--condition = function() return IsSpellKnown(51886) end,
+						--spellID = 51886,
 						group = 5,
 						order = 3,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["CounterstrikeTotem"] = {
-						condition = function() return select(10,GetPvpTalentInfoByID(3489)) and IsPvPZone() end,
-						spellID = 204331,
+						--condition = function() return select(10,GetPvpTalentInfoByID(3489)) and IsPvPZone() end,
+						--spellID = 204331,
 						group = 4,
 						order = 3,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["CrashLightning"] = {
-						condition = function() return IsSpellKnown(187874) end,
-						spellID = 187874,
+						--condition = function() return IsSpellKnown(187874) end,
+						--spellID = 187874,
 						group = 1,
 						order = 4,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
+					},
+					["EarthElemental"] = {
+						--condition = function() return IsSpellKnown(198103) end,
+						--spellID = 198103,
+						group = 0,
+						order = 0,
+						isEnabled = true,
+						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["EarthShield"] = {
-						condition = function() return select(4,GetTalentInfo(3,2,1)) end,
-						spellID = 974,
+						--condition = function() return select(4,GetTalentInfo(3,2,1)) end,
+						--spellID = 974,
 						group = 3,
 						order = 2,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["EarthbindTotem"] = {
-						condition = function() return IsSpellKnown(2484) end,
-						spellID = 2484,
+						--condition = function() return IsSpellKnown(2484) end,
+						--spellID = 2484,
 						group = 6,
 						order = 2,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["EarthenSpike"] = {
-						condition = function() return select(4,GetTalentInfo(7,2,1)) end,
-						spellID = 188089,
+						--condition = function() return select(4,GetTalentInfo(7,2,1)) end,
+						--spellID = 188089,
 						group = 2,
 						order = 3,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["EtherealForm"] = {
-						condition = function() return select(10,GetPvpTalentInfoByID(1944)) and IsPvPZone() end,
-						spellID = 210918,
+						--condition = function() return select(10,GetPvpTalentInfoByID(1944)) and IsPvPZone() end,
+						--spellID = 210918,
 						group = 4,
 						order = 5,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["FeralLunge"] = {
-						condition = function() return select(4,GetTalentInfo(5,2,1)) end,
-						spellID = 196884,
+						--condition = function() return select(4,GetTalentInfo(5,2,1)) end,
+						--spellID = 196884,
 						group = 6,
 						order = 5,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["FeralSpirit"] = {
-						condition = function() return IsSpellKnown(51533) end,
-						spellID = 51533,
+						--condition = function() return IsSpellKnown(51533) end,
+						--spellID = 51533,
 						group = 2,
 						order = 5,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["Flametongue"] = {
-						condition = function() return IsSpellKnown(193796) end,
-						spellID = 193796,
+						--condition = function() return IsSpellKnown(193796) end,
+						--spellID = 193796,
 						group = 1,
 						order = 1,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["ForcefulWinds"] = {
-						condition = function() return select(4,GetTalentInfo(2,2,1)) end,
-						spellID = 262647,
+						--condition = function() return select(4,GetTalentInfo(2,2,1)) end,
+						--spellID = 262647,
 						group = 3,
 						order = 1,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["Frostbrand"] = {
-						condition = function() return IsSpellKnown(196834) end,
-						spellID = 196834,
+						--condition = function() return IsSpellKnown(196834) end,
+						--spellID = 196834,
 						group = 1,
 						order = 2,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["GladiatorsMedallion"] = {
-						condition = function() return select(10,GetPvpTalentInfoByID(3551)) and IsPvPZone() end,
-						spellID = 208683,
+						--condition = function() return select(10,GetPvpTalentInfoByID(3551)) and IsPvPZone() end,
+						--spellID = 208683,
 						group = 4,
 						order = 1,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["GroundingTotem"] = {
-						condition = function() return select(10,GetPvpTalentInfoByID(3622)) and IsPvPZone() end,
-						spellID = 204336,
+						--condition = function() return select(10,GetPvpTalentInfoByID(3622)) and IsPvPZone() end,
+						--spellID = 204336,
 						group = 4,
 						order = 4,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["Hex"] = {
-						condition = function() return IsSpellKnown(51514) end,
-						spellID = 51514,
+						--condition = function() return IsSpellKnown(51514) end,
+						--spellID = 51514,
 						group = 5,
 						order = 2,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["LavaLash"] = {
-						condition = function() return IsSpellKnown(60103) end,
-						spellID = 60103,
+						--condition = function() return IsSpellKnown(60103) end,
+						--spellID = 60103,
 						group = 1,
 						order = 5,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["NaturesGuardian"] = {
-						condition = function() return select(4,GetTalentInfo(5,1,1)) end,
-						spellID = 30884,
+						--condition = function() return select(4,GetTalentInfo(5,1,1)) end,
+						--spellID = 30884,
 						group = 3,
 						order = 3,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["Rockbiter"] = {
-						condition = function() return IsSpellKnown(193786) end,
-						spellID = 193786,
+						--condition = function() return IsSpellKnown(193786) end,
+						--spellID = 193786,
 						group = 2,
 						order = 1,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["SkyfuryTotem"] = {
-						condition = function() return select(10,GetPvpTalentInfoByID(3487)) and IsPvPZone() end,
-						spellID = 204330,
+						--condition = function() return select(10,GetPvpTalentInfoByID(3487)) and IsPvPZone() end,
+						--spellID = 204330,
 						group = 4,
 						order = 2,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["SpiritWalk"] = {
-						condition = function() return IsSpellKnown(58875) end,
-						spellID = 58875,
+						--condition = function() return IsSpellKnown(58875) end,
+						--spellID = 58875,
 						group = 5,
 						order = 4,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["StaticCling"] = {
-						condition = function() return select(10,GetPvpTalentInfoByID(720)) end,
-						spellID = 211062,
+						--condition = function() return select(10,GetPvpTalentInfoByID(720)) end,
+						--spellID = 211062,
 						group = 4,
 						order = 6,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["Stormstrike"] = {
-						condition = function() return IsSpellKnown(17364) end,
-						spellID = 17364,
+						--condition = function() return IsSpellKnown(17364) end,
+						--spellID = 17364,
 						group = 1,
 						order = 3,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["Sundering"] = {
-						condition = function() return select(4,GetTalentInfo(6,3,1)) end,
-						spellID = 197214,
+						--condition = function() return select(4,GetTalentInfo(6,3,1)) end,
+						--spellID = 197214,
 						group = 2,
 						order = 4,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["Thundercharge"] = {
-						condition = function() return select(10,GetPvpTalentInfoByID(725)) end,
-						spellID = 204366,
+						--condition = function() return select(10,GetPvpTalentInfoByID(725)) end,
+						--spellID = 204366,
 						group = 4,
 						order = 7,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["TremorTotem"] = {
-						condition = function() return IsSpellKnown(8143) end,
-						spellID = 8143,
+						--condition = function() return IsSpellKnown(8143) end,
+						--spellID = 8143,
 						group = 6,
 						order = 3,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["WindRushTotem"] = {
-						condition = function() return select(4,GetTalentInfo(5,3,1)) end,
-						spellID = 192077,
+						--condition = function() return select(4,GetTalentInfo(5,3,1)) end,
+						--spellID = 192077,
 						group = 6,
 						order = 4,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["WindShear"] = {
-						condition = function() return IsSpellKnown(57994) end,
-						spellID = 57994,
+						--condition = function() return IsSpellKnown(57994) end,
+						--spellID = 57994,
 						group = 5,
 						order = 1,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 				},
-				--[[toggle = {
-					Adaptation = true,
-					Ascendance = true,
-					AstralShift = true,
-					AuraBase = true,
-					Bloodlust = true,
-					CapacitorTotem = true,
-					CleanseSpirit = true,
-					CounterstrikeTotem = true,
-					CrashLightning = true,
-					CrashLightningBar = true,
-					CrashLightningGlow = true,
-					EarthShield = true,
-					EarthbindTotem = true,
-					EarthenSpike = true,
-					EtherealForm = true,
-					FeralLunge = true,
-					FeralSpirit = true,
-					FeralSpiritBar = true,
-					Flametongue = true,
-					FlametongueBar = true,
-					FlametongueGlow = true,
-					ForcefulWinds = true,
-					Frostbrand = true,
-					FrostbrandBar = true,
-					FrostbrandGlow = true,
-					GladiatorsMedallion = true,
-					GroundingTotem = true,
-					HeroismBarEng = true,
-					Hex = true,
-					LandslideBar = true,
-					LavaLash = true,
-					NaturesGuardian = true,
-					Rockbiter = true,
-					RockbiterCharges = true,
-					SkyfuryTotem = true,
-					SpiritWalk = true,
-					StaticCling = true,
-					Stormstrike = true,
-					StormstrikeChargesText = false,
-					StormstrikeGlow = true,
-					Sundering = true,
-					TimeWarpBar = true,
-					Thundercharge = true,
-					TremorTotem = true,
-					WindRushTotem = true,
-					WindShear = true,
-				},]]
 			},
 			[3] = {
 				groups = {},
@@ -4521,268 +5470,821 @@ local defaults = {
 				},
 				auras = {
 					["Adaptation"] = {
-						condition = function() return select(10,GetPvpTalentInfoByID(3485)) and IsPvPZone() end,
-						spellID = 214027,
+						--condition = function() return select(10,GetPvpTalentInfoByID(3485)) and IsPvPZone() end,
+						--spellID = 214027,
 						group = 4,
 						order = 1,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									setTime = 10,
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["AncestralProtectionTotem"] = {
-						condition = function() return select(4,GetTalentInfo(4,3,1)) end,
-						spellID = 207399,
+						--condition = function() return select(4,GetTalentInfo(4,3,1)) end,
+						--spellID = 207399,
 						group = 2,
 						order = 6,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["Ascendance"] = {
-						condition = function() return select(4,GetTalentInfo(7,3,1)) end,
-						spellID = 114052,
+						--condition = function() return select(4,GetTalentInfo(7,3,1)) end,
+						--spellID = 114052,
 						group = 2,
 						order = 3,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["AstralShift"] = {
-						condition = function() return IsSpellKnown(108271) end,
-						spellID = 108271,
+						--condition = function() return IsSpellKnown(108271) end,
+						--spellID = 108271,
 						group = 5,
 						order = 3,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["CapacitorTotem"] = {
-						condition = function() return IsSpellKnown(192058) end,
-						spellID = 192058,
+						--condition = function() return IsSpellKnown(192058) end,
+						--spellID = 192058,
 						group = 6,
 						order = 3,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["CloudburstTotem"] = {
-						condition = function() return select(4,GetTalentInfo(6,3,1)) end,
-						spellID = 157153,
+						--condition = function() return select(4,GetTalentInfo(6,3,1)) end,
+						--spellID = 157153,
 						group = 1,
 						order = 3,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["CounterstrikeTotem"] = {
-						condition = function() return select(10,GetPvpTalentInfoByID(708)) and IsPvPZone() end,
-						spellID = 204331,
+						--condition = function() return select(10,GetPvpTalentInfoByID(708)) and IsPvPZone() end,
+						--spellID = 204331,
 						group = 4,
 						order = 4,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["Downpour"] = {
-						condition = function() return select(4,GetTalentInfo(6,2,1)) end,
+						--condition = function() return select(4,GetTalentInfo(6,2,1)) end,
 						spellID = 207778,
 						group = 1,
 						order = 4,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
+					},
+					["EarthElemental"] = {
+						--condition = function() return IsSpellKnown(198103) end,
+						--spellID = 198103,
+						group = 0,
+						order = 0,
+						isEnabled = true,
+						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["EarthShield"] = {
-						condition = function() return select(4,GetTalentInfo(2,3,1)) end,
-						spellID = 974,
+						--condition = function() return select(4,GetTalentInfo(2,3,1)) end,
+						--spellID = 974,
 						group = 3,
 						order = 1,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["EarthbindTotem"] = {
-						condition = function() return IsSpellKnown(2484) end,
-						spellID = 2484,
+						--condition = function() return IsSpellKnown(2484) end,
+						--spellID = 2484,
 						group = 6,
 						order = 4,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["EarthenWallTotem"] = {
-						condition = function() return select(4,GetTalentInfo(4,2,1)) end,
-						spellID = 198838,
+						--condition = function() return select(4,GetTalentInfo(4,2,1)) end,
+						--spellID = 198838,
 						group = 2,
 						order = 5,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["EarthgrabTotem"] = {
-						condition = function() return select(4,GetTalentInfo(3,2,1)) end,
-						spellID = 51485,
+						--condition = function() return select(4,GetTalentInfo(3,2,1)) end,
+						--spellID = 51485,
 						group = 6,
 						order = 5,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["FlameShock"] = {
-						condition = function() return IsSpellKnown(188838) end,
-						spellID = 188389,
+						--condition = function() return IsSpellKnown(188838) end,
+						--spellID = 188389,
 						group = 6,
 						order = 1,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["FlashFlood"] = {
-						condition = function() return select(4,GetTalentInfo(6,1,1)) end,
-						spellID = 280614,
+						--condition = function() return select(4,GetTalentInfo(6,1,1)) end,
+						--spellID = 280614,
 						group = 3,
 						order = 2,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["GladiatorsMedallion"] = {
-						condition = function() return select(10,GetPvpTalentInfoByID(3484)) and IsPvPZone() end,
-						spellID = 208683,
+						--condition = function() return select(10,GetPvpTalentInfoByID(3484)) and IsPvPZone() end,
+						--spellID = 208683,
 						group = 4,
 						order = 2,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["GroundingTotem"] = {
-						condition = function() return select(10,GetPvpTalentInfoByID(715)) and IsPvPZone() end,
-						spellID = 204336,
+						--condition = function() return select(10,GetPvpTalentInfoByID(715)) and IsPvPZone() end,
+						--spellID = 204336,
 						group = 4,
 						order = 5,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["HealingRain"] = {
-						condition = function() return IsSpellKnown(73920) end,
-						spellID = 73920,
+						--condition = function() return IsSpellKnown(73920) end,
+						--spellID = 73920,
 						group = 1,
 						order = 5,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["HealingStreamTotem"] = {
-						condition = function() return IsSpellKnown(5394) end,
-						spellID = 5394,
+						--condition = function() return IsSpellKnown(5394) end,
+						--spellID = 5394,
 						group = 1,
 						order = 2,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["HealingTideTotem"] = {
-						condition = function() return IsSpellKnown(108280) end,
-						spellID = 108280,
+						--condition = function() return IsSpellKnown(108280) end,
+						--spellID = 108280,
 						group = 2,
 						order = 1,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["Hex"] = {
-						condition = function() return IsSpellKnown(51514) end,
-						spellID = 51514,
+						--condition = function() return IsSpellKnown(51514) end,
+						--spellID = 51514,
 						group = 5,
 						order = 2,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["LavaBurst"]  = {
-						condition = function() return IsSpellKnown(51505) end,
-						spellID = 51505,
+						--condition = function() return IsSpellKnown(51505) end,
+						--spellID = 51505,
 						group = 6,
 						order = 2,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["NaturesGuardian"] = {
-						condition = function() return select(4,GetTalentInfo(5,1,1)) end,
-						spellID = 30884,
+						--condition = function() return select(4,GetTalentInfo(5,1,1)) end,
+						--spellID = 30884,
 						group = 3,
 						order = 3,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["PurifySpirit"] = {
-						condition = function() return IsSpellKnown(77130) end,
-						spellID = 77130,
+						--condition = function() return IsSpellKnown(77130) end,
+						--spellID = 77130,
 						group = 5,
 						order = 4,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["Riptide"] = {
-						condition = function() return IsSpellKnown(61295) end,
-						spellID = 61295,
+						--condition = function() return IsSpellKnown(61295) end,
+						--spellID = 61295,
 						group = 1,
 						order = 1,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["SkyfuryTotem"] = {
-						condition = function() return select(10,GetPvpTalentInfoByID(707)) and IsPvPZone() end,
-						spellID = 204330,
+						--condition = function() return select(10,GetPvpTalentInfoByID(707)) and IsPvPZone() end,
+						--spellID = 204330,
 						group = 4,
 						order = 3,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["SpiritLinkTotem"] = {
-						condition = function() return IsSpellKnown(98008) end,
-						spellID = 98008,
+						--condition = function() return IsSpellKnown(98008) end,
+						--spellID = 98008,
 						group = 2,
 						order = 2,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["SpiritwalkersGrace"] = {
-						condition = function() return IsSpellKnown(79206) end,
-						spellID = 79206,
+						--condition = function() return IsSpellKnown(79206) end,
+						--spellID = 79206,
 						group = 5,
 						order = 5,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["Tidebringer"] = {
-						condition = function() return select(10,GetPvpTalentInfoByID(1930)) and IsPvPZone() end,
-						spellID = 236501,
+						--condition = function() return select(10,GetPvpTalentInfoByID(1930)) and IsPvPZone() end,
+						--spellID = 236501,
 						group = 4,
 						order = 6,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["TremorTotem"] = {
-						condition = function() return IsSpellKnown(8143) end,
-						spellID = 8143,
+						--condition = function() return IsSpellKnown(8143) end,
+						--spellID = 8143,
 						group = 6,
 						order = 6,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["UnleashLife"] = {
-						condition = function() return select(4,GetTalentInfo(1,3,1)) end,
-						spellID = 73685,
+						--condition = function() return select(4,GetTalentInfo(1,3,1)) end,
+						--spellID = 73685,
 						group = 1,
 						order = 6,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["Wellspring"] = {
-						condition = function() return select(4,GetTalentInfo(7,2,1)) end,
-						spellID = 197995,
+						--condition = function() return select(4,GetTalentInfo(7,2,1)) end,
+						--spellID = 197995,
 						group = 2,
 						order = 4,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["WindRushTotem"] = {
-						condition = function() return select(4,GetTalentInfo(5,3,1)) end,
-						spellID = 192077,
+						--condition = function() return select(4,GetTalentInfo(5,3,1)) end,
+						--spellID = 192077,
 						group = 2,
 						order = 7,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 					["WindShear"] = {
-						condition = function() return IsSpellKnown(57994) end,
-						spellID = 57994,
+						--condition = function() return IsSpellKnown(57994) end,
+						--spellID = 57994,
 						group = 5,
 						order = 1,
 						isEnabled = true,
 						isInUse = true,
+						isCustomize = false,
+						glow = {
+							isEnabled = false,
+							states = {
+								combat = "both",
+								usable = "always",
+							},
+							triggers = {
+								selected = "time",
+								["time"] = {
+									min = 5,
+									max = 60,
+								},
+							},
+							
+						},
 					},
 				},
 			},

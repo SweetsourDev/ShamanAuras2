@@ -2,21 +2,28 @@ local SSA, Auras = unpack(select(2,...))
 
 -- Cache Global WoW API Functions
 local GetSpellCharges,GetSpellCooldown = GetSpellCharges,GetSpellCooldown
+local IsSpellKnown = IsSpellKnown
 
 -- Cache Global Addon Variables
 local LavaBurst = SSA.LavaBurst
 
+-- Initialize Data Variables
+LavaBurst.spellID = 51505
+LavaBurst.condition = function()
+	return IsSpellKnown(51505)
+end
+
 LavaBurst:SetScript('OnUpdate', function(self)
-	if (Auras:CharacterCheck(self,1,51505) or Auras:CharacterCheck(self,3,51505)) then
-		local spec,groupID = Auras:GetAuraInfo(self,'LavaBurst')
-		local buff = Auras:RetrieveBuffInfo("player", Auras:GetSpellName(77762))
-		local ascendance = Auras:RetrieveBuffInfo("player", Auras:GetSpellName(114050))
-		local start,duration = GetSpellCooldown(Auras:GetSpellName(51505))
-		local charges,maxCharges,chgStart,chgDuration = GetSpellCharges(51505)
+	if (Auras:CharacterCheck(self,1,self.spellID) or Auras:CharacterCheck(self,3,self.spellID)) then
+		local groupID = Auras:GetAuraGroupID(self,self:GetName())
+		local buff = Auras:RetrieveAuraInfo("player", 77762)
+		local ascendance = Auras:RetrieveAuraInfo("player", (SSA.spec == 1 and 114050) or (SSA.spec == 3 and 114052))
+		local start,duration = GetSpellCooldown(Auras:GetSpellName(self.spellID))
+		local charges,maxCharges,chgStart,chgDuration = GetSpellCharges(self.spellID)
 		
 		Auras:ToggleAuraVisibility(self,true,'showhide')
-		Auras:SpellRangeCheck(self,51505,true,spec)	
-		Auras:CooldownHandler(self,spec,groupID,start,duration,true)
+		Auras:SpellRangeCheck(self,self.spellID,true)
+		Auras:CooldownHandler(self,groupID,start,duration,true)
 		
 		if (maxCharges > 1) then
 			if (charges == 2) then
@@ -34,7 +41,7 @@ LavaBurst:SetScript('OnUpdate', function(self)
 				--self.ChargeCD:Show()
 			else
 				--Auras:ExecuteCooldown(self,chgStart,chgDuration,false,false,1)
-				Auras:CooldownHandler(self,spec,groupID,start,duration)
+				Auras:CooldownHandler(self,groupID,start,duration)
 				self.Charges.text:SetText('')
 				self.ChargeCD:Hide()
 			end
@@ -45,7 +52,7 @@ LavaBurst:SetScript('OnUpdate', function(self)
 
 		if ((duration or 0) > 2) then
 			Auras:ToggleOverlayGlow(self.glow,false)
-			Auras:CooldownHandler(self,spec,groupID,start,duration)
+			Auras:CooldownHandler(self,groupID,start,duration)
 			self.CD:Show()
 		elseif (buff or ascendance) then
 			if (buff) then
@@ -67,7 +74,7 @@ LavaBurst:SetScript('OnUpdate', function(self)
 		if (Auras:IsPlayerInCombat()) then
 			self:SetAlpha(1)
 		else
-			Auras:NoCombatDisplay(self,spec,groupID)
+			Auras:NoCombatDisplay(self,groupID)
 			
 			if (buff and Auras:IsTargetEnemy()) then
 				Auras:ToggleOverlayGlow(self.glow,true)

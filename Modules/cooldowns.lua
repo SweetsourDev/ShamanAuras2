@@ -11,12 +11,12 @@ local split = string.split
 local GetTime = GetTime
 
 -- Convert time, in seconds, to a timer string
-function Auras:parseTime(timer,precision,spec,group,msg)
+function Auras:parseTime(timer,precision,isFormatted,group,msg)
 	if (timer and timer > 0) then
 		local m,s,ms,fs = floor(timer / 60),floor(fmod(timer,60)),(('%%.%df'):format(1)):format(fmod(timer,60),1),timer
 
-		if (spec) then
-			local cd = Auras.db.char.auras[spec].cooldowns.groups[group]
+		if (isFormatted) then
+			local cd = Auras.db.char.auras[SSA.spec].cooldowns.groups[group]
 			
 			if (cd.text.formatting.length == "full") then
 				if (m >= 1 and s == 0) then
@@ -73,6 +73,7 @@ function Auras:parseTime(timer,precision,spec,group,msg)
 end
 
 function Auras:InitializeCooldowns(spec)
+	local spec = spec or SSA.spec
 	local cd = Auras.db.char.auras[spec].cooldowns
 	--local frames = { SSA[self]:GetChildren() }
 	
@@ -153,7 +154,8 @@ function Auras:InitializeCooldowns(spec)
 end
 
 -- Complete Cooldown Handler
-function Auras:CooldownHandler(self,spec,group,start,duration,bypass)
+function Auras:CooldownHandler(self,group,start,duration,bypass)
+	local spec = SSA.spec
 	local cd = Auras.db.char.auras[spec].cooldowns
 	
 	if (cd.adjust and not UnitAffectingCombat('player')) then
@@ -186,7 +188,7 @@ function Auras:CooldownHandler(self,spec,group,start,duration,bypass)
 		end
 		
 		Auras:ExecuteGCD(self,(start or 0),spec)
-		Auras:UpdateCooldown(self,spec,cd)
+		Auras:UpdateCooldown(self,cd)
 		
 		if (not bypass and (duration or 0) > 1.5) then
 			if (not self.CD:IsShown()) then
@@ -202,7 +204,7 @@ function Auras:CooldownHandler(self,spec,group,start,duration,bypass)
 	end
 end
 
-function Auras:UpdateCooldown(self,spec,cd)
+function Auras:UpdateCooldown(self,cd)
 	-- Gather CD Information
 	local swipe,bling = self.CD:GetDrawSwipe(),self.CD:GetDrawBling()
 	local start,duration = self.CD:GetCooldownTimes()
@@ -319,9 +321,9 @@ function Auras:SetCooldownFont(self,cdGrp,remaining)
 	end
 end
 
-function Auras:PreviewCooldown(self,group,spec)
-	local db = Auras.db.char
-	local cd = db.auras[spec].cooldowns
+function Auras:PreviewCooldown(self,group)
+	local spec = SSA.spec
+	local cd = Auras.db.char.auras[spec].cooldowns
 	local cdGrp = cd.groups[group]
 	
 	if (not self.PCD:IsShown()) then
@@ -340,9 +342,9 @@ function Auras:PreviewCooldown(self,group,spec)
 	else
 		if (cd.text) then
 			if (remains < 10 and cdGrp.text.formatting.decimals) then
-				self.PCD.text:SetText(Auras:parseTime(remains,true,spec,group))
+				self.PCD.text:SetText(Auras:parseTime(remains,true,true,group))
 			else
-				self.PCD.text:SetText(Auras:parseTime(remains,false,spec,group))
+				self.PCD.text:SetText(Auras:parseTime(remains,false,true,group))
 			end
 		else
 			self.PCD.text:SetText('')
@@ -350,12 +352,12 @@ function Auras:PreviewCooldown(self,group,spec)
 	end
 end
 
-function Auras:ExecuteGCD(self,start,spec)
+function Auras:ExecuteGCD(self,start)
 	if (not self.GCD) then
 		return
 	end
 	
-	local cd = Auras.db.char.auras[spec].cooldowns
+	local cd = Auras.db.char.auras[SSA.spec].cooldowns
 	local strt,duration = self.CD:GetCooldownTimes()
 	local gDur = self.GCD:GetCooldownDuration()
 	
@@ -376,9 +378,9 @@ function Auras:ExecuteGCD(self,start,spec)
 end
 
 --function Auras:ExecuteCooldown(self,start,duration,isSmallAura,isHideText,spec)
-function Auras:ExecuteCooldown(self,start,duration,group,spec)
+function Auras:ExecuteCooldown(self,start,duration,group)
 	-- Initialize Database Vars
-	local cd = Auras.db.char.auras[spec].cooldowns
+	local cd = Auras.db.char.auras[SSA.spec].cooldowns
 	local cdGrp = cd.groups[group]
 	
 	-- Initialize Time-based Vars
@@ -400,9 +402,9 @@ function Auras:ExecuteCooldown(self,start,duration,group,spec)
 	
 	if (cd.text) then
 		if (remains < 10 and cdGrp.text.formatting.decimals) then
-			self.CD.text:SetText(Auras:parseTime(remains,true,spec,group,subgroup))
+			self.CD.text:SetText(Auras:parseTime(remains,true,true,group))
 		else
-			self.CD.text:SetText(Auras:parseTime(remains,false,spec,group,subgroup,self:GetName()))
+			self.CD.text:SetText(Auras:parseTime(remains,false,true,group))
 		end
 	else
 		self.CD.text:SetText('')

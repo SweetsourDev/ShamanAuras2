@@ -1,27 +1,35 @@
 local SSA, Auras = unpack(select(2,...))
 
 -- Cache Global WoW API Functions
+local Enum = Enum
 local GetSpellCooldown = GetSpellCooldown
+local IsSpellKnown = IsSpellKnown
 local UnitPower = UnitPower
 
 -- Cache Global Addon Variables
 local Stormstrike = SSA.Stormstrike
 
+-- Initialize Data Variables
+Stormstrike.spellID = 17364
+Stormstrike.condition = function()
+	return IsSpellKnown(17364)
+end
+
 Stormstrike:SetScript('OnUpdate', function(self)
-	if (Auras:CharacterCheck(self,2,17364)) then
-		local spec,groupID = Auras:GetAuraInfo(self,self:GetName())
-		local buff,_,_,_,_,expires = Auras:RetrieveBuffInfo('player',Auras:GetSpellName(201846))
-		local start,duration = GetSpellCooldown(Auras:GetSpellName(17364))
+	if (Auras:CharacterCheck(self,2,self.spellID)) then
+		local groupID = Auras:GetAuraGroupID(self,self:GetName())
+		local buff,_,_,_,_,expires = Auras:RetrieveAuraInfo('player',201846)
+		local start,duration = GetSpellCooldown(Auras:GetSpellName(self.spellID))
 		local power = UnitPower('player',Enum.PowerType.Maelstrom)
 		
-		Auras:SpellRangeCheck(self,17364,true,spec)
+		Auras:SpellRangeCheck(self,self.spellID,true)
 		Auras:ToggleAuraVisibility(self,true,'showhide')
-		Auras:CooldownHandler(self,spec,groupID,start,duration,true)
+		Auras:CooldownHandler(self,groupID,start,duration,true)
 		
 		if (Auras:IsPlayerInCombat()) then
 			if ((duration or 0) > 2) then
 				Auras:ToggleOverlayGlow(self.glow,false)
-				Auras:CooldownHandler(self,spec,groupID,start,duration)
+				Auras:CooldownHandler(self,groupID,start,duration)
 				
 				if (power >= 40) then
 					self:SetAlpha(1)
@@ -52,7 +60,7 @@ Stormstrike:SetScript('OnUpdate', function(self)
 				self.CD.text:SetText('')
 			end
 		else
-			Auras:NoCombatDisplay(self,spec,groupID)
+			Auras:NoCombatDisplay(self,groupID)
 		end
 	else
 		Auras:ToggleAuraVisibility(self,false,'showhide')

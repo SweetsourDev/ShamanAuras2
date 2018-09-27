@@ -959,6 +959,8 @@ local function BuildCurrentAuraList(db,spec,grp)
 	local auras = Auras.db.char.auras[spec]
 
 	for k,v in pairs(auras.auras) do
+		local aura = SSA[k]
+		
 		if (v.group == grp) then
 			auraTbl["aura"..v.order] = {
 				order = v.order,
@@ -970,7 +972,7 @@ local function BuildCurrentAuraList(db,spec,grp)
 						order = 1,
 						type = "description",
 						name = function()
-							local name,_,icon = GetSpellInfo(v.spellID)
+							local name,_,icon = GetSpellInfo(aura.spellID)
 							
 							if (name) then
 								return "|T"..icon..":20|t "..tostring(name)
@@ -978,15 +980,31 @@ local function BuildCurrentAuraList(db,spec,grp)
 						end,
 						width = "normal",
 					},
+					moveUp_Filler = {
+						order = 2,
+						type = "description",
+						name = "",
+						hidden = function()
+							return not (v.order == 1 and true) or false
+						end,
+						width = 0.25,
+					},
 					moveUp = {
 						order = 2,
 						type = "execute",
-						name = function()
+						--[[name = function()
 							if (auras.groups[grp].auraCount <= 1) then
 								return "|cFF777777Move Up|r"
 							else
 								return "Move Up"
 							end
+						end,]]
+						name = '',
+						image = [[Interface\AddOns\ShamanAuras2\media\icons\config\move-up]],
+						imageWidth = 25,
+						imageHeight = 25,
+						hidden = function()
+							return (v.order == 1 and true) or false
 						end,
 						disabled = function()
 							return auras.groups[grp].auraCount <= 1
@@ -998,17 +1016,33 @@ local function BuildCurrentAuraList(db,spec,grp)
 							Auras:RefreshAuraGroupList(this.options,spec)
 							Auras:UpdateTalents()
 						end,
-						width = "half",
+						width = 0.25,
+					},
+					moveDown_Filler = {
+						order = 3,
+						type = "description",
+						name = "",
+						hidden = function()
+							return not (v.order == #auras.groups and true) or false
+						end,
+						width = 0.25,
 					},
 					moveDown = {
 						order = 3,
 						type = "execute",
-						name = function()
+						--[[name = function()
 							if (auras.groups[grp].auraCount <= 1) then
 								return "|cFF777777Move Down|r"
 							else
 								return "Move Down"
 							end
+						end,]]
+						name = '',
+						image = [[Interface\AddOns\ShamanAuras2\media\icons\config\move-down]],
+						imageWidth = 25,
+						imageHeight = 25,
+						hidden = function()
+							return (v.order == #auras.groups and true) or false
 						end,
 						disabled = function()
 							return auras.groups[grp].auraCount <= 1
@@ -1020,12 +1054,16 @@ local function BuildCurrentAuraList(db,spec,grp)
 							Auras:RefreshAuraGroupList(this.options,spec)
 							Auras:UpdateTalents()
 						end,
-						width = "half",
+						width = 0.25,
 					},
 					removeAura = {
 						order = 4,
 						type = "execute",
-						name = "Remove",
+						--name = "Remove",
+						name = '',
+						image = [[Interface\AddOns\ShamanAuras2\media\icons\config\remove]],
+						imageWidth = 25,
+						imageHeight = 25,
 						func = function(this)
 							ReorderAuraList(spec,grp,v.order,nil,"remove")
 							v.group = 0
@@ -1036,7 +1074,170 @@ local function BuildCurrentAuraList(db,spec,grp)
 							Auras:RefreshAuraGroupList(this.options,spec)
 							Auras:UpdateTalents()
 						end,
-						width = "half",
+						width = 0.25,
+					},
+					customize = {
+						order = 5,
+						type = "toggle",
+						name = "Configure Glow",
+						get = function()
+							return v.isCustomize
+						end,
+						set = function(this,value)
+							v.isCustomize = value
+							
+							--[[print(barTitle.." ("..grp..")")
+							for k,v in pairs(auras.auras) do
+								if (v.group == grp and k ~= barTitle) then
+									--print(k)
+									v.isCustomize = false
+								end
+							end]]
+							
+							Auras:RefreshAuraGroupList(this.options,spec)
+							Auras:UpdateTalents()
+							
+							--[[if (value) then
+								SSA[barTitle]:Show()
+							end]]
+						end,
+						width = 0.75,
+					},
+					customizeAura = {
+						order = 6,
+						type = "group",
+						name = "Customization Tools",
+						hidden = not v.isCustomize,
+						args = {
+							toggle = {
+								order = 1,
+								type = "toggle",
+								name = "Toggle",
+								--description = "TEST",
+								get = function()
+									return v.glow.isEnabled
+								end,
+								set = function(this,value)
+									v.glow.isEnabled = value
+								end,
+								width = 0.5,
+							},
+							trigger = {
+								order = 2,
+								type = "select",
+								name = "Glow Trigger",
+								--description = "TEST",
+								disabled = function()
+									local triggerCtr = 0
+									
+									for key,val in pairs(v.glow.triggers) do
+										if (type(val) == "table") then
+											triggerCtr = triggerCtr + 1
+										end
+									end
+									
+									return triggerCtr == 1 or not v.glow.isEnabled
+								end,
+								get = function()
+									return v.glow.triggers.selected
+								end,
+								set = function(this,value)
+									v.glow.triggers.selected = value
+								end,
+								values = function()
+									local items = {}
+									
+									for key,val in pairs(v.glow.triggers) do
+										if (type(val) == "table") then
+											items[key] = gsub(key, "^%a", string.upper)
+										end
+									end
+									
+									return items
+								end,
+								width = 0.75,
+							},
+							combat_state = {
+								order = 3,
+								type = "select",
+								name = "Combat Settings",
+								--[[tristate = true,
+								name = function()
+									if (v.glow.states.combat) then
+										return "|cFF00FF00In Combat|r"
+									elseif (v.glow.states.combat == false) then
+										return "|cFFFFFFFFAlways|r"
+									else
+										return "|cFFFF0000Not In Combat|r"
+									end
+								end,]]
+								--description = "TEST",
+								disabled = function()
+									return not v.glow.isEnabled
+								end,
+								get = function()
+									return v.glow.states.combat
+								end,
+								set = function(this,value)
+									v.glow.states.combat = value
+								end,
+								values = {
+									["yes"] = "In Combat",
+									["not"] = "Not In Combat",
+									["both"] = "Always",
+								},
+								width = 0.75,
+							},
+							usable_state = {
+								order = 4,
+								type = "select",
+								name = "Show",
+								--[[name = function()
+									if (v.glow.states.usable) then
+										return "|cFF00FF00Off Cooldown|r"
+									elseif (v.glow.states.usable == false) then
+										return "|cFFFFFFFFAlways|r"
+									else
+										return "|cFFFF0000On Cooldown|r"
+									end
+								end,]]
+								--tristate = true,
+								--description = "TEST",
+								disabled = function()
+									return not v.glow.isEnabled
+								end,
+								get = function()
+									return v.glow.states.usable
+								end,
+								set = function(this,value)
+									v.glow.states.usable = value
+								end,
+								values = {
+									["off"] = "Off Cooldown",
+									["no"] = "On Cooldown",
+									["always"] = "Always",
+								},
+								width = 0.75,
+							},
+							--[[time_slider = {
+								order = 5,
+								type = "range",
+								name = "Trigger Time",
+								min = v.glow.triggers.time.min,
+								max = v.glow.triggers.time.max,
+								step = 1,
+								bigStep = 1,
+								get = function()
+									return v.glow.triggers.time.setTime
+								end,
+								set = function(this,value)
+									v.glow.triggers.time.setTime = value
+								end,
+							},]]
+							--textureColor = Auras:Color_VerifyDefaults(timerbars.bars[barTitle].layout,2,spec,L["LABEL_STATUSBAR_COLOR"],nil,false,"normal",false,'color','Timerbar',grp,true),
+							--texture = Auras:Select_VerifyDefaults(timerbars.bars[barTitle].layout,3,spec,L["LABEL_STATUSBAR_TEXTURE"],L["TOOLTIP_STATUSBAR_TEXTURE"],"LSM30_Statusbar",LSM:HashTable(LSM.MediaType.STATUSBAR),"normal",false,'texture','Timerbar',grp,true),
+						},
+						width = "full",
 					},
 				},
 				width = "full",

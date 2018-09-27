@@ -1,5 +1,8 @@
 local SSA, Auras = unpack(select(2,...))
 
+-- Cache Global WoW Functions
+local GetSpecialization = GetSpecialization
+
 -- Cache Global Addon Variables
 local AscendanceBar = SSA.AscendanceBar
 

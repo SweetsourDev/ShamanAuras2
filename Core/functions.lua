@@ -6,7 +6,7 @@ SSA.InterfaceListItem = nil
 local _G = _G
 local floor, fmod = math.floor, math.fmod
 local pairs, select, tonumber, tostring = pairs, select, tonumber, tostring
-local format,lower = string.format, string.lower
+local format, lower, match = string.format, string.lower, string.match
 local twipe = table.wipe
 -- WoW API / Variables
 local C_ArtifactUI = C_ArtifactUI
@@ -171,8 +171,21 @@ function Auras:IsPlayerInCombat(isTargetNotRequired)
 end
 
 -- Searches through the unit's buffs for a specific buff, by name
+function Auras:RetrieveAuraInfo(unit,spellID,filter)
+	local auraMax = ((match((filter or ''),"HELPFUL") or not filter) and BUFF_MAX_DISPLAY) or (match((filter or ''),"HARMFUL") and DEBUFF_MAX_DISPLAY)
+	
+	for i=1,auraMax do
+		local _,_,_,_,_,_,_,_,_,auraID = UnitAura(unit,i,filter or "HELPFUL PLAYER")
+
+		if (auraID == spellID) then
+			return UnitAura(unit,i,filter or "HELPFUL PLAYER")
+		end
+	end
+end
+
+-- Searches through the unit's buffs for a specific buff, by name
 function Auras:RetrieveBuffInfo(unit,spellName)
-	for i=1,MAX_TARGET_BUFFS do
+	for i=1,BUFF_MAX_DISPLAY do
 		local name = UnitBuff(unit,i)
 
 		if (name == spellName) then
@@ -184,7 +197,7 @@ end
 
 -- Searches through the unit's debuffs for a specific debuff, by name
 function Auras:RetrieveDebuffInfo(unit,spellName)
-	for i=1,MAX_TARGET_DEBUFFS do
+	for i=1,DEBUFF_MAX_DISPLAY do
 		local name = UnitDebuff(unit,i)
 		
 		if (name == spellName) then
@@ -817,7 +830,7 @@ local function UpdateParentDimensions(spec,group)
 	
 	for k,v in pairs(Auras.db.char.auras[spec].auras) do
 		--SSA.DataFrame.text:SetText("CONDITION ERROR: "..k)
-		if (v.group == group and v.condition() and v.isInUse) then
+		if (v.group == group and SSA[k].condition() and v.isInUse) then
 			numInUse = numInUse + 1
 		end
 	end
@@ -873,8 +886,12 @@ function Auras:UpdateTalents(isTalentChange)
 	
 	--SSA.spec = GetSpecialization()
 	--spec = SSA.spec
-	local spec = GetSpecialization()
 	local db = Auras.db.char
+	local spec = GetSpecialization()
+	
+	if (spec ~= SSA.spec) then
+		SSA.spec = spec
+	end
 	
 	--local rowObj,rowList = {},{}
 	if (isTalentChange and InterfaceOptionsFrame:IsShown()) then
@@ -885,6 +902,7 @@ function Auras:UpdateTalents(isTalentChange)
 	ToggleCombatEvent(spec)
 	
 	if (spec == 1) then -- Elemental
+		
 		--[[if (db.elements[1].timerbars.buff.isEnabled) then
 			SSA.BuffTimerBarGrp1:Show()
 		else
@@ -923,11 +941,12 @@ function Auras:UpdateTalents(isTalentChange)
 			if (auras.groups[i].auraCount > 0) then
 				for k,v in pairs(auras.auras) do
 					if (v.group == i) then
+						local bar = SSA[k]
 						
-						SSA[k]:SetParent(SSA["AuraGroup"..i])
-
-						rowObj[v.order] = SSA[k]
-						rowList[v.order] = v.isEnabled and v.condition()
+						bar:SetParent(SSA["AuraGroup"..i])
+						
+						rowObj[v.order] = bar
+						rowList[v.order] = v.isEnabled and bar.condition()
 						rowVerify[v.order] = v.isInUse or auras.groups[i].isAdjust
 					end
 				end
@@ -967,11 +986,12 @@ function Auras:UpdateTalents(isTalentChange)
 			if (auras.groups[i].auraCount > 0) then
 				for k,v in pairs(auras.auras) do
 					if (v.group == i) then
+						local bar = SSA[k]
 						
-						SSA[k]:SetParent(SSA["AuraGroup"..i])
-
-						rowObj[v.order] = SSA[k]
-						rowList[v.order] = v.isEnabled and v.condition()
+						bar:SetParent(SSA["AuraGroup"..i])
+						
+						rowObj[v.order] = bar
+						rowList[v.order] = v.isEnabled and bar.condition()
 						rowVerify[v.order] = v.isInUse or auras.groups[i].isAdjust
 					end
 				end
@@ -1004,7 +1024,7 @@ function Auras:UpdateTalents(isTalentChange)
 		Auras:InitializeTimerBarFrameGroups(spec)
 		Auras:InitializeTimerBars(spec)
 		--if (statusbar:GetName() == "AscendanceBar") then
-		SSA.DataFrame.text:SetText(Auras:CurText('DataFrame').."BAR DURATION #1: "..tostring(SSA.AscendanceBar.duration).."\n")
+		--SSA.DataFrame.text:SetText(Auras:CurText('DataFrame').."BAR DURATION #1: "..tostring(SSA.AscendanceBar.duration).."\n")
 		--end
 		local auras = Auras.db.char.auras[spec]
 		
@@ -1015,11 +1035,12 @@ function Auras:UpdateTalents(isTalentChange)
 				for k,v in pairs(auras.auras) do
 					
 					if (v.group == i) then
+						local bar = SSA[k]
 						
-						SSA[k]:SetParent(SSA["AuraGroup"..i])
+						bar:SetParent(SSA["AuraGroup"..i])
 						
-						rowObj[v.order] = SSA[k]
-						rowList[v.order] = v.isEnabled and v.condition()
+						rowObj[v.order] = bar
+						rowList[v.order] = v.isEnabled and bar.condition()
 						rowVerify[v.order] = v.isInUse or auras.groups[i].isAdjust
 						
 						--SSA.DataFrame.text:SetText(Auras:CurText('DataFrame')..k.." ("..tostring(rowObj[v.order]:GetName())..")\n")

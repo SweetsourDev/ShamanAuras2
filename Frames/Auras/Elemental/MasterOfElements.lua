@@ -1,15 +1,24 @@
 local SSA, Auras = unpack(select(2,...))
 
+-- Cache Global WoW Functions
+local GetTalentInfo = GetTalentInfo
+
 -- Cache Global Addon Variables
 local MasterOfElements = SSA.MasterOfElements
 
+-- Initialize Data Variables
+MasterOfElements.spellID = 260734
+MasterOfElements.condition = function()
+	return select(4,GetTalentInfo(2,2,1))
+end
+
 MasterOfElements:SetScript('OnUpdate',function(self)
 	if (Auras:CharacterCheck(self,1,2,2)) then
-		local spec,groupID = Auras:GetAuraInfo(self,'MasterOfElements')
-		local buff,_,_,_,duration,expires = Auras:RetrieveBuffInfo("player", Auras:GetSpellName(260734))
+		local groupID = Auras:GetAuraGroupID(self,self:GetName())
+		local buff,_,_,_,duration,expires = Auras:RetrieveAuraInfo("player", self.spellID)
 		
 		Auras:ToggleAuraVisibility(self,true,'showhide')
-		Auras:CooldownHandler(self,spec,groupID,((expires or 0) - (duration or 0)),duration)
+		Auras:CooldownHandler(self,groupID,((expires or 0) - (duration or 0)),duration)
 			
 		if (Auras:IsPlayerInCombat()) then
 			if (buff) then
@@ -20,7 +29,7 @@ MasterOfElements:SetScript('OnUpdate',function(self)
 				Auras:ToggleOverlayGlow(self.glow,false)
 			end
 		else
-			Auras:NoCombatDisplay(self,spec,groupID)
+			Auras:NoCombatDisplay(self,groupID)
 			
 			if (buff) then
 				Auras:ToggleOverlayGlow(self.glow,true,false)

@@ -13,12 +13,18 @@ local Tidebringer = SSA.Tidebringer
 	end
 end]]
 
+-- Initialize Data Variables
+Tidebringer.spellID = 236501
+Tidebringer.condition = function()
+	return select(10,GetPvpTalentInfoByID(1930)) and Auras:IsPvPZone()
+end
+
 --SSA.Tidebringer.isTimerActive = false
 Tidebringer:SetScript('OnUpdate',function(self)
 	if (Auras:CharacterCheck(self,3,"1930")) then
-		local spec,groupID = Auras:GetAuraInfo(self,self:GetName())
-		local buff,_,count = Auras:RetrieveBuffInfo("player",Auras:GetSpellName(236502))
-		local pvpBuff = Auras:RetrieveBuffInfo("player",Auras:GetSpellName(269083))
+		local groupID = Auras:GetAuraGroupID(self,self:GetName())
+		local buff,_,count = Auras:RetrieveAuraInfo("player",236502)
+		local pvpBuff = Auras:RetrieveAuraInfo("player",269083)
 		
 		--if (not self.auraTimer) then self.auraTimer = Auras.db.char.elements[3].cooldowns.primary[4].tidebringerStart end
 		
@@ -68,7 +74,7 @@ Tidebringer:SetScript('OnUpdate',function(self)
 		if (Auras:IsPlayerInCombat(true)) then
 			self:SetAlpha(1)
 		else
-			Auras:NoCombatDisplay(self,spec,groupID)
+			Auras:NoCombatDisplay(self,groupID)
 		end
 	else
 		Auras:ToggleAuraVisibility(self,false,'showhide')

@@ -1,15 +1,24 @@
 local SSA, Auras = unpack(select(2,...))
 
+-- Cache Global WoW Functions
+local GetPvpTalentInfoByID = GetPvpTalentInfoByID
+
 -- Cache Global Addon Variables
 local StaticCling = SSA.StaticCling
 
+-- Initialize Data Variables
+StaticCling.spellID = 211062
+StaticCling.condition = function()
+	return select(10,GetPvpTalentInfoByID(720))
+end
+
 StaticCling:SetScript('OnUpdate', function(self)
 	if (Auras:CharacterCheck(self,2,"720")) then
-		local spec,groupID = Auras:GetAuraInfo(self,self:GetName())
-		local debuff,_,_,_,duration,expires,caster = Auras:RetrieveDebuffInfo("target", Auras:GetSpellName(211062))
+		local groupID = Auras:GetAuraGroupID(self,self:GetName())
+		local debuff,_,_,_,duration,expires,caster = Auras:RetrieveAuraInfo("target", self.spellID,"HARMFUL PLAYER")
 
 		Auras:ToggleAuraVisibility(self,true,'showhide')
-		Auras:CooldownHandler(self,spec,groupID,((expires or 0) - (duration or 0)),duration)
+		Auras:CooldownHandler(self,groupID,((expires or 0) - (duration or 0)),duration)
 		
 		if (Auras:IsPlayerInCombat(true)) then
 			if (debuff and caster) then
@@ -20,7 +29,7 @@ StaticCling:SetScript('OnUpdate', function(self)
 				Auras:ToggleOverlayGlow(self.glow,false)
 			end
 		else
-			Auras:NoCombatDisplay(self,spec,groupID)
+			Auras:NoCombatDisplay(self,groupID)
 		end
 	else
 		Auras:ToggleAuraVisibility(self,false,'showhide')

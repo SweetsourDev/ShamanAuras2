@@ -6,14 +6,20 @@ local GetSpellCooldown = GetSpellCooldown
 -- Cache Global Addon Variables
 local HealingRain = SSA.HealingRain
 
+-- Initialize Data Variables
+HealingRain.spellID = 73920
+HealingRain.condition = function()
+	return IsSpellKnown(73920)
+end
+
 HealingRain:SetScript('OnUpdate',function(self)
-	if (Auras:CharacterCheck(self,3,73920)) then
-		local spec,groupID = Auras:GetAuraInfo(self,self:GetName())
-		local start,duration = GetSpellCooldown(Auras:GetSpellName(73920))
-		local spiritRain = Auras:RetrieveBuffInfo('player',Auras:GetSpellName(246771))
+	if (Auras:CharacterCheck(self,3,self.spellID)) then
+		local groupID = Auras:GetAuraGroupID(self,self:GetName())
+		local start,duration = GetSpellCooldown(Auras:GetSpellName(self.spellID))
+		local spiritRain = Auras:RetrieveAuraInfo('player',246771)
 		
 		Auras:ToggleAuraVisibility(self,true,'showhide')
-		Auras:CooldownHandler(self,spec,groupID,start,duration)
+		Auras:CooldownHandler(self,groupID,start,duration)
 		
 		if (spiritRain) then
 			Auras:ToggleOverlayGlow(self.glow,true)
@@ -24,7 +30,7 @@ HealingRain:SetScript('OnUpdate',function(self)
 		if (Auras:IsPlayerInCombat(true)) then
 			self:SetAlpha(1)
 		else
-			Auras:NoCombatDisplay(self,spec,groupID)
+			Auras:NoCombatDisplay(self,groupID)
 		end
 	else
 		Auras:ToggleAuraVisibility(self,false,'showhide')

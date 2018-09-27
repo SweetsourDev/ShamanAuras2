@@ -65,6 +65,7 @@ SSA.BackdropFrm = {
 }
 
 SSA.activeTotems = {}
+SSA.spec = GetSpecialization()
 SSA.grid = CreateFrame('Frame', 'AuraGrid', UIParent)
 --SSA.IsMovingAuras = false;
 SSA.ButtonFont = CreateFont('SSAButtonFont')

@@ -8,7 +8,9 @@ local gsub, tonumber, tostring = gsub, tonumber, tostring
 local GetSpecialization = GetSpecialization
 
 -- Set the aura's opacity to the user-specified level when the player is out of combat.
-function Auras:NoCombatDisplay(self,spec,group)
+function Auras:NoCombatDisplay(self,group)
+	local spec = SSA.spec
+	
 	if (Auras.db.char.auras[spec].cooldowns.groups[group].isPreview or Auras.db.char.auras[spec].groups[group].isAdjust) then
 		self:SetAlpha(1)
 	else
@@ -28,19 +30,22 @@ function Auras:NoCombatDisplay(self,spec,group)
 end
 
 -- Returns the current spec as well as group ID for the specified aura
-function Auras:GetAuraInfo(obj,debugHelper)
+--function Auras:GetAuraInfo(obj,debugHelper)
+function Auras:GetAuraGroupID(obj,debugHelper)
 	if (not obj) then
 		SSA.DataFrame.text:SetText("ERROR: GetAurainfo()\nMESSAGE: NO OBJECT\nSOURCE: "..debugHelper)
 	else
-		local spec,groupID = GetSpecialization()
+		local spec = SSA.spec
+		--local spec,groupID = GetSpecialization()
 		
 		if (not Auras.db.char.auras[spec].auras[obj:GetName()]) then
 			SSA.DataFrame.text:SetText("ERROR: GetAurainfo()\nMESSAGE: BAD INDEX\nSOURCE: "..debugHelper)
 		else
-			groupID = Auras.db.char.auras[spec].auras[obj:GetName()].group
+			--groupID = Auras.db.char.auras[spec].auras[obj:GetName()].group
+			return Auras.db.char.auras[spec].auras[obj:GetName()].group
 		end
 		
-		return spec,groupID
+		--return spec,groupID
 	end
 end
 
@@ -124,21 +129,23 @@ function Auras:SortTimerBars(spec)
 	end
 end
 
-local function RunTimer(bar,db,spec,start,duration)
+local function RunTimer(bar,db,start,duration)
 	local expire = start + duration
 	local timer,seconds = Auras:parseTime(expire - GetTime(),true)
 	
 	bar:SetValue(seconds)
 	bar.timetext:SetText(timer)
 	
-	Auras:SortTimerBars(spec)
+	Auras:SortTimerBars(SSA.spec)
 	
 	if (GetTime() >= expire) then
 		db.startTime = 0
 	end
 end
 
-local function PreviewTimerBar(bar,spec,group,isAdjust)
+local function PreviewTimerBar(bar,group,isAdjust)
+	local spec = SSA.spec
+	
 	if (not bar.adjustExpireTime or GetTime() >= (bar.adjustExpireTime - 3)) then
 		bar.adjustExpireTime = GetTime() + 10
 	end
@@ -172,8 +179,7 @@ local function HideTimerBar(bar)
 end
 
 function Auras:RunTimerBarCode(bar)
-	local spec = GetSpecialization()
-	local timerbar = Auras.db.char.timerbars[spec].bars[bar:GetName()]
+	local timerbar = Auras.db.char.timerbars[SSA.spec].bars[bar:GetName()]
 	
 	local duration = bar.duration
 	
@@ -187,9 +193,9 @@ function Auras:RunTimerBarCode(bar)
 	local remains = (bar.start + bar.duration) - GetTime()
 	
 	if (remains > 0) then
-		RunTimer(bar,timerbar,spec,bar.start,duration)
+		RunTimer(bar,timerbar,bar.start,duration)
 	elseif ((timerbar.isAdjust or timerbar.isCustomize) and timerbar.isInUse) then
-		PreviewTimerBar(bar,spec,timerbar.layout.group,timerbar.isAdjust)
+		PreviewTimerBar(bar,timerbar.layout.group,timerbar.isAdjust)
 	elseif (remains <= 0) then
 		bar.start = 0
 		bar:Hide()
@@ -197,8 +203,7 @@ function Auras:RunTimerBarCode(bar)
 end
 
 function Auras:RunTimerEvent_Aura(bar,isAnyCaster,...)
-	local spec = GetSpecialization()
-	local timerbar = Auras.db.char.timerbars[spec].bars[bar:GetName()]
+	local timerbar = Auras.db.char.timerbars[SSA.spec].bars[bar:GetName()]
 	local _,subevent,_,srcGUID,_,_,_,destGUID,_,_,_,spellID = ...
 	
 	--[[if (spellID == 193796) then
@@ -221,8 +226,7 @@ function Auras:RunTimerEvent_Aura(bar,isAnyCaster,...)
 end
 
 function Auras:RunTimerEvent_Totem(bar,...)
-	local spec = GetSpecialization()
-	local timerbar = Auras.db.char.timerbars[spec].bars[bar:GetName()]
+	local timerbar = Auras.db.char.timerbars[SSA.spec].bars[bar:GetName()]
 	local _,subevent,_,srcGUID,_,_,_,_,_,_,_,spellID = ...
 	
 	if (srcGUID == UnitGUID("player") and subevent == "SPELL_SUMMON" and bar.spellID == spellID) then
@@ -237,8 +241,7 @@ function Auras:RunTimerEvent_Totem(bar,...)
 end
 
 function Auras:RunTimerEvent_Elemental(bar,primalIDs,...)
-	local spec = GetSpecialization()
-	local timerbar = Auras.db.char.timerbars[spec].bars[bar:GetName()]
+	local timerbar = Auras.db.char.timerbars[SSA.spec].bars[bar:GetName()]
 	local _,subevent,_,srcGUID,_,_,_,destGUID,_,_,_,spellID = CombatLogGetCurrentEventInfo()
 	
 	if (srcGUID == UnitGUID("player") and subevent == "SPELL_SUMMON") then

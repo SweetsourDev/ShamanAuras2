@@ -6,23 +6,29 @@ local GetSpellCharges, GetSpellCooldown = GetSpellCharges, GetSpellCooldown
 -- Cache Global Addon Variables
 local Rockbiter = SSA.Rockbiter
 
+-- Initialize Data Variables
+Rockbiter.spellID = 193786
+Rockbiter.condition = function()
+	return IsSpellKnown(193786)
+end
+
 Rockbiter:SetScript('OnUpdate', function(self)
-	if (Auras:CharacterCheck(self,2,193786)) then
-		local spec,groupID = Auras:GetAuraInfo(self,self:GetName())
-		local buff,_,_,_,_,expires = Auras:RetrieveBuffInfo('player',Auras:GetSpellName(202004))
-		local start,duration = GetSpellCooldown(Auras:GetSpellName(193786))
-		local charges,maxCharges,chgStart,chgDuration = GetSpellCharges(193786)
+	if (Auras:CharacterCheck(self,2,self.spellID)) then
+		local groupID = Auras:GetAuraGroupID(self,self:GetName())
+		local buff,_,_,_,_,expires = Auras:RetrieveAuraInfo('player',202004)
+		local start,duration = GetSpellCooldown(Auras:GetSpellName(self.spellID))
+		local charges,maxCharges,chgStart,chgDuration = GetSpellCharges(self.spellID)
 	
-		Auras:SpellRangeCheck(self,193786,true,spec)
+		Auras:SpellRangeCheck(self,self.spellID,true)
 		Auras:ToggleAuraVisibility(self,true,'showhide')
-		Auras:CooldownHandler(self,spec,groupID,start,duration,true)
+		Auras:CooldownHandler(self,groupID,start,duration,true)
 	
 		if (buff) then
-			local timer,seconds = Auras:parseTime((expires or 0) - GetTime(),false,spec,groupID)
+			local timer,seconds = Auras:parseTime((expires or 0) - GetTime(),false,true,groupID)
 			
-			if (seconds > Auras.db.char.settings[spec].rockbiter) then
+			if (seconds > Auras.db.char.settings[SSA.spec].rockbiter) then
 				Auras:ToggleOverlayGlow(self.glow,false)
-			elseif (seconds <= Auras.db.char.settings[spec].rockbiter and Auras:IsPlayerInCombat(true)) then
+			elseif (seconds <= Auras.db.char.settings[SSA.spec].rockbiter and Auras:IsPlayerInCombat(true)) then
 				Auras:ToggleOverlayGlow(self.glow,true)
 			end
 		end
@@ -39,14 +45,14 @@ Rockbiter:SetScript('OnUpdate', function(self)
 			self.Charges.text:SetText(charges)
 			self.CD.text:SetText('')
 		else
-			Auras:CooldownHandler(self,spec,groupID,start,duration)
+			Auras:CooldownHandler(self,groupID,start,duration)
 			self.Charges.text:SetText('')
 		end
 			
 		if (Auras:IsPlayerInCombat()) then
 			self:SetAlpha(1)
 		else
-			Auras:NoCombatDisplay(self,spec,groupID)
+			Auras:NoCombatDisplay(self,groupID)
 		end
 	else
 		Auras:ToggleAuraVisibility(self,false,'showhide')
