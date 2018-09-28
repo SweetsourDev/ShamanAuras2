@@ -3845,9 +3845,9 @@ local defaults = {
 						order = 1,
 						isEnabled = true,
 						isInUse = true,
-						isCustomize = false,
 						glow = {
 							isEnabled = false,
+							isCustomize = false,
 							states = {
 								combat = "both",
 								usable = "always",
@@ -3855,7 +3855,8 @@ local defaults = {
 							triggers = {
 								selected = "time",
 								["time"] = {
-									min = 5,
+									threshold = 10,
+									min = 1,
 									max = 60,
 								},
 							},
@@ -3869,9 +3870,9 @@ local defaults = {
 						order = 4,
 						isEnabled = true,
 						isInUse = true,
-						isCustomize = false,
 						glow = {
 							isEnabled = false,
+							isCustomize = false,
 							states = {
 								combat = "both",
 								usable = "always",
@@ -3879,7 +3880,8 @@ local defaults = {
 							triggers = {
 								selected = "time",
 								["time"] = {
-									min = 5,
+									threshold = 10,
+									min = 1,
 									max = 120,
 								},
 							},
@@ -3893,9 +3895,9 @@ local defaults = {
 						order = 4,
 						isEnabled = true,
 						isInUse = true,
-						isCustomize = false,
 						glow = {
 							isEnabled = false,
+							isCustomize = false,
 							states = {
 								combat = "both",
 								usable = "always",
@@ -3903,7 +3905,8 @@ local defaults = {
 							triggers = {
 								selected = "time",
 								["time"] = {
-									min = 5,
+									threshold = 10,
+									min = 1,
 									max = 180,
 								},
 							},
@@ -3917,9 +3920,9 @@ local defaults = {
 						order = 2,
 						isEnabled = true,
 						isInUse = true,
-						isCustomize = false,
 						glow = {
 							isEnabled = false,
+							isCustomize = false,
 							states = {
 								combat = "both",
 								usable = "always",
@@ -3927,7 +3930,8 @@ local defaults = {
 							triggers = {
 								selected = "time",
 								["time"] = {
-									min = 5,
+									threshold = 10,
+									min = 1,
 									max = 90,
 								},
 							},
@@ -3941,9 +3945,9 @@ local defaults = {
 						order = 3,
 						isEnabled = true,
 						isInUse = true,
-						isCustomize = false,
 						glow = {
 							isEnabled = false,
+							isCustomize = false,
 							states = {
 								combat = "both",
 								usable = "always",
@@ -3951,7 +3955,8 @@ local defaults = {
 							triggers = {
 								selected = "time",
 								["time"] = {
-									min = 5,
+									threshold = 10,
+									min = 1,
 									max = 60,
 								},
 							},
@@ -3989,9 +3994,9 @@ local defaults = {
 						order = 5,
 						isEnabled = true,
 						isInUse = true,
-						isCustomize = false,
 						glow = {
 							isEnabled = false,
+							isCustomize = false,
 							states = {
 								combat = "both",
 								usable = "always",
@@ -3999,8 +4004,9 @@ local defaults = {
 							triggers = {
 								selected = "time",
 								["time"] = {
-									min = 5,
-									max = 60,
+									threshold = 10,
+									min = 1,
+									max = 45,
 								},
 							},
 							
@@ -4013,9 +4019,9 @@ local defaults = {
 						order = 2,
 						isEnabled = true,
 						isInUse = true,
-						isCustomize = false,
 						glow = {
 							isEnabled = false,
+							isCustomize = false,
 							states = {
 								combat = "both",
 								usable = "always",
@@ -4023,8 +4029,9 @@ local defaults = {
 							triggers = {
 								selected = "time",
 								["time"] = {
-									min = 5,
-									max = 60,
+									threshold = 10,
+									min = 1,
+									max = 300,
 								},
 							},
 							
@@ -4037,9 +4044,9 @@ local defaults = {
 						order = 2,
 						isEnabled = true,
 						isInUse = true,
-						isCustomize = false,
 						glow = {
 							isEnabled = false,
+							isCustomize = false,
 							states = {
 								combat = "both",
 								usable = "always",
@@ -4047,8 +4054,14 @@ local defaults = {
 							triggers = {
 								selected = "time",
 								["time"] = {
-									min = 5,
-									max = 60,
+									threshold = 60,
+									min = 1,
+									max = 540,
+								},
+								["charges"] = {
+									threshold = 3,
+									min = 1,
+									max = 9,
 								},
 							},
 							
@@ -4084,9 +4097,9 @@ local defaults = {
 						order = 4,
 						isEnabled = true,
 						isInUse = true,
-						isCustomize = false,
 						glow = {
 							isEnabled = false,
+							isCustomize = false,
 							states = {
 								combat = "both",
 								usable = "always",
@@ -4094,8 +4107,9 @@ local defaults = {
 							triggers = {
 								selected = "time",
 								["time"] = {
-									min = 5,
-									max = 60,
+									threshold = 5,
+									min = 1,
+									max = 30,
 								},
 							},
 							
@@ -4252,9 +4266,9 @@ local defaults = {
 						order = 2,
 						isEnabled = true,
 						isInUse = true,
-						isCustomize = false,
 						glow = {
 							isEnabled = false,
+							isCustomize = false,
 							states = {
 								combat = "both",
 								usable = "always",
@@ -4262,8 +4276,9 @@ local defaults = {
 							triggers = {
 								selected = "time",
 								["time"] = {
-									min = 5,
-									max = 60,
+									threshold = 10,
+									min = 1,
+									max = 120,
 								},
 							},
 							
@@ -4276,9 +4291,9 @@ local defaults = {
 						order = 6,
 						isEnabled = true,
 						isInUse = true,
-						isCustomize = false,
 						glow = {
 							isEnabled = false,
+							isCustomize = false,
 							states = {
 								combat = "both",
 								usable = "always",
@@ -4286,8 +4301,9 @@ local defaults = {
 							triggers = {
 								selected = "time",
 								["time"] = {
-									min = 5,
-									max = 60,
+									threshold = 5,
+									min = 1,
+									max = 30,
 								},
 							},
 							
@@ -4300,9 +4316,9 @@ local defaults = {
 						order = 3,
 						isEnabled = true,
 						isInUse = true,
-						isCustomize = false,
 						glow = {
 							isEnabled = false,
+							isCustomize = false,
 							states = {
 								combat = "both",
 								usable = "always",
@@ -4310,8 +4326,9 @@ local defaults = {
 							triggers = {
 								selected = "time",
 								["time"] = {
-									min = 5,
-									max = 60,
+									threshold = 5,
+									min = 1,
+									max = 30,
 								},
 							},
 							
@@ -4348,18 +4365,23 @@ local defaults = {
 						order = 3,
 						isEnabled = true,
 						isInUse = true,
-						isCustomize = false,
 						glow = {
 							isEnabled = false,
+							isCustomize = false,
 							states = {
 								combat = "both",
 								usable = "always",
 							},
 							triggers = {
-								selected = "time",
+								selected = "all",
 								["time"] = {
-									min = 5,
-									max = 60,
+									threshold = 2,
+									min = 1,
+									max = 8,
+								},
+								["buffs"] = {
+									["lava_Surge"] = true,
+									["ascendance"] = false,
 								},
 							},
 							
@@ -4444,9 +4466,9 @@ local defaults = {
 						order = 4,
 						isEnabled = true,
 						isInUse = true,
-						isCustomize = false,
 						glow = {
 							isEnabled = false,
+							isCustomize = false,
 							states = {
 								combat = "both",
 								usable = "always",
@@ -4454,8 +4476,9 @@ local defaults = {
 							triggers = {
 								selected = "time",
 								["time"] = {
-									min = 5,
-									max = 60,
+									threshold = 10,
+									min = 1,
+									max = 45,
 								},
 							},
 							
@@ -4468,9 +4491,9 @@ local defaults = {
 						order = 4,
 						isEnabled = true,
 						isInUse = true,
-						isCustomize = false,
 						glow = {
 							isEnabled = false,
+							isCustomize = false,
 							states = {
 								combat = "both",
 								usable = "always",
@@ -4478,8 +4501,9 @@ local defaults = {
 							triggers = {
 								selected = "time",
 								["time"] = {
-									min = 5,
-									max = 60,
+									threshold = 5,
+									min = 1,
+									max = 40,
 								},
 							},
 							
@@ -4564,9 +4588,9 @@ local defaults = {
 						order = 5,
 						isEnabled = true,
 						isInUse = true,
-						isCustomize = false,
 						glow = {
 							isEnabled = false,
+							isCustomize = false,
 							states = {
 								combat = "both",
 								usable = "always",
@@ -4574,7 +4598,8 @@ local defaults = {
 							triggers = {
 								selected = "time",
 								["time"] = {
-									min = 5,
+									threshold = 10,
+									min = 1,
 									max = 60,
 								},
 							},
@@ -4612,9 +4637,9 @@ local defaults = {
 						order = 5,
 						isEnabled = true,
 						isInUse = true,
-						isCustomize = false,
 						glow = {
 							isEnabled = false,
+							isCustomize = false,
 							states = {
 								combat = "both",
 								usable = "always",
@@ -4622,8 +4647,9 @@ local defaults = {
 							triggers = {
 								selected = "time",
 								["time"] = {
-									min = 5,
-									max = 60,
+									threshold = 10,
+									min = 1,
+									max = 120,
 								},
 							},
 							
@@ -4636,21 +4662,23 @@ local defaults = {
 						order = 1,
 						isEnabled = true,
 						isInUse = true,
-						isCustomize = false,
 						glow = {
-							isEnabled = false,
-							states = {
-								combat = "both",
-								usable = "always",
-							},
+							isCustomize = false,
 							triggers = {
-								selected = "time",
-								["time"] = {
-									min = 5,
-									max = 60,
+								cooldown = {
+									isEnabled = false,
+									groupName = "Spell Cooldown",
+									threshold = 3,
+									min = 1,
+									max = 12,
+									show = "all",
+								},
+								interrupt = {
+									isEnabled = true,
+									groupName = "Spell Interrupt",
+									combat = "all",
 								},
 							},
-							
 						},
 					},
 				},
@@ -4684,9 +4712,9 @@ local defaults = {
 						order = 1,
 						isEnabled = true,
 						isInUse = true,
-						isCustomize = false,
 						glow = {
 							isEnabled = false,
+							isCustomize = false,
 							states = {
 								combat = "both",
 								usable = "always",
@@ -4694,6 +4722,7 @@ local defaults = {
 							triggers = {
 								selected = "time",
 								["time"] = {
+									threshold = 1,
 									min = 5,
 									max = 60,
 								},
@@ -4708,9 +4737,9 @@ local defaults = {
 						order = 2,
 						isEnabled = true,
 						isInUse = true,
-						isCustomize = false,
 						glow = {
 							isEnabled = false,
+							isCustomize = false,
 							states = {
 								combat = "both",
 								usable = "always",
@@ -4718,8 +4747,9 @@ local defaults = {
 							triggers = {
 								selected = "time",
 								["time"] = {
-									min = 5,
-									max = 60,
+									threshold = 10,
+									min = 1,
+									max = 180,
 								},
 							},
 							
@@ -4732,9 +4762,9 @@ local defaults = {
 						order = 5,
 						isEnabled = true,
 						isInUse = true,
-						isCustomize = false,
 						glow = {
 							isEnabled = false,
+							isCustomize = false,
 							states = {
 								combat = "both",
 								usable = "always",
@@ -4742,8 +4772,9 @@ local defaults = {
 							triggers = {
 								selected = "time",
 								["time"] = {
-									min = 5,
-									max = 60,
+									threshold = 10,
+									min = 1,
+									max = 90,
 								},
 							},
 							
@@ -4756,9 +4787,9 @@ local defaults = {
 						order = 1,
 						isEnabled = true,
 						isInUse = true,
-						isCustomize = false,
 						glow = {
 							isEnabled = false,
+							isCustomize = false,
 							states = {
 								combat = "both",
 								usable = "always",
@@ -4766,7 +4797,8 @@ local defaults = {
 							triggers = {
 								selected = "time",
 								["time"] = {
-									min = 5,
+									threshold = 10,
+									min = 1,
 									max = 60,
 								},
 							},
@@ -4804,9 +4836,9 @@ local defaults = {
 						order = 3,
 						isEnabled = true,
 						isInUse = true,
-						isCustomize = false,
 						glow = {
 							isEnabled = false,
+							isCustomize = false,
 							states = {
 								combat = "both",
 								usable = "always",
@@ -4814,8 +4846,9 @@ local defaults = {
 							triggers = {
 								selected = "time",
 								["time"] = {
-									min = 5,
-									max = 60,
+									threshold = 10,
+									min = 1,
+									max = 45,
 								},
 							},
 							
@@ -4852,9 +4885,9 @@ local defaults = {
 						order = 0,
 						isEnabled = true,
 						isInUse = true,
-						isCustomize = false,
 						glow = {
 							isEnabled = false,
+							isCustomize = false,
 							states = {
 								combat = "both",
 								usable = "always",
@@ -4862,8 +4895,9 @@ local defaults = {
 							triggers = {
 								selected = "time",
 								["time"] = {
-									min = 5,
-									max = 60,
+									threshold = 10,
+									min = 1,
+									max = 300,
 								},
 							},
 							
@@ -4876,9 +4910,9 @@ local defaults = {
 						order = 2,
 						isEnabled = true,
 						isInUse = true,
-						isCustomize = false,
 						glow = {
 							isEnabled = false,
+							isCustomize = false,
 							states = {
 								combat = "both",
 								usable = "always",
@@ -4886,8 +4920,14 @@ local defaults = {
 							triggers = {
 								selected = "time",
 								["time"] = {
-									min = 5,
-									max = 60,
+									threshold = 60,
+									min = 1,
+									max = 540,
+								},
+								["charges"] = {
+									threshold = 3,
+									min = 1,
+									max = 9,
 								},
 							},
 							
@@ -4900,9 +4940,9 @@ local defaults = {
 						order = 2,
 						isEnabled = true,
 						isInUse = true,
-						isCustomize = false,
 						glow = {
 							isEnabled = false,
+							isCustomize = false,
 							states = {
 								combat = "both",
 								usable = "always",
@@ -4910,8 +4950,9 @@ local defaults = {
 							triggers = {
 								selected = "time",
 								["time"] = {
-									min = 5,
-									max = 60,
+									threshold = 5,
+									min = 1,
+									max = 30,
 								},
 							},
 							
@@ -5092,9 +5133,9 @@ local defaults = {
 						order = 1,
 						isEnabled = true,
 						isInUse = true,
-						isCustomize = false,
 						glow = {
 							isEnabled = false,
+							isCustomize = false,
 							states = {
 								combat = "both",
 								usable = "always",
@@ -5102,8 +5143,9 @@ local defaults = {
 							triggers = {
 								selected = "time",
 								["time"] = {
-									min = 5,
-									max = 60,
+									threshold = 10,
+									min = 1,
+									max = 120,
 								},
 							},
 							
@@ -5116,9 +5158,9 @@ local defaults = {
 						order = 4,
 						isEnabled = true,
 						isInUse = true,
-						isCustomize = false,
 						glow = {
 							isEnabled = false,
+							isCustomize = false,
 							states = {
 								combat = "both",
 								usable = "always",
@@ -5126,8 +5168,9 @@ local defaults = {
 							triggers = {
 								selected = "time",
 								["time"] = {
-									min = 5,
-									max = 60,
+									threshold = 5,
+									min = 1,
+									max = 30,
 								},
 							},
 							
@@ -5140,9 +5183,9 @@ local defaults = {
 						order = 2,
 						isEnabled = true,
 						isInUse = true,
-						isCustomize = false,
 						glow = {
 							isEnabled = false,
+							isCustomize = false,
 							states = {
 								combat = "both",
 								usable = "always",
@@ -5150,8 +5193,9 @@ local defaults = {
 							triggers = {
 								selected = "time",
 								["time"] = {
-									min = 5,
-									max = 60,
+									threshold = 5,
+									min = 1,
+									max = 30,
 								},
 							},
 							
@@ -5188,9 +5232,9 @@ local defaults = {
 						order = 3,
 						isEnabled = true,
 						isInUse = true,
-						isCustomize = false,
 						glow = {
 							isEnabled = false,
+							isCustomize = false,
 							states = {
 								combat = "both",
 								usable = "always",
@@ -5198,8 +5242,9 @@ local defaults = {
 							triggers = {
 								selected = "time",
 								["time"] = {
-									min = 5,
-									max = 60,
+									threshold = 10,
+									min = 1,
+									max = 45,
 								},
 							},
 							
@@ -5236,9 +5281,9 @@ local defaults = {
 						order = 2,
 						isEnabled = true,
 						isInUse = true,
-						isCustomize = false,
 						glow = {
 							isEnabled = false,
+							isCustomize = false,
 							states = {
 								combat = "both",
 								usable = "always",
@@ -5246,8 +5291,9 @@ local defaults = {
 							triggers = {
 								selected = "time",
 								["time"] = {
-									min = 5,
-									max = 60,
+									threshold = 5,
+									min = 1,
+									max = 40,
 								},
 							},
 							
@@ -5380,9 +5426,9 @@ local defaults = {
 						order = 3,
 						isEnabled = true,
 						isInUse = true,
-						isCustomize = false,
 						glow = {
 							isEnabled = false,
+							isCustomize = false,
 							states = {
 								combat = "both",
 								usable = "always",
@@ -5390,7 +5436,8 @@ local defaults = {
 							triggers = {
 								selected = "time",
 								["time"] = {
-									min = 5,
+									threshold = 10,
+									min = 1,
 									max = 60,
 								},
 							},
@@ -5404,9 +5451,9 @@ local defaults = {
 						order = 4,
 						isEnabled = true,
 						isInUse = true,
-						isCustomize = false,
 						glow = {
 							isEnabled = false,
+							isCustomize = false,
 							states = {
 								combat = "both",
 								usable = "always",
@@ -5414,8 +5461,9 @@ local defaults = {
 							triggers = {
 								selected = "time",
 								["time"] = {
-									min = 5,
-									max = 60,
+									threshold = 10,
+									min = 1,
+									max = 120,
 								},
 							},
 							
@@ -5428,21 +5476,23 @@ local defaults = {
 						order = 1,
 						isEnabled = true,
 						isInUse = true,
-						isCustomize = false,
 						glow = {
-							isEnabled = false,
-							states = {
-								combat = "both",
-								usable = "always",
-							},
+							isCustomize = false,
 							triggers = {
-								selected = "time",
-								["time"] = {
-									min = 5,
-									max = 60,
+								cooldown = {
+									isEnabled = false,
+									groupName = "Cooldown Glow",
+									threshold = 3,
+									min = 1,
+									max = 12,
+									show = "all",
+								},
+								interrupt = {
+									isEnabled = true,
+									groupName = "Spell Interrupt",
+									combat = "all",
 								},
 							},
-							
 						},
 					},
 				},
@@ -5476,22 +5526,20 @@ local defaults = {
 						order = 1,
 						isEnabled = true,
 						isInUse = true,
-						isCustomize = false,
 						glow = {
-							isEnabled = false,
-							states = {
-								combat = "both",
-								usable = "always",
-							},
+							isCustomize = false,
 							triggers = {
-								selected = "time",
-								["time"] = {
-									setTime = 10,
-									min = 5,
+								cooldown = {
+									isEnabled = false,
+									groupName = "Spell Cooldown",
+									threshold = 10,
+									min = 1,
 									max = 60,
+									displayTime = 5,
+									show = "all",
+									combat = "on",
 								},
 							},
-							
 						},
 					},
 					["AncestralProtectionTotem"] = {
@@ -5501,21 +5549,20 @@ local defaults = {
 						order = 6,
 						isEnabled = true,
 						isInUse = true,
-						isCustomize = false,
 						glow = {
-							isEnabled = false,
-							states = {
-								combat = "both",
-								usable = "always",
-							},
+							isCustomize = false,
 							triggers = {
-								selected = "time",
-								["time"] = {
-									min = 5,
-									max = 60,
+								cooldown = {
+									isEnabled = false,
+									groupName = "Spell Cooldown",
+									threshold = 10,
+									min = 1,
+									max = 300,
+									displayTime = 5,
+									show = "all",
+									combat = "on",
 								},
 							},
-							
 						},
 					},
 					["Ascendance"] = {
@@ -5525,21 +5572,20 @@ local defaults = {
 						order = 3,
 						isEnabled = true,
 						isInUse = true,
-						isCustomize = false,
 						glow = {
-							isEnabled = false,
-							states = {
-								combat = "both",
-								usable = "always",
-							},
+							isCustomize = false,
 							triggers = {
-								selected = "time",
-								["time"] = {
-									min = 5,
-									max = 60,
+								cooldown = {
+									isEnabled = false,
+									groupName = "Spell Cooldown",
+									threshold = 10,
+									min = 1,
+									max = 180,
+									displayTime = 5,
+									show = "all",
+									combat = "on",
 								},
 							},
-							
 						},
 					},
 					["AstralShift"] = {
@@ -5549,21 +5595,20 @@ local defaults = {
 						order = 3,
 						isEnabled = true,
 						isInUse = true,
-						isCustomize = false,
 						glow = {
-							isEnabled = false,
-							states = {
-								combat = "both",
-								usable = "always",
-							},
+							isCustomize = false,
 							triggers = {
-								selected = "time",
-								["time"] = {
-									min = 5,
-									max = 60,
+								cooldown = {
+									isEnabled = false,
+									groupName = "Spell Cooldown",
+									threshold = 10,
+									min = 1,
+									max = 90,
+									displayTime = 5,
+									show = "all",
+									combat = "on",
 								},
 							},
-							
 						},
 					},
 					["CapacitorTotem"] = {
@@ -5573,21 +5618,20 @@ local defaults = {
 						order = 3,
 						isEnabled = true,
 						isInUse = true,
-						isCustomize = false,
 						glow = {
-							isEnabled = false,
-							states = {
-								combat = "both",
-								usable = "always",
-							},
+							isCustomize = false,
 							triggers = {
-								selected = "time",
-								["time"] = {
-									min = 5,
+								cooldown = {
+									isEnabled = false,
+									groupName = "Spell Cooldown",
+									threshold = 10,
+									min = 1,
 									max = 60,
+									displayTime = 5,
+									show = "all",
+									combat = "on",
 								},
 							},
-							
 						},
 					},
 					["CloudburstTotem"] = {
@@ -5597,21 +5641,20 @@ local defaults = {
 						order = 3,
 						isEnabled = true,
 						isInUse = true,
-						isCustomize = false,
 						glow = {
-							isEnabled = false,
-							states = {
-								combat = "both",
-								usable = "always",
-							},
+							isCustomize = false,
 							triggers = {
-								selected = "time",
-								["time"] = {
-									min = 5,
-									max = 60,
+								cooldown = {
+									isEnabled = false,
+									groupName = "Spell Cooldown",
+									threshold = 5,
+									min = 1,
+									max = 30,
+									displayTime = 5,
+									show = "all",
+									combat = "on",
 								},
 							},
-							
 						},
 					},
 					["CounterstrikeTotem"] = {
@@ -5621,21 +5664,20 @@ local defaults = {
 						order = 4,
 						isEnabled = true,
 						isInUse = true,
-						isCustomize = false,
 						glow = {
-							isEnabled = false,
-							states = {
-								combat = "both",
-								usable = "always",
-							},
+							isCustomize = false,
 							triggers = {
-								selected = "time",
-								["time"] = {
-									min = 5,
-									max = 60,
+								cooldown = {
+									isEnabled = false,
+									groupName = "Spell Cooldown",
+									threshold = 5,
+									min = 1,
+									max = 45,
+									displayTime = 5,
+									show = "all",
+									combat = "on",
 								},
 							},
-							
 						},
 					},
 					["Downpour"] = {
@@ -5645,21 +5687,20 @@ local defaults = {
 						order = 4,
 						isEnabled = true,
 						isInUse = true,
-						isCustomize = false,
 						glow = {
-							isEnabled = false,
-							states = {
-								combat = "both",
-								usable = "always",
-							},
+							isCustomize = false,
 							triggers = {
-								selected = "time",
-								["time"] = {
-									min = 5,
+								cooldown = {
+									isEnabled = false,
+									groupName = "Spell Cooldown",
+									threshold = 10,
+									min = 1,
 									max = 60,
+									displayTime = 5,
+									show = "all",
+									combat = "on",
 								},
 							},
-							
 						},
 					},
 					["EarthElemental"] = {
@@ -5669,21 +5710,20 @@ local defaults = {
 						order = 0,
 						isEnabled = true,
 						isInUse = true,
-						isCustomize = false,
 						glow = {
-							isEnabled = false,
-							states = {
-								combat = "both",
-								usable = "always",
-							},
+							isCustomize = false,
 							triggers = {
-								selected = "time",
-								["time"] = {
-									min = 5,
-									max = 60,
+								cooldown = {
+									isEnabled = false,
+									groupName = "Spell Cooldown",
+									threshold = 10,
+									min = 1,
+									max = 300,
+									displayTime = 5,
+									show = "all",
+									combat = "on",
 								},
 							},
-							
 						},
 					},
 					["EarthShield"] = {
@@ -5693,21 +5733,30 @@ local defaults = {
 						order = 1,
 						isEnabled = true,
 						isInUse = true,
-						isCustomize = false,
 						glow = {
-							isEnabled = false,
-							states = {
-								combat = "both",
-								usable = "always",
-							},
+							isCustomize = false,
 							triggers = {
-								selected = "time",
-								["time"] = {
-									min = 5,
-									max = 60,
+								buff = {
+									isEnabled = true,
+									groupName = "Buff Duration",
+									threshold = 60,
+									min = 1,
+									max = 540,
+									displayTime = 5,
+									show = "all",
+									combat = "on",
+								},
+								charges = {
+									isEnabled = true,
+									groupName = "Buff Stacks",
+									threshold = 3,
+									min = 1,
+									max = 9,
+									displayTime = 5,
+									disableShow = true,
+									combat = "all",
 								},
 							},
-							
 						},
 					},
 					["EarthbindTotem"] = {
@@ -5717,21 +5766,20 @@ local defaults = {
 						order = 4,
 						isEnabled = true,
 						isInUse = true,
-						isCustomize = false,
 						glow = {
-							isEnabled = false,
-							states = {
-								combat = "both",
-								usable = "always",
-							},
+							isCustomize = false,
 							triggers = {
-								selected = "time",
-								["time"] = {
-									min = 5,
-									max = 60,
+								cooldown = {
+									isEnabled = false,
+									groupName = "Spell Cooldown",
+									threshold = 5,
+									min = 1,
+									max = 30,
+									displayTime = 5,
+									show = "all",
+									combat = "on",
 								},
 							},
-							
 						},
 					},
 					["EarthenWallTotem"] = {
@@ -5741,21 +5789,20 @@ local defaults = {
 						order = 5,
 						isEnabled = true,
 						isInUse = true,
-						isCustomize = false,
 						glow = {
-							isEnabled = false,
-							states = {
-								combat = "both",
-								usable = "always",
-							},
+							isCustomize = false,
 							triggers = {
-								selected = "time",
-								["time"] = {
-									min = 5,
+								cooldown = {
+									isEnabled = false,
+									groupName = "Spell Cooldown",
+									threshold = 10,
+									min = 1,
 									max = 60,
+									displayTime = 5,
+									show = "all",
+									combat = "on",
 								},
 							},
-							
 						},
 					},
 					["EarthgrabTotem"] = {
@@ -5765,21 +5812,20 @@ local defaults = {
 						order = 5,
 						isEnabled = true,
 						isInUse = true,
-						isCustomize = false,
 						glow = {
-							isEnabled = false,
-							states = {
-								combat = "both",
-								usable = "always",
-							},
+							isCustomize = false,
 							triggers = {
-								selected = "time",
-								["time"] = {
-									min = 5,
-									max = 60,
+								cooldown = {
+									isEnabled = false,
+									groupName = "Spell Cooldown",
+									threshold = 5,
+									min = 1,
+									max = 30,
+									displayTime = 5,
+									show = "all",
+									combat = "on",
 								},
 							},
-							
 						},
 					},
 					["FlameShock"] = {
@@ -5789,21 +5835,20 @@ local defaults = {
 						order = 1,
 						isEnabled = true,
 						isInUse = true,
-						isCustomize = false,
 						glow = {
-							isEnabled = false,
-							states = {
-								combat = "both",
-								usable = "always",
-							},
+							isCustomize = false,
 							triggers = {
-								selected = "time",
-								["time"] = {
-									min = 5,
-									max = 60,
+								debuff = {
+									isEnabled = true,
+									groupName = "Debuff Duration",
+									threshold = 10,
+									min = 1,
+									max = 27,
+									displayTime = 5,
+									show = "all",
+									combat = "on",
 								},
 							},
-							
 						},
 					},
 					["FlashFlood"] = {
@@ -5813,21 +5858,20 @@ local defaults = {
 						order = 2,
 						isEnabled = true,
 						isInUse = true,
-						isCustomize = false,
 						glow = {
-							isEnabled = false,
-							states = {
-								combat = "both",
-								usable = "always",
-							},
+							isCustomize = false,
 							triggers = {
-								selected = "time",
-								["time"] = {
-									min = 5,
-									max = 60,
+								buff = {
+									isEnabled = false,
+									groupName = "Aura Duration",
+									threshold = 5,
+									min = 1,
+									max = 15,
+									displayTime = 5,
+									show = "all",
+									combat = "on",
 								},
 							},
-							
 						},
 					},
 					["GladiatorsMedallion"] = {
@@ -5837,21 +5881,20 @@ local defaults = {
 						order = 2,
 						isEnabled = true,
 						isInUse = true,
-						isCustomize = false,
 						glow = {
-							isEnabled = false,
-							states = {
-								combat = "both",
-								usable = "always",
-							},
+							isCustomize = false,
 							triggers = {
-								selected = "time",
-								["time"] = {
-									min = 5,
-									max = 60,
+								cooldown = {
+									isEnabled = false,
+									groupName = "Spell Cooldown",
+									threshold = 10,
+									min = 1,
+									max = 120,
+									displayTime = 5,
+									show = "all",
+									combat = "on",
 								},
 							},
-							
 						},
 					},
 					["GroundingTotem"] = {
@@ -5861,21 +5904,20 @@ local defaults = {
 						order = 5,
 						isEnabled = true,
 						isInUse = true,
-						isCustomize = false,
 						glow = {
-							isEnabled = false,
-							states = {
-								combat = "both",
-								usable = "always",
-							},
+							isCustomize = false,
 							triggers = {
-								selected = "time",
-								["time"] = {
-									min = 5,
-									max = 60,
+								cooldown = {
+									isEnabled = false,
+									groupName = "Spell Cooldown",
+									threshold = 5,
+									min = 1,
+									max = 30,
+									displayTime = 5,
+									show = "all",
+									combat = "on",
 								},
 							},
-							
 						},
 					},
 					["HealingRain"] = {
@@ -5885,21 +5927,20 @@ local defaults = {
 						order = 5,
 						isEnabled = true,
 						isInUse = true,
-						isCustomize = false,
 						glow = {
-							isEnabled = false,
-							states = {
-								combat = "both",
-								usable = "always",
-							},
+							isCustomize = false,
 							triggers = {
-								selected = "time",
-								["time"] = {
-									min = 5,
-									max = 60,
+								cooldown = {
+									isEnabled = false,
+									groupName = "Spell Cooldown",
+									threshold = 3,
+									min = 1,
+									max = 10,
+									displayTime = 5,
+									show = "all",
+									combat = "on",
 								},
 							},
-							
 						},
 					},
 					["HealingStreamTotem"] = {
@@ -5909,21 +5950,20 @@ local defaults = {
 						order = 2,
 						isEnabled = true,
 						isInUse = true,
-						isCustomize = false,
 						glow = {
-							isEnabled = false,
-							states = {
-								combat = "both",
-								usable = "always",
-							},
+							isCustomize = false,
 							triggers = {
-								selected = "time",
-								["time"] = {
-									min = 5,
-									max = 60,
+								cooldown = {
+									isEnabled = false,
+									groupName = "Spell Cooldown",
+									threshold = 5,
+									min = 1,
+									max = 30,
+									displayTime = 5,
+									show = "all",
+									combat = "on",
 								},
 							},
-							
 						},
 					},
 					["HealingTideTotem"] = {
@@ -5933,21 +5973,20 @@ local defaults = {
 						order = 1,
 						isEnabled = true,
 						isInUse = true,
-						isCustomize = false,
 						glow = {
-							isEnabled = false,
-							states = {
-								combat = "both",
-								usable = "always",
-							},
+							isCustomize = false,
 							triggers = {
-								selected = "time",
-								["time"] = {
-									min = 5,
-									max = 60,
+								cooldown = {
+									isEnabled = false,
+									groupName = "Spell Cooldown",
+									threshold = 10,
+									min = 1,
+									max = 180,
+									displayTime = 5,
+									show = "all",
+									combat = "on",
 								},
 							},
-							
 						},
 					},
 					["Hex"] = {
@@ -5957,42 +5996,63 @@ local defaults = {
 						order = 2,
 						isEnabled = true,
 						isInUse = true,
-						isCustomize = false,
 						glow = {
-							isEnabled = false,
-							states = {
-								combat = "both",
-								usable = "always",
-							},
+							isCustomize = false,
 							triggers = {
-								selected = "time",
-								["time"] = {
-									min = 5,
-									max = 60,
+								cooldown = {
+									isEnabled = false,
+									groupName = "Spell Cooldown",
+									threshold = 10,
+									min = 1,
+									max = 30,
+									displayTime = 5,
+									show = "all",
+									combat = "on",
 								},
 							},
-							
 						},
 					},
-					["LavaBurst"]  = {
+					["LavaBurst"] = {
 						--condition = function() return IsSpellKnown(51505) end,
 						--spellID = 51505,
 						group = 6,
 						order = 2,
 						isEnabled = true,
 						isInUse = true,
-						isCustomize = false,
 						glow = {
+							
 							isEnabled = false,
+							isCustomize = false,
 							states = {
 								combat = "both",
 								usable = "always",
 							},
 							triggers = {
-								selected = "time",
-								["time"] = {
-									min = 5,
-									max = 60,
+								cooldown = {
+									isEnabled = false,
+									groupName = "Spell Cooldown",
+									threshold = 3,
+									min = 1,
+									max = 8,
+									displayTime = 5,
+									show = "all",
+									combat = "on",
+								},
+								buff = {
+									lavaSurge = {
+										isEnabled = true,
+										groupName = "Lava Surge Proc",
+										show = "on",
+										disableShow = true,
+										combat = "on",
+									},
+									ascendance = {
+										isEnabled = true,
+										groupName = "Ascendance Buff",
+										show = "on",
+										disableShow = true,
+										combat = "on",
+									},
 								},
 							},
 							
@@ -6005,21 +6065,20 @@ local defaults = {
 						order = 3,
 						isEnabled = true,
 						isInUse = true,
-						isCustomize = false,
 						glow = {
-							isEnabled = false,
-							states = {
-								combat = "both",
-								usable = "always",
-							},
+							isCustomize = false,
 							triggers = {
-								selected = "time",
-								["time"] = {
-									min = 5,
-									max = 60,
+								cooldown = {
+									isEnabled = false,
+									groupName = "Spell Cooldown",
+									threshold = 10,
+									min = 1,
+									max = 45,
+									displayTime = 5,
+									show = "all",
+									combat = "on",
 								},
 							},
-							
 						},
 					},
 					["PurifySpirit"] = {
@@ -6029,21 +6088,20 @@ local defaults = {
 						order = 4,
 						isEnabled = true,
 						isInUse = true,
-						isCustomize = false,
 						glow = {
-							isEnabled = false,
-							states = {
-								combat = "both",
-								usable = "always",
-							},
+							isCustomize = false,
 							triggers = {
-								selected = "time",
-								["time"] = {
-									min = 5,
-									max = 60,
+								cooldown = {
+									isEnabled = false,
+									groupName = "Spell Cooldown",
+									threshold = 2,
+									min = 1,
+									max = 8,
+									displayTime = 5,
+									show = "all",
+									combat = "on",
 								},
 							},
-							
 						},
 					},
 					["Riptide"] = {
@@ -6053,21 +6111,20 @@ local defaults = {
 						order = 1,
 						isEnabled = true,
 						isInUse = true,
-						isCustomize = false,
 						glow = {
-							isEnabled = false,
-							states = {
-								combat = "both",
-								usable = "always",
-							},
+							isCustomize = false,
 							triggers = {
-								selected = "time",
-								["time"] = {
-									min = 5,
-									max = 60,
+								cooldown = {
+									isEnabled = false,
+									groupName = "Spell Cooldown",
+									threshold = 2,
+									min = 1,
+									max = 6,
+									displayTime = 5,
+									show = "all",
+									combat = "on",
 								},
 							},
-							
 						},
 					},
 					["SkyfuryTotem"] = {
@@ -6077,21 +6134,20 @@ local defaults = {
 						order = 3,
 						isEnabled = true,
 						isInUse = true,
-						isCustomize = false,
 						glow = {
-							isEnabled = false,
-							states = {
-								combat = "both",
-								usable = "always",
-							},
+							isCustomize = false,
 							triggers = {
-								selected = "time",
-								["time"] = {
-									min = 5,
-									max = 60,
+								cooldown = {
+									isEnabled = false,
+									groupName = "Spell Cooldown",
+									threshold = 5,
+									min = 1,
+									max = 40,
+									displayTime = 5,
+									show = "all",
+									combat = "on",
 								},
 							},
-							
 						},
 					},
 					["SpiritLinkTotem"] = {
@@ -6101,21 +6157,20 @@ local defaults = {
 						order = 2,
 						isEnabled = true,
 						isInUse = true,
-						isCustomize = false,
 						glow = {
-							isEnabled = false,
-							states = {
-								combat = "both",
-								usable = "always",
-							},
+							isCustomize = false,
 							triggers = {
-								selected = "time",
-								["time"] = {
-									min = 5,
-									max = 60,
+								cooldown = {
+									isEnabled = false,
+									groupName = "Spell Cooldown",
+									threshold = 10,
+									min = 1,
+									max = 180,
+									displayTime = 5,
+									show = "all",
+									combat = "on",
 								},
 							},
-							
 						},
 					},
 					["SpiritwalkersGrace"] = {
@@ -6125,21 +6180,20 @@ local defaults = {
 						order = 5,
 						isEnabled = true,
 						isInUse = true,
-						isCustomize = false,
 						glow = {
-							isEnabled = false,
-							states = {
-								combat = "both",
-								usable = "always",
-							},
+							isCustomize = false,
 							triggers = {
-								selected = "time",
-								["time"] = {
-									min = 5,
-									max = 60,
+								cooldown = {
+									isEnabled = false,
+									groupName = "Spell Cooldown",
+									threshold = 10,
+									min = 1,
+									max = 120,
+									displayTime = 5,
+									show = "all",
+									combat = "on",
 								},
 							},
-							
 						},
 					},
 					["Tidebringer"] = {
@@ -6149,22 +6203,21 @@ local defaults = {
 						order = 6,
 						isEnabled = true,
 						isInUse = true,
-						isCustomize = false,
-						glow = {
+						--[[glow = {
 							isEnabled = false,
+							isCustomize = false,
 							states = {
 								combat = "both",
 								usable = "always",
 							},
 							triggers = {
-								selected = "time",
-								["time"] = {
-									min = 5,
-									max = 60,
+								selected = "buff",
+								["buffs"] = {
+									["tidebringer"] = false,
 								},
 							},
 							
-						},
+						},]]
 					},
 					["TremorTotem"] = {
 						--condition = function() return IsSpellKnown(8143) end,
@@ -6173,21 +6226,20 @@ local defaults = {
 						order = 6,
 						isEnabled = true,
 						isInUse = true,
-						isCustomize = false,
 						glow = {
-							isEnabled = false,
-							states = {
-								combat = "both",
-								usable = "always",
-							},
+							isCustomize = false,
 							triggers = {
-								selected = "time",
-								["time"] = {
-									min = 5,
+								cooldown = {
+									isEnabled = false,
+									groupName = "Spell Cooldown",
+									threshold = 10,
+									min = 1,
 									max = 60,
+									displayTime = 5,
+									show = "all",
+									combat = "on",
 								},
 							},
-							
 						},
 					},
 					["UnleashLife"] = {
@@ -6197,21 +6249,20 @@ local defaults = {
 						order = 6,
 						isEnabled = true,
 						isInUse = true,
-						isCustomize = false,
 						glow = {
-							isEnabled = false,
-							states = {
-								combat = "both",
-								usable = "always",
-							},
+							isCustomize = false,
 							triggers = {
-								selected = "time",
-								["time"] = {
-									min = 5,
-									max = 60,
+								cooldown = {
+									isEnabled = false,
+									groupName = "Spell Cooldown",
+									threshold = 5,
+									min = 1,
+									max = 15,
+									displayTime = 5,
+									show = "all",
+									combat = "on",
 								},
 							},
-							
 						},
 					},
 					["Wellspring"] = {
@@ -6221,21 +6272,20 @@ local defaults = {
 						order = 4,
 						isEnabled = true,
 						isInUse = true,
-						isCustomize = false,
 						glow = {
-							isEnabled = false,
-							states = {
-								combat = "both",
-								usable = "always",
-							},
+							isCustomize = false,
 							triggers = {
-								selected = "time",
-								["time"] = {
-									min = 5,
-									max = 60,
+								cooldown = {
+									isEnabled = false,
+									groupName = "Spell Cooldown",
+									threshold = 5,
+									min = 1,
+									max = 20,
+									displayTime = 5,
+									show = "all",
+									combat = "on",
 								},
 							},
-							
 						},
 					},
 					["WindRushTotem"] = {
@@ -6245,21 +6295,20 @@ local defaults = {
 						order = 7,
 						isEnabled = true,
 						isInUse = true,
-						isCustomize = false,
 						glow = {
-							isEnabled = false,
-							states = {
-								combat = "both",
-								usable = "always",
-							},
+							isCustomize = false,
 							triggers = {
-								selected = "time",
-								["time"] = {
-									min = 5,
-									max = 60,
+								cooldown = {
+									isEnabled = false,
+									groupName = "Spell Cooldown",
+									threshold = 10,
+									min = 1,
+									max = 120,
+									displayTime = 5,
+									show = "all",
+									combat = "on",
 								},
 							},
-							
 						},
 					},
 					["WindShear"] = {
@@ -6269,21 +6318,25 @@ local defaults = {
 						order = 1,
 						isEnabled = true,
 						isInUse = true,
-						isCustomize = false,
 						glow = {
-							isEnabled = false,
-							states = {
-								combat = "both",
-								usable = "always",
-							},
+							isCustomize = false,
 							triggers = {
-								selected = "time",
-								["time"] = {
-									min = 5,
-									max = 60,
+								cooldown = {
+									isEnabled = false,
+									groupName = "Spell Cooldown",
+									threshold = 3,
+									min = 1,
+									max = 12,
+									displayTime = 5,
+									show = "all",
+									combat = "on",
+								},
+								interrupt = {
+									isEnabled = true,
+									groupName = "Spell Interrupt",
+									combat = "all",
 								},
 							},
-							
 						},
 					},
 				},

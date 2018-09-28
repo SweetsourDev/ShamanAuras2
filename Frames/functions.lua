@@ -29,6 +29,79 @@ function Auras:NoCombatDisplay(self,group)
 	end]]
 end
 
+function Auras:GlowHandler(obj)
+	local glow = Auras.db.char.auras[SSA.spec].auras[obj:GetName()].glow
+	
+	for k,v in pairs(glow.triggers) do
+		if (k == "cooldown" and v.isEnabled) then
+			if (v.combat == "all" or (v.combat == "on" and Auras:IsPlayerInCombat(true)) or (v.combat == "off" and not Auras:IsPlayerInCombat(true))) then
+				if (v.show == "all" or (v.show == "on" and obj.duration > 1.5) or v.show == "off") then
+					local remains = (obj.start + obj.duration) - GetTime()
+					SSA.DataFrame.text:SetText("Remains: "..tostring(remains))
+					if ((v.show == "all" or v.show == "off") and v.displayTime > 0) then
+						local expire = obj.start + obj.duration
+						
+						SSA.DataFrame.text:SetText("Time: "..GetTime().."\nExpire: "..expire.."\nDisplay: "..(expire + v.displayTime))
+						if ((GetTime() < ((obj.start + obj.duration) + v.displayTime) and GetTime() > (obj.start + obj.duration)) or (v.show == "all" and remains <= v.threshold and remains > 0)) then
+							--SSA.DataFrame.text:SetText(Auras:CurText('DataFrame').."MEET DISPLAY TIME OR THRESHOLD NEEDS\n")
+							if (not obj.isGlowing) then
+								obj.isGlowing = true
+								Auras:ToggleOverlayGlow(obj,true)
+							end
+						else
+							--SSA.DataFrame.text:SetText(Auras:CurText('DataFrame').."DOES NOT MEET DISPLAY TIME OR THRESHOLD NEEDS\n")
+							if (obj.isGlowing) then
+								obj.isGlowing = false
+								Auras:ToggleOverlayGlow(obj,false)
+							end
+						end
+					elseif ((v.show == "all" or v.show == "on") and remains <= v.threshold and remains > 0) then
+						if (not obj.isGlowing) then
+							obj.isGlowing = true
+							Auras:ToggleOverlayGlow(obj,true)
+						end
+					else
+						if (obj.isGlowing) then
+							obj.isGlowing = false
+							Auras:ToggleOverlayGlow(obj,false)
+						end
+					end
+				else
+					if (obj.isGlowing) then
+						obj.isGlowing = false
+						Auras:ToggleOverlayGlow(obj,false)
+					end
+				end
+			else
+				if (obj.isGlowing) then
+					obj.isGlowing = false
+					Auras:ToggleOverlayGlow(obj,false)
+				end
+			end
+		end
+	end
+	
+	--[[if (glow.isEnabled) then
+		if (glow.triggers.selected == "time" or (glow.triggers.selected == "all" and glow.triggers.time)) then
+			if (obj.duration > 1.5) then
+				local remains = (obj.start + obj.duration) - GetTime()
+				
+				if (glow.states.combat == "both" or (glow.states.combat == "yes" and Auras:IsPlayerInCombat(true)) or (glow.states.combat == "not" and not Auras:IsPlayerInCombat(true))) then
+					if (remains <= glow.triggers.time.threshold) then
+						Auras:ToggleOverlayGlow(obj,true)
+					else
+						Auras:ToggleOverlayGlow(obj,false)
+					end
+				else
+					Auras:ToggleOverlayGlow(obj,false)
+				end
+			end
+		end
+	else
+		Auras:ToggleOverlayGlow(obj,false)
+	end]]
+end
+
 -- Returns the current spec as well as group ID for the specified aura
 --function Auras:GetAuraInfo(obj,debugHelper)
 function Auras:GetAuraGroupID(obj,debugHelper)

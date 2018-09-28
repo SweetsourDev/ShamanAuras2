@@ -14,7 +14,7 @@ Adaptation.spellID = 214027
 Adaptation.condition = function()
 	--local spec = GetSpecialization()
 	local talentID = (SSA.spec == 1 and 3597) or (SSA.spec == 2 and 3552) or (SSA.spec == 3 and 3485)
-	SSA.DataFrame.text:SetText("TALENT ID: "..tostring(talentID).." ("..tostring(SSA.spec)..")")
+	--SSA.DataFrame.text:SetText("TALENT ID: "..tostring(talentID).." ("..tostring(SSA.spec)..")")
 	return select(10,GetPvpTalentInfoByID(talentID)) and Auras:IsPvPZone()
 end
 

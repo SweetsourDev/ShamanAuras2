@@ -953,6 +953,283 @@ local function ReorderTimerBarGroups(spec,oldPos,method)
 	end
 end
 
+local function AddGlowTools(auraTbl,grp)
+	local auras = Auras.db.char.auras[SSA.spec]
+	local orderCtr = 6
+	
+	local GLOW_OPTIONS = {
+		["combat"] = {
+			["off"] = "Out Of Combat",
+			["on"] = "In Combat",
+			["all"] = "Always",
+		},
+		["cooldown"] = {
+			["off"] = "Not On Cooldown",
+			["on"] = "On Cooldown",
+			["all"] = "Always",
+		},
+		["debuff"] = {
+			["off"] = "Debuff Missing",
+			["on"] = "Debuff Active",
+			["all"] = "Always",
+		},
+		["buff"] = {
+			["off"] = "Buff Missing",
+			["on"] = "Buff Active",
+			["all"] = "Always",
+		},
+	}
+	
+	for k,v in pairs(auras.auras) do
+		local aura = SSA[k]
+		
+		if (v.group == grp and v.glow) then
+			for key,val in pairs(v.glow.triggers) do
+				if (v.glow.triggers[key] and GLOW_OPTIONS[key]) then
+					local _,valType = next(val)
+					
+					if (type(valType) == "table") then
+						print("TABLE: "..k.." ("..key..", "..type(val)..", "..type(valType)..")")
+						for keys,vals in pairs(val) do
+							auraTbl["aura"..v.order].args["glow_"..key.."_"..keys] = {
+								order = orderCtr,
+								type = "group",
+								name = vals.groupName or "No Tables "..keys,
+								hidden = not v.isCustomize,
+								args = {
+									toggle = {
+										order = 1,
+										type = "toggle",
+										name = "Enable",
+										get = function()
+											return vals.isEnabled
+										end,
+										set = function(this,value)
+											vals.isEnabled = value
+										end,
+										width = 1,
+									},
+									combat = {
+										order = 2,
+										type = "select",
+										name = "Combat",
+										get = function()
+											return vals.combat
+										end,
+										set = function(this,value)
+											vals.combat = value
+										end,
+										values = GLOW_OPTIONS["combat"],
+										width = 0.9,
+									},
+									show = {
+										order = 3,
+										type = "select",
+										name = "Show",
+										disabled = vals.disableShow,
+										get = function()
+											return vals.show
+										end,
+										set = function(this,value)
+											vals.show = value
+										end,
+										values = GLOW_OPTIONS[key],
+										width = 0.9,
+									},
+									filler = {
+										order = 4,
+										type = "description",
+										name = "",
+										width = 0.9,
+									},
+									displayTime = {
+										order = 5,
+										type = "range",
+										name = "Display After Cooldown",
+										hidden = function()
+											if (vals.show == "on") then
+												return true
+											elseif (vals.show == "all" or vals.show == "off") then
+												return false
+											end
+										end,
+										min = 0,
+										max = 10,
+										step = 1,
+										bigStep = 1,
+										get = function()
+											return vals.displayTime
+										end,
+										set = function(this,value)
+											vals.displayTime = value
+										end,
+										width = 0.9,
+									},
+									threshold = {
+										order = 6,
+										type = "range",
+										name = "Trigger Time",
+										min = vals.min,
+										max = vals.max,
+										hidden = function()
+											if (not vals.threshold) then
+												return true
+											else
+												return false
+											end
+										end,
+										step = 1,
+										bigStep = 1,
+										get = function()
+											return vals.threshold
+										end,
+										set = function(this,value)
+											vals.threshold = value
+										end,
+										width = 0.9,
+									},
+								},
+							}
+							orderCtr = orderCtr + 1
+						end
+					else
+						print("SOLO: "..k.." ("..key..", "..type(val)..", "..type(valType)..")")
+						auraTbl["aura"..v.order].args["glow_"..key] = {
+							order = orderCtr,
+							type = "group",
+							name = val.groupName or "No Table "..key,
+							hidden = not v.isCustomize,
+							args = {
+								toggle = {
+									order = 1,
+									type = "toggle",
+									name = "Enable",
+									get = function()
+										return val.isEnabled
+									end,
+									set = function(this,value)
+										val.isEnabled = value
+									end,
+									width = 1,
+								},
+								combat = {
+									order = 2,
+									type = "select",
+									name = "Combat",
+									get = function()
+										return val.combat
+									end,
+									set = function(this,value)
+										val.combat = value
+									end,
+									values = GLOW_OPTIONS["combat"],
+									width = 0.9,
+								},
+								show = {
+									order = 3,
+									type = "select",
+									name = "Show",
+									get = function()
+										return val.show
+									end,
+									set = function(this,value)
+										val.show = value
+									end,
+									values = GLOW_OPTIONS[key],
+									width = 0.9,
+								},
+								filler = {
+									order = 4,
+									type = "description",
+									name = "",
+									width = 1,
+								},
+								displayTime = {
+									order = 5,
+									type = "range",
+									name = "Display After Cooldown",
+									hidden = function()
+										if (val.show == "on") then
+											return true
+										elseif (val.show == "all" or val.show == "off") then
+											return false
+										end
+									end,
+									min = 0,
+									max = 10,
+									step = 1,
+									bigStep = 1,
+									get = function()
+										return val.displayTime
+									end,
+									set = function(this,value)
+										val.displayTime = value
+									end,
+									width = 0.9,
+								},
+								threshold = {
+									order = 6,
+									type = "range",
+									name = "Trigger Time",
+									min = val.min,
+									max = val.max,
+									step = 1,
+									bigStep = 1,
+									get = function()
+										return val.threshold
+									end,
+									set = function(this,value)
+										val.threshold = value
+									end,
+									width = 0.9,
+								},
+							},
+						}
+						orderCtr = orderCtr + 1
+					end
+				elseif (key == "interrupt") then
+					auraTbl["aura"..v.order].args["glow_"..key] = {
+						order = orderCtr,
+						type = "group",
+						name = val.groupName,
+						hidden = not v.isCustomize,
+						args = {
+							toggle = {
+								order = 1,
+								type = "toggle",
+								name = "Enable",
+								get = function()
+									return val.isEnabled
+								end,
+								set = function(this,value)
+									val.isEnabled = value
+								end,
+								width = 2,
+							},
+							combat = {
+								order = 2,
+								type = "select",
+								name = "Combat",
+								get = function()
+									return val.combat
+								end,
+								set = function(this,value)
+									val.combat = value
+								end,
+								values = GLOW_OPTIONS["combat"],
+								width = 1,
+							},
+						},
+					}
+					
+					orderCtr = orderCtr + 1
+				end
+			end
+		end
+	end
+	_G["SSA_AURA_TABLE"] = auraTbl
+end
+
 local function BuildCurrentAuraList(db,spec,grp)
 	-- Build List of currently used auras for each group
 	local auraTbl = {}
@@ -1103,10 +1380,10 @@ local function BuildCurrentAuraList(db,spec,grp)
 						end,
 						width = 0.75,
 					},
-					customizeAura = {
+					--[[customizeAura = {
 						order = 6,
 						type = "group",
-						name = "Customization Tools",
+						name = "Glow Customization",
 						hidden = not v.isCustomize,
 						args = {
 							toggle = {
@@ -1155,22 +1432,12 @@ local function BuildCurrentAuraList(db,spec,grp)
 									
 									return items
 								end,
-								width = 0.75,
+								width = 1,
 							},
 							combat_state = {
 								order = 3,
 								type = "select",
 								name = "Combat Settings",
-								--[[tristate = true,
-								name = function()
-									if (v.glow.states.combat) then
-										return "|cFF00FF00In Combat|r"
-									elseif (v.glow.states.combat == false) then
-										return "|cFFFFFFFFAlways|r"
-									else
-										return "|cFFFF0000Not In Combat|r"
-									end
-								end,]]
 								--description = "TEST",
 								disabled = function()
 									return not v.glow.isEnabled
@@ -1192,17 +1459,6 @@ local function BuildCurrentAuraList(db,spec,grp)
 								order = 4,
 								type = "select",
 								name = "Show",
-								--[[name = function()
-									if (v.glow.states.usable) then
-										return "|cFF00FF00Off Cooldown|r"
-									elseif (v.glow.states.usable == false) then
-										return "|cFFFFFFFFAlways|r"
-									else
-										return "|cFFFF0000On Cooldown|r"
-									end
-								end,]]
-								--tristate = true,
-								--description = "TEST",
 								disabled = function()
 									return not v.glow.isEnabled
 								end,
@@ -1219,12 +1475,19 @@ local function BuildCurrentAuraList(db,spec,grp)
 								},
 								width = 0.75,
 							},
-							--[[time_slider = {
+							time_slider = {
 								order = 5,
 								type = "range",
 								name = "Trigger Time",
-								min = v.glow.triggers.time.min,
-								max = v.glow.triggers.time.max,
+								hidden = function()
+									if (not v.glow.triggers.time) then
+										return true
+									else
+										return false
+									end
+								end,
+								min = (v.glow.triggers.time and v.glow.triggers.time.min) or 0,
+								max = (v.glow.triggers.time and v.glow.triggers.time.max) or 0,
 								step = 1,
 								bigStep = 1,
 								get = function()
@@ -1233,17 +1496,19 @@ local function BuildCurrentAuraList(db,spec,grp)
 								set = function(this,value)
 									v.glow.triggers.time.setTime = value
 								end,
-							},]]
+							},
 							--textureColor = Auras:Color_VerifyDefaults(timerbars.bars[barTitle].layout,2,spec,L["LABEL_STATUSBAR_COLOR"],nil,false,"normal",false,'color','Timerbar',grp,true),
 							--texture = Auras:Select_VerifyDefaults(timerbars.bars[barTitle].layout,3,spec,L["LABEL_STATUSBAR_TEXTURE"],L["TOOLTIP_STATUSBAR_TEXTURE"],"LSM30_Statusbar",LSM:HashTable(LSM.MediaType.STATUSBAR),"normal",false,'texture','Timerbar',grp,true),
 						},
 						width = "full",
-					},
+					},]]
 				},
 				width = "full",
 			}
 		end
 	end
+	
+	AddGlowTools(auraTbl,grp)
 	
 	return auraTbl
 end
