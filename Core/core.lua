@@ -741,18 +741,47 @@ local function GetVersionNumber()
 end
 -- Toggle Button Glow Animation
 function Auras:ToggleOverlayGlow(object,toggle,enemyCheck)
-
+	local glow = self.db.char.auras[SSA.spec].auras[object:GetName()].glow
+	
 	if (enemyCheck and not UnitIsFriend('target','player')) then
 		if (toggle) then
-			LBG.ShowOverlayGlow(object)
+			if (not object.isGlowing) then
+				--[[if (glow.) then
+					object.triggerTime = GetTime()
+				end]]
+				
+				object.isGlowing = true
+				LBG.ShowOverlayGlow(object)
+			end
 		else
-			LBG.HideOverlayGlow(object)
+			if (object.isGlowing) then
+				--[[if (object.triggerTime) then
+					object.triggerTime = 0
+				end]]
+				
+				object.isGlowing = false
+				LBG.HideOverlayGlow(object)
+			end
 		end
 	else
 		if (toggle) then
-			LBG.ShowOverlayGlow(object)
+			if (not object.isGlowing) then
+				--[[if (object.triggerTime) then
+					object.triggerTime = GetTime()
+				end]]
+				
+				object.isGlowing = true
+				LBG.ShowOverlayGlow(object)
+			end
 		else
-			LBG.HideOverlayGlow(object)
+			if (object.isGlowing) then
+				--[[if (object.triggerTime) then
+					object.triggerTime = 0
+				end]]
+				
+				object.isGlowing = false
+				LBG.HideOverlayGlow(object)
+			end
 		end
 	end
 end

@@ -978,6 +978,7 @@ local function AddGlowTools(auraTbl,grp)
 			["on"] = "Buff Active",
 			["all"] = "Always",
 		},
+		["charges"] = {},
 	}
 	
 	for k,v in pairs(auras.auras) do
@@ -1020,7 +1021,7 @@ local function AddGlowTools(auraTbl,grp)
 											vals.combat = value
 										end,
 										values = GLOW_OPTIONS["combat"],
-										width = 0.9,
+										width = 0.8,
 									},
 									show = {
 										order = 3,
@@ -1034,13 +1035,13 @@ local function AddGlowTools(auraTbl,grp)
 											vals.show = value
 										end,
 										values = GLOW_OPTIONS[key],
-										width = 0.9,
+										width = 0.8,
 									},
 									filler = {
 										order = 4,
 										type = "description",
 										name = "",
-										width = 0.9,
+										width = 0.8,
 									},
 									displayTime = {
 										order = 5,
@@ -1063,7 +1064,7 @@ local function AddGlowTools(auraTbl,grp)
 										set = function(this,value)
 											vals.displayTime = value
 										end,
-										width = 0.9,
+										width = 0.8,
 									},
 									threshold = {
 										order = 6,
@@ -1086,7 +1087,7 @@ local function AddGlowTools(auraTbl,grp)
 										set = function(this,value)
 											vals.threshold = value
 										end,
-										width = 0.9,
+										width = 0.8,
 									},
 								},
 							}
@@ -1123,7 +1124,7 @@ local function AddGlowTools(auraTbl,grp)
 										val.combat = value
 									end,
 									values = GLOW_OPTIONS["combat"],
-									width = 0.9,
+									width = 0.8,
 								},
 								show = {
 									order = 3,
@@ -1136,7 +1137,7 @@ local function AddGlowTools(auraTbl,grp)
 										val.show = value
 									end,
 									values = GLOW_OPTIONS[key],
-									width = 0.9,
+									width = 0.8,
 								},
 								filler = {
 									order = 4,
@@ -1165,7 +1166,7 @@ local function AddGlowTools(auraTbl,grp)
 									set = function(this,value)
 										val.displayTime = value
 									end,
-									width = 0.9,
+									width = 0.8,
 								},
 								threshold = {
 									order = 6,
@@ -1181,7 +1182,7 @@ local function AddGlowTools(auraTbl,grp)
 									set = function(this,value)
 										val.threshold = value
 									end,
-									width = 0.9,
+									width = 0.8,
 								},
 							},
 						}

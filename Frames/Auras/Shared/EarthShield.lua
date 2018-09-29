@@ -8,6 +8,11 @@ local EarthShield = SSA.EarthShield
 
 -- Initialize Data Variables
 EarthShield.spellID = 974
+EarthShield.start = 0
+EarthShield.duration = 0
+EarthShield.charges = 0
+EarthShield.isGlowing = false
+EarthShield.triggerTime = 0
 EarthShield.condition = function()
 	local row,col = (SSA.spec == 1 and 3) or (SSA.spec == 2 and 3) or (SSA.spec == 3 and 2), (SSA.spec == 1 and 2) or (SSA.spec == 2 and 2) or (SSA.spec == 3 and 3)
 	
@@ -23,6 +28,17 @@ EarthShield:SetScript('OnUpdate',function(self)
 		local tarBuff,_,tarCount,_,tarDuration,tarExpires,tarCaster = Auras:RetrieveAuraInfo("target",self.spellID,"HELPFUL PLAYER")
 		--local tarBuff,_,tarCount,_,tarDuration,tarExpires,tarCaster = AuraUtil.FindAuraByName("target", Auras:GetSpellName(self.spellID))
 		
+		if ((duration or 0) > 1.5) then
+			self.start = expires - duration
+			self.duration = duration
+		elseif ((tarDuration or 0) > 1.5) then
+			self.start = tarExpires - tarDuration
+			self.duration = tarDuration
+		end
+		
+		self.charges = ((count or 0) > 0 and count) or ((tarCount or 0) > 0 and tarCount) or 0
+		
+		Auras:GlowHandler(self)
 		Auras:ToggleAuraVisibility(self,true,'showhide')
 		
 		if (buff) then

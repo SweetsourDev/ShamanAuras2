@@ -1,4 +1,4 @@
-local SSA, Auras = unpack(select(2,...))
+local SSA, Auras, _, _, LBG = unpack(select(2,...))
 
 -- Cache Global Lua Functions
 local floor = math.floor
@@ -29,55 +29,95 @@ function Auras:NoCombatDisplay(self,group)
 	end]]
 end
 
-function Auras:GlowHandler(obj)
+function Auras:GlowHandler(obj,glowTbl)
 	local glow = Auras.db.char.auras[SSA.spec].auras[obj:GetName()].glow
 	
-	for k,v in pairs(glow.triggers) do
-		if (k == "cooldown" and v.isEnabled) then
-			if (v.combat == "all" or (v.combat == "on" and Auras:IsPlayerInCombat(true)) or (v.combat == "off" and not Auras:IsPlayerInCombat(true))) then
-				if (v.show == "all" or (v.show == "on" and obj.duration > 1.5) or v.show == "off") then
-					local remains = (obj.start + obj.duration) - GetTime()
-					SSA.DataFrame.text:SetText("Remains: "..tostring(remains))
-					if ((v.show == "all" or v.show == "off") and v.displayTime > 0) then
-						local expire = obj.start + obj.duration
-						
-						SSA.DataFrame.text:SetText("Time: "..GetTime().."\nExpire: "..expire.."\nDisplay: "..(expire + v.displayTime))
-						if ((GetTime() < ((obj.start + obj.duration) + v.displayTime) and GetTime() > (obj.start + obj.duration)) or (v.show == "all" and remains <= v.threshold and remains > 0)) then
-							--SSA.DataFrame.text:SetText(Auras:CurText('DataFrame').."MEET DISPLAY TIME OR THRESHOLD NEEDS\n")
-							if (not obj.isGlowing) then
-								obj.isGlowing = true
-								Auras:ToggleOverlayGlow(obj,true)
+	for k,v in pairs(glowTbl or glow.triggers) do
+		local key,val = next(v)
+		
+		if (type(val) ~= "table") then
+			if ((k == "cooldown" or k == "buff" or k == "debuff") and v.isEnabled) then
+				if (v.combat == "all" or (v.combat == "on" and Auras:IsPlayerInCombat(true)) or (v.combat == "off" and not Auras:IsPlayerInCombat(true))) then
+					if (v.show == "all" or (v.show == "on" and obj.duration > 1.5) or v.show == "off") then
+						local remains = (obj.start + obj.duration) - GetTime()
+						--SSA.DataFrame.text:SetText("Remains: "..tostring(remains))
+						if ((v.show == "all" or v.show == "off") and v.displayTime > 0) then
+							local expire = obj.start + obj.duration
+							
+							--SSA.DataFrame.text:SetText("Time: "..GetTime().."\nExpire: "..expire.."\nDisplay: "..(expire + v.displayTime))
+							if ((GetTime() < ((expire) + v.displayTime) and GetTime() > (expire)) or (v.show == "all" and remains <= v.threshold and remains > 0)) then
+								--SSA.DataFrame.text:SetText(Auras:CurText('DataFrame').."MEET DISPLAY TIME OR THRESHOLD NEEDS\n")
+								--if (not obj.isGlowing) then
+								--	obj.isGlowing = true
+									if (v.pulseRate > 0 and GetTime() >= obj.pulseTime) then
+										obj.pulseTime = GetTime() + v.pulseRate
+										LBG.ShowOverlayGlow(obj)
+									end
+									
+									Auras:ToggleOverlayGlow(obj,true)
+								--end
+							else
+								--SSA.DataFrame.text:SetText(Auras:CurText('DataFrame').."DOES NOT MEET DISPLAY TIME OR THRESHOLD NEEDS\n")
+								--if (obj.isGlowing) then
+								--	obj.isGlowing = false
+									Auras:ToggleOverlayGlow(obj,false)
+								--end
 							end
-						else
-							--SSA.DataFrame.text:SetText(Auras:CurText('DataFrame').."DOES NOT MEET DISPLAY TIME OR THRESHOLD NEEDS\n")
-							if (obj.isGlowing) then
-								obj.isGlowing = false
-								Auras:ToggleOverlayGlow(obj,false)
+						elseif ((v.show == "all" or v.show == "on") and remains <= v.threshold and remains > 0) then
+							--if (not obj.isGlowing) then
+							--	obj.isGlowing = true
+							if (v.pulseRate > 0 and GetTime() >= obj.pulseTime) then
+								obj.pulseTime = GetTime() + v.pulseRate
+								LBG.ShowOverlayGlow(obj)
 							end
-						end
-					elseif ((v.show == "all" or v.show == "on") and remains <= v.threshold and remains > 0) then
-						if (not obj.isGlowing) then
-							obj.isGlowing = true
+							
 							Auras:ToggleOverlayGlow(obj,true)
+							--end
+						else
+							--if (obj.isGlowing) then
+							--	obj.isGlowing = false
+								Auras:ToggleOverlayGlow(obj,false)
+							--end
 						end
 					else
-						if (obj.isGlowing) then
-							obj.isGlowing = false
+						--if (obj.isGlowing) then
+						--	obj.isGlowing = false
 							Auras:ToggleOverlayGlow(obj,false)
-						end
+						--end
 					end
 				else
-					if (obj.isGlowing) then
-						obj.isGlowing = false
+					--if (obj.isGlowing) then
+					--	obj.isGlowing = false
 						Auras:ToggleOverlayGlow(obj,false)
-					end
+					--end
 				end
-			else
-				if (obj.isGlowing) then
-					obj.isGlowing = false
-					Auras:ToggleOverlayGlow(obj,false)
+			elseif (k == "charges" and v.isEnabled) then
+				if (v.combat == "all" or (v.combat == "on" and Auras:IsPlayerInCombat(true)) or (v.combat == "off" and not Auras:IsPlayerInCombat(true))) then
+					if (obj.charges <= v.threshold and obj.charges > 0) then
+						--if (not obj.isGlowing) then
+						--	obj.isGlowing = true
+						SSA.DataFrame.text:SetText("Time: "..GetTime().."\nTrigger: "..obj.triggerTime.."\nDisplay: "..tostring(v.displayTime).."\nEnd: "..(obj.triggerTime + v.displayTime))
+						if (v.displayTime == 0 or obj.triggerTime == 0 or (v.displayTime > 0 and GetTime() < (obj.triggerTime + v.displayTime) and GetTime() >= obj.triggerTime)) then
+							Auras:ToggleOverlayGlow(obj,true)
+						else
+							Auras:ToggleOverlayGlow(obj,false)
+						end
+						--end
+					else
+						--if (obj.isGlowing) then
+						--	obj.isGlowing = false
+							Auras:ToggleOverlayGlow(obj,false)
+						--end
+					end
+				else
+					--if (obj.isGlowing) then
+					--	obj.isGlowing = false
+						Auras:ToggleOverlayGlow(obj,false)
+					--end
 				end
 			end
+		else
+			self:GlowHandler(obj,val)
 		end
 	end
 	
