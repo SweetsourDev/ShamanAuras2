@@ -9,15 +9,19 @@ local EarthShield = SSA.EarthShield
 -- Initialize Data Variables
 EarthShield.spellID = 974
 EarthShield.start = 0
-EarthShield.duration = 0
+EarthShield.duration = 540
 EarthShield.charges = 0
 EarthShield.isGlowing = false
 EarthShield.triggerTime = 0
+EarthShield.pulseTime = 0
+EarthShield.isTriggered = false
 EarthShield.condition = function()
 	local row,col = (SSA.spec == 1 and 3) or (SSA.spec == 2 and 3) or (SSA.spec == 3 and 2), (SSA.spec == 1 and 2) or (SSA.spec == 2 and 2) or (SSA.spec == 3 and 3)
 	
 	return select(4,GetTalentInfo(row,col,1))
 end
+
+EarthShield:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 
 EarthShield:SetScript('OnUpdate',function(self)
 	if (Auras:CharacterCheck(self,0,self.spellID)) then
@@ -72,5 +76,30 @@ EarthShield:SetScript('OnUpdate',function(self)
 		end
 	else
 		Auras:ToggleAuraVisibility(self,false,'showhide')
+	end
+end)
+
+EarthShield:SetScript("OnEvent",function(self,event)
+	if (event ~= "COMBAT_LOG_EVENT_UNFILTERED") then
+		return
+	end
+	
+	local _,subevent,_,srcGUID,_,_,_,destGUID,_,_,_,spellID,_,_,_,count = CombatLogGetCurrentEventInfo()
+	
+	if ((((subevent == "SPELL_AURA_APPLIED" or subevent == "SPELL_AURA_REFRESH" or subevent == "SPELL_AURA_REMOVED_DOSE") and srcGUID == UnitGUID("player")) or (subevent == "SPELL_AURA_REMOVED" and destGUID == UnitGUID("player")))and spellID == self.spellID) then
+		if (subevent == "SPELL_AURA_APPLIED" or subevent == "SPELL_AURA_REFRESH") then
+			self.start = GetTime()
+			self.isTriggered = false
+		elseif (subevent == "SPELL_AURA_REMOVED") then
+			self.start = 0
+		elseif (subevent == "SPELL_AURA_REMOVED_DOSE") then
+			local glow = Auras.db.char.auras[SSA.spec].auras[self:GetName()].glow
+			
+			if (count <= glow.triggers.charges.threshold and count > 0) then
+				self.triggerTime = GetTime()
+			else
+				self.isTriggered = false
+			end
+		end
 	end
 end)

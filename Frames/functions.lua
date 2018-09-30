@@ -39,12 +39,13 @@ function Auras:GlowHandler(obj,glowTbl)
 			if ((k == "cooldown" or k == "buff" or k == "debuff") and v.isEnabled) then
 				if (v.combat == "all" or (v.combat == "on" and Auras:IsPlayerInCombat(true)) or (v.combat == "off" and not Auras:IsPlayerInCombat(true))) then
 					if (v.show == "all" or (v.show == "on" and obj.duration > 1.5) or v.show == "off") then
-						local remains = (obj.start + obj.duration) - GetTime()
+						local expire = obj.start + obj.duration
+						local remains = (expire) - GetTime()
 						--SSA.DataFrame.text:SetText("Remains: "..tostring(remains))
 						if ((v.show == "all" or v.show == "off") and v.displayTime > 0) then
-							local expire = obj.start + obj.duration
 							
-							--SSA.DataFrame.text:SetText("Time: "..GetTime().."\nExpire: "..expire.."\nDisplay: "..(expire + v.displayTime))
+							
+							SSA.DataFrame.text:SetText("WITH DISPLAY\n\nTime: "..GetTime().."\nExpire: "..expire.."\nDisplay: "..(expire + v.displayTime))
 							if ((GetTime() < ((expire) + v.displayTime) and GetTime() > (expire)) or (v.show == "all" and remains <= v.threshold and remains > 0)) then
 								--SSA.DataFrame.text:SetText(Auras:CurText('DataFrame').."MEET DISPLAY TIME OR THRESHOLD NEEDS\n")
 								--if (not obj.isGlowing) then
@@ -66,11 +67,14 @@ function Auras:GlowHandler(obj,glowTbl)
 						elseif ((v.show == "all" or v.show == "on") and remains <= v.threshold and remains > 0) then
 							--if (not obj.isGlowing) then
 							--	obj.isGlowing = true
+							SSA.DataFrame.text:SetText("NO DISPLAY\n\nTime: "..GetTime().."\nExpire: "..expire.."\nDisplay: "..(expire + v.displayTime))
 							if (v.pulseRate > 0 and GetTime() >= obj.pulseTime) then
+								SSA.DataFrame.text:SetText(Auras:CurText('DataFrame').."PULSE\n")
 								obj.pulseTime = GetTime() + v.pulseRate
+								LBG.HideOverlayGlow(obj)
 								LBG.ShowOverlayGlow(obj)
 							end
-							
+							SSA.DataFrame.text:SetText(Auras:CurText('DataFrame').."\nFILLER\n")
 							Auras:ToggleOverlayGlow(obj,true)
 							--end
 						else
@@ -96,10 +100,19 @@ function Auras:GlowHandler(obj,glowTbl)
 					if (obj.charges <= v.threshold and obj.charges > 0) then
 						--if (not obj.isGlowing) then
 						--	obj.isGlowing = true
-						SSA.DataFrame.text:SetText("Time: "..GetTime().."\nTrigger: "..obj.triggerTime.."\nDisplay: "..tostring(v.displayTime).."\nEnd: "..(obj.triggerTime + v.displayTime))
-						if (v.displayTime == 0 or obj.triggerTime == 0 or (v.displayTime > 0 and GetTime() < (obj.triggerTime + v.displayTime) and GetTime() >= obj.triggerTime)) then
-							Auras:ToggleOverlayGlow(obj,true)
+						if (obj.triggerTime == 0 and not obj.isTriggered) then
+							obj.triggerTime = GetTime()
+						end
+						SSA.DataFrame.text:SetText("Time: "..GetTime().."\nTrigger: "..obj.triggerTime.."\nDisplay: "..tostring(v.displayTime).."\nEnd: "..(obj.triggerTime + v.displayTime).."\nTriggered: "..tostring(obj.isTriggered))
+						if (v.displayTime == 0 or (v.displayTime > 0 and GetTime() < (obj.triggerTime + v.displayTime) and GetTime() >= obj.triggerTime)) then
+							SSA.DataFrame.text:SetText(Auras:CurText('DataFrame').."\n\nShowing Glow\n")
+							if (not obj.isTriggered) then
+								SSA.DataFrame.text:SetText(Auras:CurText('DataFrame').."\n\nTriggering Glow\n")
+								obj.isTriggered = true
+								Auras:ToggleOverlayGlow(obj,true)
+							end
 						else
+							SSA.DataFrame.text:SetText(Auras:CurText('DataFrame').."\n\nHiding Glow\n")
 							Auras:ToggleOverlayGlow(obj,false)
 						end
 						--end

@@ -12,7 +12,7 @@ EarthbindTotem.spellID = 2484
 EarthbindTotem.isGlowing = false
 EarthbindTotem.start = 0
 EarthbindTotem.duration = 0
-EarthbindTotem.triggerTime = 0
+EarthbindTotem.pulseTime = 0
 EarthbindTotem.condition = function()
 	return IsSpellKnown(2484)
 end

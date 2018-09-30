@@ -3,7 +3,7 @@
 ## Notes: A full package of auras for all 3 Shaman specializations
 ## Author: Sweetsour
 ## Version: r1-alpha1
-## SavedVariables: SSA_db
+## SavedVariables: SSA2_db
 
 ## OptionalDeps: Ace3, LibAboutPanel
 

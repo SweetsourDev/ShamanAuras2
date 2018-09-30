@@ -294,7 +294,7 @@ function Auras:OnInitialize()
 		self.optionsFrame = about_panel.new(nil, "ShamanAuras")
 	end
 	
-	self.db = LibStub("AceDB-3.0"):New("SSA_db",defaults)
+	self.db = LibStub("AceDB-3.0"):New("SSA2_db",defaults)
 	self:SetupOptions()
 	
 	BuildAuraGroups()

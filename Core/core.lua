@@ -741,7 +741,7 @@ local function GetVersionNumber()
 end
 -- Toggle Button Glow Animation
 function Auras:ToggleOverlayGlow(object,toggle,enemyCheck)
-	local glow = self.db.char.auras[SSA.spec].auras[object:GetName()].glow
+	--local glow = self.db.char.auras[SSA.spec].auras[object:GetName()].glow
 	
 	if (enemyCheck and not UnitIsFriend('target','player')) then
 		if (toggle) then
