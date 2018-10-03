@@ -5736,20 +5736,10 @@ local defaults = {
 						glow = {
 							isCustomize = false,
 							triggers = {
-								buff = {
+								[1] = {
 									isEnabled = true,
-									groupName = "Buff Duration",
-									threshold = 60,
-									min = 1,
-									max = 540,
-									pulseRate = 0.5,
-									displayTime = 5,
-									show = "all",
-									combat = "on",
-								},
-								charges = {
-									isEnabled = true,
-									groupName = "Buff Stacks",
+									type = "charges",
+									name = "Buff Stacks",
 									threshold = 3,
 									min = 1,
 									max = 9,
@@ -5757,6 +5747,18 @@ local defaults = {
 									displayTime = 5,
 									disableShow = true,
 									combat = "all",
+								},
+								[2] = {
+									isEnabled = true,
+									type = "buff",
+									name = "Buff Duration",
+									threshold = 60,
+									min = 1,
+									max = 600,
+									pulseRate = 0.5,
+									displayTime = 5,
+									show = "all",
+									combat = "on",
 								},
 							},
 						},

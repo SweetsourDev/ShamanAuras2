@@ -953,6 +953,31 @@ local function ReorderTimerBarGroups(spec,oldPos,method)
 	end
 end
 
+local function ReorderAuraGlow(triggers,oldPos,newPos)
+	--for i=1,#triggers do
+		--print(triggers[i].name)
+		local tempTable = {}
+		
+		for k,v in pairs(triggers[newPos]) do
+			tempTable[k] = v
+		end
+		
+		triggers[newPos] = nil
+		triggers[newPos] = {}
+		
+		for k,v in pairs(triggers[oldPos])  do
+			triggers[newPos][k] = v
+		end
+		
+		triggers[oldPos] = nil
+		triggers[oldPos] = {}
+		
+		for k,v in pairs(tempTable) do
+			triggers[oldPos][k] = v
+		end
+	--end
+end
+
 local function AddGlowTools(auraTbl,grp)
 	local auras = Auras.db.char.auras[SSA.spec]
 	local orderCtr = 6
@@ -984,7 +1009,222 @@ local function AddGlowTools(auraTbl,grp)
 	for k,v in pairs(auras.auras) do
 		local aura = SSA[k]
 		
-		if (v.group == grp and v.glow) then
+		if (v.glow) then
+			for i=1,#v.glow.triggers do
+				local trigger = v.glow.triggers[i]
+				
+				if (GLOW_OPTIONS[trigger.type]) then
+					
+					auraTbl["aura"..v.order].args["glow_"..i] = {
+						order = orderCtr + i,
+						type = "group",
+						name = trigger.name or "No Table "..i,
+						hidden = not v.isCustomize,
+						args = {
+							toggle = {
+								order = 1,
+								type = "toggle",
+								name = "Enable",
+								get = function()
+									return trigger.isEnabled
+								end,
+								set = function(this,value)
+									trigger.isEnabled = value
+								end,
+								width = 0.56,
+							},
+							filler_moveUp = {
+								order = 2,
+								type = "description",
+								name = '',
+								hidden = function()
+									return ((i ~= 1 and #v.glow.triggers ~= 1) and true) or false
+								end,
+								width = 0.17,
+							},
+							moveUp = {
+								order = 2,
+								type = "execute",
+								name = ' ',
+								desc = "Increase Glow Priority",
+								image = [[Interface\AddOns\ShamanAuras2\media\icons\config\move-up-glow]],
+								imageWidth = 25,
+								imageHeight = 25,
+								hidden = function()
+									return ((i == 1 or #v.glow.triggers == 1)and true) or false
+								end,
+								disabled = function()
+									--return auras.groups[grp].auraCount <= 1
+								end,
+								func = function(this)
+									ReorderAuraGlow(v.glow.triggers,i,i-1)
+									Auras:RefreshAuraGroupList(this.options,SSA.spec)
+									--val.priority = val.priority - 1
+									
+									--Auras:RefreshAuraGroupList(this.options,spec)
+									--[[ReorderAuraList(spec,grp,v.order - 1,v.order,"swap")
+									v.order = v.order - 1
+									
+									Auras:RefreshAuraGroupList(this.options,spec)
+									Auras:UpdateTalents()]]
+								end,
+								width = 0.17,
+							},
+							filler_moveDown = {
+								order = 3,
+								type = "description",
+								name = '',
+								hidden = function()
+									return (i ~= #v.glow.triggers and true) or false
+								end,
+								width = 0.17,
+							},
+							moveDown = {
+								order = 3,
+								type = "execute",
+								name = ' ',
+								desc = "Decrease Glow Priority",
+								image = [[Interface\AddOns\ShamanAuras2\media\icons\config\move-down-glow]],
+								imageWidth = 25,
+								imageHeight = 25,
+								hidden = function()
+									--print("PRIORITY: "..tostring(val.priority)..", TRIGGERS: "..tostring(v.glow.triggers.numTriggers))
+									return (i == #v.glow.triggers and true) or false
+								end,
+								disabled = function()
+									--return auras.groups[grp].auraCount <= 1
+								end,
+								func = function(this)
+									ReorderAuraGlow(v.glow.triggers,i,i+1)
+									Auras:RefreshAuraGroupList(this.options,SSA.spec)
+									--val.priority = val.priority + 1
+									
+									--[[ReorderAuraList(spec,grp,v.order + 1,v.order,"swap")
+									v.order = v.order + 1
+									
+									Auras:RefreshAuraGroupList(this.options,spec)
+									Auras:UpdateTalents()]]
+								end,
+								width = 0.17,
+							},
+							filler_show = {
+								order = 4,
+								hidden = not trigger.disableShow,
+								type = "description",
+								name = '',
+								width = 0.9,
+							},
+							show = {
+								order = 4,
+								type = "select",
+								name = "Show",
+								hidden = function()
+									print(trigger.name..": "..tostring(trigger.disableShow or false))
+									return trigger.disableShow or false
+								end,
+								get = function()
+									return trigger.show
+								end,
+								set = function(this,value)
+									trigger.show = value
+								end,
+								values = GLOW_OPTIONS[trigger.type],
+								width = 0.9,
+							},
+							combat = {
+								order = 5,
+								type = "select",
+								name = "Combat",
+								get = function()
+									return trigger.combat
+								end,
+								set = function(this,value)
+									trigger.combat = value
+								end,
+								values = GLOW_OPTIONS["combat"],
+								width = 0.9,
+							},
+							filler_displayTime = {
+								order = 6,
+								type = "description",
+								name = "",
+								hidden = function()
+									if (trigger.show == "all" or trigger.show == "off" or not trigger.show) then
+										return true
+									elseif (trigger.show == "on") then
+										return false
+									end
+								end,
+								width = 0.9,
+							},
+							displayTime = {
+								order = 7,
+								type = "range",
+								name = "Glow Duration",
+								desc = "The number of seconds that the glow will display after being triggered.\n\n|cFFFF0000Setting this value to 0 disables this functionality.|r",
+								hidden = function()
+									if (trigger.show == "on") then
+										return true
+									elseif (trigger.show == "all" or trigger.show == "off") then
+										return false
+									end
+								end,
+								min = 0,
+								max = 10,
+								step = 1,
+								bigStep = 1,
+								get = function()
+									return trigger.displayTime
+								end,
+								set = function(this,value)
+									trigger.displayTime = value
+								end,
+								width = 0.9,
+							},
+							pulseRate = {
+								order = 8,
+								type = "range",
+								name = "Pulse Rate",
+								min = 0,
+								max = 10,
+								step = 0.5,
+								bigStep = 0.5,
+								get = function()
+									return trigger.pulseRate
+								end,
+								set = function(this,value)
+									-- Prevent the user from manually entering a value below 0.5 seconds
+									if (value < 0.5 and value > 0 ) then
+										value = 0.5
+									end
+									
+									trigger.pulseRate = value
+								end,
+								width = 0.9,
+							},
+							threshold = {
+								order = 9,
+								type = "range",
+								name = "Trigger Threshold",
+								min = trigger.min,
+								max = trigger.max,
+								step = 1,
+								bigStep = 1,
+								get = function()
+									return trigger.threshold
+								end,
+								set = function(this,value)
+									trigger.threshold = value
+								end,
+								width = 0.9,
+							},
+						},
+					}
+				end
+			end
+		end
+		
+		--[[if (v.group == grp and v.glow) then
 			for key,val in pairs(v.glow.triggers) do
 				if (v.glow.triggers[key] and GLOW_OPTIONS[key]) then
 					local _,valType = next(val)
@@ -993,7 +1233,7 @@ local function AddGlowTools(auraTbl,grp)
 						print("TABLE: "..k.." ("..key..", "..type(val)..", "..type(valType)..")")
 						for keys,vals in pairs(val) do
 							auraTbl["aura"..v.order].args["glow_"..key.."_"..keys] = {
-								order = orderCtr,
+								order = orderCtr + (vals.priority or 0),
 								type = "group",
 								name = vals.groupName or "No Tables "..keys,
 								hidden = not v.isCustomize,
@@ -1008,10 +1248,95 @@ local function AddGlowTools(auraTbl,grp)
 										set = function(this,value)
 											vals.isEnabled = value
 										end,
-										width = 1,
+										width = 0.5,
+									},
+									filler_moveUp = {
+										order = 2,
+										type = "description",
+										name = '',
+										hidden = function()
+											return ((vals.priority ~= 1 and v.glow.triggers.numTriggers ~= 1) and true) or false
+										end,
+										width = 0.25,
+									},
+									moveUp = {
+										order = 2,
+										type = "execute",
+										name = '',
+										desc = "Increase Glow Priority",
+										image = "Interface\\AddOns\\ShamanAuras2\\media\\icons\\config\\move-up-glow",
+										imageWidth = 25,
+										imageHeight = 25,
+										hidden = function()
+											return ((vals.priority == 1 or v.glow.triggers.numTriggers == 1)and true) or false
+										end,
+										disabled = function()
+											--return auras.groups[grp].auraCount <= 1
+										end,
+										func = function(this)
+											--ReorderAuraList(spec,grp,v.order - 1,v.order,"swap")
+											--v.order = v.order - 1
+											
+											--Auras:RefreshAuraGroupList(this.options,spec)
+											--Auras:UpdateTalents()
+										end,
+										width = 0.25,
+									},
+									filler_moveDown = {
+										order = 3,
+										type = "description",
+										name = '',
+										hidden = function()
+											return (vals.priority ~= v.glow.triggers.numTriggers and true) or false
+										end,
+										width = 0.25,
+									},
+									moveDown = {
+										order = 3,
+										type = "execute",
+										name = '',
+										desc = "Decrease Glow Priority",
+										image = "Interface\\AddOns\\ShamanAuras2\\media\\icons\\config\\move-down-glow",
+										imageWidth = 25,
+										imageHeight = 25,
+										hidden = function()
+											return (vals.priority == v.glow.triggers.numTriggers and true) or false
+										end,
+										disabled = function()
+											--return auras.groups[grp].auraCount <= 1
+										end,
+										func = function(this)
+											--ReorderAuraList(spec,grp,v.order + 1,v.order,"swap")
+											--v.order = v.order + 1
+											
+											--Auras:RefreshAuraGroupList(this.options,spec)
+											--Auras:UpdateTalents()
+										end,
+										width = 0.25,
+									},
+									filler_show = {
+										order = 4,
+										hidden = not vals.disableShow,
+										type = "description",
+										name = '',
+										width = 0.8,
+									},
+									show = {
+										order = 4,
+										type = "select",
+										name = "Show",
+										hidden = vals.disableShow,
+										get = function()
+											return vals.show
+										end,
+										set = function(this,value)
+											vals.show = value
+										end,
+										values = GLOW_OPTIONS[key],
+										width = 0.8,
 									},
 									combat = {
-										order = 2,
+										order = 5,
 										type = "select",
 										name = "Combat",
 										get = function()
@@ -1023,30 +1348,16 @@ local function AddGlowTools(auraTbl,grp)
 										values = GLOW_OPTIONS["combat"],
 										width = 0.8,
 									},
-									show = {
-										order = 3,
-										type = "select",
-										name = "Show",
-										disabled = vals.disableShow,
-										get = function()
-											return vals.show
-										end,
-										set = function(this,value)
-											vals.show = value
-										end,
-										values = GLOW_OPTIONS[key],
-										width = 0.8,
-									},
 									filler = {
-										order = 4,
+										order = 6,
 										type = "description",
 										name = "",
 										width = 0.8,
 									},
 									displayTime = {
-										order = 5,
+										order = 7,
 										type = "range",
-										name = "Display After Cooldown",
+										name = "Glow Duration",
 										hidden = function()
 											if (vals.show == "on") then
 												return true
@@ -1067,7 +1378,7 @@ local function AddGlowTools(auraTbl,grp)
 										width = 0.8,
 									},
 									threshold = {
-										order = 6,
+										order = 8,
 										type = "range",
 										name = "Trigger Time",
 										min = vals.min,
@@ -1091,12 +1402,12 @@ local function AddGlowTools(auraTbl,grp)
 									},
 								},
 							}
-							orderCtr = orderCtr + 1
+							--orderCtr = orderCtr + 1
 						end
 					else
 						print("SOLO: "..k.." ("..key..", "..type(val)..", "..type(valType)..")")
 						auraTbl["aura"..v.order].args["glow_"..key] = {
-							order = orderCtr,
+							order = orderCtr + (val.priority or 0),
 							type = "group",
 							name = val.groupName or "No Table "..key,
 							hidden = not v.isCustomize,
@@ -1111,10 +1422,99 @@ local function AddGlowTools(auraTbl,grp)
 									set = function(this,value)
 										val.isEnabled = value
 									end,
-									width = 1,
+									width = 0.56,
+								},
+								filler_moveUp = {
+									order = 2,
+									type = "description",
+									name = '',
+									hidden = function()
+										return ((val.priority ~= 1 and v.glow.triggers.numTriggers ~= 1) and true) or false
+									end,
+									width = 0.17,
+								},
+								moveUp = {
+									order = 2,
+									type = "execute",
+									name = ' ',
+									desc = "Increase Glow Priority",
+									image = "Interface\\AddOns\\ShamanAuras2\\media\\icons\\config\\move-up-glow",
+									imageWidth = 25,
+									imageHeight = 25,
+									hidden = function()
+										return ((val.priority == 1 or v.glow.triggers.numTriggers == 1)and true) or false
+									end,
+									disabled = function()
+										--return auras.groups[grp].auraCount <= 1
+									end,
+									func = function(this)
+										val.priority = val.priority - 1
+										--Auras:RefreshAuraGroupList(this.options,spec)
+										--ReorderAuraList(spec,grp,v.order - 1,v.order,"swap")
+										--v.order = v.order - 1
+										
+										--Auras:RefreshAuraGroupList(this.options,spec)
+										--Auras:UpdateTalents()
+									end,
+									width = 0.17,
+								},
+								filler_moveDown = {
+									order = 3,
+									type = "description",
+									name = '',
+									hidden = function()
+										return (val.priority ~= v.glow.triggers.numTriggers and true) or false
+									end,
+									width = 0.17,
+								},
+								moveDown = {
+									order = 3,
+									type = "execute",
+									name = ' ',
+									desc = "Decrease Glow Priority",
+									image = "Interface\\AddOns\\ShamanAuras2\\media\\icons\\config\\move-down-glow",
+									imageWidth = 25,
+									imageHeight = 25,
+									hidden = function()
+										--print("PRIORITY: "..tostring(val.priority)..", TRIGGERS: "..tostring(v.glow.triggers.numTriggers))
+										return (val.priority == v.glow.triggers.numTriggers and true) or false
+									end,
+									disabled = function()
+										--return auras.groups[grp].auraCount <= 1
+									end,
+									func = function(this)
+										val.priority = val.priority + 1
+										--ReorderAuraList(spec,grp,v.order + 1,v.order,"swap")
+										--v.order = v.order + 1
+										
+										--Auras:RefreshAuraGroupList(this.options,spec)
+										--Auras:UpdateTalents()
+									end,
+									width = 0.17,
+								},
+								filler_show = {
+									order = 4,
+									hidden = not val.disableShow,
+									type = "description",
+									name = '',
+									width = 0.9,
+								},
+								show = {
+									order = 4,
+									type = "select",
+									name = "Show",
+									hidden = val.disableShow,
+									get = function()
+										return val.show
+									end,
+									set = function(this,value)
+										val.show = value
+									end,
+									values = GLOW_OPTIONS[key],
+									width = 0.9,
 								},
 								combat = {
-									order = 2,
+									order = 5,
 									type = "select",
 									name = "Combat",
 									get = function()
@@ -1124,31 +1524,26 @@ local function AddGlowTools(auraTbl,grp)
 										val.combat = value
 									end,
 									values = GLOW_OPTIONS["combat"],
-									width = 0.8,
+									width = 0.9,
 								},
-								show = {
-									order = 3,
-									type = "select",
-									name = "Show",
-									get = function()
-										return val.show
-									end,
-									set = function(this,value)
-										val.show = value
-									end,
-									values = GLOW_OPTIONS[key],
-									width = 0.8,
-								},
-								filler = {
-									order = 4,
+								filler_displayTime = {
+									order = 6,
 									type = "description",
 									name = "",
-									width = 1,
+									hidden = function()
+										if (val.show == "all" or val.show == "off" or not val.show) then
+											return true
+										elseif (val.show == "on") then
+											return false
+										end
+									end,
+									width = 0.9,
 								},
 								displayTime = {
-									order = 5,
+									order = 7,
 									type = "range",
-									name = "Display After Cooldown",
+									name = "Glow Duration",
+									desc = "The number of seconds that the glow will display after being triggered.\n\n|cFFFF0000Setting this value to 0 disables this functionality.|r",
 									hidden = function()
 										if (val.show == "on") then
 											return true
@@ -1166,12 +1561,28 @@ local function AddGlowTools(auraTbl,grp)
 									set = function(this,value)
 										val.displayTime = value
 									end,
-									width = 0.8,
+									width = 0.9,
+								},
+								pulseRate = {
+									order = 8,
+									type = "range",
+									name = "Pulse Rate",
+									min = 0.5,
+									max = 10,
+									step = 1,
+									bigStep = 1,
+									get = function()
+										return val.pulseRate
+									end,
+									set = function(this,value)
+										val.pulseRate = value
+									end,
+									width = 0.9,
 								},
 								threshold = {
-									order = 6,
+									order = 9,
 									type = "range",
-									name = "Trigger Time",
+									name = "Trigger Threshold",
 									min = val.min,
 									max = val.max,
 									step = 1,
@@ -1182,11 +1593,11 @@ local function AddGlowTools(auraTbl,grp)
 									set = function(this,value)
 										val.threshold = value
 									end,
-									width = 0.8,
+									width = 0.9,
 								},
 							},
 						}
-						orderCtr = orderCtr + 1
+						--orderCtr = orderCtr + 1
 					end
 				elseif (key == "interrupt") then
 					auraTbl["aura"..v.order].args["glow_"..key] = {
@@ -1226,7 +1637,7 @@ local function AddGlowTools(auraTbl,grp)
 					orderCtr = orderCtr + 1
 				end
 			end
-		end
+		end]]
 	end
 	_G["SSA_AURA_TABLE"] = auraTbl
 end

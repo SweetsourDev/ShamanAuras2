@@ -15,6 +15,9 @@ EarthShield.isGlowing = false
 EarthShield.triggerTime = 0
 EarthShield.pulseTime = 0
 EarthShield.isTriggered = false
+EarthShield.isTimeGlow = false
+EarthShield.isChargeGlow = false
+EarthShield.activePriority = 0
 EarthShield.condition = function()
 	local row,col = (SSA.spec == 1 and 3) or (SSA.spec == 2 and 3) or (SSA.spec == 3 and 2), (SSA.spec == 1 and 2) or (SSA.spec == 2 and 2) or (SSA.spec == 3 and 3)
 	
@@ -98,6 +101,7 @@ EarthShield:SetScript("OnEvent",function(self,event)
 			if (count <= glow.triggers.charges.threshold and count > 0) then
 				self.triggerTime = GetTime()
 			else
+				self.triggerTime = 0
 				self.isTriggered = false
 			end
 		end
