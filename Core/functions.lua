@@ -853,40 +853,47 @@ end
 
 local function ToggleCombatEvent(spec)
 	--SSA.DataFrame.text:SetText('EXECUTING COMBAT EVENTS\n')
-	for i=1,3 do
-		for k,v in pairs(Auras.db.char.timerbars[i].bars) do
-			if (i == spec) then
-				--if (v.data.condition()) then
-				if (not SSA[k].condition) then
-					SSA.DataFrame.text:SetText("BAD BAR: "..k)
-				end
-				if (SSA[k].condition()) then
-					--if (not SSA[k]:IsEventRegistered("COMBAT_LOG_EVENT_UNFILTERED")) then
-						SSA[k]:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
-						--SSA.DataFrame.text:SetText(Auras:CurText('DataFrame')..k..": TRUE ("..tostring(SSA[k]:IsEventRegistered("COMBAT_LOG_EVENT_UNFILTERED"))..")\n")
-					--end
+	--if (not Auras.db.char.isFirstEverLoad) then
+		for i=1,3 do
+			for k,v in pairs(Auras.db.char.timerbars[i].bars) do
+				if (i == spec) then
+					--if (v.data.condition()) then
+					if (not SSA[k].condition) then
+						SSA.DataFrame.text:SetText("BAD BAR: "..k)
+					end
+					if (SSA[k].condition()) then
+						--if (not SSA[k]:IsEventRegistered("COMBAT_LOG_EVENT_UNFILTERED")) then
+							SSA[k]:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+							--SSA.DataFrame.text:SetText(Auras:CurText('DataFrame')..k..": TRUE ("..tostring(SSA[k]:IsEventRegistered("COMBAT_LOG_EVENT_UNFILTERED"))..")\n")
+						--end
+					else
+						--if (SSA[k]:IsEventRegistered("COMBAT_LOG_EVENT_UNFILTERED")) then
+							--SSA.DataFrame.text:SetText(Auras:CurText('DataFrame')..k..": FALSE\n")
+							SSA[k]:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+						--end
+					end
 				else
 					--if (SSA[k]:IsEventRegistered("COMBAT_LOG_EVENT_UNFILTERED")) then
-						--SSA.DataFrame.text:SetText(Auras:CurText('DataFrame')..k..": FALSE\n")
+					if (not v.isShared) then
 						SSA[k]:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+					end
 					--end
 				end
-			else
-				--if (SSA[k]:IsEventRegistered("COMBAT_LOG_EVENT_UNFILTERED")) then
-				if (not v.isShared) then
-					SSA[k]:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
-				end
-				--end
 			end
 		end
-	end
+	--end
 end
 --/script print(SSA_EarthbindTotem:IsEventRegistered("COMBAT_LOG_EVENT_UNFILTERED"))
 function Auras:UpdateTalents(isTalentChange)
 	
 	--SSA.spec = GetSpecialization()
 	--spec = SSA.spec
-	local db = Auras.db.char
+	local db = self.db.char
+	
+	if (db.isFirstEverLoad) then
+		return
+	end
+	
 	local spec = GetSpecialization()
 	
 	if (spec ~= SSA.spec) then

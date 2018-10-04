@@ -593,8 +593,8 @@ function Auras:VerifyDefaultValues(spec,options,group)
 		end
 	elseif (group == "Primary") then
 		local db = Auras.db.char
-		local layout = db.layout[spec]
-		local defaults = db.layout.defaults
+		--local layout = db.layout[spec]
+		--local defaults = db.layout.defaults
 		
 		--[[if (layout.orientation.top ~= defaults.orientation.top or
 			layout.orientation.bottom ~= defaults.orientation.bottom or
@@ -611,8 +611,8 @@ function Auras:VerifyDefaultValues(spec,options,group)
 		end]]
 	elseif (group == "Secondary") then
 		local db = Auras.db.char
-		local layout = db.layout[spec]
-		local defaults = db.layout.defaults
+		--local layout = db.layout[spec]
+		--local defaults = db.layout.defaults
 	
 		--[[if (layout.orientation.left ~= defaults.orientation.left or
 			layout.orientation.right ~= defaults.orientation.right or
@@ -766,7 +766,7 @@ function Auras:VerifyDefaultValues(spec,options,group)
 	end
 end
 
-function Auras:RefreshCooldownList(options,spec,cooldownDB)
+function Auras:RefreshCooldownList(options,spec)
 	local args = {}
 	local orderCtr = 9
 	print("REFRESHING COOLDOWN LIST")
@@ -1031,9 +1031,9 @@ local function AddGlowTools(auraTbl,grp)
 								set = function(this,value)
 									trigger.isEnabled = value
 								end,
-								width = 0.56,
+								width = 0.47,
 							},
-							filler_moveUp = {
+							--[[filler_moveUp = {
 								order = 2,
 								type = "description",
 								name = '',
@@ -1041,7 +1041,7 @@ local function AddGlowTools(auraTbl,grp)
 									return ((i ~= 1 and #v.glow.triggers ~= 1) and true) or false
 								end,
 								width = 0.17,
-							},
+							},]]
 							moveUp = {
 								order = 2,
 								type = "execute",
@@ -1050,11 +1050,8 @@ local function AddGlowTools(auraTbl,grp)
 								image = [[Interface\AddOns\ShamanAuras2\media\icons\config\move-up-glow]],
 								imageWidth = 25,
 								imageHeight = 25,
-								hidden = function()
-									return ((i == 1 or #v.glow.triggers == 1)and true) or false
-								end,
 								disabled = function()
-									--return auras.groups[grp].auraCount <= 1
+									return ((i == 1 or #v.glow.triggers == 1)and true) or false
 								end,
 								func = function(this)
 									ReorderAuraGlow(v.glow.triggers,i,i-1)
@@ -1070,7 +1067,7 @@ local function AddGlowTools(auraTbl,grp)
 								end,
 								width = 0.17,
 							},
-							filler_moveDown = {
+							--[[filler_moveDown = {
 								order = 3,
 								type = "description",
 								name = '',
@@ -1078,7 +1075,7 @@ local function AddGlowTools(auraTbl,grp)
 									return (i ~= #v.glow.triggers and true) or false
 								end,
 								width = 0.17,
-							},
+							},]]
 							moveDown = {
 								order = 3,
 								type = "execute",
@@ -1087,13 +1084,13 @@ local function AddGlowTools(auraTbl,grp)
 								image = [[Interface\AddOns\ShamanAuras2\media\icons\config\move-down-glow]],
 								imageWidth = 25,
 								imageHeight = 25,
-								hidden = function()
+								disabled = function()
 									--print("PRIORITY: "..tostring(val.priority)..", TRIGGERS: "..tostring(v.glow.triggers.numTriggers))
 									return (i == #v.glow.triggers and true) or false
 								end,
-								disabled = function()
+								--disabled = function()
 									--return auras.groups[grp].auraCount <= 1
-								end,
+								--end,
 								func = function(this)
 									ReorderAuraGlow(v.glow.triggers,i,i+1)
 									Auras:RefreshAuraGroupList(this.options,SSA.spec)
@@ -1107,15 +1104,21 @@ local function AddGlowTools(auraTbl,grp)
 								end,
 								width = 0.17,
 							},
-							filler_show = {
+							filler = {
 								order = 4,
+								type = "description",
+								name = '',
+								width = 0.1,
+							},
+							filler_show = {
+								order = 5,
 								hidden = not trigger.disableShow,
 								type = "description",
 								name = '',
 								width = 0.9,
 							},
 							show = {
-								order = 4,
+								order = 5,
 								type = "select",
 								name = "Show",
 								hidden = function()
@@ -1132,7 +1135,7 @@ local function AddGlowTools(auraTbl,grp)
 								width = 0.9,
 							},
 							combat = {
-								order = 5,
+								order = 6,
 								type = "select",
 								name = "Combat",
 								get = function()
@@ -1144,8 +1147,8 @@ local function AddGlowTools(auraTbl,grp)
 								values = GLOW_OPTIONS["combat"],
 								width = 0.9,
 							},
-							filler_displayTime = {
-								order = 6,
+							--[[filler_displayTime = {
+								order = 7,
 								type = "description",
 								name = "",
 								hidden = function()
@@ -1156,13 +1159,13 @@ local function AddGlowTools(auraTbl,grp)
 									end
 								end,
 								width = 0.9,
-							},
+							},]]
 							displayTime = {
-								order = 7,
+								order = 8,
 								type = "range",
 								name = "Glow Duration",
 								desc = "The number of seconds that the glow will display after being triggered.\n\n|cFFFF0000Setting this value to 0 disables this functionality.|r",
-								hidden = function()
+								disabled = function()
 									if (trigger.show == "on") then
 										return true
 									elseif (trigger.show == "all" or trigger.show == "off") then
@@ -1182,7 +1185,7 @@ local function AddGlowTools(auraTbl,grp)
 								width = 0.9,
 							},
 							pulseRate = {
-								order = 8,
+								order = 9,
 								type = "range",
 								name = "Pulse Rate",
 								min = 0,
@@ -1203,7 +1206,7 @@ local function AddGlowTools(auraTbl,grp)
 								width = 0.9,
 							},
 							threshold = {
-								order = 9,
+								order = 10,
 								type = "range",
 								name = "Trigger Threshold",
 								min = trigger.min,
@@ -1669,7 +1672,7 @@ local function BuildCurrentAuraList(db,spec,grp)
 						end,
 						width = "normal",
 					},
-					moveUp_Filler = {
+					--[[moveUp_Filler = {
 						order = 2,
 						type = "description",
 						name = "",
@@ -1677,7 +1680,7 @@ local function BuildCurrentAuraList(db,spec,grp)
 							return not (v.order == 1 and true) or false
 						end,
 						width = 0.25,
-					},
+					},]]
 					moveUp = {
 						order = 2,
 						type = "execute",
@@ -1692,12 +1695,12 @@ local function BuildCurrentAuraList(db,spec,grp)
 						image = [[Interface\AddOns\ShamanAuras2\media\icons\config\move-up]],
 						imageWidth = 25,
 						imageHeight = 25,
-						hidden = function()
+						disabled = function()
 							return (v.order == 1 and true) or false
 						end,
-						disabled = function()
+						--[[disabled = function()
 							return auras.groups[grp].auraCount <= 1
-						end,
+						end,]]
 						func = function(this)
 							ReorderAuraList(spec,grp,v.order - 1,v.order,"swap")
 							v.order = v.order - 1
@@ -1707,7 +1710,7 @@ local function BuildCurrentAuraList(db,spec,grp)
 						end,
 						width = 0.25,
 					},
-					moveDown_Filler = {
+					--[[moveDown_Filler = {
 						order = 3,
 						type = "description",
 						name = "",
@@ -1715,7 +1718,7 @@ local function BuildCurrentAuraList(db,spec,grp)
 							return not (v.order == #auras.groups and true) or false
 						end,
 						width = 0.25,
-					},
+					},]]
 					moveDown = {
 						order = 3,
 						type = "execute",
@@ -1730,12 +1733,13 @@ local function BuildCurrentAuraList(db,spec,grp)
 						image = [[Interface\AddOns\ShamanAuras2\media\icons\config\move-down]],
 						imageWidth = 25,
 						imageHeight = 25,
-						hidden = function()
-							return (v.order == #auras.groups and true) or false
-						end,
 						disabled = function()
-							return auras.groups[grp].auraCount <= 1
+							print(v.order.." - "..auras.groups[grp].auraCount)
+							return (v.order == auras.groups[grp].auraCount and true) or false
 						end,
+						--[[disabled = function()
+							return auras.groups[grp].auraCount <= 1
+						end,]]
 						func = function(this)
 							ReorderAuraList(spec,grp,v.order + 1,v.order,"swap")
 							v.order = v.order + 1

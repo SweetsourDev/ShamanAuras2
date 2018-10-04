@@ -52,127 +52,131 @@ end
 
 -- Check Current Class
 function Auras:CharacterCheck(obj,spec,...)
-	local _,_,classIndex = UnitClass('player')
-	local curSpec = GetSpecialization()
-	local isAuraInUse,isCorrectSpecializationAndClass,isValidSpell = false,false,false
-		
-	-- If an object is NOT passed, bypass this boolean
-	if (obj and type(obj) == "table") then
-		local objDb
-		
-		if (Auras.db.char.auras[curSpec].auras[obj:GetName()]) then
-			objDb = 'auras'
-		elseif (Auras.db.char.timerbars[curSpec].bars[obj:GetName()]) then
-			objDb = 'timerbars'
-		elseif (Auras.db.char.statusbars[curSpec].bars[obj:GetName()]) then
-			objDb = 'statusbar'
-		end
-		--[[if (not Auras.db.char.auras[spec]) then
-			local args = { ... }
-			local msg = tostring(obj)..", "..tostring(spec)
-			for i=1,#args do
-				msg = msg..tostring(args[i])..", "
+	if (not self.db.char.isFirstEverLoad) then
+		local _,_,classIndex = UnitClass('player')
+		local curSpec = GetSpecialization()
+		local isAuraInUse,isCorrectSpecializationAndClass,isValidSpell = false,false,false
+			
+		-- If an object is NOT passed, bypass this boolean
+		if (obj and type(obj) == "table") then
+			local objDb
+			
+			if (Auras.db.char.auras[curSpec].auras[obj:GetName()]) then
+				objDb = 'auras'
+			elseif (Auras.db.char.timerbars[curSpec].bars[obj:GetName()]) then
+				objDb = 'timerbars'
+			elseif (Auras.db.char.statusbars[curSpec].bars[obj:GetName()]) then
+				objDb = 'statusbar'
 			end
-			print(msg)
-		end]]
-		
-		
-		
-		
-		if (objDb == "auras") then
-			if (spec == 0) then
-				if (Auras.db.char.auras[curSpec].auras[obj:GetName()]) then
-					isAuraInUse = Auras.db.char.auras[curSpec].auras[obj:GetName()].isInUse
+			--[[if (not Auras.db.char.auras[spec]) then
+				local args = { ... }
+				local msg = tostring(obj)..", "..tostring(spec)
+				for i=1,#args do
+					msg = msg..tostring(args[i])..", "
+				end
+				print(msg)
+			end]]
+			
+			
+			
+			
+			if (objDb == "auras") then
+				if (spec == 0) then
+					if (Auras.db.char.auras[curSpec].auras[obj:GetName()]) then
+						isAuraInUse = Auras.db.char.auras[curSpec].auras[obj:GetName()].isInUse
+					else
+						isAuraInUse = false
+					end
 				else
-					isAuraInUse = false
+					--[[if (not Auras.db.char.auras[spec][obj:GetName()]) then
+						print(obj:GetName().." ("..spec..")")
+					end
+					if (type(spec) == "boolean" or type(obj:GetName()) == "boolean") then
+						SSA.DataFrame.text:SetText(obj:GetName())
+					end]]
+				
+					isAuraInUse = Auras.db.char.auras[spec].auras[obj:GetName()].isInUse
+				end
+			elseif (objDb == "timerbars") then
+				if (spec == 0) then
+					if (Auras.db.char.timerbars[curSpec].bars[obj:GetName()]) then
+						isAuraInUse = Auras.db.char.timerbars[curSpec].bars[obj:GetName()].isInUse
+					else
+						isAuraInUse = false
+					end
+				else			
+					isAuraInUse = Auras.db.char.timerbars[spec].bars[obj:GetName()].isInUse
+				end
+			elseif (objDb == "statusbar") then
+				if (spec == 0) then
+					if (Auras.db.char.statusbars[curSpec].bars[obj:GetName()]) then
+						isAuraInUse = Auras.db.char.statusbars[curSpec].bars[obj:GetName()].isEnabled
+					else
+						isAuraInUse = false
+					end
+				else
+					isAuraInUse = Auras.db.char.statusbars[spec].bars[obj:GetName()].isEnabled
+				end
+			end
+			--[[if (spec == 0) then
+				spec = curSpec
+				
+				if (Auras.db.char.auras[spec][obj:GetName()]) then
+					isAuraInUse = Auras.db.char.auras[spec][obj:GetName()].isInUse
+				else
+					isAuraInUse = true
 				end
 			else
-				--[[if (not Auras.db.char.auras[spec][obj:GetName()]) then
-					print(obj:GetName().." ("..spec..")")
-				end
-				if (type(spec) == "boolean" or type(obj:GetName()) == "boolean") then
-					SSA.DataFrame.text:SetText(obj:GetName())
-				end]]
-			
-				isAuraInUse = Auras.db.char.auras[spec].auras[obj:GetName()].isInUse
-			end
-		elseif (objDb == "timerbars") then
-			if (spec == 0) then
-				if (Auras.db.char.timerbars[curSpec].bars[obj:GetName()]) then
-					isAuraInUse = Auras.db.char.timerbars[curSpec].bars[obj:GetName()].isInUse
-				else
-					isAuraInUse = false
-				end
-			else			
-				isAuraInUse = Auras.db.char.timerbars[spec].bars[obj:GetName()].isInUse
-			end
-		elseif (objDb == "statusbar") then
-			if (spec == 0) then
-				if (Auras.db.char.statusbars[curSpec].bars[obj:GetName()]) then
-					isAuraInUse = Auras.db.char.statusbars[curSpec].bars[obj:GetName()].isEnabled
-				else
-					isAuraInUse = false
-				end
-			else
-				isAuraInUse = Auras.db.char.statusbars[spec].bars[obj:GetName()].isEnabled
-			end
-		end
-		--[[if (spec == 0) then
-			spec = curSpec
-			
-			if (Auras.db.char.auras[spec][obj:GetName()]) then
 				isAuraInUse = Auras.db.char.auras[spec][obj:GetName()].isInUse
-			else
-				isAuraInUse = true
-			end
+			end]]
 		else
-			isAuraInUse = Auras.db.char.auras[spec][obj:GetName()].isInUse
-		end]]
-	else
-		isAuraInUse = true
-	end
-	
-	if ((spec == curSpec or spec == 0) and classIndex == 7) then
-		isCorrectSpecializationAndClass = true
-	else
-		isCorrectSpecializationAndClass = false
-	end
-
-	if (select('#',...) > 1) then
-		local row,col = ...
-
-		if (type(obj) == "number") then
-			print("Talents: "..row..", "..col)
+			isAuraInUse = true
 		end
-		_,_,_,isValidSpell = GetTalentInfo(row,col,1)
-	elseif (select('#',...) > 0) then
-		local spellID = ...
 		
-		if (type(spellID) == "number") then
+		if ((spec == curSpec or spec == 0) and classIndex == 7) then
+			isCorrectSpecializationAndClass = true
+		else
+			isCorrectSpecializationAndClass = false
+		end
+
+		if (select('#',...) > 1) then
+			local row,col = ...
+
 			if (type(obj) == "number") then
-				print("Spell ID: "..spellID)
+				print("Talents: "..row..", "..col)
 			end
+			_,_,_,isValidSpell = GetTalentInfo(row,col,1)
+		elseif (select('#',...) > 0) then
+			local spellID = ...
 			
-			if (spellID > 0) then
-				isValidSpell = IsSpellKnown(spellID)
+			if (type(spellID) == "number") then
+				if (type(obj) == "number") then
+					print("Spell ID: "..spellID)
+				end
+				
+				if (spellID > 0) then
+					isValidSpell = IsSpellKnown(spellID)
+				else
+					isValidSpell = false
+				end
 			else
-				isValidSpell = false
+				if (type(obj) == "number") then
+					print("PvP ID: "..spellID)
+				end
+
+				_,_,_,_,_,_,_,_,_,isValidSpell = GetPvpTalentInfoByID(tonumber(spellID))
 			end
 		else
-			if (type(obj) == "number") then
-				print("PvP ID: "..spellID)
-			end
-
-			_,_,_,_,_,_,_,_,_,isValidSpell = GetPvpTalentInfoByID(tonumber(spellID))
+			isValidSpell = true
 		end
-	else
-		isValidSpell = true
-	end
 
-	if (type(obj) == "table" and obj:GetName() == "Healing Rain") then
-		--SSA.DataFrame.text:SetText("Healing Rain: "..tostring(isAuraInUse and isCorrectSpecializationAndClass and isValidSpell))
+		if (type(obj) == "table" and obj:GetName() == "Healing Rain") then
+			--SSA.DataFrame.text:SetText("Healing Rain: "..tostring(isAuraInUse and isCorrectSpecializationAndClass and isValidSpell))
+		end
+		return isAuraInUse and isCorrectSpecializationAndClass and isValidSpell
+	else
+		return false
 	end
-	return isAuraInUse and isCorrectSpecializationAndClass and isValidSpell
 end
 
 -- Retrieve Spell Info Name

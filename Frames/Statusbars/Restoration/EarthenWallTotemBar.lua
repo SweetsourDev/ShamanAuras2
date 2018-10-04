@@ -188,7 +188,7 @@ end
 
 EarthenWallTotemBar:SetScript('OnEvent',function(self,event)
 	--if (Auras:CharacterCheck(3)) then
-		if (event ~= 'COMBAT_LOG_EVENT_UNFILTERED') then
+		if (event ~= 'COMBAT_LOG_EVENT_UNFILTERED' or Auras.db.char.isFirstEverLoad) then
 			return
 		end
 		

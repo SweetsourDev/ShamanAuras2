@@ -2887,7 +2887,7 @@ _G["SSA_ele_options"] = GetElementalOptions()
 	local enh_options = GetEnhancementOptions()
 	local res_options = GetRestorationOptions()
 	if (spec == 1) then
-		Auras:RefreshCooldownList(ele_options,1,Auras.db.char.auras[1].cooldowns,SSA.groupDefaults.cooldowns)
+		Auras:RefreshCooldownList(ele_options,1)
 		Auras:RefreshAuraGroupList(ele_options,1)
 		Auras:RefreshTimerBarGroupList(ele_options,1)
 		
@@ -2913,7 +2913,7 @@ _G["SSA_ele_options"] = GetElementalOptions()
 		res_options.args.cooldowns.disabled = true
 		--res_options.args.layout.disabled = true
 	elseif (spec == 2) then
-		Auras:RefreshCooldownList(enh_options,2,Auras.db.char.auras[2].cooldowns,SSA.groupDefaults.cooldowns)
+		Auras:RefreshCooldownList(enh_options,2)
 		Auras:RefreshAuraGroupList(enh_options,2)
 		Auras:RefreshTimerBarGroupList(enh_options,2)
 		
@@ -2938,7 +2938,7 @@ _G["SSA_ele_options"] = GetElementalOptions()
 		res_options.args.cooldowns.disabled = true
 		--res_options.args.layout.disabled = true
 	elseif (spec == 3) then
-		Auras:RefreshCooldownList(res_options,3,Auras.db.char.auras[3].cooldowns,SSA.groupDefaults.cooldowns)
+		Auras:RefreshCooldownList(res_options,3)
 		Auras:RefreshAuraGroupList(res_options,3)
 		Auras:RefreshTimerBarGroupList(res_options,3)
 		

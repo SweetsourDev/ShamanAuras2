@@ -287,22 +287,48 @@ end
 -- Event: ADDON_LOADED
 function Auras:OnInitialize()
 
-	local defaults = SSA.defaults;
+	local database = SSA.database;
 	local about_panel = LibStub:GetLibrary("LibAboutPanel", true)
 
 	if about_panel then
 		self.optionsFrame = about_panel.new(nil, "ShamanAuras")
 	end
 	
-	self.db = LibStub("AceDB-3.0"):New("SSA2_db",defaults)
+	self.db = LibStub("AceDB-3.0"):New("SSA2_db",database)
 	self:SetupOptions()
 	
-	BuildAuraGroups()
+	if (not self.db.char.isFirstEverLoad) then
+		BuildAuraGroups()
+	end
+end
+
+local function PopulateDatabase()
+
 end
 
 -- Event: PLAYER_LOGIN
 function Auras:OnEnable()
 	local db = Auras.db.char
+	
+	if (db.isFirstEverLoad) then
+		StaticPopupDialogs["SSA_FIRST_LOAD"] = {
+			text = "This is the first time you're loading this addon. In order to work correctly, the database needs to be populated with default values.\n\nClick the button below to proceed.",
+			button1 = "Populate Database",
+			OnAccept = function()
+				self:CopyTableValues(self.db.char,SSA.defaults)
+				db.isFirstEverLoad = false
+				ReloadUI()
+			end,
+			timeout = 0,
+			whileDead = true,
+			hideOnEscape = true,
+			preferredIndex = 3,
+		}
+		
+		StaticPopup_Show ("SSA_FIRST_LOAD")
+		
+		return
+	end
 	local _,_,classIndex = UnitClass('player')
 
 	self:UnregisterAllEvents()
@@ -332,7 +358,8 @@ function Auras:OnEnable()
 	if (db.isFirstEverLoad) then
 		SSA.DataFrame.text:SetText("FIRST EVER LOAD\n")
 		
-		for i=1,3 do
+		--self:CopyTableValues(self.db.char,SSA.defaults)
+		--[[for i=1,3 do
 			local auras = Auras.db.char.auras[i]
 			local timerbars = Auras.db.char.timerbars[i]
 			
@@ -365,8 +392,8 @@ function Auras:OnEnable()
 				Auras:CopyTableValues(timerbars.groups[j],SSA.groupDefaults[i].layout.timerbars[j])
 				Auras:CopyTableValues(timerbars.frames[j],SSA.groupDefaults[i].frames.timerbars[j])
 			end
-		end
-		db.isFirstEverLoad = false
+		end]]
+		--db.isFirstEverLoad = false
 	end
 	--if (db.EquippedArtifact == '') then
 		local _,_,name = C_ArtifactUI.GetEquippedArtifactInfo()
@@ -423,7 +450,7 @@ function Auras:OnEnable()
 	
 	
 	-- Clean up old version checks
-	for i=1,70 do
+	--[[for i=1,70 do
 		if (db["isR"..tostring(i).."FirstLoad"] == false) then
 			db["isR"..tostring(i).."FirstLoad"] = nil
 		end
@@ -432,7 +459,7 @@ function Auras:OnEnable()
 	if (db.isR71FirstLoad) then
 		SSA.Bulletin:Show()
 		db.isR71FirstLoad = false
-	end
+	end]]
 
 	StaticPopupDialogs["SSA_CLASS_CHECKER"] = {
 		text = "You are currently running the addon \"Sweetsour's Shaman Auras\" while on a non-shaman character. It is recommended that you disable this addon.",
@@ -910,6 +937,10 @@ function Auras:COMBAT_LOG_EVENT_UNFILTERED()
 end
 
 Frame:HookScript("OnEvent",function(self,event,...)
+	if (Auras.db.char.isFirstEverLoad) then
+		return
+	end
+	
 	local spec = GetSpecialization()
 
 	local castBar,channelBar = SSA["CastBar"],SSA["ChannelBar"]
