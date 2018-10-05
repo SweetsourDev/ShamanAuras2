@@ -953,24 +953,43 @@ local function ReorderTimerBarGroups(spec,oldPos,method)
 	end
 end
 
-local function ReorderAuraGlow(triggers,oldPos,newPos)
+local function ReorderAuraGlow(obj,triggers,oldPos,newPos)
 	--for i=1,#triggers do
 		--print(triggers[i].name)
+		--local aura = SSA[obj]
+		
+		--local auraTempTable = {}
 		local tempTable = {}
+		
+		--[[for k,v in pairs(aura.triggers[newPos]) do
+			auraTempTable[k] = v
+		end]]
 		
 		for k,v in pairs(triggers[newPos]) do
 			tempTable[k] = v
 		end
 		
+		--aura.triggers[newPos] = nil
+		--aura.triggers[newPos] = {}
 		triggers[newPos] = nil
 		triggers[newPos] = {}
+		
+		--[[for k,v in pairs(aura.triggers[oldPos]) do
+			aura.triggers[newPos][k] = v
+		end]]
 		
 		for k,v in pairs(triggers[oldPos])  do
 			triggers[newPos][k] = v
 		end
 		
+		--aura.triggers[oldPos] = nil
+		--aura.triggers[oldPos] = {}
 		triggers[oldPos] = nil
 		triggers[oldPos] = {}
+		
+		--[[for k,v in pairs(auraTempTable) do
+			aura.triggers[oldPos][k] = v
+		end]]
 		
 		for k,v in pairs(tempTable) do
 			triggers[oldPos][k] = v
@@ -1013,7 +1032,7 @@ local function AddGlowTools(auraTbl,grp)
 			for i=1,#v.glow.triggers do
 				local trigger = v.glow.triggers[i]
 				
-				if (GLOW_OPTIONS[trigger.type]) then
+				if (GLOW_OPTIONS[trigger.type] and v.group == grp) then
 					
 					auraTbl["aura"..v.order].args["glow_"..i] = {
 						order = orderCtr + i,
@@ -1054,7 +1073,7 @@ local function AddGlowTools(auraTbl,grp)
 									return ((i == 1 or #v.glow.triggers == 1)and true) or false
 								end,
 								func = function(this)
-									ReorderAuraGlow(v.glow.triggers,i,i-1)
+									ReorderAuraGlow(k,v.glow.triggers,i,i-1)
 									Auras:RefreshAuraGroupList(this.options,SSA.spec)
 									--val.priority = val.priority - 1
 									
@@ -1092,7 +1111,7 @@ local function AddGlowTools(auraTbl,grp)
 									--return auras.groups[grp].auraCount <= 1
 								--end,
 								func = function(this)
-									ReorderAuraGlow(v.glow.triggers,i,i+1)
+									ReorderAuraGlow(k,v.glow.triggers,i,i+1)
 									Auras:RefreshAuraGroupList(this.options,SSA.spec)
 									--val.priority = val.priority + 1
 									
@@ -1112,7 +1131,13 @@ local function AddGlowTools(auraTbl,grp)
 							},
 							filler_show = {
 								order = 5,
-								hidden = not trigger.disableShow,
+								hidden = function()
+									if (not trigger.show) then
+										return false
+									else
+										return true
+									end
+								end,
 								type = "description",
 								name = '',
 								width = 0.9,
@@ -1122,8 +1147,11 @@ local function AddGlowTools(auraTbl,grp)
 								type = "select",
 								name = "Show",
 								hidden = function()
-									print(trigger.name..": "..tostring(trigger.disableShow or false))
-									return trigger.disableShow or false
+									if (not trigger.show) then
+										return true
+									else
+										return false
+									end
 								end,
 								get = function()
 									return trigger.show
@@ -1147,24 +1175,38 @@ local function AddGlowTools(auraTbl,grp)
 								values = GLOW_OPTIONS["combat"],
 								width = 0.9,
 							},
-							--[[filler_displayTime = {
-								order = 7,
+							filler_displayTime = {
+								order = 8,
 								type = "description",
 								name = "",
-								hidden = function()
+								--[[hidden = function()
 									if (trigger.show == "all" or trigger.show == "off" or not trigger.show) then
 										return true
 									elseif (trigger.show == "on") then
 										return false
 									end
+								end,]]
+								hidden = function()
+									if (not trigger.displayTime) then
+										return false
+									else
+										return true
+									end
 								end,
 								width = 0.9,
-							},]]
+							},
 							displayTime = {
 								order = 8,
 								type = "range",
 								name = "Glow Duration",
 								desc = "The number of seconds that the glow will display after being triggered.\n\n|cFFFF0000Setting this value to 0 disables this functionality.|r",
+								hidden = function()
+									if (not trigger.displayTime) then
+										return true
+									else
+										return false
+									end
+								end,
 								disabled = function()
 									if (trigger.show == "on") then
 										return true
@@ -1205,12 +1247,25 @@ local function AddGlowTools(auraTbl,grp)
 								end,
 								width = 0.9,
 							},
+							filler_threshold = {
+								order = 10,
+								type = "description",
+								name = "",
+								hidden = function()
+									if (not trigger.threshold) then
+										return false
+									else
+										return true
+									end
+								end,
+								width = 0.9,
+							},
 							threshold = {
 								order = 10,
 								type = "range",
 								name = "Trigger Threshold",
-								min = trigger.min,
-								max = trigger.max,
+								min = trigger.min or 1,
+								max = trigger.charges or trigger.duration or 0,
 								step = 1,
 								bigStep = 1,
 								get = function()

@@ -41,13 +41,13 @@ function Auras:GlowHandler(obj)
 			end
 			
 			if (trigger.combat == "all" or (trigger.combat == "on" and Auras:IsPlayerInCombat(true)) or (trigger.combat == "off" and not Auras:IsPlayerInCombat(true))) then
-				if (trigger.show == "all" or (trigger.show == "on" and obj.duration > 1.5) or trigger.show == "off") then
-					local expire = obj.start + obj.duration
+				if (trigger.show == "all" or (trigger.show == "on" and trigger.duration > 1.5) or trigger.show == "off") then
+					local expire = trigger.start + trigger.duration
 					local remains = (expire) - GetTime()
 					
 					if (trigger.show ~= "on" and trigger.displayTime > 0) then
 						SSA.DataFrame.text:SetText("WITH DISPLAY\n\nTime: "..GetTime().."\nExpire: "..expire.."\nDisplay: "..(expire + trigger.displayTime))
-						if ((GetTime() < ((expire) + trigger.displayTime) and GetTime() > (expire)) or (trigger.show == "all" and remains <= trigger.threshold and remains > 0)) then
+						if ((GetTime() < ((expire) + trigger.displayTime) and GetTime() > (expire)) or (trigger.show == "all" and ((remains <= trigger.threshold and remains > 0) or not trigger.threshold))) then
 						--if ((GetTime() < ((expire) + v.displayTime) and GetTime() > (expire))) then
 							--SSA.DataFrame.text:SetText(Auras:CurText('DataFrame').."MEET DISPLAY TIME OR THRESHOLD NEEDS\n")
 							--if (not obj.isGlowing) then
@@ -69,7 +69,7 @@ function Auras:GlowHandler(obj)
 							Auras:ToggleOverlayGlow(obj,false)
 							--end
 						end
-					elseif (trigger.show ~= "off" and remains <= trigger.threshold and remains > 0) then
+					elseif (trigger.show ~= "off" and ((remains <= trigger.threshold and remains > 0) or not trigger.threshold)) then
 						--if (not obj.isGlowing) then
 						--	obj.isGlowing = true
 						SSA.DataFrame.text:SetText("NO DISPLAY\n\nTime: "..GetTime().."\nExpire: "..expire.."\nDisplay: "..(expire + trigger.displayTime))

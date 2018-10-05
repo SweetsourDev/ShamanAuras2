@@ -10,6 +10,8 @@ local Riptide = SSA.Riptide
 
 -- Initialize Data Variables
 Riptide.spellID = 61295
+Riptide.pulseTime = 0
+Riptide.activePriority = 0
 Riptide.condition = function()
 	return IsSpellKnown(61295)
 end
@@ -17,15 +19,21 @@ end
 Riptide:SetScript('OnUpdate', function(self)
 	if (Auras:CharacterCheck(self,3,self.spellID)) then
 		local groupID = Auras:GetAuraGroupID(self,self:GetName())
-		local start,duration = GetSpellCooldown(Auras:GetSpellName(self.spellID))
+		local cdStart,cdDuration = GetSpellCooldown(Auras:GetSpellName(self.spellID))
 		local charges,maxCharges,chgStart,chgDuration = GetSpellCharges(self.spellID)
 		local _,_,_,selected = GetTalentInfo(2,1,1)
 		
 		self.CD:Show()
 		
+		if ((duration or 0) > 1.5) then
+			--self.cooldown.start = cdStart
+			--self.duration = duration
+		end
+		
 		local tidalForce = Auras:RetrieveAuraInfo('player',246729)
 	
 		Auras:ToggleAuraVisibility(self,true,'showhide')
+		Auras:GlowHandler(self)
 		
 		if (selected) then
 			if (maxCharges > 1) then
@@ -57,7 +65,7 @@ Riptide:SetScript('OnUpdate', function(self)
 				end]]
 			end
 		else
-			Auras:CooldownHandler(self,groupID,start,duration)
+			Auras:CooldownHandler(self,groupID,cdStart,cdDuration)
 		end
 		
 		if (tidalForce) then
