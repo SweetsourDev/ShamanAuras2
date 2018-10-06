@@ -181,6 +181,8 @@ function Auras:RetrieveAuraInfo(unit,spellID,filter)
 			return UnitAura(unit,i,filter or "HELPFUL PLAYER")
 		end
 	end
+	
+	return false
 end
 
 -- Searches through the unit's buffs for a specific buff, by name

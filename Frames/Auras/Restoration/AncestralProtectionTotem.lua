@@ -9,6 +9,11 @@ local AncestralProtectionTotem = SSA.AncestralProtectionTotem
 
 -- Initialize Data Variables
 AncestralProtectionTotem.spellID = 207399
+AncestralProtectionTotem.start = {
+	[207399] = 0,
+}
+Riptide.pulseTime = 0
+Riptide.activePriority = 0
 AncestralProtectionTotem.condition = function()
 	return select(4,GetTalentInfo(4,3,1))
 end

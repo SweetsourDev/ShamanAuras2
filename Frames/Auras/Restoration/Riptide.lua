@@ -10,6 +10,10 @@ local Riptide = SSA.Riptide
 
 -- Initialize Data Variables
 Riptide.spellID = 61295
+Riptide.start = {
+	[53390] = 0,
+	[61295] = 0,
+}
 Riptide.pulseTime = 0
 Riptide.activePriority = 0
 Riptide.condition = function()

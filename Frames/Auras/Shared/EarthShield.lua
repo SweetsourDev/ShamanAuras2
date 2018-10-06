@@ -8,6 +8,10 @@ local EarthShield = SSA.EarthShield
 
 -- Initialize Data Variables
 EarthShield.spellID = 974
+EarthShield.start = {
+	[0] = 0,
+	[974] = 0,
+}
 --[[EarthShield.buff = {
 	start = 0,
 	duration = 600,
@@ -15,8 +19,9 @@ EarthShield.spellID = 974
 EarthShield.pulseTime = 0
 EarthShield.activePriority = 0
 EarthShield.charges = 0
-EarthShield.triggerTime = 0
+--EarthShield.triggerTime = 0
 EarthShield.isTriggered = false
+EarthShield.isGlowing = false
 EarthShield.condition = function()
 	local row,col = (SSA.spec == 1 and 3) or (SSA.spec == 2 and 3) or (SSA.spec == 3 and 2), (SSA.spec == 1 and 2) or (SSA.spec == 2 and 2) or (SSA.spec == 3 and 3)
 	
@@ -34,13 +39,13 @@ EarthShield:SetScript('OnUpdate',function(self)
 		local tarBuff,_,tarCount,_,tarDuration,tarExpires,tarCaster = Auras:RetrieveAuraInfo("target",self.spellID,"HELPFUL PLAYER")
 		--local tarBuff,_,tarCount,_,tarDuration,tarExpires,tarCaster = AuraUtil.FindAuraByName("target", Auras:GetSpellName(self.spellID))
 		
-		if ((duration or 0) > 1.5) then
+		--[[if ((duration or 0) > 1.5) then
 			self.buff.start = expires - duration
 			--self.duration = duration
 		elseif ((tarDuration or 0) > 1.5) then
 			self.buff.start = tarExpires - tarDuration
 			--self.duration = tarDuration
-		end
+		end]]
 		
 		self.charges = ((count or 0) > 0 and count) or ((tarCount or 0) > 0 and tarCount) or 0
 		
@@ -85,23 +90,36 @@ EarthShield:SetScript("OnEvent",function(self,event)
 	if (event ~= "COMBAT_LOG_EVENT_UNFILTERED") then
 		return
 	end
+	local spec = SSA.spec or GetSpecialization()
 	
+	local glow = Auras.db.char.auras[spec].auras[self:GetName()].glow
 	local _,subevent,_,srcGUID,_,_,_,destGUID,_,_,_,spellID,_,_,_,count = CombatLogGetCurrentEventInfo()
 	
 	if ((((subevent == "SPELL_AURA_APPLIED" or subevent == "SPELL_AURA_REFRESH" or subevent == "SPELL_AURA_REMOVED_DOSE") and srcGUID == UnitGUID("player")) or (subevent == "SPELL_AURA_REMOVED" and destGUID == UnitGUID("player")))and spellID == self.spellID) then
 		if (subevent == "SPELL_AURA_APPLIED" or subevent == "SPELL_AURA_REFRESH") then
-			self.start = GetTime()
-			self.isTriggered = false
+			for i=1,#glow.triggers do
+				if ((glow.triggers[i].spellID or 0) == spellID) then
+					glow.triggers[i].start = GetTime()
+					self.isTriggered = false
+				end
+			end
 		elseif (subevent == "SPELL_AURA_REMOVED") then
-			self.start = 0
+			for i=1,#glow.triggers do
+				if ((glow.triggers[i].spellID or 0) == spellID) then
+					glow.triggers[i].start = 0
+				end
+			end
 		elseif (subevent == "SPELL_AURA_REMOVED_DOSE") then
-			local glow = Auras.db.char.auras[SSA.spec].auras[self:GetName()].glow
 			
-			if (count <= glow.triggers.charges.threshold and count > 0) then
-				self.triggerTime = GetTime()
-			else
-				self.triggerTime = 0
-				self.isTriggered = false
+			for i=1,#glow.triggers do
+				if (glow.triggers[i].type == "charges") then
+					if (count <= glow.triggers[i].threshold and count > 0) then
+						self.start[0] = GetTime()
+					else
+						self.start[0] = 0
+						self.isTriggered = false
+					end
+				end
 			end
 		end
 	end
