@@ -87,7 +87,7 @@ EarthShield:SetScript('OnUpdate',function(self)
 end)
 
 EarthShield:SetScript("OnEvent",function(self,event)
-	if (event ~= "COMBAT_LOG_EVENT_UNFILTERED") then
+	if (event ~= "COMBAT_LOG_EVENT_UNFILTERED" or Auras.db.char.isFirstEverLoad) then
 		return
 	end
 	local spec = SSA.spec or GetSpecialization()
@@ -98,26 +98,32 @@ EarthShield:SetScript("OnEvent",function(self,event)
 	if ((((subevent == "SPELL_AURA_APPLIED" or subevent == "SPELL_AURA_REFRESH" or subevent == "SPELL_AURA_REMOVED_DOSE") and srcGUID == UnitGUID("player")) or (subevent == "SPELL_AURA_REMOVED" and destGUID == UnitGUID("player")))and spellID == self.spellID) then
 		if (subevent == "SPELL_AURA_APPLIED" or subevent == "SPELL_AURA_REFRESH") then
 			for i=1,#glow.triggers do
-				if ((glow.triggers[i].spellID or 0) == spellID) then
-					glow.triggers[i].start = GetTime()
-					self.isTriggered = false
+				local trigger = glow.triggers[i]
+				
+				if ((trigger.spellID or 0) == spellID) then
+					trigger.start = GetTime()
+					--self.isTriggered = false
 				end
 			end
 		elseif (subevent == "SPELL_AURA_REMOVED") then
 			for i=1,#glow.triggers do
-				if ((glow.triggers[i].spellID or 0) == spellID) then
-					glow.triggers[i].start = 0
+				local trigger = glow.triggers[i]
+				
+				if ((trigger.spellID or 0) == spellID) then
+					trigger.start = 0
 				end
 			end
 		elseif (subevent == "SPELL_AURA_REMOVED_DOSE") then
 			
 			for i=1,#glow.triggers do
-				if (glow.triggers[i].type == "charges") then
-					if (count <= glow.triggers[i].threshold and count > 0) then
-						self.start[0] = GetTime()
+				local trigger = glow.triggers[i]
+				
+				if (trigger.type == "charges") then
+					if (count <= trigger.threshold and count > 0) then
+						trigger.start = GetTime()
 					else
-						self.start[0] = 0
-						self.isTriggered = false
+						trigger.start = 0
+						--self.isTriggered = false
 					end
 				end
 			end

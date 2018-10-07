@@ -37,7 +37,7 @@ Riptide:SetScript('OnUpdate', function(self)
 		local tidalForce = Auras:RetrieveAuraInfo('player',246729)
 	
 		Auras:ToggleAuraVisibility(self,true,'showhide')
-		Auras:GlowHandler(self)
+		--Auras:GlowHandler(self)
 		
 		if (selected) then
 			if (maxCharges > 1) then
