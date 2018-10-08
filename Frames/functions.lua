@@ -29,6 +29,28 @@ function Auras:NoCombatDisplay(self,group)
 	end]]
 end
 
+function Auras:SetAuraStartTime(obj,duration,spellID)
+	local glow = Auras.db.char.auras[SSA.spec].auras[obj:GetName()].glow
+	
+	--if ((duration or 0) > 1.5) then
+	for i=1,#glow.triggers do
+		local trigger = glow.triggers[i]
+		
+		if ((trigger.spellID or 0) == spellID) then
+			if ((duration or 0) > 1.5) then
+				if (trigger.start == 0) then
+					trigger.start = GetTime()
+				end
+			else
+				if (trigger.start > 0) then
+					trigger.start = 0
+				end
+			end
+		end
+	end
+	--end
+end
+
 function Auras:GlowHandler(obj)
 	local glow = Auras.db.char.auras[SSA.spec].auras[obj:GetName()].glow
 	
@@ -75,12 +97,19 @@ function Auras:GlowHandler(obj)
 				if (obj.charges <= trigger.threshold and obj.charges > 0) then
 					-- Check if the trigger's combat conditions are met
 					if (trigger.combat == "all" or (trigger.combat == "on" and Auras:IsPlayerInCombat(true)) or (trigger.combat == "off" and not Auras:IsPlayerInCombat(true))) then
-
 						SSA.DataFrame.text:SetText("Time: "..GetTime().."\nTrigger: "..trigger.start.."\nDisplay: "..tostring(trigger.displayTime).."\nEnd: "..(trigger.start + trigger.displayTime).."\nTriggered: "..tostring(trigger.isActive))
-						if (trigger.displayTime == 0 or (trigger.displayTime > 0 and GetTime() < (trigger.start + trigger.displayTime) and GetTime() >= trigger.start)) then
+						if (trigger.displayTime == 0) then
 							trigger.isActive = true
-						else
-							trigger.isActive = false
+						elseif (trigger.displayTime > 0) then
+							if (trigger.start == 0) then
+								trigger.start = GetTime()
+							end
+						
+							if (GetTime() < (trigger.start + trigger.displayTime) and GetTime() >= trigger.start) then
+								trigger.isActive = true
+							else
+								trigger.isActive = false
+							end
 						end
 					else
 						trigger.isActive = false

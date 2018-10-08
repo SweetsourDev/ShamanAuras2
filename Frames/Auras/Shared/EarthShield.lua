@@ -100,7 +100,7 @@ EarthShield:SetScript("OnEvent",function(self,event)
 			for i=1,#glow.triggers do
 				local trigger = glow.triggers[i]
 				
-				if ((trigger.spellID or 0) == spellID) then
+				if ((trigger.spellID or 0) == spellID and trigger.type ~= "charges") then
 					trigger.start = GetTime()
 					--self.isTriggered = false
 				end

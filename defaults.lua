@@ -3029,7 +3029,6 @@ local defaults = {
 								charges = 9,
 								pulseRate = 2,
 								displayTime = 5,
-								disableShow = true,
 								combat = "all",
 							},
 							[2] = {
@@ -3220,6 +3219,7 @@ local defaults = {
 						triggers = {
 							[1] = {
 								isEnabled = false,
+								isActive = false,
 								type = "cooldown",
 								name = "Spell Cooldown",
 								threshold = 3,

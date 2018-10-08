@@ -1273,6 +1273,10 @@ local function AddGlowTools(auraTbl,grp)
 								end,
 								set = function(this,value)
 									trigger.threshold = value
+									
+									if ((aura.charges or 100) <= trigger.threshold) then
+										trigger.start = GetTime()
+									end
 								end,
 								width = 0.9,
 							},
