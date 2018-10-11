@@ -1199,7 +1199,15 @@ local function AddGlowTools(auraTbl,grp)
 								order = 8,
 								type = "range",
 								name = "Glow Duration",
-								desc = "The number of seconds that the glow will display after being triggered.\n\n|cFFFF0000Setting this value to 0 disables this functionality.|r",
+								desc = function()
+									if (trigger.type == "cooldown") then
+										return "The number of seconds that the glow will display after this spell's cooldown concludes.\n\n|cFFFF0000Setting this value to 0 disables this functionality.|r"
+									elseif (trigger.type == "buff" or trigger.type == "debuff") then
+										return "The number of seconds that the glow will display after the "..((trigger.type == "buff" and "buff") or "debuff").." is no longer active.\n\n|cFFFF0000Setting this value to 0 disables this functionality.|r"
+									else
+										return "The number of seconds that the glow will display after being triggered.\n\n|cFFFF0000Setting this value to 0 disables this functionality.|r"
+									end
+								end,
 								hidden = function()
 									if (not trigger.displayTime) then
 										return true
@@ -1226,10 +1234,24 @@ local function AddGlowTools(auraTbl,grp)
 								end,
 								width = 0.9,
 							},
-							pulseRate = {
+							filler_threshold = {
 								order = 9,
+								type = "description",
+								name = "",
+								hidden = function()
+									if (not trigger.threshold) then
+										return false
+									else
+										return true
+									end
+								end,
+								width = 0.9,
+							},
+							pulseRate = {
+								order = 10,
 								type = "range",
 								name = "Pulse Rate",
+								desc = "Causes the glow animation to \"pulse\". This value sets the amount of seconds that will elapse between each pulse.\n\n|cFFFF0000Setting this value to 0 disables this functionality.|r",
 								min = 0,
 								max = 10,
 								step = 0.5,
@@ -1247,23 +1269,17 @@ local function AddGlowTools(auraTbl,grp)
 								end,
 								width = 0.9,
 							},
-							filler_threshold = {
-								order = 10,
-								type = "description",
-								name = "",
-								hidden = function()
-									if (not trigger.threshold) then
-										return false
-									else
-										return true
-									end
-								end,
-								width = 0.9,
-							},
 							threshold = {
-								order = 10,
+								order = 11,
 								type = "range",
 								name = "Trigger Threshold",
+								hidden = function()
+									if (not trigger.threshold) then
+										return true
+									else
+										return false
+									end
+								end,
 								min = trigger.min or 1,
 								max = trigger.charges or trigger.duration or 0,
 								step = 1,

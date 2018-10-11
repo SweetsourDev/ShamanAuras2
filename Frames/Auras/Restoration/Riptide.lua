@@ -25,14 +25,18 @@ Riptide:SetScript('OnUpdate', function(self)
 		local groupID = Auras:GetAuraGroupID(self,self:GetName())
 		local cdStart,cdDuration = GetSpellCooldown(Auras:GetSpellName(self.spellID))
 		local charges,maxCharges,chgStart,chgDuration = GetSpellCharges(self.spellID)
-		local buff,_,count,_,duration,expires = Auras:RetrieveAuraInfo("player",53390,"HELPFUL")
+		local _,_,_,_,twDuration = Auras:RetrieveAuraInfo("player",53390,"HELPFUL")
+		local _,_,_,_,tfDuration = Auras:RetrieveAuraInfo("player",246729,"HELPFUL")
 		local _,_,_,selected = GetTalentInfo(2,1,1)
 		local glow = Auras.db.char.auras[3].auras[self:GetName()].glow
 		
 		self.CD:Show()
 		
-		Auras:SetAuraStartTime(self,cdDuration,self.spellID)
-		Auras:SetAuraStartTime(self,duration,53390)
+		if ((selected and (charges or 0) == 0) or not selected) then
+			Auras:SetAuraStartTime(self,cdDuration,self.spellID)
+		end
+		Auras:SetAuraStartTime(self,twDuration,53390)
+		Auras:SetAuraStartTime(self,tfDuration,246729)
 		--[[if ((cdDuration or 0) > 1.5) then
 			for i=1,#glow.triggers do
 				local trigger = glow.triggers[i]
@@ -44,11 +48,15 @@ Riptide:SetScript('OnUpdate', function(self)
 				end
 			end
 		end]]
-		
-		local tidalForce = Auras:RetrieveAuraInfo('player',246729)
+		--[[SSA.DataFrame.text:SetText(GetTime().."\n\n")
+		for i=1,#glow.triggers do
+			local trigger = glow.triggers[i]
+			
+			SSA.DataFrame.text:SetText(Auras:CurText('DataFrame')..i..". "..trigger.start.." ("..tostring(trigger.isActive)..")\n")
+		end]]
 	
 		Auras:ToggleAuraVisibility(self,true,'showhide')
-		--Auras:GlowHandler(self)
+		Auras:GlowHandler(self)
 		
 		if (selected) then
 			if (maxCharges > 1) then
@@ -108,7 +116,7 @@ end)
 	local glow = Auras.db.char.auras[spec].auras[self:GetName()].glow
 	local _,subevent,_,srcGUID,_,_,_,destGUID,_,_,_,spellID,_,_,_,count = CombatLogGetCurrentEventInfo()
 	
-	if ((((subevent == "SPELL_AURA_APPLIED" or subevent == "SPELL_AURA_REFRESH" or subevent == "SPELL_AURA_REMOVED_DOSE") and srcGUID == UnitGUID("player")) or (subevent == "SPELL_AURA_REMOVED" and destGUID == UnitGUID("player")))and spellID == self.spellID) then
+	if ((((subevent == "SPELL_AURA_APPLIED" or subevent == "SPELL_AURA_REFRESH") and srcGUID == UnitGUID("player")) or (subevent == "SPELL_AURA_REMOVED" and destGUID == UnitGUID("player")))and spellID == self.spellID) then
 		if (subevent == "SPELL_AURA_APPLIED" or subevent == "SPELL_AURA_REFRESH") then
 			for i=1,#glow.triggers do
 				local trigger = glow.triggers[i]
@@ -124,20 +132,6 @@ end)
 				
 				if ((trigger.spellID or 0) == spellID) then
 					trigger.start = 0
-				end
-			end
-		elseif (subevent == "SPELL_AURA_REMOVED_DOSE") then
-			
-			for i=1,#glow.triggers do
-				local trigger = glow.triggers[i]
-				
-				if (trigger.type == "charges") then
-					if (count <= trigger.threshold and count > 0) then
-						trigger.start = GetTime()
-					else
-						trigger.start = 0
-						--self.isTriggered = false
-					end
 				end
 			end
 		end
