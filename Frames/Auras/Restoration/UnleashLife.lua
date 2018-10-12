@@ -8,6 +8,7 @@ local UnleashLife = SSA.UnleashLife
 
 -- Initialize Data Variables
 UnleashLife.spellID = 73685
+UnleashLife.pulseTime = 0
 UnleashLife.condition = function()
 	return select(4,GetTalentInfo(1,3,1))
 end
@@ -16,10 +17,15 @@ UnleashLife:SetScript('OnUpdate',function(self)
 	if (Auras:CharacterCheck(self,3,1,3)) then
 		local groupID = Auras:GetAuraGroupID(self,self:GetName())
 		local start,duration = GetSpellCooldown(Auras:GetSpellName(self.spellID))
+		local _,_,_,_,buffDuration = Auras:RetrieveAuraInfo("player",self.spellID,"HELPFUL")
 	
+		Auras:SetAuraStartTime(self,duration,self.spellID,"cooldown")
+		Auras:SetAuraStartTime(self,buffDuration,self.spellID,"buff")
+		Auras:GlowHandler(self)
+		
 		Auras:ToggleAuraVisibility(self,true,'showhide')
 		Auras:CooldownHandler(self,groupID,start,duration)
-			
+		
 		if (Auras:IsPlayerInCombat(true)) then
 			self:SetAlpha(1)
 		else

@@ -9,6 +9,7 @@ local PurifySpirit = SSA.PurifySpirit
 
 -- Initialize Data Variables
 PurifySpirit.spellID = 77130
+PurifySpirit.pulseTime = 0
 PurifySpirit.condition = function()
 	return IsSpellKnown(77130)
 end
@@ -18,9 +19,11 @@ PurifySpirit:SetScript('OnUpdate',function(self)
 		local groupID = Auras:GetAuraGroupID(self,self:GetName())
 		local start,duration = GetSpellCooldown(Auras:GetSpellName(self.spellID))
 	
+		Auras:SetAuraStartTime(self,duration,self.spellID)
+		Auras:GlowHandler(self)
 		Auras:ToggleAuraVisibility(self,true,'showhide')
 		Auras:CooldownHandler(self,groupID,start,duration)
-			
+		
 		if (Auras:IsPlayerInCombat(true)) then
 			self:SetAlpha(1)
 		else

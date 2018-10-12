@@ -29,7 +29,7 @@ function Auras:NoCombatDisplay(self,group)
 	end]]
 end
 
-function Auras:SetAuraStartTime(obj,duration,spellID)
+function Auras:SetAuraStartTime(obj,duration,spellID,triggerType)
 	local glow = Auras.db.char.auras[SSA.spec].auras[obj:GetName()].glow
 	
 	--if ((duration or 0) > 1.5) then
@@ -37,7 +37,12 @@ function Auras:SetAuraStartTime(obj,duration,spellID)
 		local trigger = glow.triggers[i]
 		
 		if (trigger.isEnabled) then
-			if ((trigger.spellID or 0) == spellID) then
+			if ((trigger.spellID or 0) == spellID and trigger.type == triggerType) then	
+				if (obj:GetName() == "WindRushTotem") then
+					if ((duration or 0) > 0) then
+						print("Duration: "..tostring(duration))
+					end
+				end
 				if ((duration or 0) > 1.5) then
 					if (trigger.start == 0) then
 						trigger.start = GetTime()
@@ -46,7 +51,7 @@ function Auras:SetAuraStartTime(obj,duration,spellID)
 					if (trigger.start > 0) then
 						if (trigger.displayTime > 0) then
 							local expire = trigger.start + trigger.duration
-							print(floor(GetTime()).." - "..tostring(floor(expire + trigger.displayTime)))
+							--print(floor(GetTime()).." - "..tostring(floor(expire + trigger.displayTime)))
 							if (GetTime() > (expire + trigger.displayTime)) then
 								
 								trigger.start = 0
@@ -69,57 +74,34 @@ function Auras:GlowHandler(obj)
 		local trigger = glow.triggers[i]
 
 		-- Check the type of trigger
-		if ((trigger.type == "cooldown" or trigger.type == "buff" or trigger.type == "debuff") and i == 2) then
-			--SSA.DataFrame.text:SetText("#1")
+		if ((trigger.type == "cooldown" or trigger.type == "buff" or trigger.type == "debuff") and i == 1) then
 			-- Check if the trigger is enabled
 			if (trigger.isEnabled) then
-				--SSA.DataFrame.text:SetText("#2")
 				local expire = trigger.start + trigger.duration
 				local remains = expire - GetTime()
-				
-				-- Check if the trigger's threshold conditions are met
-				--if (((remains <= trigger.threshold and remains > 0) or not trigger.threshold)) then
-					--SSA.DataFrame.text:SetText("#3")
-					-- Check if the trigger's combat conditions are met
-					if (trigger.combat == "all" or (trigger.combat == "on" and Auras:IsPlayerInCombat(true)) or (trigger.combat == "off" and not Auras:IsPlayerInCombat(true))) then
-						--SSA.DataFrame.text:SetText("#4")
-						-- Check if the trigger's "show" conditons are met
-						if (not trigger.threshold or (trigger.show == "all" and (remains <= trigger.threshold and remains > 0 or (GetTime() >= expire and trigger.start > 0))) or (trigger.show == "on" and remains <= trigger.threshold and remains > 0) or (trigger.show == "off" and GetTime() >= expire)) then
-							SSA.DataFrame.text:SetText("Theshold: "..tostring(not trigger.threshold).."\n")
-							SSA.DataFrame.text:SetText(Auras:CurText('DataFrame').."All: "..tostring(trigger.show == "all" and (remains <= trigger.threshold and remains > 0 or (GetTime() >= expire and trigger.start > 0))).."\n")
-							SSA.DataFrame.text:SetText(Auras:CurText('DataFrame').."On: "..tostring(trigger.show == "on" and remains <= trigger.threshold and remains > 0).."\n")
-							SSA.DataFrame.text:SetText(Auras:CurText('DataFrame').."Off: "..tostring(trigger.show == "off" and GetTime() >= expire).."\n")
-							--SSA.DataFrame.text:SetText(GetTime().."\n\n".."Expire: "..expire.." ("..trigger.start.." + "..trigger.duration..")\n\n")
-							--SSA.DataFrame.text:SetText("WITH DISPLAY\n\nTime: "..GetTime().."\nExpire: "..expire.."\nDisplay: "..(expire + trigger.displayTime).."\n")
-							if ((trigger.show == "all" or trigger.show == "off") and GetTime() >= expire and (trigger.displayTime or 0) > 0) then
-								--SSA.DataFrame.text:SetText(Auras:CurText('DataFrame').."#7")
-								if (GetTime() < (expire + trigger.displayTime)) then
-									--SSA.DataFrame.text:SetText("#7")
-									--SSA.DataFrame.text:SetText(Auras:CurText('DataFrame').."-A")
-									trigger.isActive = true
-								else
-									--SSA.DataFrame.text:SetText("#7.5")
-									--SSA.DataFrame.text:SetText(Auras:CurText('DataFrame').."-B")
-									trigger.isActive = false
-								end
-							else
-								--SSA.DataFrame.text:SetText("#6")
+
+				SSA.DataFrame.text:SetText(GetTime().."\n"..expire.."\n"..remains)
+				-- Check if the trigger's combat conditions are met
+				if (trigger.combat == "all" or (trigger.combat == "on" and Auras:IsPlayerInCombat(true)) or (trigger.combat == "off" and not Auras:IsPlayerInCombat(true))) then
+					-- Check if the trigger's "show" and threshold conditons are met
+					if (not trigger.threshold or (trigger.show == "all" and (remains <= trigger.threshold and remains > 0 or (GetTime() >= expire and trigger.start > 0))) or (trigger.show == "on" and remains <= trigger.threshold and remains > 0) or (trigger.show == "off" and GetTime() >= expire)) then
+						-- If the trigger has a glow duration time, keep it active after the trigger expiration, otherwise just activate the trigger while it's not expired.
+						if ((trigger.show == "all" or trigger.show == "off") and GetTime() >= expire and (trigger.displayTime or 0) > 0) then
+							if (GetTime() < (expire + trigger.displayTime)) then
 								trigger.isActive = true
+							else
+								trigger.isActive = false
 							end
 						else
-							--SSA.DataFrame.text:SetText("#6.5")
-							trigger.isActive = false
+							trigger.isActive = true
 						end
 					else
-						--SSA.DataFrame.text:SetText("#4.5")
 						trigger.isActive = false
 					end
-				--else
-					--SSA.DataFrame.text:SetText("#3.5")
-					--trigger.isActive = false
-				--end
+				else
+					trigger.isActive = false
+				end
 			else
-				--SSA.DataFrame.text:SetText("#2.5")
 				trigger.isActive = false
 			end
 		elseif (trigger.type == "charges") then
@@ -152,7 +134,26 @@ function Auras:GlowHandler(obj)
 			else
 				trigger.isActive = false
 			end
-		else
+		elseif (trigger.type == "interrupt") then
+			-- Check if the trigger is enabled
+			if (trigger.isEnabled) then
+				-- Check if the trigger's combat conditions are met
+				if (trigger.combat == "all" or (trigger.combat == "on" and Auras:IsPlayerInCombat(true)) or (trigger.combat == "off" and not Auras:IsPlayerInCombat(true))) then
+					-- Check if a target is casting an interruptible cast
+					if (obj.isInterruptible) then
+						-- If the trigger's start time hasn't been initialize, do so now.
+						--[[if (trigger.start == 0) then
+							trigger.start = GetTime()
+						end]]
+						trigger.isActive = true
+					else
+						--trigger.start = 0
+						trigger.isActive = false
+					end
+				else
+					trigger.isActive = false
+				end
+			end
 			--Auras:ToggleOverlayGlow(obj,false)
 		end
 	end

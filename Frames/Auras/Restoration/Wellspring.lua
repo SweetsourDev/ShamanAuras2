@@ -9,6 +9,7 @@ local Wellspring = SSA.Wellspring
 
 -- Initialize Data Variables
 Wellspring.spellID = 197995
+Wellspring.pulseTime = 0
 Wellspring.condition = function()
 	return select(4,GetTalentInfo(7,2,1))
 end
@@ -18,6 +19,8 @@ Wellspring:SetScript('OnUpdate',function(self)
 		local groupID = Auras:GetAuraGroupID(self,self:GetName())
 		local start,duration = GetSpellCooldown(Auras:GetSpellName(self.spellID))
 	
+		Auras:SetAuraStartTime(self,duration,self.spellID,"cooldown")
+		Auras:GlowHandler(self)
 		Auras:ToggleAuraVisibility(self,true,'showhide')
 		Auras:CooldownHandler(self,groupID,start,duration)
 			

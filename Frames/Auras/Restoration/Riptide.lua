@@ -10,12 +10,7 @@ local Riptide = SSA.Riptide
 
 -- Initialize Data Variables
 Riptide.spellID = 61295
-Riptide.start = {
-	[53390] = 0,
-	[61295] = 0,
-}
 Riptide.pulseTime = 0
-Riptide.activePriority = 0
 Riptide.condition = function()
 	return IsSpellKnown(61295)
 end
@@ -33,10 +28,10 @@ Riptide:SetScript('OnUpdate', function(self)
 		self.CD:Show()
 		
 		if ((selected and (charges or 0) == 0) or not selected) then
-			Auras:SetAuraStartTime(self,cdDuration,self.spellID)
+			Auras:SetAuraStartTime(self,cdDuration,self.spellID,"cooldown")
 		end
-		Auras:SetAuraStartTime(self,twDuration,53390)
-		Auras:SetAuraStartTime(self,tfDuration,246729)
+		Auras:SetAuraStartTime(self,twDuration,53390,"buff")
+		Auras:SetAuraStartTime(self,tfDuration,246729,"buff")
 		--[[if ((cdDuration or 0) > 1.5) then
 			for i=1,#glow.triggers do
 				local trigger = glow.triggers[i]
@@ -56,7 +51,7 @@ Riptide:SetScript('OnUpdate', function(self)
 		end]]
 	
 		Auras:ToggleAuraVisibility(self,true,'showhide')
-		Auras:GlowHandler(self)
+		--Auras:GlowHandler(self)
 		
 		if (selected) then
 			if (maxCharges > 1) then

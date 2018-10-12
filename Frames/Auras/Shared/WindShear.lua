@@ -10,6 +10,8 @@ local WindShear = SSA.WindShear
 
 -- Initialize Data Variables
 WindShear.spellID = 57994
+WindShear.pulseTime = 0
+WindShear.isInterruptible = false
 WindShear.condition = function()
 	return IsSpellKnown(57994)
 end
@@ -23,12 +25,16 @@ WindShear:SetScript('OnUpdate',function(self)
 		Auras:ToggleAuraVisibility(self,true,'showhide')
 		Auras:SpellRangeCheck(self,self.spellID,true)
 		Auras:CooldownHandler(self,groupID,start,duration)
+		Auras:SetAuraStartTime(self,duration,self.spellID,"cooldown")
 		
 		if (name and not interrupt and (start or 0) == 0 and Auras:IsTargetEnemy()) then
-			Auras:ToggleOverlayGlow(self.glow,true,true)
+			self.isInterruptible = true
 		else
-			Auras:ToggleOverlayGlow(self.glow,false)
+			self.isInterruptible = false
 		end
+		
+		
+		Auras:GlowHandler(self)
 		
 		if (Auras:IsPlayerInCombat()) then
 			self:SetAlpha(1)

@@ -1023,6 +1023,7 @@ local function AddGlowTools(auraTbl,grp)
 			["all"] = "Always",
 		},
 		["charges"] = {},
+		["interrupt"] = {},
 	}
 	
 	for k,v in pairs(auras.auras) do
@@ -1290,7 +1291,7 @@ local function AddGlowTools(auraTbl,grp)
 								set = function(this,value)
 									trigger.threshold = value
 									
-									if ((aura.charges or 100) <= trigger.threshold) then
+									if ((aura.charges or 1000) <= trigger.threshold) then
 										trigger.start = GetTime()
 									end
 								end,
