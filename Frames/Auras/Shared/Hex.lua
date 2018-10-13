@@ -10,6 +10,7 @@ local Hex = SSA.Hex
 
 -- Initialize Data Variables
 Hex.spellID = 51514
+Hex.pulseTime = 0
 Hex.condition = function()
 	return IsSpellKnown(51514)
 end
@@ -19,6 +20,8 @@ Hex:SetScript('OnUpdate',function(self)
 		local groupID = Auras:GetAuraGroupID(self,self:GetName())
 		local start,duration = GetSpellCooldown(Auras:GetSpellName(self.spellID))
 		
+		Auras:SetAuraStartTime(self,duration,self.spellID,"cooldown")
+		Auras:GlowHandler(self)
 		Auras:ToggleAuraVisibility(self,true,'showhide')
 		Auras:CooldownHandler(self,groupID,start,duration)
 		

@@ -9,6 +9,7 @@ local LavaBurst = SSA.LavaBurst
 
 -- Initialize Data Variables
 LavaBurst.spellID = 51505
+LavaBurst.pulseTime = 0
 LavaBurst.condition = function()
 	return IsSpellKnown(51505)
 end
@@ -16,11 +17,12 @@ end
 LavaBurst:SetScript('OnUpdate', function(self)
 	if (Auras:CharacterCheck(self,1,self.spellID) or Auras:CharacterCheck(self,3,self.spellID)) then
 		local groupID = Auras:GetAuraGroupID(self,self:GetName())
-		local buff = Auras:RetrieveAuraInfo("player", 77762)
 		local ascendance = Auras:RetrieveAuraInfo("player", (SSA.spec == 1 and 114050) or (SSA.spec == 3 and 114052))
 		local start,duration = GetSpellCooldown(Auras:GetSpellName(self.spellID))
 		local charges,maxCharges,chgStart,chgDuration = GetSpellCharges(self.spellID)
-		
+	
+		Auras:SetAuraStartTime(self,duration,self.spellID,"cooldown")
+		Auras:GlowHandler(self)
 		Auras:ToggleAuraVisibility(self,true,'showhide')
 		Auras:SpellRangeCheck(self,self.spellID,true)
 		Auras:CooldownHandler(self,groupID,start,duration,true)
@@ -51,15 +53,9 @@ LavaBurst:SetScript('OnUpdate', function(self)
 		end
 
 		if ((duration or 0) > 2) then
-			Auras:ToggleOverlayGlow(self.glow,false)
 			Auras:CooldownHandler(self,groupID,start,duration)
 			self.CD:Show()
 		elseif (buff or ascendance) then
-			if (buff) then
-				Auras:ToggleOverlayGlow(self.glow,true,false)
-			else
-				Auras:ToggleOverlayGlow(self.glow,false)
-			end
 			if (ascendance) then
 				self.Charges.text:SetText('')
 				self.ChargeCD:Hide()
@@ -67,7 +63,7 @@ LavaBurst:SetScript('OnUpdate', function(self)
 			self.CD:Hide()
 			self.CD:SetCooldown(0,0)
 		else
-			Auras:ToggleOverlayGlow(self.glow,false)
+			--Auras:ToggleOverlayGlow(self.glow,false)
 			self.CD.text:SetText('')
 		end
 		
@@ -76,11 +72,44 @@ LavaBurst:SetScript('OnUpdate', function(self)
 		else
 			Auras:NoCombatDisplay(self,groupID)
 			
-			if (buff and Auras:IsTargetEnemy()) then
+			--[[if (buff and Auras:IsTargetEnemy()) then
 				Auras:ToggleOverlayGlow(self.glow,true)
-			end
+			end]]
 		end
 	else
 		Auras:ToggleAuraVisibility(self,false,'showhide')
+	end
+end)
+
+LavaBurst:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+LavaBurst:SetScript("OnEvent",function(self,event)
+	if (event ~= "COMBAT_LOG_EVENT_UNFILTERED" or Auras.db.char.isFirstEverLoad) then
+		return
+	end
+	
+	local spec = SSA.spec or GetSpecialization()
+	
+	local glow = Auras.db.char.auras[spec].auras[self:GetName()].glow
+	local _,subevent,_,srcGUID,_,_,_,destGUID,_,_,_,spellID = CombatLogGetCurrentEventInfo()
+
+	if ((subevent == "SPELL_AURA_APPLIED" or subevent == "SPELL_AURA_REFRESH" or subevent == "SPELL_AURA_REMOVED") and srcGUID == UnitGUID("player") and spellID == 77762) then
+		if (subevent == "SPELL_AURA_APPLIED" or subevent == "SPELL_AURA_REFRESH") then
+			for i=1,#glow.triggers do
+				local trigger = glow.triggers[i]
+				
+				if ((trigger.spellID or 0) == spellID and trigger.type == "buff") then
+					trigger.start = GetTime()
+					--self.isTriggered = false
+				end
+			end
+		elseif (subevent == "SPELL_AURA_REMOVED") then
+			for i=1,#glow.triggers do
+				local trigger = glow.triggers[i]
+				
+				if ((trigger.spellID or 0) == spellID and trigger.type == "buff") then
+					trigger.start = 0
+				end
+			end
+		end
 	end
 end)

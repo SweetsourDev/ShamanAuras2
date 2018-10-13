@@ -9,6 +9,7 @@ local TremorTotem = SSA.TremorTotem
 
 -- Initialize Data Variables
 TremorTotem.spellID = 8143
+TremorTotem.pulseTime = 0
 TremorTotem.condition = function() return
 	IsSpellKnown(8143)
 end
@@ -18,6 +19,8 @@ TremorTotem:SetScript('OnUpdate',function(self)
 		local groupID = Auras:GetAuraGroupID(self,self:GetName())
 		local start,duration = GetSpellCooldown(Auras:GetSpellName(self.spellID))
 		
+		Auras:SetAuraStartTime(self,duration,self.spellID,"cooldown")
+		Auras:GlowHandler(self)
 		Auras:ToggleAuraVisibility(self,true,'showhide')
 		Auras:CooldownHandler(self,groupID,start,duration)
 			

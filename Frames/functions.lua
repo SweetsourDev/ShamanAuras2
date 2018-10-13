@@ -38,9 +38,9 @@ function Auras:SetAuraStartTime(obj,duration,spellID,triggerType)
 		
 		if (trigger.isEnabled) then
 			if ((trigger.spellID or 0) == spellID and trigger.type == triggerType) then	
-				if (obj:GetName() == "WindRushTotem") then
+				if (obj:GetName() == "LavaBurst") then
 					if ((duration or 0) > 0) then
-						print("Duration: "..tostring(duration))
+						--print("Duration: "..tostring(duration))
 					end
 				end
 				if ((duration or 0) > 1.5) then
@@ -49,7 +49,10 @@ function Auras:SetAuraStartTime(obj,duration,spellID,triggerType)
 					end
 				else
 					if (trigger.start > 0) then
-						if (trigger.displayTime > 0) then
+						if (obj:GetName() == "LavaBurst") then
+							--print("Start above 0")
+						end
+						if ((trigger.displayTime or 0) > 0) then
 							local expire = trigger.start + trigger.duration
 							--print(floor(GetTime()).." - "..tostring(floor(expire + trigger.displayTime)))
 							if (GetTime() > (expire + trigger.displayTime)) then
@@ -58,6 +61,10 @@ function Auras:SetAuraStartTime(obj,duration,spellID,triggerType)
 							end
 						else
 							trigger.start = 0
+						end
+					else
+						if (obj:GetName() == "LavaBurst") then
+							--print("Start 0")
 						end
 					end
 				end
@@ -74,7 +81,7 @@ function Auras:GlowHandler(obj)
 		local trigger = glow.triggers[i]
 
 		-- Check the type of trigger
-		if ((trigger.type == "cooldown" or trigger.type == "buff" or trigger.type == "debuff") and i == 1) then
+		if ((trigger.type == "cooldown" or trigger.type == "buff" or trigger.type == "debuff")) then
 			-- Check if the trigger is enabled
 			if (trigger.isEnabled) then
 				local expire = trigger.start + trigger.duration
@@ -84,7 +91,7 @@ function Auras:GlowHandler(obj)
 				-- Check if the trigger's combat conditions are met
 				if (trigger.combat == "all" or (trigger.combat == "on" and Auras:IsPlayerInCombat(true)) or (trigger.combat == "off" and not Auras:IsPlayerInCombat(true))) then
 					-- Check if the trigger's "show" and threshold conditons are met
-					if (not trigger.threshold or (trigger.show == "all" and (remains <= trigger.threshold and remains > 0 or (GetTime() >= expire and trigger.start > 0))) or (trigger.show == "on" and remains <= trigger.threshold and remains > 0) or (trigger.show == "off" and GetTime() >= expire)) then
+					if ((not trigger.threshold and trigger.start > 0) or (trigger.show == "all" and (remains <= (trigger.threshold or 0) and remains > 0 or (GetTime() >= expire and trigger.start > 0))) or (trigger.show == "on" and remains <= (trigger.threshold or 0) and remains > 0) or (trigger.show == "off" and GetTime() >= expire)) then
 						-- If the trigger has a glow duration time, keep it active after the trigger expiration, otherwise just activate the trigger while it's not expired.
 						if ((trigger.show == "all" or trigger.show == "off") and GetTime() >= expire and (trigger.displayTime or 0) > 0) then
 							if (GetTime() < (expire + trigger.displayTime)) then

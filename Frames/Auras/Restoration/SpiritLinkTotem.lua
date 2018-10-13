@@ -8,6 +8,7 @@ local SpiritLinkTotem = SSA.SpiritLinkTotem
 
 -- Initialize Data Variables
 SpiritLinkTotem.spellID = 98008
+SpiritLinkTotem.pulseTime = 0
 SpiritLinkTotem.condition = function()
 	return IsSpellKnown(98008)
 end
@@ -17,6 +18,8 @@ SpiritLinkTotem:SetScript('OnUpdate',function(self)
 		local groupID = Auras:GetAuraGroupID(self,self:GetName())
 		local start,duration = GetSpellCooldown(Auras:GetSpellName(self.spellID))
 	
+		Auras:SetAuraStartTime(self,duration,self.spellID,"cooldown")
+		Auras:GlowHandler(self)
 		Auras:ToggleAuraVisibility(self,true,'showhide')
 		Auras:CooldownHandler(self,groupID,start,duration)
 		

@@ -8,35 +8,28 @@ local GetTime = GetTime
 local NaturesGuardian = SSA.NaturesGuardian
 
 -- Initialize Data Variables
-NaturesGuardian.spellID = 30884
-NaturesGuardian.start = 0
-NaturesGuardian.duration = 45
+NaturesGuardian.spellID = 31616
+NaturesGuardian.pulseTime = 0
 NaturesGuardian.condition = function()
 	return select(4,GetTalentInfo(5,1,1))
 end
 
 NaturesGuardian:SetScript('OnUpdate',function(self)
 	if (Auras:CharacterCheck(self,0,5,1)) then
+		local spec = SSA.spec or GetSpecialization()
 		local groupID = Auras:GetAuraGroupID(self,self:GetName())
-		--local start,duration
-		--local start,duration = GetSpellCooldown(Auras:GetSpellName(31616))
-		--start = self.natureGuardianCastTime or nil
+		local trigger = Auras.db.char.auras[spec].auras[self:GetName()].glow.triggers[1]
 		
-		--[[if (self.natureGuardianCastTime) then
-			duration = 45
-		else 
-			duration = nil
-		end]]
-		
-		if (GetTime() > (self.start + self.duration)) then
-			self.start = 0
+		if (GetTime() > (trigger.start + trigger.duration)) then
+			trigger.start = 0
 		end
 		
+		Auras:GlowHandler(self)
 		Auras:ToggleAuraVisibility(self,true,'showhide')
-		Auras:CooldownHandler(self,groupID,self.start,self.duration)
+		Auras:CooldownHandler(self,groupID,trigger.start,((trigger.start > 0 and trigger.duration) or 0))
 			
 		if (Auras:IsPlayerInCombat()) then
-			if (self.start > 0) then
+			if (trigger.start > 0) then
 				self:SetAlpha(1)
 			else
 				self:SetAlpha(0.5)
@@ -46,5 +39,21 @@ NaturesGuardian:SetScript('OnUpdate',function(self)
 		end
 	else
 		Auras:ToggleAuraVisibility(self,false,'showhide')
+	end
+end)
+
+NaturesGuardian:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+NaturesGuardian:SetScript("OnEvent",function(self,event)
+	if (event ~= "COMBAT_LOG_EVENT_UNFILTERED") then
+		return
+	end
+	
+	local _,subevent,_,srcGUID,_,_,_,_,_,_,_,spellID = CombatLogGetCurrentEventInfo()
+	
+	if (subevent == "SPELL_HEAL" and srcGUID == UnitGUID("player") and spellID == self.spellID) then
+		local spec = SSA.spec or GetSpecialization()
+		local trigger = Auras.db.char.auras[spec].auras[self:GetName()].glow.triggers[1]
+
+		trigger.start = GetTime()
 	end
 end)
