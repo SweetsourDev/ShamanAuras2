@@ -10,8 +10,9 @@ local FlameShock = SSA.FlameShock
 
 -- Initialize Data Variables
 FlameShock.spellID = (SSA.spec == 1 and 188389) or (SSA.spec == 2 and 0) or (SSA.spec == 3 and 188838)
+FlameShock.pulseTime = 0
 FlameShock.condition = function()
-	return IsSpellKnown(188389)
+	return IsSpellKnown(FlameShock.spellID)
 end
 
 FlameShock:SetScript('OnUpdate', function(self)
@@ -30,7 +31,7 @@ FlameShock:SetScript('OnUpdate', function(self)
 		local groupID = Auras:GetAuraGroupID(self,'FlameShock')
 		local db = Auras.db.char
 		--local debuff,_,_,_,_,expires,caster = Auras:RetrieveDebuffInfo("target", Auras:GetSpellName(spellID))
-		local debuff,_,_,_,_,expires,caster = Auras:RetrieveAuraInfo("target", self.spellID, "HARMFUL PLAYER")
+		local debuff,_,_,_,debuffDuration,expires,caster = Auras:RetrieveAuraInfo("target", self.spellID, "HARMFUL PLAYER")
 		local start,duration = GetSpellCooldown(Auras:GetSpellName(self.spellID))
 		local timer,seconds
 		local remains = (expires or 0) - GetTime()
@@ -43,6 +44,14 @@ FlameShock:SetScript('OnUpdate', function(self)
 			self.text:SetTextColor(1,1,0,1)
 		end
 		
+		if (debuff) then
+			Auras:SetAuraStartTime(self,((expires or 0) - (debuffDuration or 0)),debuffDuration,self.spellID,"debuff")
+		else
+			local trigger = Auras.db.char.auras[SSA.spec].auras[self:GetName()].glow.triggers[1]
+			
+			trigger.start = 0
+		end
+		Auras:GlowHandler(self)
 		Auras:ToggleAuraVisibility(self,true,'showhide')
 		Auras:SpellRangeCheck(self,self.spellID,true)	
 		Auras:CooldownHandler(self,groupID,start,duration)
@@ -60,17 +69,17 @@ FlameShock:SetScript('OnUpdate', function(self)
 		
 		if (debuff and caster == 'player') then
 			if ((seconds or 0) <= db.settings[SSA.spec].flameShock and UnitAffectingCombat('player')) then
-				Auras:ToggleOverlayGlow(self.glow,true,true)
+				--Auras:ToggleOverlayGlow(self.glow,true,true)
 			else
-				Auras:ToggleOverlayGlow(self.glow,false)
+				--Auras:ToggleOverlayGlow(self.glow,false)
 			end
 			self.text:SetText(timer)
 		else
 			self.text:SetText('')
 			if (Auras:IsTargetEnemy()) then
-				Auras:ToggleOverlayGlow(self.glow,true,true)
+				--Auras:ToggleOverlayGlow(self.glow,true,true)
 			else
-				Auras:ToggleOverlayGlow(self.glow,false)
+				--Auras:ToggleOverlayGlow(self.glow,false)
 			end
 		end
 			
@@ -84,6 +93,6 @@ FlameShock:SetScript('OnUpdate', function(self)
 		end
 	else
 		Auras:ToggleAuraVisibility(self,false,'showhide')
-		Auras:ToggleOverlayGlow(self.glow,false)
+		--Auras:ToggleOverlayGlow(self.glow,false)
 	end
 end)

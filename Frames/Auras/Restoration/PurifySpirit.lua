@@ -19,7 +19,7 @@ PurifySpirit:SetScript('OnUpdate',function(self)
 		local groupID = Auras:GetAuraGroupID(self,self:GetName())
 		local start,duration = GetSpellCooldown(Auras:GetSpellName(self.spellID))
 	
-		Auras:SetAuraStartTime(self,duration,self.spellID)
+		Auras:SetAuraStartTime(self,start,duration,self.spellID)
 		Auras:GlowHandler(self)
 		Auras:ToggleAuraVisibility(self,true,'showhide')
 		Auras:CooldownHandler(self,groupID,start,duration)

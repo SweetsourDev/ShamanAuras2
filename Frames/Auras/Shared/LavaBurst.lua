@@ -21,7 +21,7 @@ LavaBurst:SetScript('OnUpdate', function(self)
 		local start,duration = GetSpellCooldown(Auras:GetSpellName(self.spellID))
 		local charges,maxCharges,chgStart,chgDuration = GetSpellCharges(self.spellID)
 	
-		Auras:SetAuraStartTime(self,duration,self.spellID,"cooldown")
+		Auras:SetAuraStartTime(self,start,duration,self.spellID,"cooldown")
 		Auras:GlowHandler(self)
 		Auras:ToggleAuraVisibility(self,true,'showhide')
 		Auras:SpellRangeCheck(self,self.spellID,true)

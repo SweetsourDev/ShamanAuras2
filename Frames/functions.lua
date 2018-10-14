@@ -29,7 +29,7 @@ function Auras:NoCombatDisplay(self,group)
 	end]]
 end
 
-function Auras:SetAuraStartTime(obj,duration,spellID,triggerType)
+function Auras:SetAuraStartTime(obj,start,duration,spellID,triggerType)
 	local glow = Auras.db.char.auras[SSA.spec].auras[obj:GetName()].glow
 	
 	--if ((duration or 0) > 1.5) then
@@ -38,18 +38,20 @@ function Auras:SetAuraStartTime(obj,duration,spellID,triggerType)
 		
 		if (trigger.isEnabled) then
 			if ((trigger.spellID or 0) == spellID and trigger.type == triggerType) then	
-				if (obj:GetName() == "LavaBurst") then
-					if ((duration or 0) > 0) then
-						--print("Duration: "..tostring(duration))
-					end
-				end
+				
 				if ((duration or 0) > 1.5) then
+					if (obj:GetName() == "HealingStreamTotem") then
+						if ((duration or 0) > 0) then
+							--print("Duration: "..tostring(duration))
+						end
+					end
 					if (trigger.start == 0) then
-						trigger.start = GetTime()
+						--print("START: "..start)
+						trigger.start = start
 					end
 				else
 					if (trigger.start > 0) then
-						if (obj:GetName() == "LavaBurst") then
+						if (obj:GetName() == "HealingStreamTotem") then
 							--print("Start above 0")
 						end
 						if ((trigger.displayTime or 0) > 0) then
@@ -63,7 +65,7 @@ function Auras:SetAuraStartTime(obj,duration,spellID,triggerType)
 							trigger.start = 0
 						end
 					else
-						if (obj:GetName() == "LavaBurst") then
+						if (obj:GetName() == "HealingStreamTotem") then
 							--print("Start 0")
 						end
 					end
@@ -87,11 +89,13 @@ function Auras:GlowHandler(obj)
 				local expire = trigger.start + trigger.duration
 				local remains = expire - GetTime()
 
-				SSA.DataFrame.text:SetText(GetTime().."\n"..expire.."\n"..remains)
+				if (obj:GetName() == "FlameShock") then
+					SSA.DataFrame.text:SetText(GetTime().."\n"..trigger.start.." + "..trigger.duration.." = "..expire.."\n"..remains)
+				end
 				-- Check if the trigger's combat conditions are met
 				if (trigger.combat == "all" or (trigger.combat == "on" and Auras:IsPlayerInCombat(true)) or (trigger.combat == "off" and not Auras:IsPlayerInCombat(true))) then
 					-- Check if the trigger's "show" and threshold conditons are met
-					if ((not trigger.threshold and trigger.start > 0) or (trigger.show == "all" and (remains <= (trigger.threshold or 0) and remains > 0 or (GetTime() >= expire and trigger.start > 0))) or (trigger.show == "on" and remains <= (trigger.threshold or 0) and remains > 0) or (trigger.show == "off" and GetTime() >= expire)) then
+					if ((not trigger.threshold and trigger.start > 0) or ((trigger.show == "all" or not trigger.show) and (remains <= (trigger.threshold or 0) and remains > 0 or (GetTime() >= expire and trigger.start > 0))) or (trigger.show == "on" and remains <= (trigger.threshold or 0) and remains > 0) or (trigger.show == "off" and GetTime() >= expire)) then
 						-- If the trigger has a glow duration time, keep it active after the trigger expiration, otherwise just activate the trigger while it's not expired.
 						if ((trigger.show == "all" or trigger.show == "off") and GetTime() >= expire and (trigger.displayTime or 0) > 0) then
 							if (GetTime() < (expire + trigger.displayTime)) then

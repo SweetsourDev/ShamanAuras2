@@ -43,10 +43,12 @@ HexBar:HookScript('OnEvent',function(self,event)
 	
 	if ((subevent == "SPELL_AURA_APPLIED" or subevent == "SPELL_AURA_REFRESH" or subevent == "SPELL_AURA_REMOVED") and srcGUID == UnitGUID("player") and hexIDs[spellID]) then
 		if (subevent == "SPELL_AURA_APPLIED" or subevent == "SPELL_AURA_REFRESH") then
-			hexBar.data.start = GetTime()
+			--hexBar.data.start = GetTime()
+			self.start = GetTime()
 			self:Show()
 		elseif (subevent == "SPELL_AURA_REMOVED") then
-			hexBar.data.start = 0
+			--hexBar.data.start = 0
+			self.start = 0
 		end
 	end
 end)

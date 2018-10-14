@@ -25,7 +25,7 @@ WindShear:SetScript('OnUpdate',function(self)
 		Auras:ToggleAuraVisibility(self,true,'showhide')
 		Auras:SpellRangeCheck(self,self.spellID,true)
 		Auras:CooldownHandler(self,groupID,start,duration)
-		Auras:SetAuraStartTime(self,duration,self.spellID,"cooldown")
+		Auras:SetAuraStartTime(self,start,duration,self.spellID,"cooldown")
 		
 		if (name and not interrupt and (start or 0) == 0 and Auras:IsTargetEnemy()) then
 			self.isInterruptible = true

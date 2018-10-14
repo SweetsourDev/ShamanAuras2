@@ -9,6 +9,7 @@ local GroundingTotem = SSA.GroundingTotem
 
 -- Initialize Data Variables
 GroundingTotem.spellID = 204336
+GroundingTotem.pulseTime = 0
 GroundingTotem.condition = function()
 	local talentID = (SSA.spec == 1 and 3620) or (SSA.spec == 2 and 3622) or (SSA.spec == 3 and 715)
 	
@@ -20,6 +21,8 @@ GroundingTotem:SetScript('OnUpdate',function(self)
 		local groupID = Auras:GetAuraGroupID(self,self:GetName())
 		local start,duration = GetSpellCooldown(Auras:GetSpellName(self.spellID))
 		
+		Auras:SetAuraStartTime(self,start,duration,self.spellID,"cooldown")
+		Auras:GlowHandler(self)
 		Auras:ToggleAuraVisibility(self,true,'showhide')
 		Auras:CooldownHandler(self,groupID,start,duration)
 			

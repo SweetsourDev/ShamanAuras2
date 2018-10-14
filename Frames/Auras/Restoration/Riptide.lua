@@ -20,18 +20,35 @@ Riptide:SetScript('OnUpdate', function(self)
 		local groupID = Auras:GetAuraGroupID(self,self:GetName())
 		local cdStart,cdDuration = GetSpellCooldown(Auras:GetSpellName(self.spellID))
 		local charges,maxCharges,chgStart,chgDuration = GetSpellCharges(self.spellID)
-		local _,_,_,_,twDuration = Auras:RetrieveAuraInfo("player",53390,"HELPFUL")
-		local _,_,_,_,tfDuration = Auras:RetrieveAuraInfo("player",246729,"HELPFUL")
+		local _,_,_,_,twDuration,twExpire = Auras:RetrieveAuraInfo("player",53390,"HELPFUL")
+		local _,_,_,_,tfDuration,tfExpire = Auras:RetrieveAuraInfo("player",246729,"HELPFUL")
 		local _,_,_,selected = GetTalentInfo(2,1,1)
 		local glow = Auras.db.char.auras[3].auras[self:GetName()].glow
 		
 		self.CD:Show()
 		
-		if ((selected and (charges or 0) == 0) or not selected) then
-			Auras:SetAuraStartTime(self,cdDuration,self.spellID,"cooldown")
+		--[[if ((selected and (charges or 0) == 0) or not selected) then
+			Auras:SetAuraStartTime(self,cdStart,cdDuration,self.spellID,"cooldown")
+		end]]
+		if (selected) then
+			if ((charges or 0) == 0) then
+				Auras:SetAuraStartTime(self,(chgStart - 30),chgDuration,self.spellID,"cooldown")
+			else
+				local glow = Auras.db.char.auras[3].auras[self:GetName()].glow
+				
+				for i=1,#glow.triggers do
+					local trigger = glow.triggers[i]
+					
+					if (trigger.type == "cooldown") then
+						trigger.start = 0
+					end
+				end
+			end
+		else
+			Auras:SetAuraStartTime(self,cdStart,cdDuration,self.spellID,"cooldown")
 		end
-		Auras:SetAuraStartTime(self,twDuration,53390,"buff")
-		Auras:SetAuraStartTime(self,tfDuration,246729,"buff")
+		Auras:SetAuraStartTime(self,((twExpire or 0) - (twDuration or 0)),twDuration,53390,"buff")
+		Auras:SetAuraStartTime(self,((tfExpire or 0) - (tfDuration or 0)),tfDuration,246729,"buff")
 		--[[if ((cdDuration or 0) > 1.5) then
 			for i=1,#glow.triggers do
 				local trigger = glow.triggers[i]
@@ -51,7 +68,7 @@ Riptide:SetScript('OnUpdate', function(self)
 		end]]
 	
 		Auras:ToggleAuraVisibility(self,true,'showhide')
-		--Auras:GlowHandler(self)
+		Auras:GlowHandler(self)
 		
 		if (selected) then
 			if (maxCharges > 1) then

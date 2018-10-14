@@ -8,6 +8,7 @@ local HealingRain = SSA.HealingRain
 
 -- Initialize Data Variables
 HealingRain.spellID = 73920
+HealingRain.pulseTime = 0
 HealingRain.condition = function()
 	return IsSpellKnown(73920)
 end
@@ -18,6 +19,8 @@ HealingRain:SetScript('OnUpdate',function(self)
 		local start,duration = GetSpellCooldown(Auras:GetSpellName(self.spellID))
 		local spiritRain = Auras:RetrieveAuraInfo('player',246771)
 		
+		Auras:SetAuraStartTime(self,start,duration,self.spellID,"cooldown")
+		Auras:GlowHandler(self)
 		Auras:ToggleAuraVisibility(self,true,'showhide')
 		Auras:CooldownHandler(self,groupID,start,duration)
 		
