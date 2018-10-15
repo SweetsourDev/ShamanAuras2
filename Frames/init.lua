@@ -10,16 +10,26 @@ local EventFrame = CreateFrame("Frame")
 
 
 -- Aura Icon Builder
-local function InitializeFrames(name,icon,isGCD,isGlow,isCharge)
-	SSA[name] = CreateFrame('Frame',name)
-	local Frame = SSA[name]
+--local function InitializeFrames(name,icon,isGCD,isGlow,isCharge)
+local function InitializeFrame(name,db)
+	--[[local db = nil
+	
+	for i=1,3 do
+		if (Auras.db.char.auras[i].auras[name]) then
+			db = Auras.db.char.auras[i].auras[name]
+			break
+		end
+	end]]
+	local Frame = CreateFrame('Frame',name)
+	
 	Frame:SetFrameStrata('LOW')
 	Frame:SetWidth(iconSize)
 	Frame:SetHeight(iconSize)
 
 	-- Add the spell icon to the frame
 	Frame.texture = Frame:CreateTexture(nil,'BACKGROUND')
-	Frame.texture:SetTexture([[Interface\addons\ShamanAurasDev\media\ICONS\]]..icon)
+	Frame.texture:SetTexture([[Interface\addons\ShamanAuras2\media\ICONS\]]..db.layout.icon)
+	--Frame.texture:SetTexture([[Interface\addons\ShamanAurasDev\media\ICONS\]]..icon)
 	Frame.texture:SetAllPoints(Frame)
 	
 	-- Build Cooldown Frame
@@ -74,14 +84,16 @@ local function InitializeFrames(name,icon,isGCD,isGlow,isCharge)
 	Frame.PCD.Flash.fadeOut:SetEndDelay(0.1)
 	
 	-- If the current frame has a GCD (Global Cooldown) Frame, build it
-	if (isGCD) then
+	if (db.layout.isGCD) then
+	--if (isGCD) then
 		Frame.GCD = CreateFrame("Cooldown", name.."GCD", Frame, "CooldownFrameTemplate");
 		Frame.GCD:SetAllPoints(Frame);
 		Frame.GCD:Hide();
 	end
 	
 	-- If the current frame has a glow effect, build a glow frame
-	if (isGlow) then
+	if (db.glow) then
+	--if (isGlow) then
 		Frame.glow = CreateFrame('Frame',name..'Glow',Frame)
 		Frame.glow:SetPoint('CENTER',0,0)
 		Frame.glow:SetFrameStrata('BACKGROUND')
@@ -91,7 +103,8 @@ local function InitializeFrames(name,icon,isGCD,isGlow,isCharge)
 	end
 	
 	-- If the current frame has charges to track, but the Charges frame
-	if (isCharge) then
+	if (db.layout.isCharge) then
+	--if (isCharge) then
 		Frame.ChargeCD = CreateFrame('Cooldown', name..'ChargeCD', Frame, 'CooldownFrameTemplate')
 		Frame.ChargeCD:SetAllPoints(Frame)
 		Frame.ChargeCD:SetFrameStrata('LOW')
@@ -108,6 +121,8 @@ local function InitializeFrames(name,icon,isGCD,isGlow,isCharge)
 		Frame.Charges.text:SetFont((LSM.MediaTable.font['PT Sans Narrow'] or LSM.DefaultMedia.font), 13.5,'OUTLINE')
 		Frame.Charges.text:SetTextColor(1,1,1,1)		
 	end
+	
+	SSA[name] = Frame
 	_G['SSA_'..name] = Frame
 end
 
@@ -136,81 +151,158 @@ _G['SSA_AuraBase'] = AuraBase
 
 
 
+--local function InitializeAuras()
+	for i=1,3 do
+		for k,v in pairs(SSA.defaults.auras[i].auras) do
+			if (not SSA[k]) then
+				InitializeFrame(k,v)
+			end
+		end
+	end
+--end
+--Build Icon Frames Used by Multiple Shaman Specializations
+-- InitializeFrames('Adaptation')
+-- InitializeFrames('AncestralGuidance')
+-- InitializeFrames('Ascendance')
+-- InitializeFrames('AstralShift')
+-- InitializeFrames('CapacitorTotem')
+-- InitializeFrames('CleanseSpirit')
+-- InitializeFrames('CounterstrikeTotem')
+-- InitializeFrames('EarthbindTotem')
+-- InitializeFrames('GladiatorsMedallion')
+-- InitializeFrames('GroundingTotem')
+-- InitializeFrames('Hex')
+-- InitializeFrames('LavaBurst')
+-- InitializeFrames('NaturesGuardian')
+-- InitializeFrames('SkyfuryTotem')
+-- InitializeFrames('TremorTotem')
+-- InitializeFrames('WindRushTotem')
+-- InitializeFrames('WindShear')
 
+--Build Icon Frames Used by Elemental Shamans
+-- InitializeFrames('EarthElemental')
+-- InitializeFrames('EarthShock')
+-- InitializeFrames('EarthShield')
+-- InitializeFrames('EarthenStrength')
+-- InitializeFrames('Earthquake')
+-- InitializeFrames('ElementalBlast')
+-- InitializeFrames('ExposedElements')
+-- InitializeFrames('FireElemental')
+-- InitializeFrames('FlameShock')
+-- InitializeFrames('Icefury')
+-- InitializeFrames('LightningLasso')
+-- InitializeFrames('LiquidMagmaTotem')
+-- InitializeFrames('MasterOfElements')
+-- InitializeFrames('StormElemental')
+-- InitializeFrames('Stormkeeper')
+-- InitializeFrames('Thunderstorm')
+-- InitializeFrames('UnlimitedPower')
 
+--Build Icon Frames Used by Enhancement Shamans
+-- InitializeFrames('CrashLightning')
+-- InitializeFrames('EarthenSpike')
+-- InitializeFrames('EtherealForm')
+-- InitializeFrames('FeralLunge')
+-- InitializeFrames('FeralSpirit')
+-- InitializeFrames('Flametongue')
+-- InitializeFrames('ForcefulWinds')
+-- InitializeFrames('Frostbrand')
+-- InitializeFrames('LavaLash')
+-- InitializeFrames('Rockbiter')
+-- InitializeFrames('SpiritWalk')
+-- InitializeFrames('StaticCling')
+-- InitializeFrames('Stormstrike')
+-- InitializeFrames('Sundering')
+-- InitializeFrames('Thundercharge')
 
--- Build Icon Frames Used by Multiple Shaman Specializations
-InitializeFrames('Adaptation',[[shared\adaptation]])
-InitializeFrames('AncestralGuidance',[[shared\ancestral_guidance]],true)
-InitializeFrames('Ascendance',[[shared\ascendance]],true)
-InitializeFrames('AstralShift',[[shared\astral_shift]],true)
-InitializeFrames('CapacitorTotem',[[totems\capacitor_totem]],true)
-InitializeFrames('CleanseSpirit',[[restoration\purify_spirit]],true)
-InitializeFrames('CounterstrikeTotem',[[totems\totem_mastery]],true)
-InitializeFrames('EarthbindTotem',[[totems\earthbind_totem]],true)
-InitializeFrames('GladiatorsMedallion',[[shared\gladiators_medallion]])
-InitializeFrames('GroundingTotem',[[totems\grounding_totem]],true)
-InitializeFrames('Hex',[[shared\hex]],true)
-InitializeFrames('LavaBurst',[[elemental\lava_burst]],true,true,true)
-InitializeFrames('NaturesGuardian',[[shared\natures_guardian]],true)
-InitializeFrames('SkyfuryTotem',[[totems\skyfury_totem]],true)
-InitializeFrames('TremorTotem',[[totems\tremor_totem]],true)
-InitializeFrames('WindRushTotem',[[totems\wind_rush_totem]],true)
-InitializeFrames('WindShear',[[shared\wind_shear]],false,true)
+-- InitializeFrames('AncestralProtectionTotem')
+-- InitializeFrames('CloudburstTotem')
+-- InitializeFrames('Downpour')
+-- InitializeFrames('EarthenWallTotem')
+-- InitializeFrames('EarthgrabTotem')
+-- InitializeFrames('FlashFlood')
+-- InitializeFrames('HealingRain')
+-- InitializeFrames('HealingStreamTotem')
+-- InitializeFrames('HealingTideTotem')
+-- InitializeFrames('PurifySpirit')
+-- InitializeFrames('Riptide')
+-- InitializeFrames('SpiritLinkTotem')
+-- InitializeFrames('SpiritwalkersGrace')
+-- InitializeFrames('Tidebringer')
+-- InitializeFrames('UnleashLife')
+-- InitializeFrames('Wellspring')
 
--- Build Icon Frames Used by Elemental Shamans
-InitializeFrames('EarthElemental',[[elemental\earth_elemental]],true)
-InitializeFrames('EarthShock',[[elemental\earth_shock]],true,true)
-InitializeFrames('EarthShield',[[shared\earth_shield]],false,true,true)
-InitializeFrames('EarthenStrength',[[elemental\earthen_strength]],false,true)
-InitializeFrames('Earthquake',[[elemental\earthquake]],false,true)
-InitializeFrames('ElementalBlast',[[elemental\elemental_blast]],true)
-InitializeFrames('ExposedElements',[[elemental\exposed_elements]],false,true)
-InitializeFrames('FireElemental',[[elemental\fire_elemental]],true)
-InitializeFrames('FlameShock',[[shared\flame_shock]],true,true)
-InitializeFrames('Icefury',[[elemental\icefury]],true)
-InitializeFrames('LightningLasso',[[elemental\lightning_lasso]],true)
-InitializeFrames('LiquidMagmaTotem',[[totems\liquid_magma_totem]],true)
-InitializeFrames('MasterOfElements',[[elemental\master_of_elements]],false,true)
-InitializeFrames('StormElemental',[[elemental\storm_elemental]],true)
-InitializeFrames('Stormkeeper',[[elemental\stormkeeper]],true,true,true)
-InitializeFrames('Thunderstorm',[[elemental\thunderstorm]],true)
-InitializeFrames('UnlimitedPower',[[elemental\unlimited_power]],false,nil,true)
-_G["SSA_Flametongue"] = SSA.Flametongue
--- Build Icon Frames Used by Enhancement Shamans
-InitializeFrames('CrashLightning',[[enhancement\crash_lightning]],true)
-InitializeFrames('EarthenSpike',[[enhancement\earthen_spike]],true)
-InitializeFrames('EtherealForm',[[enhancement\ethereal_form]],true)
-InitializeFrames('FeralLunge',[[enhancement\feral_lunge]],true)
-InitializeFrames('FeralSpirit',[[enhancement\feral_spirit]],true)
-InitializeFrames('Flametongue',[[enhancement\flametongue]],true,true)
-InitializeFrames('ForcefulWinds',[[enhancement\forceful_winds]],true,true,true)
-InitializeFrames('Frostbrand',[[enhancement\frostbrand]],true,true)
-InitializeFrames('LavaLash',[[enhancement\lava_lash]],true,true,true)
-InitializeFrames('Rockbiter',[[enhancement\rockbiter]],true,true,true)
-InitializeFrames('SpiritWalk',[[enhancement\spirit_walk]],true)
-InitializeFrames('StaticCling',[[enhancement\static_cling]],true,true)
-InitializeFrames('Stormstrike',[[enhancement\stormstrike]],true,true,true)
-InitializeFrames('Sundering',[[enhancement\sundering]],true)
-InitializeFrames('Thundercharge',[[enhancement\thundercharge]],true)
+--Build Icon Frames Used by Multiple Shaman Specializations
+-- InitializeFrames('Adaptation',[[shared\adaptation]])
+-- InitializeFrames('AncestralGuidance',[[shared\ancestral_guidance]],true)
+-- InitializeFrames('Ascendance',[[shared\ascendance]],true)
+-- InitializeFrames('AstralShift',[[shared\astral_shift]],true)
+-- InitializeFrames('CapacitorTotem',[[totems\capacitor_totem]],true)
+-- InitializeFrames('CleanseSpirit',[[restoration\purify_spirit]],true)
+-- InitializeFrames('CounterstrikeTotem',[[totems\totem_mastery]],true)
+-- InitializeFrames('EarthbindTotem',[[totems\earthbind_totem]],true)
+-- InitializeFrames('GladiatorsMedallion',[[shared\gladiators_medallion]])
+-- InitializeFrames('GroundingTotem',[[totems\grounding_totem]],true)
+-- InitializeFrames('Hex',[[shared\hex]],true)
+-- InitializeFrames('LavaBurst',[[elemental\lava_burst]],true,true,true)
+-- InitializeFrames('NaturesGuardian',[[shared\natures_guardian]],true)
+-- InitializeFrames('SkyfuryTotem',[[totems\skyfury_totem]],true)
+-- InitializeFrames('TremorTotem',[[totems\tremor_totem]],true)
+-- InitializeFrames('WindRushTotem',[[totems\wind_rush_totem]],true)
+-- InitializeFrames('WindShear',[[shared\wind_shear]],false,true)
 
-InitializeFrames('AncestralProtectionTotem',[[totems\ancestral_protection_totem]],true)
-InitializeFrames('CloudburstTotem',[[totems\cloudburst_totem]],true,false,true)
-InitializeFrames('Downpour',[[restoration\downpour]],true)
-InitializeFrames('EarthenWallTotem',[[totems\earthen_wall_totem]],true)
-InitializeFrames('EarthgrabTotem',[[totems\earthgrab_totem]],true)
-InitializeFrames('FlashFlood',[[restoration\flash_flood]],false,true)
-InitializeFrames('HealingRain',[[restoration\healing_rain]],true,true)
-InitializeFrames('HealingStreamTotem',[[totems\healing_stream_totem]],true,false,true)
-InitializeFrames('HealingTideTotem',[[totems\healing_tide_totem]],true)
-InitializeFrames('PurifySpirit',[[restoration\purify_spirit]],true)
-InitializeFrames('Riptide',[[restoration\riptide]],true,true,true)
-InitializeFrames('SpiritLinkTotem',[[totems\spirit_link_totem]],true)
-InitializeFrames('SpiritwalkersGrace',[[restoration\spiritwalkers_grace]],true)
-InitializeFrames('Tidebringer',[[restoration\tidebringer]],false,false,true)
-InitializeFrames('UnleashLife',[[restoration\unleash_life]],true)
-InitializeFrames('Wellspring',[[restoration\wellspring]],true)
-_G["SSA_HealingRain"] = SSA.HealingRain
+--Build Icon Frames Used by Elemental Shamans
+-- InitializeFrames('EarthElemental',[[elemental\earth_elemental]],true)
+-- InitializeFrames('EarthShock',[[elemental\earth_shock]],true,true)
+-- InitializeFrames('EarthShield',[[shared\earth_shield]],false,true,true)
+-- InitializeFrames('EarthenStrength',[[elemental\earthen_strength]],false,true)
+-- InitializeFrames('Earthquake',[[elemental\earthquake]],false,true)
+-- InitializeFrames('ElementalBlast',[[elemental\elemental_blast]],true)
+-- InitializeFrames('ExposedElements',[[elemental\exposed_elements]],false,true)
+-- InitializeFrames('FireElemental',[[elemental\fire_elemental]],true)
+-- InitializeFrames('FlameShock',[[shared\flame_shock]],true,true)
+-- InitializeFrames('Icefury',[[elemental\icefury]],true)
+-- InitializeFrames('LightningLasso',[[elemental\lightning_lasso]],true)
+-- InitializeFrames('LiquidMagmaTotem',[[totems\liquid_magma_totem]],true)
+-- InitializeFrames('MasterOfElements',[[elemental\master_of_elements]],false,true)
+-- InitializeFrames('StormElemental',[[elemental\storm_elemental]],true)
+-- InitializeFrames('Stormkeeper',[[elemental\stormkeeper]],true,true,true)
+-- InitializeFrames('Thunderstorm',[[elemental\thunderstorm]],true)
+-- InitializeFrames('UnlimitedPower',[[elemental\unlimited_power]],false,nil,true)
+
+--Build Icon Frames Used by Enhancement Shamans
+-- InitializeFrames('CrashLightning',[[enhancement\crash_lightning]],true)
+-- InitializeFrames('EarthenSpike',[[enhancement\earthen_spike]],true)
+-- InitializeFrames('EtherealForm',[[enhancement\ethereal_form]],true)
+-- InitializeFrames('FeralLunge',[[enhancement\feral_lunge]],true)
+-- InitializeFrames('FeralSpirit',[[enhancement\feral_spirit]],true)
+-- InitializeFrames('Flametongue',[[enhancement\flametongue]],true,true)
+-- InitializeFrames('ForcefulWinds',[[enhancement\forceful_winds]],true,true,true)
+-- InitializeFrames('Frostbrand',[[enhancement\frostbrand]],true,true)
+-- InitializeFrames('LavaLash',[[enhancement\lava_lash]],true,true,true)
+-- InitializeFrames('Rockbiter',[[enhancement\rockbiter]],true,true,true)
+-- InitializeFrames('SpiritWalk',[[enhancement\spirit_walk]],true)
+-- InitializeFrames('StaticCling',[[enhancement\static_cling]],true,true)
+-- InitializeFrames('Stormstrike',[[enhancement\stormstrike]],true,true,true)
+-- InitializeFrames('Sundering',[[enhancement\sundering]],true)
+-- InitializeFrames('Thundercharge',[[enhancement\thundercharge]],true)
+
+-- InitializeFrames('AncestralProtectionTotem',[[totems\ancestral_protection_totem]],true)
+-- InitializeFrames('CloudburstTotem',[[totems\cloudburst_totem]],true,false,true)
+-- InitializeFrames('Downpour',[[restoration\downpour]],true)
+-- InitializeFrames('EarthenWallTotem',[[totems\earthen_wall_totem]],true)
+-- InitializeFrames('EarthgrabTotem',[[totems\earthgrab_totem]],true)
+-- InitializeFrames('FlashFlood',[[restoration\flash_flood]],false,true)
+-- InitializeFrames('HealingRain',[[restoration\healing_rain]],true,true)
+-- InitializeFrames('HealingStreamTotem',[[totems\healing_stream_totem]],true,false,true)
+-- InitializeFrames('HealingTideTotem',[[totems\healing_tide_totem]],true)
+-- InitializeFrames('PurifySpirit',[[restoration\purify_spirit]],true)
+-- InitializeFrames('Riptide',[[restoration\riptide]],true,true,true)
+-- InitializeFrames('SpiritLinkTotem',[[totems\spirit_link_totem]],true)
+-- InitializeFrames('SpiritwalkersGrace',[[restoration\spiritwalkers_grace]],true)
+-- InitializeFrames('Tidebringer',[[restoration\tidebringer]],false,false,true)
+-- InitializeFrames('UnleashLife',[[restoration\unleash_life]],true)
+-- InitializeFrames('Wellspring',[[restoration\wellspring]],true)
 
 -------------------------------------------------------------------------------------------------------
 ----- Build and Initialize Timer Bars

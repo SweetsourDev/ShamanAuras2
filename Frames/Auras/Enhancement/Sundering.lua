@@ -9,6 +9,7 @@ local Sundering = SSA.Sundering
 
 -- Initialize Data Variables
 Sundering.spellID = 197214
+Sundering.pulseTime = 0
 Sundering.condition = function()
 	return select(4,GetTalentInfo(6,3,1))
 end
@@ -18,6 +19,8 @@ Sundering:SetScript('OnUpdate',function(self)
 		local groupID = Auras:GetAuraGroupID(self,self:GetName())
 		local start,duration = GetSpellCooldown(Auras:GetSpellName(self.spellID))
 
+		Auras:SetGlowStartTime(self,start,duration,self.spellID,"cooldown")
+		Auras:GlowHandler(self)
 		Auras:SpellRangeCheck(self,self.spellID,true)
 		Auras:ToggleAuraVisibility(self,true,'showhide')
 		Auras:CooldownHandler(self,groupID,start,duration)

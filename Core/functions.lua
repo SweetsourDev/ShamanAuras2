@@ -896,6 +896,11 @@ function Auras:UpdateTalents(isTalentChange)
 		return
 	end
 	
+	--[[if (not SSA.isAurasInitialized) then
+		SSA.isAurasInitialized = true
+		self:InitializeAuras()
+	end]]
+	
 	local spec = GetSpecialization()
 	
 	if (spec ~= SSA.spec) then
@@ -1047,7 +1052,7 @@ function Auras:UpdateTalents(isTalentChange)
 						local bar = SSA[k]
 						
 						bar:SetParent(SSA["AuraGroup"..i])
-						SSA.DataFrame.text:SetText("CONDITION ERROR: "..k)
+
 						rowObj[v.order] = bar
 						rowList[v.order] = v.isEnabled and bar.condition()
 						rowVerify[v.order] = v.isInUse or auras.groups[i].isAdjust

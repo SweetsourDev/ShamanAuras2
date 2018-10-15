@@ -296,7 +296,7 @@ function Auras:OnInitialize()
 	
 	self.db = LibStub("AceDB-3.0"):New("SSA2_db",database)
 	self:SetupOptions()
-	
+
 	if (not self.db.char.isFirstEverLoad) then
 		BuildAuraGroups()
 	end
@@ -305,6 +305,8 @@ end
 local function PopulateDatabase()
 
 end
+
+
 
 -- Event: PLAYER_LOGIN
 function Auras:OnEnable()
@@ -399,7 +401,6 @@ function Auras:OnEnable()
 		local _,_,name = C_ArtifactUI.GetEquippedArtifactInfo()
 		db.EquippedArtifact = name
 	--end
-	
 	
 	
 	-- Check if cooldowns value is table
