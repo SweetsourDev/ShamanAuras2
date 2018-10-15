@@ -32,7 +32,7 @@ Riptide:SetScript('OnUpdate', function(self)
 		end]]
 		if (selected) then
 			if ((charges or 0) == 0) then
-				Auras:SetAuraStartTime(self,(chgStart - 30),chgDuration,self.spellID,"cooldown")
+				Auras:SetGlowStartTime(self,(chgStart - 30),chgDuration,self.spellID,"cooldown")
 			else
 				local glow = Auras.db.char.auras[3].auras[self:GetName()].glow
 				
@@ -45,10 +45,10 @@ Riptide:SetScript('OnUpdate', function(self)
 				end
 			end
 		else
-			Auras:SetAuraStartTime(self,cdStart,cdDuration,self.spellID,"cooldown")
+			Auras:SetGlowStartTime(self,cdStart,cdDuration,self.spellID,"cooldown")
 		end
-		Auras:SetAuraStartTime(self,((twExpire or 0) - (twDuration or 0)),twDuration,53390,"buff")
-		Auras:SetAuraStartTime(self,((tfExpire or 0) - (tfDuration or 0)),tfDuration,246729,"buff")
+		Auras:SetGlowStartTime(self,((twExpire or 0) - (twDuration or 0)),twDuration,53390,"buff")
+		Auras:SetGlowStartTime(self,((tfExpire or 0) - (tfDuration or 0)),tfDuration,246729,"buff")
 		--[[if ((cdDuration or 0) > 1.5) then
 			for i=1,#glow.triggers do
 				local trigger = glow.triggers[i]

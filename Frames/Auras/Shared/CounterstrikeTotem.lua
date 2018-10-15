@@ -8,8 +8,11 @@ local CounterstrikeTotem = SSA.CounterstrikeTotem
 
 -- Initialize Data Variables
 CounterstrikeTotem.spellID = 204331
+CounterstrikeTotem.pulseTime = 0
 CounterstrikeTotem.condition = function()
-	return (SSA.spec == 1 and 3490) or (SSA.spec == 2 and 3489) or (SSA.spec == 3 and 708)
+	local talentID = (SSA.spec == 1 and 3490) or (SSA.spec == 2 and 3489) or (SSA.spec == 3 and 708)
+	
+	return select(10,GetPvpTalentInfoByID(talentID)) and Auras:IsPvPZone()
 end
 
 CounterstrikeTotem:SetScript('OnUpdate',function(self)
@@ -17,6 +20,8 @@ CounterstrikeTotem:SetScript('OnUpdate',function(self)
 		local groupID = Auras:GetAuraGroupID(self,self:GetName())
 		local start,duration = GetSpellCooldown(Auras:GetSpellName(self.spellID))
 		
+		Auras:SetGlowStartTime(self,start,duration,self.spellID,"cooldown")
+		Auras:GlowHandler(self)
 		Auras:ToggleAuraVisibility(self,true,'showhide')
 		Auras:CooldownHandler(self,groupID,start,duration)
 			

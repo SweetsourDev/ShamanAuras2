@@ -19,7 +19,7 @@ HealingRain:SetScript('OnUpdate',function(self)
 		local start,duration = GetSpellCooldown(Auras:GetSpellName(self.spellID))
 		local spiritRain = Auras:RetrieveAuraInfo('player',246771)
 		
-		Auras:SetAuraStartTime(self,start,duration,self.spellID,"cooldown")
+		Auras:SetGlowStartTime(self,start,duration,self.spellID,"cooldown")
 		Auras:GlowHandler(self)
 		Auras:ToggleAuraVisibility(self,true,'showhide')
 		Auras:CooldownHandler(self,groupID,start,duration)

@@ -11,6 +11,7 @@ local Adaptation = SSA.Adaptation
 
 -- Initialize Data Variables
 Adaptation.spellID = 214027
+Adaptation.pulseTime = 0
 Adaptation.condition = function()
 	--local spec = GetSpecialization()
 	local talentID = (SSA.spec == 1 and 3597) or (SSA.spec == 2 and 3552) or (SSA.spec == 3 and 3485)
@@ -24,6 +25,8 @@ Adaptation:SetScript('OnUpdate',function(self)
 		local groupID = Auras:GetAuraGroupID(self,self:GetName())
 		local start,duration = GetSpellCooldown(Auras:GetSpellName(self.spellID))
 		
+		Auras:SetGlowStartTime(self,start,duration,self.spellID,"cooldown")
+		Auras:GlowHandler(self)
 		Auras:ToggleAuraVisibility(self,true,'showhide')
 		--Auras:CooldownHandler(self,spec,groupID,start,duration)
 		Auras:CooldownHandler(self,groupID,start,duration)

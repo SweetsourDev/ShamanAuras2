@@ -49,7 +49,7 @@ EarthShield:SetScript('OnUpdate',function(self)
 		
 		self.charges = ((count or 0) > 0 and count) or ((tarCount or 0) > 0 and tarCount) or 0
 		
-		--Auras:GlowHandler(self)
+		Auras:GlowHandler(self)
 		Auras:ToggleAuraVisibility(self,true,'showhide')
 		
 		if (buff) then

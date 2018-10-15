@@ -18,7 +18,7 @@ FlashFlood:SetScript('OnUpdate', function(self)
 		local groupID = Auras:GetAuraGroupID(self,self:GetName())
 		local buff,_,_,_,duration,expires = Auras:RetrieveAuraInfo("player", self.spellID)
 
-		Auras:SetAuraStartTime(self,((expires or 0) - (duration or 0)),duration,self.spellID,"buff")
+		Auras:SetGlowStartTime(self,((expires or 0) - (duration or 0)),duration,self.spellID,"buff")
 		Auras:GlowHandler(self)
 		Auras:ToggleAuraVisibility(self,true,'showhide')
 		Auras:CooldownHandler(self,groupID,((expires or 0) - (duration or 0)),duration)

@@ -19,8 +19,8 @@ UnleashLife:SetScript('OnUpdate',function(self)
 		local start,duration = GetSpellCooldown(Auras:GetSpellName(self.spellID))
 		local _,_,_,_,buffDuration,buffExpire = Auras:RetrieveAuraInfo("player",self.spellID,"HELPFUL")
 	
-		Auras:SetAuraStartTime(self,start,duration,self.spellID,"cooldown")
-		Auras:SetAuraStartTime(self,((buffExpire or 0) - (buffDuration or 0)),buffDuration,self.spellID,"buff")
+		Auras:SetGlowStartTime(self,start,duration,self.spellID,"cooldown")
+		Auras:SetGlowStartTime(self,((buffExpire or 0) - (buffDuration or 0)),buffDuration,self.spellID,"buff")
 		Auras:GlowHandler(self)
 		
 		Auras:ToggleAuraVisibility(self,true,'showhide')

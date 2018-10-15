@@ -9,6 +9,7 @@ local EarthenWallTotem = SSA.EarthenWallTotem
 
 -- Initialize Data Variables
 EarthenWallTotem.spellID = 198838
+EarthenWallTotem.pulseTime = 0
 EarthenWallTotem.condition = function()
 	return select(4,GetTalentInfo(4,2,1))
 end
@@ -18,6 +19,8 @@ EarthenWallTotem:SetScript('OnUpdate',function(self)
 		local groupID = Auras:GetAuraGroupID(self,self:GetName())
 		local start,duration = GetSpellCooldown(Auras:GetSpellName(self.spellID))
 	
+		Auras:SetGlowStartTime(self,start,duration,self.spellID,"cooldown")
+		Auras:GlowHandler(self)
 		Auras:ToggleAuraVisibility(self,true,'showhide')
 		Auras:CooldownHandler(self,groupID,start,duration)
 			

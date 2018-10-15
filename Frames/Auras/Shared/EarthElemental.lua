@@ -9,6 +9,7 @@ local EarthElemental = SSA.EarthElemental
 
 -- Initialize Data Variables
 EarthElemental.spellID = 198103
+EarthElemental.pulseTime = 0
 EarthElemental.condition = function()
 	return IsSpellKnown(198103)
 end
@@ -18,6 +19,8 @@ EarthElemental:SetScript('OnUpdate',function(self)
 		local groupID = Auras:GetAuraGroupID(self,self:GetName())
 		local start,duration = GetSpellCooldown(Auras:GetSpellName(self.spellID))
 		
+		Auras:SetGlowStartTime(self,start,duration,self.spellID,"cooldown")
+		Auras:GlowHandler(self)
 		Auras:ToggleAuraVisibility(self,true,'showhide')
 		Auras:CooldownHandler(self,groupID,start,duration)
 			

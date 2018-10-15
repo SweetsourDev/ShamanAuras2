@@ -9,11 +9,7 @@ local AncestralProtectionTotem = SSA.AncestralProtectionTotem
 
 -- Initialize Data Variables
 AncestralProtectionTotem.spellID = 207399
-AncestralProtectionTotem.start = {
-	[207399] = 0,
-}
-Riptide.pulseTime = 0
-Riptide.activePriority = 0
+AncestralProtectionTotem.pulseTime = 0
 AncestralProtectionTotem.condition = function()
 	return select(4,GetTalentInfo(4,3,1))
 end
@@ -23,6 +19,8 @@ AncestralProtectionTotem:SetScript('OnUpdate',function(self)
 		local groupID = Auras:GetAuraGroupID(self,self:GetName())
 		local start,duration = GetSpellCooldown(Auras:GetSpellName(self.spellID))
 		
+		Auras:SetGlowStartTime(self,start,duration,self.spellID,"cooldown")
+		Auras:GlowHandler(self)
 		Auras:ToggleAuraVisibility(self,true,'showhide')
 		Auras:CooldownHandler(self,groupID,start,duration)
 			

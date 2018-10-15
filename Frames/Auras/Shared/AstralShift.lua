@@ -9,6 +9,7 @@ local AstralShift = SSA.AstralShift
 
 -- Initialize Data Variables
 AstralShift.spellID = 108271
+AstralShift.pulseTime = 0
 AstralShift.condition = function()
 	return IsSpellKnown(108271)
 end
@@ -18,6 +19,8 @@ AstralShift:SetScript('OnUpdate',function(self)
 		local groupID = Auras:GetAuraGroupID(self,self:GetName())
 		local start,duration = GetSpellCooldown(Auras:GetSpellName(self.spellID))
 		
+		Auras:SetGlowStartTime(self,start,duration,self.spellID,"cooldown")
+		Auras:GlowHandler(self)
 		Auras:ToggleAuraVisibility(self,true,'showhide')
 		Auras:CooldownHandler(self,groupID,start,duration)
 			

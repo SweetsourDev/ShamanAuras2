@@ -9,6 +9,7 @@ local Downpour = SSA.Downpour
 
 -- Initialize Data Variables
 Downpour.spellID = 207778
+Downpour.pulseTime = 0
 Downpour.condition = function()
 	return select(4,GetTalentInfo(6,2,1))
 end
@@ -18,6 +19,8 @@ Downpour:SetScript('OnUpdate',function(self)
 		local groupID = Auras:GetAuraGroupID(self,self:GetName())
 		local start,duration = GetSpellCooldown(Auras:GetSpellName(self.spellID))
 		
+		Auras:SetGlowStartTime(self,start,duration,self.spellID,"cooldown")
+		Auras:GlowHandler(self)
 		Auras:ToggleAuraVisibility(self,true,'showhide')
 		Auras:CooldownHandler(self,groupID,start,duration)
 			

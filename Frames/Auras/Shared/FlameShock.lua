@@ -9,7 +9,7 @@ local IsSpellKnown = IsSpellKnown
 local FlameShock = SSA.FlameShock
 
 -- Initialize Data Variables
-FlameShock.spellID = (SSA.spec == 1 and 188389) or (SSA.spec == 2 and 0) or (SSA.spec == 3 and 188838)
+FlameShock.spellID = ((SSA.spec or GetSpecialization()) == 1 and 188389) or ((SSA.spec or GetSpecialization()) == 2 and 0) or ((SSA.spec or GetSpecialization()) == 3 and 188838)
 FlameShock.pulseTime = 0
 FlameShock.condition = function()
 	return IsSpellKnown(FlameShock.spellID)
@@ -45,7 +45,7 @@ FlameShock:SetScript('OnUpdate', function(self)
 		end
 		
 		if (debuff) then
-			Auras:SetAuraStartTime(self,((expires or 0) - (debuffDuration or 0)),debuffDuration,self.spellID,"debuff")
+			Auras:SetGlowStartTime(self,((expires or 0) - (debuffDuration or 0)),debuffDuration,self.spellID,"debuff")
 		else
 			local trigger = Auras.db.char.auras[SSA.spec].auras[self:GetName()].glow.triggers[1]
 			

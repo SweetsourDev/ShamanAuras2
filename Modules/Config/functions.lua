@@ -1124,14 +1124,77 @@ local function AddGlowTools(auraTbl,grp)
 								end,
 								width = 0.17,
 							},
-							filler = {
+							requiredTarget = {
 								order = 4,
+								type = "execute",
+								name = ' ',
+								desc = function()
+									if (trigger.target.reaction ~= "off") then
+										if (trigger.target.reaction == "enemy") then
+											return "|cFFFF0000Enemy|r target currently required.\n-------------------------------------\n|cFFFFe961Click to require any target.|r\n\n|cFF00FF00Shift+Click to require a friendly target.|r\n\n|cFF888888Alt+Click to disable target requirement.|r\n-------------------------------------\nRecommended: "..trigger.target.recommend
+										elseif (trigger.target.reaction == "friend") then
+											return "|cFF00FF00Friendly|r target currently required.\n-------------------------------------\n|cFFFFe961Click to require any target.|r\n\n|cFFFF0000Ctrl+Click to require an enemy target.|r\n\n|cFF888888Alt+Click to disable target requirement.|r\n-------------------------------------\nRecommended: "..trigger.target.recommend
+										elseif (trigger.target.reaction == "all") then
+											return "Any target currently required.\n-------------------------------------\n|cFF00FF00Shift+Click to require a friendly target.|r\n\n|cFFFF0000Ctrl+Click to require an enemy target.|r\n\n|cFF888888Alt+Click to disable target requirement.|r\n-------------------------------------\nRecommended: "..trigger.target.recommend
+										end
+									else
+										return "Target currently not required.\n-------------------------------------\n|cFFFFe961Click to require any target.|r\n\n|cFF00FF00Shift+Click to require a friendly target.|r\n\n|cFFFF0000Ctrl+Click to require an enemy target.|r\n\n|cFF888888Alt+Click to disable target requirement.|r\n-------------------------------------\nRecommended: "..trigger.target.recommend
+									end
+								end,
+								disabled = function()
+									if (trigger.target.locked) then
+										return true
+									else
+										return false
+									end
+								end,
+								image = function()
+									if (trigger.target.reaction ~= "off") then
+										return [[Interface\AddOns\ShamanAuras2\media\icons\config\target-]]..trigger.target.reaction
+									else
+										return [[Interface\AddOns\ShamanAuras2\media\icons\config\target-disabled]]
+									end
+								end,
+								imageWidth = 25,
+								imageHeight = 25,
+								func = function(this)
+									if (IsShiftKeyDown()) then
+										trigger.target.reaction = "friend"
+									elseif (IsControlKeyDown()) then
+										trigger.target.reaction = "enemy"
+									elseif (IsAltKeyDown()) then
+										trigger.target.isRequired = "off"
+									else
+										trigger.target.reaction = "all"
+									end
+									
+									--trigger.isTargetRequired = not trigger.isTargetRequired
+									--ReorderAuraGlow(k,v.glow.triggers,i,i+1)
+									Auras:RefreshAuraGroupList(this.options,SSA.spec)
+									--val.priority = val.priority + 1
+									
+									--[[ReorderAuraList(spec,grp,v.order + 1,v.order,"swap")
+									v.order = v.order + 1
+									
+									Auras:RefreshAuraGroupList(this.options,spec)
+									Auras:UpdateTalents()]]
+								end,
+								width = 0.3,
+							},
+							filler = {
+								order = 5,
 								type = "description",
 								name = '',
-								width = 0.1,
+								width = 0.05,
 							},
-							filler_show = {
+							--[[filler_skull = {
 								order = 5,
+								type = "description",
+								name = '',
+								width = 0.3,
+							},]]
+							filler_show = {
+								order = 6,
 								hidden = function()
 									if (not trigger.show) then
 										return false
@@ -1141,10 +1204,10 @@ local function AddGlowTools(auraTbl,grp)
 								end,
 								type = "description",
 								name = '',
-								width = 0.9,
+								width = 0.8,
 							},
 							show = {
-								order = 5,
+								order = 6,
 								type = "select",
 								name = "Show",
 								hidden = function()
@@ -1161,10 +1224,10 @@ local function AddGlowTools(auraTbl,grp)
 									trigger.show = value
 								end,
 								values = GLOW_OPTIONS[trigger.type],
-								width = 0.9,
+								width = 0.8,
 							},
 							combat = {
-								order = 6,
+								order = 7,
 								type = "select",
 								name = "Combat",
 								get = function()
@@ -1174,7 +1237,7 @@ local function AddGlowTools(auraTbl,grp)
 									trigger.combat = value
 								end,
 								values = GLOW_OPTIONS["combat"],
-								width = 0.9,
+								width = 0.7,
 							},
 							filler_displayTime = {
 								order = 8,

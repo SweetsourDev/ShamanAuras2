@@ -1047,7 +1047,7 @@ function Auras:UpdateTalents(isTalentChange)
 						local bar = SSA[k]
 						
 						bar:SetParent(SSA["AuraGroup"..i])
-						
+						SSA.DataFrame.text:SetText("CONDITION ERROR: "..k)
 						rowObj[v.order] = bar
 						rowList[v.order] = v.isEnabled and bar.condition()
 						rowVerify[v.order] = v.isInUse or auras.groups[i].isAdjust

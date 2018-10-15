@@ -195,7 +195,7 @@ InitializeFrames('Sundering',[[enhancement\sundering]],true)
 InitializeFrames('Thundercharge',[[enhancement\thundercharge]],true)
 
 InitializeFrames('AncestralProtectionTotem',[[totems\ancestral_protection_totem]],true)
-InitializeFrames('CloudburstTotem',[[totems\cloudburst_totem]],true)
+InitializeFrames('CloudburstTotem',[[totems\cloudburst_totem]],true,false,true)
 InitializeFrames('Downpour',[[restoration\downpour]],true)
 InitializeFrames('EarthenWallTotem',[[totems\earthen_wall_totem]],true)
 InitializeFrames('EarthgrabTotem',[[totems\earthgrab_totem]],true)
