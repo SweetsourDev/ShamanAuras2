@@ -11,6 +11,8 @@ local LavaLash = SSA.LavaLash
 
 -- Intialize Data Variables
 LavaLash.spellID = 60103
+LavaLash.pulseTime = 0
+--LavaLash.charges = 0
 LavaLash.condition = function()
 	return IsSpellKnown(60103)
 end
@@ -20,16 +22,20 @@ LavaLash:SetScript('OnUpdate', function(self)
 		local groupID = Auras:GetAuraGroupID(self,self:GetName())
 		local db = Auras.db.char
 		local start,duration = GetSpellCooldown(Auras:GetSpellName(self.spellID))
-		local buff = Auras:RetrieveAuraInfo('player',201900)
-		local _,_,count = Auras:RetrieveAuraInfo('target',240842,"HARMFUL PLAYER")
+		local buff,_,_,_,buffDuration,expires = Auras:RetrieveAuraInfo('player',215785)
+		--local _,_,count = Auras:RetrieveAuraInfo('target',240842,"HARMFUL PLAYER")
 		
 		local power = UnitPower('player',Enum.PowerType.Maelstrom)
 		
+		--self.charges = count
+		
+		Auras:SetGlowStartTime(self,((expires or 0) - (buffDuration or 0)),buffDuration,215785,"buff")
+		Auras:GlowHandler(self)
 		Auras:SpellRangeCheck(self,self.spellID,true)
 		Auras:ToggleAuraVisibility(self,true,'showhide')
 		Auras:CooldownHandler(self,groupID,start,duration)
 		
-		if (count and db.settings[2].lavaLash.stacks.isEnabled) then
+		--[[if (count and db.settings[2].lavaLash.stacks.isEnabled) then
 			self.Charges.text:SetText(count)
 		else
 			self.Charges.text:SetText('')
@@ -39,7 +45,7 @@ LavaLash:SetScript('OnUpdate', function(self)
 			Auras:ToggleOverlayGlow(self.glow,true)
 		else
 			Auras:ToggleOverlayGlow(self.glow,false)
-		end
+		end]]
 		
 		if (Auras:IsPlayerInCombat()) then
 			if (power >= 30 or buff) then

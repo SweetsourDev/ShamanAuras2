@@ -1337,6 +1337,7 @@ local function AddGlowTools(auraTbl,grp)
 								order = 11,
 								type = "range",
 								name = "Trigger Threshold",
+								desc = "Select the threshold at which the glow will trigger.\n\n|cFFFF0000Setting this value to 0 disables this functionality.|r",
 								hidden = function()
 									if (not trigger.threshold) then
 										return true
@@ -1344,7 +1345,7 @@ local function AddGlowTools(auraTbl,grp)
 										return false
 									end
 								end,
-								min = trigger.min or 1,
+								min = trigger.min or 0,
 								max = trigger.charges or trigger.duration or 0,
 								step = 1,
 								bigStep = 1,

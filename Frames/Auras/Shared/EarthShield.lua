@@ -8,20 +8,8 @@ local EarthShield = SSA.EarthShield
 
 -- Initialize Data Variables
 EarthShield.spellID = 974
-EarthShield.start = {
-	[0] = 0,
-	[974] = 0,
-}
---[[EarthShield.buff = {
-	start = 0,
-	duration = 600,
-}]]
 EarthShield.pulseTime = 0
-EarthShield.activePriority = 0
 EarthShield.charges = 0
---EarthShield.triggerTime = 0
-EarthShield.isTriggered = false
-EarthShield.isGlowing = false
 EarthShield.condition = function()
 	local row,col = (SSA.spec == 1 and 3) or (SSA.spec == 2 and 3) or (SSA.spec == 3 and 2), (SSA.spec == 1 and 2) or (SSA.spec == 2 and 2) or (SSA.spec == 3 and 3)
 	

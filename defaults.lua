@@ -2252,19 +2252,28 @@ local defaults = {
 						isCharge = false,
 					},
 					glow = {
-						isEnabled = false,
-						states = {
-							combat = "both",
-							usable = "always",
-						},
+						isCustomize = false,
 						triggers = {
-							selected = "time",
-							["time"] = {
-								min = 5,
-								max = 60,
+							[1] = {
+								isEnabled = true,
+								isActive = false,
+								target = {
+									locked = false,
+									reaction = "off",
+									recommend = "off",
+								},
+								type = "buff",
+								name = "Buff Duration",
+								spellID = 196834,
+								threshold = 5,
+								start = 0,
+								duration = 16,
+								pulseRate = 0.5,
+								displayTime = 0,
+								show = "all",
+								combat = "on",
 							},
 						},
-						
 					},
 				},
 				["GladiatorsMedallion"] = {
@@ -2278,21 +2287,28 @@ local defaults = {
 						isCharge = false,
 					},
 					glow = {
-						isEnabled = false,
 						isCustomize = false,
-						states = {
-							combat = "both",
-							usable = "always",
-						},
 						triggers = {
-							selected = "time",
-							["time"] = {
+							[1] = {
+								isEnabled = false,
+								isActive = false,
+								target = {
+									locked = false,
+									reaction = "off",
+									recommend = "off",
+								},
+								type = "cooldown",
+								name = "Spell Cooldown",
+								spellID = 208683,
 								threshold = 10,
-								min = 1,
-								max = 120,
+								start = 0,
+								duration = 120,
+								pulseRate = 1.5,
+								displayTime = 5,
+								show = "all",
+								combat = "on",
 							},
 						},
-						
 					},
 				},
 				["GroundingTotem"] = {
@@ -2306,21 +2322,28 @@ local defaults = {
 						isCharge = false,
 					},
 					glow = {
-						isEnabled = false,
 						isCustomize = false,
-						states = {
-							combat = "both",
-							usable = "always",
-						},
 						triggers = {
-							selected = "time",
-							["time"] = {
+							[1] = {
+								isEnabled = false,
+								isActive = false,
+								target = {
+									locked = false,
+									reaction = "off",
+									recommend = "off",
+								},
+								type = "cooldown",
+								name = "Spell Cooldown",
+								spellID = 204336,
 								threshold = 5,
-								min = 1,
-								max = 30,
+								start = 0,
+								duration = 30,
+								pulseRate = 1.5,
+								displayTime = 5,
+								show = "all",
+								combat = "on",
 							},
 						},
-						
 					},
 				},
 				["Hex"] = {
@@ -2334,21 +2357,47 @@ local defaults = {
 						isCharge = false,
 					},
 					glow = {
-						isEnabled = false,
 						isCustomize = false,
-						states = {
-							combat = "both",
-							usable = "always",
-						},
 						triggers = {
-							selected = "time",
-							["time"] = {
+							[1] = {
+								isEnabled = false,
+								isActive = false,
+								target = {
+									locked = false,
+									reaction = "off",
+									recommend = "off",
+								},
+								type = "debuff",
+								name = "Deuff Duration: Hex",
+								spellID = 51514,
+								threshold = 10,
+								start = 0,
+								duration = 60,
+								pulseRate = 0.5,
+								displayTime = 5,
+								show = false,
+								combat = "on",
+							},
+							[2] = {
+								isEnabled = false,
+								isActive = false,
+								target = {
+									locked = false,
+									reaction = "off",
+									recommend = "off",
+								},
+								type = "cooldown",
+								name = "Spell Cooldown",
+								spellID = 51514,
 								threshold = 5,
-								min = 1,
-								max = 30,
+								start = 0,
+								duration = 30,
+								pulseRate = 0,
+								displayTime = 5,
+								show = "all",
+								combat = "on",
 							},
 						},
-						
 					},
 				},
 				["LavaLash"] = {
@@ -2368,13 +2417,45 @@ local defaults = {
 							usable = "always",
 						},
 						triggers = {
-							selected = "time",
-							["time"] = {
-								min = 5,
-								max = 60,
+							[1] = {
+								isEnabled = true,
+								isActive = false,
+								target = {
+									locked = false,
+									reaction = "off",
+									recommend = "off",
+								},
+								type = "buff",
+								name = "Buff Duration: Hot Hand",
+								spellID = 215785,
+								threshold = false,
+								start = 0,
+								duration = 15,
+								pulseRate = 0.5,
+								displayTime = false,
+								show = false,
+								combat = "on",
 							},
+							--[[[2] = {
+								isEnabled = true,
+								isActive = false,
+								target = {
+									locked = false,
+									reaction = "off",
+									recommend = "off",
+								},
+								type = "debuff",
+								name = "Debuff Duration: Lashing Flames",
+								spellID = 240842,
+								threshold = false,
+								start = 0,
+								duration = 15,
+								pulseRate = 0.5,
+								displayTime = false,
+								show = false,
+								combat = "on",
+							},]]
 						},
-						
 					},
 				},
 				["NaturesGuardian"] = {
@@ -2388,21 +2469,28 @@ local defaults = {
 						isCharge = false,
 					},
 					glow = {
-						isEnabled = false,
 						isCustomize = false,
-						states = {
-							combat = "both",
-							usable = "always",
-						},
 						triggers = {
-							selected = "time",
-							["time"] = {
+							[1] = {
+								isEnabled = false,
+								isActive = false,
+								target = {
+									locked = false,
+									reaction = "off",
+									recommend = "off",
+								},
+								type = "cooldown",
+								name = "Spell Cooldown",
+								spellID = 30884,
 								threshold = 10,
-								min = 1,
-								max = 45,
+								start = 0,
+								duration = 45,
+								pulseRate = 1,
+								displayTime = 5,
+								show = "all",
+								combat = "on",
 							},
 						},
-						
 					},
 				},
 				["Rockbiter"] = {
@@ -2416,19 +2504,47 @@ local defaults = {
 						isCharge = true,
 					},
 					glow = {
-						isEnabled = false,
-						states = {
-							combat = "both",
-							usable = "always",
-						},
+						isCustomize = false,
 						triggers = {
-							selected = "time",
-							["time"] = {
-								min = 5,
-								max = 60,
+							[1] = {
+								isEnabled = true,
+								isActive = false,
+								target = {
+									locked = false,
+									reaction = "off",
+									recommend = "off",
+								},
+								type = "buff",
+								name = "Buff Duration",
+								spellID = 202004,
+								threshold = false,
+								start = 0,
+								duration = 10,
+								pulseRate = 0.5,
+								displayTime = false,
+								show = false,
+								combat = "on",
+							},
+							[2] = {
+								isEnabled = false,
+								isActive = false,
+								target = {
+									locked = false,
+									reaction = "off",
+									recommend = "off",
+								},
+								type = "cooldown",
+								name = "Spell Cooldown",
+								spellID = 193786,
+								threshold = 2,
+								start = 0,
+								duration = 5.6,
+								pulseRate = 1,
+								displayTime = false,
+								show = "all",
+								combat = "on",
 							},
 						},
-						
 					},
 				},
 				["SkyfuryTotem"] = {
@@ -2442,21 +2558,28 @@ local defaults = {
 						isCharge = false,
 					},
 					glow = {
-						isEnabled = false,
 						isCustomize = false,
-						states = {
-							combat = "both",
-							usable = "always",
-						},
 						triggers = {
-							selected = "time",
-							["time"] = {
+							[1] = {
+								isEnabled = false,
+								isActive = false,
+								target = {
+									locked = false,
+									reaction = "off",
+									recommend = "off",
+								},
+								type = "cooldown",
+								name = "Spell Cooldown",
+								spellID = 204330,
 								threshold = 5,
-								min = 1,
-								max = 40,
+								start = 0,
+								duration = 40,
+								pulseRate = 1,
+								displayTime = 5,
+								show = "all",
+								combat = "on",
 							},
 						},
-						
 					},
 				},
 				["SpiritWalk"] = {
@@ -2470,19 +2593,28 @@ local defaults = {
 						isCharge = false,
 					},
 					glow = {
-						isEnabled = false,
-						states = {
-							combat = "both",
-							usable = "always",
-						},
+						isCustomize = false,
 						triggers = {
-							selected = "time",
-							["time"] = {
-								min = 5,
-								max = 60,
+							[1] = {
+								isEnabled = false,
+								isActive = false,
+								target = {
+									locked = false,
+									reaction = "off",
+									recommend = "off",
+								},
+								type = "cooldown",
+								name = "Spell Cooldown",
+								spellID = 58875,
+								threshold = 5,
+								start = 0,
+								duration = 60,
+								pulseRate = 1.5,
+								displayTime = 5,
+								show = "all",
+								combat = "on",
 							},
 						},
-						
 					},
 				},
 				["StaticCling"] = {
@@ -2496,19 +2628,28 @@ local defaults = {
 						isCharge = false,
 					},
 					glow = {
-						isEnabled = false,
-						states = {
-							combat = "both",
-							usable = "always",
-						},
+						isCustomize = false,
 						triggers = {
-							selected = "time",
-							["time"] = {
-								min = 5,
-								max = 60,
+							[1] = {
+								isEnabled = true,
+								isActive = false,
+								target = {
+									locked = false,
+									reaction = "off",
+									recommend = "off",
+								},
+								type = "buff",
+								name = "Buff Duration",
+								spellID = 211400,
+								threshold = false,
+								start = 0,
+								duration = false,
+								pulseRate = 0.5,
+								displayTime = false,
+								show = false,
+								combat = "on",
 							},
 						},
-						
 					},
 				},
 				["Stormstrike"] = {
@@ -2522,19 +2663,47 @@ local defaults = {
 						isCharge = true,
 					},
 					glow = {
-						isEnabled = false,
-						states = {
-							combat = "both",
-							usable = "always",
-						},
+						isCustomize = false,
 						triggers = {
-							selected = "time",
-							["time"] = {
-								min = 5,
-								max = 60,
+							[1] = {
+								isEnabled = true,
+								isActive = false,
+								target = {
+									locked = false,
+									reaction = "off",
+									recommend = "off",
+								},
+								type = "buff",
+								name = "Buff Duration",
+								spellID = 201846,
+								threshold = false,
+								start = 0,
+								duration = 12,
+								pulseRate = 0.5,
+								displayTime = false,
+								show = false,
+								combat = "on",
+							},
+							[2] = {
+								isEnabled = false,
+								isActive = false,
+								target = {
+									locked = false,
+									reaction = "off",
+									recommend = "off",
+								},
+								type = "cooldown",
+								name = "Spell Cooldown",
+								spellID = 17364,
+								threshold = 2,
+								start = 0,
+								duration = 10,
+								pulseRate = 1.5,
+								displayTime = 5,
+								show = "all",
+								combat = "on",
 							},
 						},
-						
 					},
 				},
 				["Sundering"] = {
@@ -2555,8 +2724,8 @@ local defaults = {
 								isActive = false,
 								target = {
 									locked = false,
-									reaction = "enemy",
-									recommend = "enemy",
+									reaction = "off",
+									recommend = "off",
 								},
 								type = "cooldown",
 								name = "Spell Cooldown",
@@ -2595,10 +2764,10 @@ local defaults = {
 								},
 								type = "cooldown",
 								name = "Spell Cooldown",
-								spellID = 8143,
+								spellID = 204366,
 								threshold = 10,
 								start = 0,
-								duration = 60,
+								duration = 45,
 								pulseRate = 1.5,
 								displayTime = 5,
 								show = "all",

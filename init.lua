@@ -6,7 +6,9 @@
 
 local FOLDER_NAME, Engine = ...
 
-local SSA = {}
+local SSA = {
+	spec = GetSpecialization()
+}
 local Auras = LibStub('AceAddon-3.0'):NewAddon('ShamanAurasDev', 'AceConsole-3.0','AceEvent-3.0', 'AceHook-3.0', 'AceTimer-3.0');
 Auras.version = GetAddOnMetadata('ShamanAurasDev', 'Version')
 Auras:RegisterChatCommand('ssa','ChatCommand')
@@ -30,7 +32,6 @@ local GetSpecialization, GetSpecializationInfo = GetSpecialization, GetSpecializ
 local GetSpellCooldown = GetSpellCooldown
 local GetTime = GetTime
 local UnitCastingInfo, UnitChannelInfo = UnitCastingInfo, UnitChannelInfo
-
 
 -------------------------------------------------------------------------------------------------------
 ----- Initialize Global Variables
@@ -300,6 +301,7 @@ function Auras:OnInitialize()
 	if (not self.db.char.isFirstEverLoad) then
 		BuildAuraGroups()
 	end
+	
 end
 
 local function PopulateDatabase()

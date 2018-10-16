@@ -1,6 +1,7 @@
 local SSA, Auras = unpack(select(2,...))
 
 -- Cache Global WoW API Functions
+local GetSpecialization = GetSpecialization
 local GetSpellCooldown = GetSpellCooldown
 local GetTime = GetTime
 local IsSpellKnown = IsSpellKnown
@@ -9,23 +10,13 @@ local IsSpellKnown = IsSpellKnown
 local FlameShock = SSA.FlameShock
 
 -- Initialize Data Variables
-FlameShock.spellID = ((SSA.spec or GetSpecialization()) == 1 and 188389) or ((SSA.spec or GetSpecialization()) == 2 and 0) or ((SSA.spec or GetSpecialization()) == 3 and 188838)
 FlameShock.pulseTime = 0
 FlameShock.condition = function()
-	return IsSpellKnown(FlameShock.spellID)
+	return IsSpellKnown((SSA.spec == 1 and 188389) or (SSA.spec == 2 and 0) or (SSA.spec == 3 and 188838))
 end
 
 FlameShock:SetScript('OnUpdate', function(self)
-	--local spec = GetSpecialization()
-	--local spellID = (SSA.spec == 1 and 188389) or (SSA.spec == 2 and 0) or (SSA.spec == 3 and 188838)
-	
-	--[[if (spec == 1) then
-		spellID = 188389
-	elseif (spec == 3) then
-		spellID = 188838
-	else
-		spellID = 0
-	end]]
+	self.spellID = (SSA.spec == 1 and 188389) or (SSA.spec == 2 and 0) or (SSA.spec == 3 and 188838)
 
 	if (Auras:CharacterCheck(self,1,self.spellID) or Auras:CharacterCheck(self,3,self.spellID)) then
 		local groupID = Auras:GetAuraGroupID(self,'FlameShock')

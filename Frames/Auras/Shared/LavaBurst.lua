@@ -83,13 +83,13 @@ end)
 
 LavaBurst:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 LavaBurst:SetScript("OnEvent",function(self,event)
-	if (event ~= "COMBAT_LOG_EVENT_UNFILTERED" or Auras.db.char.isFirstEverLoad) then
+	if (event ~= "COMBAT_LOG_EVENT_UNFILTERED" or Auras.db.char.isFirstEverLoad or (SSA.spec or GetSpecialization()) == 2) then
 		return
 	end
 	
 	local spec = SSA.spec or GetSpecialization()
 	
-	local glow = Auras.db.char.auras[spec].auras[self:GetName()].glow
+	local glow = Auras.db.char.auras[SSA.spec].auras[self:GetName()].glow
 	local _,subevent,_,srcGUID,_,_,_,destGUID,_,_,_,spellID = CombatLogGetCurrentEventInfo()
 
 	if ((subevent == "SPELL_AURA_APPLIED" or subevent == "SPELL_AURA_REFRESH" or subevent == "SPELL_AURA_REMOVED") and srcGUID == UnitGUID("player") and spellID == 77762) then

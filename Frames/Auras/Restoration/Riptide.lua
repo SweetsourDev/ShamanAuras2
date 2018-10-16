@@ -26,13 +26,10 @@ Riptide:SetScript('OnUpdate', function(self)
 		local glow = Auras.db.char.auras[3].auras[self:GetName()].glow
 		
 		self.CD:Show()
-		
-		--[[if ((selected and (charges or 0) == 0) or not selected) then
-			Auras:SetAuraStartTime(self,cdStart,cdDuration,self.spellID,"cooldown")
-		end]]
+
 		if (selected) then
 			if ((charges or 0) == 0) then
-				Auras:SetGlowStartTime(self,(chgStart - 30),chgDuration,self.spellID,"cooldown")
+				Auras:SetGlowStartTime(self,chgStart,chgDuration,self.spellID,"cooldown")
 			else
 				local glow = Auras.db.char.auras[3].auras[self:GetName()].glow
 				

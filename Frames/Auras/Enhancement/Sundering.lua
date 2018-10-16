@@ -21,7 +21,7 @@ Sundering:SetScript('OnUpdate',function(self)
 
 		Auras:SetGlowStartTime(self,start,duration,self.spellID,"cooldown")
 		Auras:GlowHandler(self)
-		Auras:SpellRangeCheck(self,self.spellID,true)
+		--Auras:SpellRangeCheck(self,self.spellID,true)
 		Auras:ToggleAuraVisibility(self,true,'showhide')
 		Auras:CooldownHandler(self,groupID,start,duration)
 		

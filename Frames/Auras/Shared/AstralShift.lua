@@ -30,7 +30,6 @@ AstralShift:SetScript('OnUpdate',function(self)
 			Auras:NoCombatDisplay(self,groupID)
 		end
 	else
-		--SSA.DataFrame.text:SetText("Astral Shift OFF: "..GetTime())
 		Auras:ToggleAuraVisibility(self,false,'showhide')
 	end
 end)

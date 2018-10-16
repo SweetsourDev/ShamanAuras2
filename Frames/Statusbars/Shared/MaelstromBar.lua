@@ -64,12 +64,12 @@ MaelstromBar.Lightning:SetSequence(37)
 MaelstromBar:SetScript('OnUpdate',function(self,elaps)
 	if (Auras:CharacterCheck(nil,1) or Auras:CharacterCheck(nil,2)) then
 		local powerID = Enum.PowerType.Maelstrom
-		local spec = GetSpecialization()
+		--local spec = GetSpecialization()
 		local isCombat = UnitAffectingCombat('player')
 		local power,maxPower = UnitPower('player',powerID),UnitPowerMax('player',powerID)
 
 		local db = Auras.db.char
-		local bar = db.elements[spec].statusbars.maelstromBar
+		local bar = db.statusbars[SSA.spec].bars.MaelstromBar
 		local isMoving = db.elements.isMoving
 
 		local _,maxVal = self:GetMinMaxValues()
