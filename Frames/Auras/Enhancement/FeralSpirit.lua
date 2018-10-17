@@ -8,6 +8,7 @@ local FeralSpirit = SSA.FeralSpirit
 
 -- Initialize Data Variables
 FeralSpirit.spellID = 51533
+FeralSpirit.pulseTime = 0
 FeralSpirit.condition = function()
 	return IsSpellKnown(51533)
 end
@@ -17,6 +18,8 @@ FeralSpirit:SetScript('OnUpdate',function(self)
 		local groupID = Auras:GetAuraGroupID(self,self:GetName())
 		local start,duration = GetSpellCooldown(Auras:GetSpellName(self.spellID))
 		
+		Auras:SetGlowStartTime(self,start,duration,self.spellID,"cooldown")
+		Auras:GlowHandler(self)
 		Auras:ToggleAuraVisibility(self,true,'showhide')
 		Auras:CooldownHandler(self,groupID,start,duration)
 			

@@ -11,6 +11,7 @@ local EarthenSpike = SSA.EarthenSpike
 
 -- Initialize Data Variables
 EarthenSpike.spellID = 188089
+EarthenSpike.pulseTime = 0
 EarthenSpike.condition = function()
 	return select(4,GetTalentInfo(7,2,1))
 end
@@ -21,6 +22,8 @@ EarthenSpike:SetScript('OnUpdate', function(self)
 		local start,duration = GetSpellCooldown(Auras:GetSpellName(self.spellID))
 		local power = UnitPower('player',Enum.PowerType.Maelstrom)
 	
+		Auras:SetGlowStartTime(self,start,duration,self.spellID,"cooldown")
+		Auras:GlowHandler(self)
 		Auras:SpellRangeCheck(self,self.spellID,true)
 		Auras:ToggleAuraVisibility(self,true,'showhide')
 		Auras:CooldownHandler(self,groupID,start,duration)

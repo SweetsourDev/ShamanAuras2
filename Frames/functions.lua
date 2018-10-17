@@ -97,7 +97,8 @@ function Auras:GlowHandler(obj)
 					if (trigger.combat == "all" or (trigger.combat == "on" and Auras:IsPlayerInCombat(true)) or (trigger.combat == "off" and not Auras:IsPlayerInCombat(true))) then
 						-- Check if the trigger's "show" and threshold conditons are met
 						--if ((not trigger.threshold and trigger.start > 0) or ((trigger.show == "all" or not trigger.show) and (remains <= (trigger.threshold or 0) and remains > 0 or (GetTime() >= expire and trigger.start > 0))) or (trigger.show == "on" and remains <= (trigger.threshold or 0) and remains > 0) or (trigger.show == "off" and GetTime() >= expire)) then
-						if ((not trigger.threshold and trigger.start > 0) or ((trigger.show == "all" or not trigger.show) and (trigger.threshold or 0) == 0) or ((trigger.show == "all" or not trigger.show) and (trigger.threshold or 0) > 0 and (remains <= (trigger.threshold or 0) and remains > 0 or (GetTime() >= expire and trigger.start > 0))) or (trigger.show == "on" and remains <= (trigger.threshold or 0) and remains > 0) or (trigger.show == "off" and GetTime() >= expire)) then
+						--if ((not trigger.threshold and trigger.start > 0) or ((trigger.show == "all" or not trigger.show) and (trigger.threshold or 0) == 0) or ((trigger.show == "all" or not trigger.show) and (trigger.threshold or 0) > 0 and (remains <= (trigger.threshold or 0) and remains > 0 or (GetTime() >= expire and trigger.start > 0))) or (trigger.show == "on" and remains <= (trigger.threshold or 0) and remains > 0) or (trigger.show == "off" and GetTime() >= expire)) then
+						if ((not trigger.threshold and trigger.start > 0) or ((trigger.show == "all" or not trigger.show) and (remains <= (trigger.threshold or 0) and remains > 0 or (GetTime() >= expire and type(trigger.treshold) == "number"))) or (trigger.show == "on" and remains <= (trigger.threshold or 0) and remains > 0) or (trigger.show == "off" and GetTime() >= expire)) then
 							-- If the trigger has a glow duration time, keep it active after the trigger expiration, otherwise just activate the trigger while it's not expired.
 							if ((trigger.show == "all" or trigger.show == "off") and GetTime() >= expire and (trigger.displayTime or 0) > 0) then
 								if (GetTime() < (expire + trigger.displayTime)) then
@@ -183,17 +184,17 @@ function Auras:GlowHandler(obj)
 			end
 			if (trigger.pulseRate > 0 and GetTime() >= obj.pulseTime) then
 				obj.pulseTime = GetTime() + trigger.pulseRate
-				LBG.HideOverlayGlow(obj)
-				LBG.ShowOverlayGlow(obj)
+				LBG.HideOverlayGlow(obj.glow)
+				LBG.ShowOverlayGlow(obj.glow)
 			else
-				LBG.ShowOverlayGlow(obj)
+				LBG.ShowOverlayGlow(obj.glow)
 			end
 			
 			return
 		end
 	end
 	
-	LBG.HideOverlayGlow(obj)
+	LBG.HideOverlayGlow(obj.glow)
 	return
 	--[[for k,v in pairs(glowTbl or glow.triggers) do
 		

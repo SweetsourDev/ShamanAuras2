@@ -9,6 +9,7 @@ local EtherealForm = SSA.EtherealForm
 
 -- Initialize Data Variables
 EtherealForm.spellID = 210918
+EtherealForm.pulseTime = 0
 EtherealForm.condition = function()
 	return select(10,GetPvpTalentInfoByID(1944)) and Auras:IsPvPZone()
 end
@@ -18,6 +19,8 @@ EtherealForm:SetScript('OnUpdate',function(self)
 		local groupID = Auras:GetAuraGroupID(self,self:GetName())
 		local start,duration = GetSpellCooldown(Auras:GetSpellName(self.spellID))
 		
+		Auras:SetGlowStartTime(self,start,duration,self.spellID,"cooldown")
+		Auras:GlowHandler(self)
 		Auras:ToggleAuraVisibility(self,true,'showhide')
 		Auras:CooldownHandler(self,groupID,start,duration)
 			

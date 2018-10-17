@@ -9,15 +9,18 @@ local FeralLunge = SSA.FeralLunge
 
 -- Initialize Data Variables
 FeralLunge.spellID = 196884
+FeralLunge.pulseTime = 0
 FeralLunge.condition = function()
 	return select(4,GetTalentInfo(5,2,1))
 end
 
 FeralLunge:SetScript('OnUpdate',function(self)
 	if (Auras:CharacterCheck(self,2,5,2)) then
-		local groupID = Auras:GetAuraInfo(self,self:GetName())
+		local groupID = Auras:GetAuraGroupID(self,self:GetName())
 		local start,duration = GetSpellCooldown(Auras:GetSpellName(self.spellID))
 		
+		Auras:SetGlowStartTime(self,start,duration,self.spellID,"cooldown")
+		Auras:GlowHandler(self)
 		Auras:SpellRangeCheck(self,self.spellID,true)
 		Auras:ToggleAuraVisibility(self,true,'showhide')
 		Auras:CooldownHandler(self,groupID,start,duration)

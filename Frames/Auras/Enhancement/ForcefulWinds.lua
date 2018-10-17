@@ -7,7 +7,8 @@ local GetTalentInfo = GetTalentInfo
 local ForcefulWinds = SSA.ForcefulWinds
 
 -- Initialize Data Variables
-ForcefulWinds.spellID = 262647
+ForcefulWinds.spellID = 262652
+ForcefulWinds.pulseTime = 0
 ForcefulWinds.condition = function()
 	return select(4,GetTalentInfo(2,2,1))
 end
@@ -17,6 +18,8 @@ SSA.ForcefulWinds:SetScript('OnUpdate', function(self)
 		local groupID = Auras:GetAuraGroupID(self,self:GetName())
 		local buff,_,count,_,duration,expires = Auras:RetrieveAuraInfo('player', self.spellID)
 
+		Auras:SetGlowStartTime(self,((expires or 0) - (duration or 0)),duration,self.spellID,"buff")
+		Auras:GlowHandler(self)
 		Auras:ToggleAuraVisibility(self,true,'showhide')
 		Auras:CooldownHandler(self,groupID,((expires or 0) - (duration or 0)),duration,true)
 	
@@ -29,10 +32,8 @@ SSA.ForcefulWinds:SetScript('OnUpdate', function(self)
 		if (Auras:IsPlayerInCombat(true)) then
 			if (buff) then
 				self:SetAlpha(1)
-				Auras:ToggleOverlayGlow(self.glow,true)
 			else
 				self:SetAlpha(0.5)
-				Auras:ToggleOverlayGlow(self.glow,false)
 			end
 		else
 			Auras:NoCombatDisplay(self,groupID)
