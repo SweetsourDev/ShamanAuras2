@@ -8,6 +8,7 @@ local Thunderstorm = SSA.Thunderstorm
 
 -- Initialize Data Variables
 Thunderstorm.spellID = 51490
+Thunderstorm.pulseTime = 0
 Thunderstorm.condition = function()
 	return IsSpellKnown(51490)
 end
@@ -17,6 +18,8 @@ Thunderstorm:SetScript('OnUpdate',function(self)
 		local groupID = Auras:GetAuraGroupID(self,self:GetName())
 		local start,duration = GetSpellCooldown(Auras:GetSpellName(self.spellID))
 		
+		Auras:SetGlowStartTime(self,start,duration,self.spellID,"cooldown")
+		Auras:GlowHandler(self)
 		Auras:ToggleAuraVisibility(self,true,'showhide')
 		Auras:CooldownHandler(self,groupID,start,duration)
 			

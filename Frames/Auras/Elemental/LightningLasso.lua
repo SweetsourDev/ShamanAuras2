@@ -9,6 +9,7 @@ local LightningLasso = SSA.LightningLasso
 
 -- Initialize Data Variables
 LightningLasso.spellID = 204437
+LightningLasso.pulseTime = 0
 LightningLasso.condition = function()
 	return select(10,GetPvpTalentInfoByID(731)) and Auras:IsPvPZone()
 end
@@ -18,6 +19,8 @@ LightningLasso:SetScript('OnUpdate',function(self)
 		local groupID = Auras:GetAuraGroupID(self,self:GetName())
 		local start,duration = GetSpellCooldown(Auras:GetSpellName(self.spellID))
 		
+		Auras:SetGlowStartTime(self,start,duration,self.spellID,"cooldown")
+		Auras:GlowHandler(self)
 		Auras:ToggleAuraVisibility(self,true,'showhide')
 		Auras:SpellRangeCheck(self,self.spellID,true)
 		Auras:CooldownHandler(self,groupID,start,duration)

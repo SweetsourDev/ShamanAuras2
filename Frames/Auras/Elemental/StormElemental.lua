@@ -9,6 +9,7 @@ local StormElemental = SSA.StormElemental
 
 -- Initialize Data Variables
 StormElemental.spellID = 192249
+StormElemental.pulseTime = 0
 StormElemental.condition = function()
 	return select(4,GetTalentInfo(4,2,1))
 end
@@ -18,6 +19,8 @@ StormElemental:SetScript('OnUpdate',function(self)
 		local groupID = Auras:GetAuraGroupID(self,self:GetName())
 		local start,duration = GetSpellCooldown(Auras:GetSpellName(self.spellID))
 		
+		Auras:SetGlowStartTime(self,start,duration,self.spellID,"cooldown")
+		Auras:GlowHandler(self)
 		Auras:ToggleAuraVisibility(self,true,'showhide')
 		Auras:CooldownHandler(self,groupID,start,duration)
 			

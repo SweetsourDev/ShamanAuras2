@@ -10,6 +10,7 @@ local FireElemental = SSA.FireElemental
 
 -- Initialize Data Variables
 FireElemental.spellID = 198067
+FireElemental.pulseTime = 0
 FireElemental.condition = function()
 	return not select(4,GetTalentInfo(4,2,1)) and IsSpellKnown(198067)
 end
@@ -19,6 +20,8 @@ FireElemental:SetScript('OnUpdate',function(self)
 		local groupID = Auras:GetAuraGroupID(self,self:GetName())
 		local start,duration = GetSpellCooldown(Auras:GetSpellName(self.spellID))
 		
+		Auras:SetGlowStartTime(self,start,duration,self.spellID,"cooldown")
+		Auras:GlowHandler(self)
 		Auras:ToggleAuraVisibility(self,true,'showhide')
 		Auras:CooldownHandler(self,groupID,start,duration)
 			

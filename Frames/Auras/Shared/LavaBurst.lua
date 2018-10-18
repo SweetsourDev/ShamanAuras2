@@ -17,10 +17,13 @@ end
 LavaBurst:SetScript('OnUpdate', function(self)
 	if (Auras:CharacterCheck(self,1,self.spellID) or Auras:CharacterCheck(self,3,self.spellID)) then
 		local groupID = Auras:GetAuraGroupID(self,self:GetName())
-		local ascendance = Auras:RetrieveAuraInfo("player", (SSA.spec == 1 and 114050) or (SSA.spec == 3 and 114052))
+		local ascendance,_,_,_,ascDuration,ascExpires = Auras:RetrieveAuraInfo("player", (SSA.spec == 1 and 114050) or (SSA.spec == 3 and 114052))
 		local start,duration = GetSpellCooldown(Auras:GetSpellName(self.spellID))
 		local charges,maxCharges,chgStart,chgDuration = GetSpellCharges(self.spellID)
 	
+		if (ascendance) then
+			Auras:SetGlowStartTime(self,((ascExpires or 0) - (ascDuration or 0)),ascDuration,((SSA.spec == 1 and 114050) or (SSA.spec == 3 and 114052)),"buff")
+		end
 		Auras:SetGlowStartTime(self,start,duration,self.spellID,"cooldown")
 		Auras:GlowHandler(self)
 		Auras:ToggleAuraVisibility(self,true,'showhide')

@@ -9,6 +9,7 @@ local Stormkeeper = SSA.Stormkeeper
 
 -- Initialize Data Variables
 Stormkeeper.spellID = 191634
+Stormkeeper.pulseTime = 0
 Stormkeeper.condition = function()
 	return select(4,GetTalentInfo(7,2,1))
 end
@@ -17,14 +18,17 @@ Stormkeeper:SetScript('OnUpdate',function(self)
 	if (Auras:CharacterCheck(self,1,7,2)) then
 		local groupID = Auras:GetAuraGroupID(self,self:GetName())
 		--local spell = Auras:GetSpellName(191634)
-		local buff,_,_,count = Auras:RetrieveAuraInfo("player", self.spellID)
+		local buff,_,_,count,buffDuration,expires = Auras:RetrieveAuraInfo("player", self.spellID)
 		local start,duration = GetSpellCooldown(Auras:GetSpellName(self.spellID))
 		
+		Auras:SetGlowStartTime(self,start,duration,self.spellID,"cooldown")
+		Auras:SetGlowStartTime(self,((expires or 0) - (buffDuration or 0)),buffDuration,self.spellID,"buff")
+		Auras:GlowHandler(self)
 		Auras:ToggleAuraVisibility(self,true,'showhide')
 		Auras:CooldownHandler(self,groupID,start,duration)
 
 		if (buff) then
-			Auras:ToggleOverlayGlow(self.glow,true)
+			--Auras:ToggleOverlayGlow(self.glow,true)
 			
 			self.CD:SetAlpha(0)
 			self.ChargeCD:Show()
@@ -37,7 +41,7 @@ Stormkeeper:SetScript('OnUpdate',function(self)
 			
 			self.Charges.text:SetText(count)
 		else
-			Auras:ToggleOverlayGlow(self.glow,false)
+			--Auras:ToggleOverlayGlow(self.glow,false)
 
 			self.CD:SetAlpha(1)
 			self.ChargeCD:Hide()
