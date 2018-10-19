@@ -119,6 +119,152 @@ DataFrame.text:SetJustifyH('LEFT')
 SSA.DataFrame = DataFrame
 _G['SSA_DataFrame'] = DataFrame
 
+----------------------------
+--- Introduction Display ---
+----------------------------
+local IntroFrame = CreateFrame('Frame',nil,UIParent)
+IntroFrame:SetSize(1024,512)
+IntroFrame:SetPoint("CENTER",0,0)
+IntroFrame:SetBackdrop(SSA.BackdropSB)
+IntroFrame:SetBackdropColor(0.1,0.1,0.1,0.9)
+IntroFrame:SetBackdropBorderColor(1,1,1,1)
+IntroFrame:SetFrameStrata("TOOLTIP")
+IntroFrame:SetAlpha(0)
+--IntroFrame:Hide()
+
+IntroFrame.logo = IntroFrame:CreateTexture(nil,'HIGH')
+IntroFrame.logo:SetTexture([[Interface\AddOns\ShamanAuras2\Media\textures\logo]])
+IntroFrame.logo:SetSize(1024,512)
+--IntroFrame.logo:SetPoint("LEFT",IntroFrame,"CENTER",0,0)
+--IntroFrame.logo:SetPoint("RIGHT",IntroFrame,"CENTER",0,0)
+IntroFrame.logo:SetPoint("TOP",IntroFrame,"TOP",0,-3)
+
+IntroFrame.elapsedTime = 0
+IntroFrame.currentSpeed = 0
+IntroFrame.currentAlpha = 0
+IntroFrame.maxAlphaTime = 0
+IntroFrame.descReady = false
+IntroFrame.dbReady = false
+IntroFrame:SetScript("OnUpdate",function(self,elapsed)
+	if (GetAddOnMetadata(FOLDER_NAME,"Version") ~= Auras.db.char.version or Auras.db.char.isFirstEverLoad) then
+		self.elapsedTime = self.elapsedTime + elapsed
+
+		if (self.elapsedTime >= 3.5) then
+			if (self:GetAlpha() < 1) then
+				local appearSpeed = 0.015
+				--local maxAppearSpeed = 
+				local newAlpha = self:GetAlpha() + appearSpeed
+				self:SetAlpha(newAlpha)
+			elseif (not self.descReady) then
+				if (self.maxAlphaTime == 0) then
+					self.maxAlphaTime = self.elapsedTime
+				end
+				
+				local alphaTimeDiff = self.elapsedTime - self.maxAlphaTime
+				
+				if (alphaTimeDiff >= 1) then
+					local acceleration = 0.05
+					local maxSpeed = 8
+					local maxY = 200
+					local _,_,_,_,y = self:GetPoint(1)
+					
+					if (y < maxY) then
+						if (self.currentSpeed < maxSpeed) then
+							self.currentSpeed = self.currentSpeed + acceleration
+						end
+						y = y + self.currentSpeed
+						self:SetPoint("CENTER",0,y)
+					else
+						self.descReady = true
+						self.currentSpeed = 0
+					end
+				end
+			elseif (self.descReady and not self.dbReady) then
+				if (self.desc:GetAlpha() < 1) then
+					local appearSpeed = 0.03
+					--local maxAppearSpeed = 
+					local newAlpha = self.desc:GetAlpha() + appearSpeed
+					self.desc:SetAlpha(newAlpha)
+				else
+					self.dbReady = true
+				end
+			elseif (self.dbReady) then
+				if (Auras.db.char.isFirstEverLoad) then
+					local acceleration = 0.05
+					local maxSpeed = 8
+					local maxX = 750
+					local width = self.desc:GetWidth()
+					
+					if (width > maxX) then
+						if (self.currentSpeed < maxSpeed) then
+							self.currentSpeed = self.currentSpeed + acceleration
+						end
+						
+						width = width - self.currentSpeed
+						self.desc:SetWidth(width)
+					else
+						if (self.dbFrame:GetAlpha() < 1) then
+							local appearSpeed = 0.03
+							--local maxAppearSpeed = 
+							local newAlpha = self.dbFrame:GetAlpha() + appearSpeed
+							self.dbFrame:SetAlpha(newAlpha)
+						else
+							Auras.db.char.version = GetAddOnMetadata(FOLDER_NAME,"Version")
+						end
+					end
+				else
+					Auras.db.char.version = GetAddOnMetadata(FOLDER_NAME,"Version")
+				end
+			end
+		end
+	end
+end)
+
+IntroFrame.desc = CreateFrame("Frame",nil,IntroFrame)
+IntroFrame.desc:SetSize(1024,128)
+IntroFrame.desc:SetBackdrop(SSA.BackdropSB)
+IntroFrame.desc:SetBackdropColor(0.1,0.1,0.1,0.9)
+IntroFrame.desc:SetBackdropBorderColor(1,1,1,1)
+IntroFrame.desc:SetFrameStrata("DIALOG")
+IntroFrame.desc:SetPoint("TOPLEFT",IntroFrame,"BOTTOMLEFT",0,2)
+IntroFrame.desc:SetAlpha(0)
+
+IntroFrame.desc.text = IntroFrame.desc:CreateFontString(nil,"MEDIUM", "GameFontHighlightLarge")
+IntroFrame.desc.text:SetFont([[Interface\addons\ShamanAuras\media\fonts\PT_Sans_Narrow.TTF]], 14,'OUTLINE')
+IntroFrame.desc.text:SetPoint("TOPLEFT",10,-10)
+IntroFrame.desc.text:SetSize(1024,128)
+IntroFrame.desc.text:SetTextColor(1,1,1,1)
+IntroFrame.desc.text:SetJustifyH("LEFT")
+IntroFrame.desc.text:SetJustifyV("TOP")
+IntroFrame.desc.text:SetText("Welcome to my new and improved Shaman Auras!\n\n• Many bugs from the previous version have been squashed!\n• You can now organize auras and create aura groups to your liking!\n• You can now customize and organize timer bars!")
+
+IntroFrame.dbFrame = CreateFrame("Frame",nil,IntroFrame)
+IntroFrame.dbFrame:SetSize(280,128)
+IntroFrame.dbFrame:SetBackdrop(SSA.BackdropSB)
+IntroFrame.dbFrame:SetBackdropColor(0.1,0.1,0.1,0.9)
+IntroFrame.dbFrame:SetBackdropBorderColor(1,1,1,1)
+IntroFrame.dbFrame:SetFrameStrata("DIALOG")
+IntroFrame.dbFrame:SetPoint("TOPRIGHT",IntroFrame,"BOTTOMRIGHT",0,2)
+IntroFrame.dbFrame:SetAlpha(0)
+
+IntroFrame.dbFrame.text = IntroFrame.dbFrame:CreateFontString(nil,"MEDIUM", "GameFontHighlightLarge")
+IntroFrame.dbFrame.text:SetFont([[Interface\addons\ShamanAuras\media\fonts\PT_Sans_Narrow.TTF]], 14,'OUTLINE')
+IntroFrame.dbFrame.text:SetPoint("TOPLEFT",2,-8)
+IntroFrame.dbFrame.text:SetSize(280,128)
+IntroFrame.dbFrame.text:SetTextColor(1,1,1,1)
+IntroFrame.dbFrame.text:SetJustifyV("TOP")
+IntroFrame.dbFrame.text:SetText("This is the first time you're loading this addon.\n\nIn order to work correctly, the database needs to be populated with default values.\n\nClick the button below to proceed.")
+
+IntroFrame.dbFrame.button = CreateFrame("Button",nil,IntroFrame.dbFrame,"UIPanelButtonTemplate")
+IntroFrame.dbFrame.button:SetSize(128,20)
+IntroFrame.dbFrame.button:SetPoint("BOTTOM",0,10)
+IntroFrame.dbFrame.button:SetText("Proceed")
+IntroFrame.dbFrame.button:SetScript("OnClick",function(self,button)
+	Auras:CopyTableValues(Auras.db.char,SSA.defaults)
+	Auras.db.char.isFirstEverLoad = false
+	ReloadUI()
+end)
+_G["SSA_IntroFrame"] = IntroFrame
 -- Initialize Check Button Frames
 SSA.MoveEle = CreateFrame('Frame','MoveEle',UIParent)
 --SSA.MoveEnh = CreateFrame('Frame','MoveEnh',UIParent)
@@ -315,7 +461,7 @@ function Auras:OnEnable()
 	local db = Auras.db.char
 	
 	if (db.isFirstEverLoad) then
-		StaticPopupDialogs["SSA_FIRST_LOAD"] = {
+		--[[StaticPopupDialogs["SSA_FIRST_LOAD"] = {
 			text = "This is the first time you're loading this addon. In order to work correctly, the database needs to be populated with default values.\n\nClick the button below to proceed.",
 			button1 = "Populate Database",
 			OnAccept = function()
@@ -329,7 +475,7 @@ function Auras:OnEnable()
 			preferredIndex = 3,
 		}
 		
-		StaticPopup_Show ("SSA_FIRST_LOAD")
+		StaticPopup_Show ("SSA_FIRST_LOAD")]]
 		
 		return
 	end

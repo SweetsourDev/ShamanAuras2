@@ -92,7 +92,7 @@ LavaBurst:SetScript("OnEvent",function(self,event)
 	
 	local spec = SSA.spec or GetSpecialization()
 	
-	local glow = Auras.db.char.auras[SSA.spec].auras[self:GetName()].glow
+	local glow = Auras.db.char.auras[spec].auras[self:GetName()].glow
 	local _,subevent,_,srcGUID,_,_,_,destGUID,_,_,_,spellID = CombatLogGetCurrentEventInfo()
 
 	if ((subevent == "SPELL_AURA_APPLIED" or subevent == "SPELL_AURA_REFRESH" or subevent == "SPELL_AURA_REMOVED") and srcGUID == UnitGUID("player") and spellID == 77762) then

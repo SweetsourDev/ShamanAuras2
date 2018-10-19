@@ -407,7 +407,7 @@ function Auras:InitializeTimerBarFrameGroups(spec)
 					end
 				end
 				
-				SSA["BarGroup"..i]:SetBackdrop(SSA.BackdropSB)
+				--[[SSA["BarGroup"..i]:SetBackdrop(SSA.BackdropSB)
 				if (i == 1) then
 					SSA["BarGroup"..i]:SetBackdropColor(1,0,0,1)
 				elseif (i == 2) then
@@ -423,7 +423,7 @@ function Auras:InitializeTimerBarFrameGroups(spec)
 				end
 				
 				
-				SSA["BarGroup"..i]:SetBackdropBorderColor(0,0,0,1)
+				SSA["BarGroup"..i]:SetBackdropBorderColor(0,0,0,1)]]
 				
 				if (group:GetName() == "Undulation") then
 					group.Model:SetModel('SPELLS/Monk_ForceSpere_Orb.m2')

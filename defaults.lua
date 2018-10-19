@@ -486,21 +486,28 @@ local defaults = {
 						isCharge = false,
 					},
 					glow = {
-						isEnabled = false,
 						isCustomize = false,
-						states = {
-							combat = "both",
-							usable = "always",
-						},
 						triggers = {
-							selected = "time",
-							["time"] = {
+							[1] = {
+								isEnabled = true,
+								isActive = false,
+								target = {
+									locked = false,
+									reaction = "off",
+									recommend = "off",
+								},
+								type = "cooldown",
+								name = "Spell Cooldown",
+								spellID = 108281,
 								threshold = 10,
-								min = 1,
-								max = 120,
+								start = 0,
+								duration = 120,
+								pulseRate = 1,
+								displayTime = 5,
+								show = "on",
+								combat = "on",
 							},
 						},
-						
 					},
 				},
 				["Ascendance"] = {
@@ -684,26 +691,33 @@ local defaults = {
 					isEnabled = true,
 					isInUse = true,
 					layout = {
-						icon = [[elemental\earth_elemental]],
+						icon = [[shared\earth_elemental]],
 						isGCD = true,
 						isCharge = false,
 					},
 					glow = {
-						isEnabled = false,
 						isCustomize = false,
-						states = {
-							combat = "both",
-							usable = "always",
-						},
 						triggers = {
-							selected = "time",
-							["time"] = {
+							[1] = {
+								isEnabled = false,
+								isActive = false,
+								target = {
+									locked = false,
+									reaction = "off",
+									recommend = "off",
+								},
+								type = "cooldown",
+								name = "Spell Cooldown",
+								spellID = 198103,
 								threshold = 10,
-								min = 1,
-								max = 300,
+								start = 0,
+								duration = 300,
+								pulseRate = 1.5,
+								displayTime = 5,
+								show = "all",
+								combat = "on",
 							},
 						},
-						
 					},
 				},
 				["EarthShield"] = {
@@ -770,19 +784,28 @@ local defaults = {
 						isCharge = false,
 					},
 					glow = {
-						isEnabled = false,
-						states = {
-							combat = "both",
-							usable = "always",
-						},
+						isCustomize = false,
 						triggers = {
-							selected = "time",
-							["time"] = {
-								min = 5,
-								max = 60,
+							[1] = {
+								isEnabled = true,
+								isActive = false,
+								target = {
+									locked = false,
+									reaction = "off",
+									recommend = "off",
+								},
+								type = "buff",
+								name = "Buff Duration",
+								spellID = 8042,
+								threshold = false,
+								start = 0,
+								duration = false,
+								pulseRate = 0.5,
+								displayTime = false,
+								show = false,
+								combat = "on",
 							},
 						},
-						
 					},
 				},
 				["EarthbindTotem"] = {

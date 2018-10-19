@@ -560,12 +560,7 @@ function Auras:VerifyDefaultValues(spec,options,group)
 		local option = options.args.general.args.settings.args
 		
 		if (settings.OoCAlpha ~= defaults.OoCAlpha or 
-			(settings.flameShock and settings.flameShock ~= defaults[spec].flameShock) or 
 			(settings.totemMastery and settings.totemMastery ~= defaults[spec].totemMastery) or 
-			(settings.flametongue and settings.flametongue ~= defaults[spec].flametongue) or
-			(settings.frostbrand and settings.frostbrand ~= defaults[spec].frostbrand) or
-			(settings.rockbiter and settings.rockbiter ~= defaults[spec].rockbiter) or
-			(settings.lavaLash and (settings.lavaLash.stacks.isEnabled or not settings.lavaLash.stacks.glow or settings.lavaLash.stacks.value ~= defaults[spec].lavaLash.stacks)) or
 			settings.OoRColor.r ~= defaults.OoRColor.r or 
 			settings.OoRColor.g ~= defaults.OoRColor.g or 
 			settings.OoRColor.b ~= defaults.OoRColor.b or 

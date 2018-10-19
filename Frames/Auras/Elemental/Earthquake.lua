@@ -23,7 +23,6 @@ Earthquake:SetScript('OnUpdate', function(self)
 		local glow = Auras.db.char.auras[1].auras[self:GetName()].glow
 		
 		if (power >= 60) then
-			
 			if (self.powerTime == 0) then
 				self.powerTime = GetTime()
 				

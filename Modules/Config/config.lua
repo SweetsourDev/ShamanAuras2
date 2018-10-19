@@ -297,7 +297,6 @@ local function GetElementalOptions()
 							guiInline = true,
 							args = {
 								OoCAlpha = Auras:Slider_VerifyDefaults(settings,1,1,L["LABEL_ALPHA_NO_COMBAT"],L["TOOLTIP_AURAS_ALPHA_NO_COMBAT"],0,1,nil,false,'OoCAlpha','Settings'),
-								FlameShock = Auras:Slider_VerifyDefaults(settings,2,1,Auras:GetSpellName(188838),L["TOOLTIP_GLOW_TIME_TRIGGER"],5,15,nil,false,'flameShock','Settings'),
 								TotemMastery = Auras:Slider_VerifyDefaults(settings,3,1,Auras:GetSpellName(210643),L["TOOLTIP_TOTEM_MASTERY_TRIGGER_TIMER"],5,30,nil,false,'totemMastery','Settings'),
 								OoRColor = Auras:Color_VerifyDefaults(settings,4,1,L["LABEL_COLOR_NO_RANGE"],L["TOOLTIP_COLOR_OUT_OF_RANGE"],true,"full",false,'OoRColor','Settings'),
 								reset = {
@@ -305,7 +304,6 @@ local function GetElementalOptions()
 									type = "execute",
 									name = L["BUTTON_RESET_SETTINGS"],
 									func = function()
-										settings.flameShock = settingDefaults[1].flameShock
 										settings.totemMastery = settingDefaults[1].totemMastery
 										settings.OoCAlpha = settingDefaults.OoCAlpha
 										settings.OoRColor.r = settingDefaults.OoRColor.r
@@ -1293,17 +1291,6 @@ local function GetEnhancementOptions()
 							args = {
 								OoCAlpha = Auras:Slider_VerifyDefaults(settings,1,2,L["LABEL_ALPHA_NO_COMBAT"],L["TOOLTIP_AURAS_ALPHA_NO_COMBAT"],0,1,nil,false,'OoCAlpha','Settings'),
 								OoRColor = Auras:Color_VerifyDefaults(settings,2,2,L["LABEL_COLOR_NO_RANGE"],L["TOOLTIP_COLOR_OUT_OF_RANGE"],true,"double",false,'OoRColor','Settings'),
-								lavaLash = {
-									name = L["LABEL_LAVA_LASH_OPTIONS"],
-									type = "group",
-									order = 3,
-									guiInline = true,
-									args = {
-										LavaLashStacks = Auras:Toggle_VerifyDefaults(settings.lavaLash.stacks,1,2,L["TOGGLE_LAVA_LASH_STACKS"],L["TOOLTIP_TOGGLE_LAVA_LASH_STACKS"],nil,false,'isEnabled','Settings'),
-										LavaLashGlow = Auras:Toggle_VerifyDefaults(settings.lavaLash,2,2,L["TOGGLE_LAVA_LASH_GLOW"],L["TOOLTIP_TOGGLE_LAVA_LASH_GLOW"],nil,false,'glow','Settings'),
-										LavaLashGlowStacks = Auras:Slider_VerifyDefaults(settings.lavaLash.stacks,3,2,L["LABEL_LAVA_LASH_STACKS"],L["TOOLTIP_LAVA_LASH_STACKS"],1,99,nil,false,'value','Settings'),
-									},
-								},
 								reset = {
 									order = 4,
 									type = "execute",
@@ -1314,10 +1301,6 @@ local function GetEnhancementOptions()
 										settings.OoRColor.g = settingDefaults.OoRColor.g
 										settings.OoRColor.b = settingDefaults.OoRColor.b
 										settings.OoRColor.a = settingDefaults.OoRColor.a
-										settings.lavaLash.stacks.isEnabled = true
-										settings.lavaLash.stacks.value = settingDefaults[2].lavaLash.stacks
-										settings.lavaLash.glow = true
-										enh_options.args.general.args.settings.args.lavaLash.args.LavaLashGlowStacks.disabled = false
 										enh_options.args.general.args.settings.args.reset.disabled = true
 										enh_options.args.general.args.settings.args.reset.name = "|cFF666666"..L["BUTTON_RESET_SETTINGS"].."|r"
 									end,
@@ -2032,7 +2015,6 @@ local function GetRestorationOptions()
 							guiInline = true,
 							args = {
 								OoCAlpha = Auras:Slider_VerifyDefaults(settings,1,3,L["LABEL_ALPHA_NO_COMBAT"],L["TOOLTIP_AURAS_ALPHA_NO_COMBAT"],0,1,nil,nil,'OoCAlpha','Settings'),
-								FlameShock = Auras:Slider_VerifyDefaults(settings,2,3,Auras:GetSpellName(188838),L["TOOLTIP_GLOW_TIME_TRIGGER"],5,15,nil,nil,'flameShock','Settings'),
 								OoRColor = Auras:Color_VerifyDefaults(settings,3,3,L["LABEL_COLOR_NO_RANGE"],L["TOOLTIP_COLOR_OUT_OF_RANGE"],true,"full",nil,'OoRColor','Settings'),
 								reset = {
 									order = 4,
@@ -2042,7 +2024,6 @@ local function GetRestorationOptions()
 									name = L["BUTTON_RESET_SETTINGS"],
 									func = function()
 										settings.OoCAlpha = Auras.db.char.triggers.default.OoCAlpha
-										settings.flameShock = Auras.db.char.triggers.default[3].flameShock
 										settings.OoRColor.r = Auras.db.char.triggers.default.OoRColor.r
 										settings.OoRColor.g = Auras.db.char.triggers.default.OoRColor.g
 										settings.OoRColor.b = Auras.db.char.triggers.default.OoRColor.b
