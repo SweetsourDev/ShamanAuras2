@@ -16,8 +16,8 @@ _G['SSA_EarthenWall'] = EarthenWallTotemBar
 EarthenWallTotemBar:SetStatusBarTexture([[Interface\addons\ShamanAuras\media\statusbar\fifths]])
 EarthenWallTotemBar:GetStatusBarTexture():SetHorizTile(false)
 EarthenWallTotemBar:GetStatusBarTexture():SetVertTile(false)
-EarthenWallTotemBar:Hide()
---EarthenWallTotemBar:SetAlpha(0)
+--EarthenWallTotemBar:Hide()
+EarthenWallTotemBar:SetAlpha(0)
 
 EarthenWallTotemBar.bg = EarthenWallTotemBar:CreateTexture(nil,'BACKGROUND')
 EarthenWallTotemBar.bg:SetAllPoints(true)
@@ -27,8 +27,8 @@ EarthenWallTotemBar.Timer:SetStatusBarTexture([[Interface\TargetingFrame\UI-Stat
 EarthenWallTotemBar.Timer:GetStatusBarTexture():SetHorizTile(false)
 EarthenWallTotemBar.Timer:GetStatusBarTexture():SetVertTile(false)
 EarthenWallTotemBar.Timer:SetMinMaxValues(0,15)
-EarthenWallTotemBar.Timer:Show()
---EarthenWallTotemBar.Timer:SetAlpha(0)
+--EarthenWallTotemBar.Timer:Show()
+EarthenWallTotemBar.Timer:SetAlpha(0)
 
 EarthenWallTotemBar.healthtext = EarthenWallTotemBar.Timer:CreateFontString(nil, 'HIGH', 'GameFontHighlightLarge')
 EarthenWallTotemBar.timetext = EarthenWallTotemBar.Timer:CreateFontString(nil, 'HIGH', 'GameFontHighlightLarge')
@@ -39,7 +39,7 @@ EarthenWallTotemBar.isSummoned = false
 
 EarthenWallTotemBar:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 EarthenWallTotemBar:SetScript('OnUpdate',function(self,elapsed)
-	if (Auras:CharacterCheck(self,3,4,2)) then
+	if (Auras:CharacterCheck(nil,3,4,2) or Auras.db.char.statusbars[3].bars[self:GetName()].adjust.isEnabled) then
 		--SSA.DataFrame.text:SetText("ACTIVATE")
 		local db = Auras.db.char
 		--local bar = db.elements[3].statusbars.earthenWallBar
@@ -114,17 +114,17 @@ EarthenWallTotemBar:SetScript('OnUpdate',function(self,elapsed)
 			
 			if (bar.data.start > 0) then
 			--if (bar.info.GUID ~= '') then
-				if (not self:IsShown()) then
+				--[[if (not self:IsShown()) then
 					self:Show()
-				end
+				end]]
 				
-				--self.Timer:SetAlpha(1)
+				self.Timer:SetAlpha(1)
 				self.Timer:SetValue(seconds)
 				
 				if (Auras:IsPlayerInCombat(true)) then
 					self:SetAlpha(bar.alphaCombat)
 				else
-					--self:SetAlpha(bar.alphaOoC)
+					self:SetAlpha(bar.alphaOoC)
 				end
 				
 				if (bar.timetext.isDisplayText) then
@@ -133,18 +133,20 @@ EarthenWallTotemBar:SetScript('OnUpdate',function(self,elapsed)
 					self.timetext:SetText('')
 				end
 			else
-				self:Hide()
-				--self:SetAlpha(0)
+				--self:Hide()
+				self:SetAlpha(0)
 				self.Timer:SetValue(0)
 				self.timetext:SetText('')
 			end
 			
 		elseif (not bar.isEnabled and not isMoving and not bar.adjust.isEnabled) then
-			self:Hide()
+			--self:Hide()
+			self:SetAlpha(0)
 		end
 	else
 		SSA.DataFrame.text:SetText("HIDDING EARTHEN WALL BAR")
-		self:Hide()
+		--self:Hide()
+		self:SetAlpha(0)
 	end
 end)
 

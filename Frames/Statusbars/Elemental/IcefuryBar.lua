@@ -28,6 +28,7 @@ IcefuryBar.Timer = CreateFrame('StatusBar','IcefuryTimer',IcefuryBar)
 IcefuryBar.Timer:SetStatusBarTexture([[Interface\TargetingFrame\UI-StatusBar]])
 IcefuryBar.Timer:GetStatusBarTexture():SetHorizTile(false)
 IcefuryBar.Timer:GetStatusBarTexture():SetVertTile(false)
+IcefuryBar.Timer:SetFrameStrata("MEDIUM")
 IcefuryBar.Timer:SetMinMaxValues(0,15)
 
 IcefuryBar.counttext = IcefuryBar.Timer:CreateFontString(nil, 'HIGH', 'GameFontHighlightLarge')
@@ -36,7 +37,7 @@ IcefuryBar.timetext = IcefuryBar.Timer:CreateFontString(nil, 'HIGH', 'GameFontHi
 IcefuryBar:SetScript('OnUpdate',function(self)
 	if (Auras:CharacterCheck(nil,1,6,3)) then
 		local db = Auras.db.char
-		local bar = db.elements[1].statusbars.icefuryBar
+		local bar = db.statusbars[1].bars.IcefuryBar
 		local isMoving = db.elements.isMoving
 
 		Auras:ToggleProgressBarMove(self,isMoving,bar)
@@ -84,13 +85,13 @@ IcefuryBar:SetScript('OnUpdate',function(self)
 			
 			self:SetWidth(bar.layout.width)
 			self:SetHeight(bar.layout.height)
-			self:SetPoint(bar.layout.point,AuraBase,bar.layout.point,bar.layout.x,bar.layout.y)
+			self:SetPoint(bar.layout.point,SSA[bar.layout.relativeTo],bar.layout.point,bar.layout.x,bar.layout.y)
 			self:SetFrameStrata(bar.layout.strata)
 			
 			
 			self.Timer:SetWidth(bar.layout.width)
 			self.Timer:SetHeight(bar.layout.height)
-			self.Timer:SetFrameStrata(bar.layout.strata)
+			self.Timer:SetFrameStrata(bar.timerBar.strata)
 			self.Timer:SetAlpha(1)
 		end		
 

@@ -7159,7 +7159,7 @@ local defaults = {
 						point = "TOP",
 					},
 					justify = "CENTER",
-					threshold = 90,
+					threshold = 60,
 					alphaCombat = 1,
 					alphaOoC = 0,
 					alphaTar = 0.5,
@@ -7453,6 +7453,7 @@ local defaults = {
 							b = 1,
 							a = 0.35,
 						},
+						strata = "MEDIUM",
 					},
 					foreground = {
 						texture = 'Fourths',

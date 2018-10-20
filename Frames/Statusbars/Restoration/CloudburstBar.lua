@@ -53,7 +53,7 @@ Cloudburst.icon.text:SetTextColor(1,1,0,1)
 Cloudburst.icon.text:SetFont([[Interface\addons\ShamanAuras\media\fonts\PT_Sans_Narrow.TTF]], 20,'OUTLINE')
 
 Cloudburst:SetScript('OnUpdate',function(self,elapsed)
-	if (Auras:CharacterCheck(3)) then
+	if (Auras:CharacterCheck(nil,3)) then
 		local db = Auras.db.char
 	
 		local _,_,_,_,_,_,_,_,_,_,_,_,_,_,_,absorbed = Auras:RetrieveBuffInfo('player',Auras:GetSpellName(157153))

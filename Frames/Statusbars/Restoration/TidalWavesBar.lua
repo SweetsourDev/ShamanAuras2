@@ -66,7 +66,7 @@ TidalWavesBar.Flash.fadeOut:SetEndDelay(0)
 TidalWavesBar.healTime = 0
 
 TidalWavesBar:SetScript('OnUpdate',function(self)
-	if (Auras:CharacterCheck(3)) then
+	if (Auras:CharacterCheck(nil,3)) then
 		local db = Auras.db.char
 		local bar = Auras.db.char.statusbars[3].bars[self:GetName()]
 		local isMoving = db.elements.isMoving

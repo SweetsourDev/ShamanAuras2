@@ -136,11 +136,11 @@ CastBar:SetScript('OnUpdate',function(self)
 				if (bar.spark) then
 					self.progress = self.endTime - GetTime()
 
+					print(self.duration..", "..self.progress)
 					if (self.duration > 0 and self.progress > 0) then
 						local position = self:GetWidth() - (self:GetWidth() / (self.duration / self.progress))
+						self.spark:SetPoint('CENTER', self, 'LEFT', position, 0)
 					end
-					
-					self.spark:SetPoint('CENTER', self, 'LEFT', position, 0)
 				end
 				
 				if (Auras:IsPlayerInCombat(true)) then

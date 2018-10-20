@@ -116,7 +116,7 @@ function Auras:Toggle_Cooldowns(db,order,spec,name,desc,disabled,dbKey,auraGroup
 		end,
 		set = function(this,value)
 			db[dbKey] = value
-			Auras:InitializeCooldowns(auraGroup,spec)
+			Auras:InitializeCooldowns(spec)
 			
 			if (optionsGroup) then
 				self:VerifyDefaultValues(spec,this.options,optionsGroup,optionsSubgroup)
@@ -279,7 +279,7 @@ function Auras:Select_VerifyDefaults(db,order,spec,name,desc,dialogControl,value
 			end
 			
 			if (isUpdateCooldown) then
-				for i=1,Auras.db.char.layout[spec].auras.groupCount do
+				for i=1,#Auras.db.char.auras[spec].groups do
 					if (db.selected == i) then
 						db.groups[i].isPreview = true
 					else

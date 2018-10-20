@@ -590,14 +590,36 @@ function Auras:ShiftPressCheck(self)
 end
 
 -- FIX THIS
-function Auras:ResetAuraGroupPosition(auraGroup)
+function Auras:ResetAuraGroupPosition()
 	local spec = GetSpecialization()
 	
 	local db = Auras.db.char
 	local elements = db.elements[spec]
 	local objName, obj, subName
 
-	for i=1,SSA[auraGroup]:GetNumChildren() do
+	for i=1,#SSA.defaults.auras[spec].frames do
+		local frame = self.db.char.auras[spec].frames[i]
+		local frameDefault = SSA.defaults.auras[spec].frames[i]
+		
+		SSA["AuraGroup"..i]:SetPoint(frameDefault.point,SSA[frameDefault.relativeTo],frameDefault.relativePoint,frameDefault.x,frameDefault.y)
+		frame.point,_,frame.relativePoint,frame.x,frame.y = SSA["AuraGroup"..i]:GetPoint()
+	end
+	
+	for i=1,#SSA.defaults.timerbars[spec].frames do
+		local frame = self.db.char.timerbars[spec].frames[i]
+		local frameDefault = SSA.defaults.timerbars[spec].frames[i]
+		
+		SSA["BarGroup"..i]:SetPoint(frameDefault.point,SSA[frameDefault.relativeTo],frameDefault.relativePoint,frameDefault.x,frameDefault.y)
+		frame.point,_,frame.relativePoint,frame.x,frame.y = SSA["AuraGroup"..i]:GetPoint()
+	end
+	
+	for k,v in pairs(SSA.defaults.statusbars[spec].bars) do
+		local bar = self.db.char.statusbars[spec].bars[k]
+		
+		SSA[k]:SetPoint(v.layout.point,SSA[v.layout.relativeTo],v.layout.relativePoint,v.layout.x,v.layout.y)
+		bar.layout.point,_,bar.layout.relativePoint,bar.layout.x,bar.layout.y = SSA[k]:GetPoint()
+	end
+	--[[for i=1,SSA[auraGroup]:GetNumChildren() do
 		objName = select(i,SSA[auraGroup]:GetChildren()):GetName()
 		
 		if (elements.frames[objName]) then
@@ -633,7 +655,7 @@ function Auras:ResetAuraGroupPosition(auraGroup)
 				Auras:UpdateLayout(SSA[objName],elements.statusbars[subName])
 			end
 		end	
-	end
+	end]]
 end
 
 -- FIX THIS

@@ -25,7 +25,7 @@ ManaBar.text:SetPoint('CENTER',ManaBar,'CENTER',0,0)
 ManaBar.text:SetTextColor(1,1,1,1)
 
 ManaBar:SetScript('OnUpdate',function(self)	
-	if (Auras:CharacterCheck(3)) then
+	if (Auras:CharacterCheck(nil,3)) then
 		local powerID = Enum.PowerType.Mana
 		local isCombat = UnitAffectingCombat('player')
 		local power,maxPower = UnitPower('player',powerID),UnitPowerMax('player',powerID)
@@ -60,7 +60,7 @@ ManaBar:SetScript('OnUpdate',function(self)
 			else
 				self:SetMinMaxValues(0,maxPower)
 				self:SetValue(maxPower)
-				self.text:SetText(maxPower)
+				self.text:SetText(Auras:ManaPrecision(bar.precision,false))
 			end
 
 			self:SetStatusBarTexture(LSM.MediaTable.statusbar[bar.foreground.texture])
@@ -71,12 +71,11 @@ ManaBar:SetScript('OnUpdate',function(self)
 
 			self:SetWidth(bar.layout.width)
 			self:SetHeight(bar.layout.height)
-			self:SetPoint(bar.layout.point,AuraGroup,bar.layout.point,bar.layout.x,bar.layout.y)
+			self:SetPoint(bar.layout.point,SSA[bar.layout.relativeTo],bar.layout.point,bar.layout.x,bar.layout.y)
 			self:SetFrameStrata(bar.layout.strata)
 		end
 			
 		if (bar.isEnabled and not isMoving and not bar.adjust.isEnabled) then
-			
 			if (bar.text.isDisplayText) then
 				self.text:SetText(Auras:ManaPrecision(bar.precision,true))
 			else

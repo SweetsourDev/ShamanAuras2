@@ -298,7 +298,7 @@ local function GetElementalOptions()
 							args = {
 								OoCAlpha = Auras:Slider_VerifyDefaults(settings,1,1,L["LABEL_ALPHA_NO_COMBAT"],L["TOOLTIP_AURAS_ALPHA_NO_COMBAT"],0,1,nil,false,'OoCAlpha','Settings'),
 								TotemMastery = Auras:Slider_VerifyDefaults(settings,3,1,Auras:GetSpellName(210643),L["TOOLTIP_TOTEM_MASTERY_TRIGGER_TIMER"],5,30,nil,false,'totemMastery','Settings'),
-								OoRColor = Auras:Color_VerifyDefaults(settings,4,1,L["LABEL_COLOR_NO_RANGE"],L["TOOLTIP_COLOR_OUT_OF_RANGE"],true,"full",false,'OoRColor','Settings'),
+								OoRColor = Auras:Color_VerifyDefaults(settings,4,1,L["LABEL_COLOR_NO_RANGE"],L["TOOLTIP_COLOR_OUT_OF_RANGE"],true,nil,false,'OoRColor','Settings'),
 								reset = {
 									order = 5,
 									type = "execute",
@@ -580,7 +580,7 @@ local function GetElementalOptions()
 									name = L["BUTTON_RESET_STATUSBAR_MAELSTROM"],
 									func = function()
 										local bar = statusbars.bars.MaelstromBar
-										local default = statusbars.defaults.MaelstromBar
+										local default = SSA.defaults.statusbars[1].defaults.MaelstromBar
 										
 										bar.alphaCombat = default.alphaCombat
 										bar.alphaOoC = default.alphaOoC
@@ -714,7 +714,7 @@ local function GetElementalOptions()
 									name = L["BUTTON_RESET_STATUSBAR_CAST"],
 									func = function()
 										local bar = statusbars.bars.CastBar
-										local default = Auras.db.char.statusbars.defaults.CastBar
+										local default = SSA.defaults.statusbars.defaults.CastBar
 										
 										bar.alphaCombat = default.alphaCombat
 										bar.alphaOoC = default.alphaOoC
@@ -851,7 +851,7 @@ local function GetElementalOptions()
 									name = L["BUTTON_RESET_STATUSBAR_CHANNEL"],
 									func = function()
 										local bar = statusbars.bars.ChannelBar
-										local default = Auras.db.char.statusbars.defaults.ChannelBar
+										local default = SSA.defaults.statusbars.defaults.ChannelBar
 										
 										bar.alphaCombat = default.alphaCombat
 										bar.alphaOoC = default.alphaOoC
@@ -969,7 +969,7 @@ local function GetElementalOptions()
 									name = L["BUTTON_RESET_STATUSBAR_ICEFURY"],
 									func = function()
 										local bar = statusbars.bars.IcefuryBar
-										local default = statusbars[1].defaults.IcefuryBar
+										local default = SSA.defaults.statusbars[1].defaults.IcefuryBar
 										
 										bar.alphaCombat = default.alphaCombat
 										bar.alphaOoC = default.alphaOoC
@@ -1423,7 +1423,7 @@ local function GetEnhancementOptions()
 									name = L["BUTTON_RESET_STATUSBAR_MAELSTROM"],
 									func = function()
 										local bar = statusbars.bars.MaelstromBar
-										local default = statusbars.defaults.MaelstromBar
+										local default = SSA.defaults.statusbars[2].defaults.MaelstromBar
 										
 										bar.alphaCombat = default.alphaCombat
 										bar.alphaOoC = default.alphaOoC
@@ -1557,7 +1557,7 @@ local function GetEnhancementOptions()
 									name = L["BUTTON_RESET_STATUSBAR_CAST"],
 									func = function()
 										local bar = statusbars.bars.CastBar
-										local default = Auras.db.char.statusbars.defaults.CastBar
+										local default = SSA.defaults.statusbars.defaults.CastBar
 										
 										bar.alphaCombat = default.alphaCombat
 										bar.alphaOoC = default.alphaOoC
@@ -1694,7 +1694,7 @@ local function GetEnhancementOptions()
 									name = L["BUTTON_RESET_STATUSBAR_CHANNEL"],
 									func = function()
 										local bar = statusbars.bars.ChannelBar
-										local default = Auras.db.char.statusbars.default.channelBar
+										local default = SSA.defaults.statusbars.default.channelBar
 										
 										bar.alphaCombat = default.alphaCombat
 										bar.alphaOoC = default.alphaOoC
@@ -2147,7 +2147,6 @@ local function GetRestorationOptions()
 											set = function(self,value)
 												statusbars.bars.ManaBar.precision = value
 												Auras:VerifyDefaultValues(3,res_options,"Mana")
-												Auras:UpdateTalents()
 											end,
 											values = {
 												["Long"] = tostring(Auras:ManaPrecision("Long")),
@@ -2206,7 +2205,7 @@ local function GetRestorationOptions()
 									name = L["BUTTON_RESET_STATUSBAR_MAELSTROM"],
 									func = function()
 										local bar = statusbars.bars.ManaBar
-										local default = statusbars.defaults.ManaBar
+										local default = SSA.defaults.statusbars[3].defaults.ManaBar
 										
 										bar.alphaCombat = default.alphaCombat
 										bar.alphaOoC = default.alphaOoC
@@ -2341,7 +2340,7 @@ local function GetRestorationOptions()
 									name = L["BUTTON_RESET_STATUSBAR_CAST"],
 									func = function()
 										local bar = statusbars.bars.CastBar
-										local default = Auras.db.char.statusbars.defaults.CastBar
+										local default = SSA.defaults.statusbars.defaults.CastBar
 										
 										bar.alphaCombat = default.alphaCombat
 										bar.alphaOoC = default.alphaOoC
@@ -2478,7 +2477,7 @@ local function GetRestorationOptions()
 									name = L["BUTTON_RESET_STATUSBAR_CHANNEL"],
 									func = function()
 										local bar = statusbars.bars.ChannelBar
-										local default = Auras.db.char.statusbars.defaults.ChannelBar
+										local default = SSA.defaults.statusbars.defaults.ChannelBar
 										
 										bar.alphaCombat = default.alphaCombat
 										bar.alphaOoC = default.alphaOoC
@@ -2607,7 +2606,7 @@ local function GetRestorationOptions()
 									name = L["BUTTON_RESET_STATUSBAR_EARTHEN_WALL"],
 									func = function()
 										local bar = statusbars.bars.EarthenWallTotemBar
-										local default = statusbars.defaults.EarthenWallTotemBar
+										local default = SSA.defaults.statusbar[3].defaults.EarthenWallTotemBar
 										
 										bar.alphaCombat = default.alphaCombat
 										bar.alphaOoC = default.alphaOoC
@@ -2685,7 +2684,7 @@ local function GetRestorationOptions()
 									name = L["BUTTON_RESET_STATUSBAR_TIDAL_WAVES"],
 									func = function()
 										local bar = statusbars.bars.TidalWavesBar
-										local default = statusbars.defaults.TidalWavesBar
+										local default = SSA.defaults.statusbars[3].defaults.TidalWavesBar
 										
 										bar.combatDisplay = default.combatDisplay
 										bar.OoCDisplay = default.OoCDisplay

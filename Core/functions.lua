@@ -682,13 +682,7 @@ local function BuildHorizontalIconRow(rowObj,rowList,rowVerify,spec,group)
 	
 	validAuraCtr = 0
 	for i=1,layout.auraCount do
-		--SSA.DataFrame.text:SetText(Auras:CurText('DataFrame')..i.." ("..rowObj[i]:GetParent():GetName()..": "..tostring(rowList[i])..")\n")
-		--if (rowObj[i] and rowObj[i]:GetName() == "ForcefulWinds") then
-		if (group == 3) then
-			SSA.DataFrame.text:SetText(Auras:CurText('DataFrame')..(rowObj[i] and rowObj[i]:GetName()).." ("..tostring(rowList[i])..")\n")
-		end
 		if (rowList[i]) then
-			
 			validAuraCtr = validAuraCtr + 1
 			rowObj[i]:SetPoint("CENTER",iconDistribution[validAuraCtr],0)
 		end

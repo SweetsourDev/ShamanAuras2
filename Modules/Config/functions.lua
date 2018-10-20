@@ -504,7 +504,7 @@ function Auras:VerifyDefaultValues(spec,options,group)
 	elseif (group == "Cast" or group == "Channel") then
 		local db = Auras.db.char
 		local bar = db.statusbars[spec].bars[group.."Bar"]
-		local default = db.statusbars.defaults[group.."Bar"]
+		local default = SSA.defaults.statusbars.defaults[group.."Bar"]
 		
 		local option = options.args.bars.args[group.."Bar"].args
 		
@@ -527,7 +527,7 @@ function Auras:VerifyDefaultValues(spec,options,group)
 	elseif (group == "Maelstrom") then
 		local db = Auras.db.char
 		local bar = db.statusbars[spec].bars.MaelstromBar
-		local default = db.statusbars[spec].defaults.MaelstromBar
+		local default = SSA.defaults.statusbars[spec].defaults.MaelstromBar
 		local option = options.args.bars.args.MaelstromBar.args
 		
 		Auras:SetBarOptions(bar,option,'text')
@@ -574,7 +574,7 @@ function Auras:VerifyDefaultValues(spec,options,group)
 	elseif (group == "Timerbar") then
 		local db = Auras.db.char
 		local layout = db.timerbars[spec].groups[subgroup]
-		local defaults = SSA.groupDefaults[spec].layout.timerbars[spec]
+		local defaults = SSA.defaults.timerbars[spec].layout[spec]
 		
 		if (layout.alphaOoC ~= defaults.alphaOoC or
 			layout.alphaCombat ~= defaults.alphaCombat or
@@ -624,7 +624,7 @@ function Auras:VerifyDefaultValues(spec,options,group)
 	elseif (group == "Icefury") then
 		local db = Auras.db.char
 		local bar = db.statusbars[spec].bars.IcefuryBar
-		local default = db.statusbars[spec].defaults.IcefuryBar
+		local default = SSA.defaults.statusbars[spec].defaults.IcefuryBar
 
 		local option = options.args.bars.args.IcefuryBar.args
 		
@@ -650,7 +650,7 @@ function Auras:VerifyDefaultValues(spec,options,group)
 	elseif (group == "Earthen Wall") then
 		local db = Auras.db.char
 		local bar = db.statusbars[spec].bars.EarthenWallTotemBar
-		local default = db.statusbars[spec].defaults.EarthenWallTotemBar
+		local default = SSA.defaults.statusbars[spec].defaults.EarthenWallTotemBar
 		
 		local option = options.args.bars.args.EarthenWallTotemBar.args
 		
@@ -676,7 +676,7 @@ function Auras:VerifyDefaultValues(spec,options,group)
 	elseif (group == "Mana") then
 		local db = Auras.db.char
 		local bar = db.statusbars[spec].bars.ManaBar
-		local default = db.statusbars[spec].defaults.ManaBar
+		local default = SSA.defaults.statusbars[spec].defaults.ManaBar
 		local option = options.args.bars.args.ManaBar.args
 		
 		Auras:SetBarOptions(bar,option,'text')
@@ -704,7 +704,7 @@ function Auras:VerifyDefaultValues(spec,options,group)
 	elseif (group == "Tidal Waves") then
 		local db = Auras.db.char
 		local bar = db.statusbars[spec].bars.TidalWavesBar
-		local default = db.statusbars[spec].defaults.TidalWavesBar
+		local default = SSA.defaults.statusbars[spec].defaults.TidalWavesBar
 		local option = options.args.bars.args.TidalWavesBar.args
 
 		if (bar.adjust.isEnabled) then

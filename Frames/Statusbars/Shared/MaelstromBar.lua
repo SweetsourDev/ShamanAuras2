@@ -33,8 +33,7 @@ MaelstromBar.bg:SetAllPoints(true)
 MaelstromBar.text = MaelstromBar:CreateFontString(nil, 'HIGH', 'GameFontHighlightLarge')
 
 
---[[SSA.MaelstromBar1Lightning = CreateFrame('PlayerModel','MaelstromBar1Lightning',AuraGroup)
-local MaelstromBarLightning = SSA.MaelstromBar1Lightning
+--[[MaelstromBar.Lightning = CreateFrame('PlayerModel','MaelstromBarLightning',MaelstromBar)
 MaelstromBarLightning:SetModel('SPELLS/LIGHTNING_AREA_DISC_STATE.m2')
 MaelstromBarLightning:SetFrameStrata('MEDIUM')
 MaelstromBarLightning:SetPosition(0,0,-2)
@@ -49,8 +48,9 @@ MaelstromBarLightning:HookScript('OnUpdate', function(self, elaps)
 	elapsed = elapsed + (elaps * 1000)
 	self:SetSequenceTime(1, elapsed)
 end)]]
+
 MaelstromBar.Elapsed = 0
-MaelstromBar.Lightning = CreateFrame('PlayerModel','MaelstromBar1Lightning',MaelstromBar)
+MaelstromBar.Lightning = CreateFrame('PlayerModel','MaelstromBarLightning',MaelstromBar)
 MaelstromBar.Lightning:SetModel('SPELLS/LIGHTNING_AREA_DISC_STATE.m2')
 MaelstromBar.Lightning:SetFrameStrata('MEDIUM')
 MaelstromBar.Lightning:SetPosition(0,0,-2)
@@ -109,7 +109,7 @@ MaelstromBar:SetScript('OnUpdate',function(self,elaps)
 			
 			self:SetWidth(bar.layout.width)
 			self:SetHeight(bar.layout.height)
-			self:SetPoint(bar.layout.point,AuraGroup,bar.layout.point,bar.layout.x,bar.layout.y)
+			self:SetPoint(bar.layout.point,SSA[bar.layout.relativeTo],bar.layout.point,bar.layout.x,bar.layout.y)
 			self:SetFrameStrata(bar.layout.strata)
 		end
 
@@ -128,13 +128,13 @@ MaelstromBar:SetScript('OnUpdate',function(self,elaps)
 			else
 				self.text:SetText('')
 			end
-			--[[if (power >= bar.threshold and bar.animate) then
+			if (power >= bar.threshold and bar.animate) then
 				self.Lightning:SetAlpha(bar.alphaCombat)
 				self.bg:SetAlpha(bar.alphaCombat)
 			else
 				self.Lightning:SetAlpha(0)
 				self.bg:SetAlpha(bar.alphaCombat / 2)
-			end]]
+			end
 				
 			
 			if (isCombat) then

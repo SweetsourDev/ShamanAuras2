@@ -21,11 +21,13 @@ Frostbrand:SetScript('OnUpdate', function(self)
 		local groupID = Auras:GetAuraGroupID(self,self:GetName())
 		local buff,_,_,_,duration,expires = Auras:RetrieveAuraInfo('player',self.spellID)
 		local power = UnitPower('player',Enum.PowerType.Maelstrom)
+		local start,duration = GetSpellCooldown(Auras:GetSpellName(self.spellID))
 		
 		Auras:SetGlowStartTime(self,((expires or 0) - (duration or 0)),duration,self.spellID,"buff")
 		Auras:GlowHandler(self)
 		Auras:SpellRangeCheck(self,self.spellID,true)
 		Auras:ToggleAuraVisibility(self,true,'showhide')
+		Auras:CooldownHandler(self,groupID,start,duration,true)
 		
 		if (Auras:IsPlayerInCombat()) then
 			if (power >= 20) then

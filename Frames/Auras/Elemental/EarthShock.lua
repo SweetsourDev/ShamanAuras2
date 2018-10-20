@@ -21,7 +21,7 @@ EarthShock:SetScript('OnUpdate', function(self)
 		local groupID = Auras:GetAuraGroupID(self,self:GetName())
 		local power = UnitPower('player',Enum.PowerType.Maelstrom)
 		local glow = Auras.db.char.auras[1].auras[self:GetName()].glow
-		--local start,duration = GetSpellCooldown(Auras:GetSpellName(self.spellID))
+		local start,duration = GetSpellCooldown(Auras:GetSpellName(self.spellID))
 		
 		if (power >= 60) then
 			if (self.powerTime == 0) then
@@ -52,7 +52,7 @@ EarthShock:SetScript('OnUpdate', function(self)
 		Auras:GlowHandler(self)
 		Auras:ToggleAuraVisibility(self,true,'showhide')
 		Auras:SpellRangeCheck(self,self.spellID,true)
-		--Auras:CooldownHandler(self,groupID,start,duration,true)
+		Auras:CooldownHandler(self,groupID,start,duration,true)
 		
 		if (Auras:IsPlayerInCombat()) then
 			--[[if (power >= Auras.db.char.elements[1].statusbars.maelstromBar.threshold) then

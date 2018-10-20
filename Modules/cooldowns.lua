@@ -73,7 +73,8 @@ function Auras:parseTime(timer,precision,isFormatted,group,msg)
 end
 
 function Auras:InitializeCooldowns(spec)
-	local spec = spec or SSA.spec
+	local spec = spec or SSA.spec or GetSpecialization()
+	print("SPEC: "..tostring(spec))
 	local cd = Auras.db.char.auras[spec].cooldowns
 	--local frames = { SSA[self]:GetChildren() }
 	
