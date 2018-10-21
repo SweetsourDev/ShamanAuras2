@@ -22,7 +22,7 @@ function Auras:Execute_MoveAuras(db,order,spec,name)
 		name = name,
 		func = function()
 			db.isMoving = true
-			SSA["Move"..spec].Info:Show()
+			SSA.Move.Info:Show()
 			self:InitMoveAuraGroups(spec)
 		end,
 	}
@@ -30,13 +30,13 @@ function Auras:Execute_MoveAuras(db,order,spec,name)
 	return execute
 end
 
-function Auras:Execute_ResetAuras(order,auraGroup,name)
+function Auras:Execute_ResetAuras(order,name)
 	local execute = {
 		order = order,
 		type = "execute",
 		name = name,
 		func = function()
-			self:ResetAuraGroupPosition(auraGroup)
+			self:ResetAuraGroupPosition()
 		end,
 	}
 	
@@ -91,10 +91,6 @@ function Auras:Toggle_Basic(db,order,name,desc,disabled,dbKey,isUpdateTalents)
 		set = function(this,value)
 			db[dbKey] = value
 			
-			if (dbKey == "healingStreamTotemOne") then
-				db.healingStreamTotemTwo = value
-			end
-			
 			if (isUpdateTalents) then
 				self:UpdateTalents()
 			end
@@ -127,7 +123,7 @@ function Auras:Toggle_Cooldowns(db,order,spec,name,desc,disabled,dbKey,auraGroup
 	return toggle
 end
 
-function Auras:Toggle_VerifyDefaults(db,order,spec,name,desc,width,disabled,dbKey,optionsGroup,optionsSubgroup)
+function Auras:Toggle_VerifyDefaults(db,order,spec,name,desc,width,disabled,dbKey,optionsGroup,optionsSubgroup,isUpdateTalents)
 	local toggle = {
 		order = order,
 		type = "toggle",
@@ -140,6 +136,11 @@ function Auras:Toggle_VerifyDefaults(db,order,spec,name,desc,width,disabled,dbKe
 		set = function(this,value)
 			db[dbKey] = value
 			self:VerifyDefaultValues(spec,this.options,optionsGroup,optionsSubgroup)
+			
+			if (isUpdateTalents) then
+				print("--UPDATING TALENTS--")
+				self:UpdateTalents()
+			end
 		end,
 		width = width,
 	}

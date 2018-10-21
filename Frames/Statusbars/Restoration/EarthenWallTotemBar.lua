@@ -39,7 +39,7 @@ EarthenWallTotemBar.isSummoned = false
 
 EarthenWallTotemBar:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 EarthenWallTotemBar:SetScript('OnUpdate',function(self,elapsed)
-	if (Auras:CharacterCheck(nil,3,4,2) or Auras.db.char.statusbars[3].bars[self:GetName()].adjust.isEnabled) then
+	if (Auras:CharacterCheck(self,3,4,2) or Auras.db.char.statusbars[3].bars[self:GetName()].adjust.isEnabled) then
 		--SSA.DataFrame.text:SetText("ACTIVATE")
 		local db = Auras.db.char
 		--local bar = db.elements[3].statusbars.earthenWallBar
@@ -144,8 +144,6 @@ EarthenWallTotemBar:SetScript('OnUpdate',function(self,elapsed)
 			self:SetAlpha(0)
 		end
 	else
-		SSA.DataFrame.text:SetText("HIDDING EARTHEN WALL BAR")
-		--self:Hide()
 		self:SetAlpha(0)
 	end
 end)

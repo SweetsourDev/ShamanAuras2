@@ -296,9 +296,11 @@ local function GetElementalOptions()
 							order = 3,
 							guiInline = true,
 							args = {
-								OoCAlpha = Auras:Slider_VerifyDefaults(settings,1,1,L["LABEL_ALPHA_NO_COMBAT"],L["TOOLTIP_AURAS_ALPHA_NO_COMBAT"],0,1,nil,false,'OoCAlpha','Settings'),
-								TotemMastery = Auras:Slider_VerifyDefaults(settings,3,1,Auras:GetSpellName(210643),L["TOOLTIP_TOTEM_MASTERY_TRIGGER_TIMER"],5,30,nil,false,'totemMastery','Settings'),
-								OoRColor = Auras:Color_VerifyDefaults(settings,4,1,L["LABEL_COLOR_NO_RANGE"],L["TOOLTIP_COLOR_OUT_OF_RANGE"],true,nil,false,'OoRColor','Settings'),
+								MoveAuras = Auras:Execute_MoveAuras(elements,1,1,"|cFFFFCC00"..L["BUTTON_MOVE_AURAS_ELEMENTAL"].."|r"),
+								ResetAuras = Auras:Execute_ResetAuras(2,"|cFFFFCC00"..L["BUTTON_RESET_AURAS_ELEMENTAL"].."|r"),
+								OoCAlpha = Auras:Slider_VerifyDefaults(settings,3,1,L["LABEL_ALPHA_NO_COMBAT"],L["TOOLTIP_AURAS_ALPHA_NO_COMBAT"],0,1,nil,false,'OoCAlpha','Settings'),
+								TotemMastery = Auras:Slider_VerifyDefaults(settings,4,1,Auras:GetSpellName(210643),L["TOOLTIP_TOTEM_MASTERY_TRIGGER_TIMER"],5,30,nil,false,'totemMastery','Settings'),
+								OoRColor = Auras:Color_VerifyDefaults(settings,5,1,L["LABEL_COLOR_NO_RANGE"],L["TOOLTIP_COLOR_OUT_OF_RANGE"],true,nil,false,'OoRColor','Settings'),
 								reset = {
 									order = 5,
 									type = "execute",
@@ -1009,7 +1011,7 @@ local function GetElementalOptions()
 						inverse = Auras:Toggle_Cooldowns(cooldowns,5,1,L["LABEL_COOLDOWN_REVERSE_SWEEP"],L["TOOLTIP_COOLDOWN_REVERSE_SWEEP"],not cooldowns.sweep and not cooldowns.isEnabled,'inverse','AuraBase'),
 						bling = Auras:Toggle_Cooldowns(cooldowns,6,1,L["LABEL_COOLDOWN_BLING"],L["TOOLTIP_TOGGLE_COOLDOWN_BLING"],not cooldowns.sweep and not cooldowns.isEnabled,'blind','AuraBase'),
 						group = Auras:Select_VerifyDefaults(cooldowns,7,1,L["LABEL_COOLDOWN_GROUP"],L["TOOLTIP_AURAS_GROUP_SELECT"],nil,COOLDOWN_OPTIONS,nil,not cooldowns.isEnabled,'selected','Cooldowns',nil,false,true),
-						adjustToggle = Auras:Toggle_VerifyDefaults(cooldowns,8,1,L["LABEL_COOLDOWN_ADJUST"],nil,nil,not cooldowns.isEnabled,'adjust','Cooldowns'),
+						adjustToggle = Auras:Toggle_VerifyDefaults(cooldowns,8,1,L["LABEL_COOLDOWN_ADJUST"],nil,nil,not cooldowns.isEnabled,'adjust','Cooldowns',nil,true),
 						cdGroups = {
 							name = "Cooldown Groups",
 							order = 9,

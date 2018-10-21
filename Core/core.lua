@@ -55,7 +55,8 @@ function Auras:CharacterCheck(obj,spec,...)
 	if (not self.db.char.isFirstEverLoad) then
 		local _,_,classIndex = UnitClass('player')
 		local curSpec = GetSpecialization()
-		local isAuraInUse,isCorrectSpecializationAndClass,isValidSpell = false,false,false
+		local db = self.db.char
+		local isPreview,isAuraInUse,isCorrectSpecializationAndClass,isValidSpell = false,false,false,false
 			
 		-- If an object is NOT passed, bypass this boolean
 		if (obj and type(obj) == "table") then
@@ -67,6 +68,8 @@ function Auras:CharacterCheck(obj,spec,...)
 				objDb = 'timerbars'
 			elseif (Auras.db.char.statusbars[curSpec].bars[obj:GetName()]) then
 				objDb = 'statusbar'
+			else
+				isAuraInUse = false
 			end
 			--[[if (not Auras.db.char.auras[spec]) then
 				local args = { ... }
@@ -82,20 +85,19 @@ function Auras:CharacterCheck(obj,spec,...)
 			
 			if (objDb == "auras") then
 				if (spec == 0) then
-					if (Auras.db.char.auras[curSpec].auras[obj:GetName()]) then
+					local auras = self.db.char.auras[curSpec]
+					isAuraInUse = auras.auras[obj:GetName()].isInUse
+					isPreview = db.elements[curSpec].isMoving or auras.cooldowns.groups[auras.auras[obj:GetName()].group].isPreview
+					--[[if (Auras.db.char.auras[curSpec].auras[obj:GetName()]) then
+						
 						isAuraInUse = Auras.db.char.auras[curSpec].auras[obj:GetName()].isInUse
 					else
 						isAuraInUse = false
-					end
-				else
-					--[[if (not Auras.db.char.auras[spec][obj:GetName()]) then
-						print(obj:GetName().." ("..spec..")")
-					end
-					if (type(spec) == "boolean" or type(obj:GetName()) == "boolean") then
-						SSA.DataFrame.text:SetText(obj:GetName())
 					end]]
-				
-					isAuraInUse = Auras.db.char.auras[spec].auras[obj:GetName()].isInUse
+				else
+					local auras = self.db.char.auras[spec]
+					isAuraInUse = auras.auras[obj:GetName()].isInUse
+					isPreview = db.elements[spec].isMoving or auras.cooldowns.groups[auras.auras[obj:GetName()].group].isPreview
 				end
 			elseif (objDb == "timerbars") then
 				if (spec == 0) then
@@ -170,10 +172,10 @@ function Auras:CharacterCheck(obj,spec,...)
 			isValidSpell = true
 		end
 
-		if (type(obj) == "table" and obj:GetName() == "Healing Rain") then
-			--SSA.DataFrame.text:SetText("Healing Rain: "..tostring(isAuraInUse and isCorrectSpecializationAndClass and isValidSpell))
+		if (type(obj) == "table" and obj:GetName() == "EarthShield") then
+			SSA.DataFrame.text:SetText("Earth Shield: "..tostring(isPreview or (isAuraInUse and isCorrectSpecializationAndClass and isValidSpell)))
 		end
-		return isAuraInUse and isCorrectSpecializationAndClass and isValidSpell
+		return isPreview or (isAuraInUse and isCorrectSpecializationAndClass and isValidSpell)
 	else
 		return false
 	end
@@ -590,7 +592,7 @@ function Auras:ShiftPressCheck(self)
 end
 
 -- FIX THIS
-function Auras:ResetAuraGroupPosition()
+function Auras:ResetAuraGroupPosition(objName)
 	local spec = GetSpecialization()
 	
 	local db = Auras.db.char
@@ -598,26 +600,32 @@ function Auras:ResetAuraGroupPosition()
 	local objName, obj, subName
 
 	for i=1,#SSA.defaults.auras[spec].frames do
-		local frame = self.db.char.auras[spec].frames[i]
-		local frameDefault = SSA.defaults.auras[spec].frames[i]
-		
-		SSA["AuraGroup"..i]:SetPoint(frameDefault.point,SSA[frameDefault.relativeTo],frameDefault.relativePoint,frameDefault.x,frameDefault.y)
-		frame.point,_,frame.relativePoint,frame.x,frame.y = SSA["AuraGroup"..i]:GetPoint()
+		if (not objName or objName == "AuraGroup"..i) then
+			local frame = self.db.char.auras[spec].frames[i]
+			local frameDefault = SSA.defaults.auras[spec].frames[i]
+			
+			SSA["AuraGroup"..i]:SetPoint(frameDefault.point,SSA[frameDefault.relativeTo],frameDefault.relativePoint,frameDefault.x,frameDefault.y)
+			frame.point,_,frame.relativePoint,frame.x,frame.y = SSA["AuraGroup"..i]:GetPoint()
+		end
 	end
 	
 	for i=1,#SSA.defaults.timerbars[spec].frames do
-		local frame = self.db.char.timerbars[spec].frames[i]
-		local frameDefault = SSA.defaults.timerbars[spec].frames[i]
-		
-		SSA["BarGroup"..i]:SetPoint(frameDefault.point,SSA[frameDefault.relativeTo],frameDefault.relativePoint,frameDefault.x,frameDefault.y)
-		frame.point,_,frame.relativePoint,frame.x,frame.y = SSA["AuraGroup"..i]:GetPoint()
+		if (not objName or objName == "BarGroup"..i) then
+			local frame = self.db.char.timerbars[spec].frames[i]
+			local frameDefault = SSA.defaults.timerbars[spec].frames[i]
+			
+			SSA["BarGroup"..i]:SetPoint(frameDefault.point,SSA[frameDefault.relativeTo],frameDefault.relativePoint,frameDefault.x,frameDefault.y)
+			frame.point,_,frame.relativePoint,frame.x,frame.y = SSA["AuraGroup"..i]:GetPoint()
+		end
 	end
 	
 	for k,v in pairs(SSA.defaults.statusbars[spec].bars) do
-		local bar = self.db.char.statusbars[spec].bars[k]
-		
-		SSA[k]:SetPoint(v.layout.point,SSA[v.layout.relativeTo],v.layout.relativePoint,v.layout.x,v.layout.y)
-		bar.layout.point,_,bar.layout.relativePoint,bar.layout.x,bar.layout.y = SSA[k]:GetPoint()
+		if (not objName or objName == k) then
+			local bar = self.db.char.statusbars[spec].bars[k]
+			
+			SSA[k]:SetPoint(v.layout.point,SSA[v.layout.relativeTo],v.layout.relativePoint,v.layout.x,v.layout.y)
+			bar.layout.point,_,bar.layout.relativePoint,bar.layout.x,bar.layout.y = SSA[k]:GetPoint()
+		end
 	end
 	--[[for i=1,SSA[auraGroup]:GetNumChildren() do
 		objName = select(i,SSA[auraGroup]:GetChildren()):GetName()
@@ -683,47 +691,47 @@ function Auras:ConfigureMove(db,obj,backdrop)
 end
 
 -- FIX THIS
-function Auras:MoveOnMouseDown(self,auraGroup,button)
-	local framePt,_,parentPt,x,y = self:GetPoint(1)
+function Auras:MoveOnMouseDown(obj,button)
+	local framePt,_,parentPt,x,y = obj:GetPoint(1)
 
 	if (not IsShiftKeyDown() and not IsControlKeyDown() and button == 'LeftButton') then
-		self.framePt = framePt
-		self.parentPt = parentPt
-		self.frameX = x
-		self.frameY = y
-		self:StartMoving()
-		_,_,_,x,y = self:GetPoint(1)
-		self.screenX = x
-		self.screenY = y
+		obj.framePt = framePt
+		obj.parentPt = parentPt
+		obj.frameX = x
+		obj.frameY = y
+		obj:StartMoving()
+		_,_,_,x,y = obj:GetPoint(1)
+		obj.screenX = x
+		obj.screenY = y
 	elseif (IsShiftKeyDown() and not IsControlKeyDown()) then
 		if (button == "LeftButton") then
-			self:SetPoint("CENTER",self:GetParent(),"CENTER",0,y)
+			obj:SetPoint("CENTER",obj:GetParent(),"CENTER",0,y)
 		elseif (button == "RightButton") then
-			self:SetPoint("CENTER",self:GetParent(),"CENTER",x,0)
+			obj:SetPoint("CENTER",obj:GetParent(),"CENTER",x,0)
 		elseif (button == "MiddleButton") then
-			self:SetPoint("CENTER",self:GetParent(),"CENTER",0,0)
+			obj:SetPoint("CENTER",obj:GetParent(),"CENTER",0,0)
 		end
 	elseif (not IsShiftKeyDown() and IsControlKeyDown() and button == "RightButton") then
-		Auras:ResetAuraGroupPosition(auraGroup)
+		self:ResetAuraGroupPosition(obj:GetName())
 	end
 end
 
 -- FIX THIS
-function Auras:MoveOnMouseUp(self,button)
-	local framePt,_,parentPt,x,y = self:GetPoint(1)
+function Auras:MoveOnMouseUp(obj,button)
+	local framePt,_,parentPt,x,y = obj:GetPoint(1)
 
-	if (button == 'LeftButton' and self.framePt) then
-		self:StopMovingOrSizing()
-		x = (x - self.screenX) + self.frameX
-		y = (y - self.screenY) + self.frameY
-		self:ClearAllPoints()
-		self:SetPoint(self.framePt, self:GetParent(), self.parentPt, x, y)
-		self.framePt = nil
-		self.parentPt = nil
-		self.frameX = nil
-		self.frameY =nil
-		self.screenX = nil
-		self.screenY = nil
+	if (button == 'LeftButton' and obj.framePt) then
+		obj:StopMovingOrSizing()
+		x = (x - obj.screenX) + obj.frameX
+		y = (y - obj.screenY) + obj.frameY
+		obj:ClearAllPoints()
+		obj:SetPoint(obj.framePt, obj:GetParent(), obj.parentPt, x, y)
+		obj.framePt = nil
+		obj.parentPt = nil
+		obj.frameX = nil
+		obj.frameY =nil
+		obj.screenX = nil
+		obj.screenY = nil
 	end
 end
 

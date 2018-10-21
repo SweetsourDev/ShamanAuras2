@@ -91,25 +91,25 @@ function Auras:AdjustStatusBarText(self,db)
 end
 
 -- Toggles the movement of a frame.
-function Auras:ToggleFrameMove(self,isMoving)
+function Auras:ToggleFrameMove(obj,isMoving)
 	if (isMoving) then
-		if (not self:IsMouseEnabled()) then
-			self:EnableMouse(true)
-			self:SetMovable(true)
+		if (not obj:IsMouseEnabled()) then
+			obj:EnableMouse(true)
+			obj:SetMovable(true)
 		end
 		
-		if (not self:GetBackdrop()) then
-			self:SetBackdrop(backdrop)
-			self:SetBackdropColor(0,0,0,0.85)
+		if (not obj:GetBackdrop()) then
+			obj:SetBackdrop(SSA.BackdropSB)
+			obj:SetBackdropColor(0,0,0,0.85)
 		end
 	else
-		if (self:IsMouseEnabled()) then
-			self:EnableMouse(false)
-			self:SetMovable(false)
+		if (obj:IsMouseEnabled()) then
+			obj:EnableMouse(false)
+			obj:SetMovable(false)
 		end
 		
-		if (self:GetBackdrop()) then
-			--self:SetBackdrop(nil)
+		if (obj:GetBackdrop()) then
+			obj:SetBackdrop(nil)
 		end
 	end
 end
@@ -331,21 +331,22 @@ function Auras:InitMoveAuraGroups(spec)
 		SSA.grid:Hide()
 	end
 	--SSA.IsMovingAuras = true
-	SSA["Move"..spec]:Show()
-	SSA["Move"..spec].Grid:SetChecked(Auras.db.char.isMoveGrid)
+	SSA.Move:Show()
+	SSA.Move.Grid:SetChecked(Auras.db.char.isMoveGrid)
 	
 	InterfaceOptionsFrame:Hide()
 	GameMenuFrame:Hide()
 end
 
-function Auras:BuildMoveUI(spec)
+function Auras:BuildMoveUI(obj)
 	local ButtonFont = SSA.ButtonFont
 	local BackdropSB = SSA.BackdropSB
-	local Move = SSA["Move"..spec]
+	--local Move = SSA["Move"..spec]
+	local Move = obj
 	
 	Move.Close = CreateFrame("Button","CloseButton",Move)
-	Move.Grid = CreateFrame("CheckButton","Move"..spec.."Grid",Move,"ChatConfigCheckButtonTemplate")
-	Move.InfoDisplay = CreateFrame("CheckButton","Move"..spec.."InfoDisplay",Move,"ChatConfigCheckButtonTemplate")
+	Move.Grid = CreateFrame("CheckButton","MoveGrid",Move,"ChatConfigCheckButtonTemplate")
+	Move.InfoDisplay = CreateFrame("CheckButton","MoveInfoDisplay",Move,"ChatConfigCheckButtonTemplate")
 	Move.Info = CreateFrame("Frame","MoveInfoFrame",UIParent)
 
 	Move.Info:SetWidth(446)
@@ -958,8 +959,11 @@ function Auras:UpdateTalents(isTalentChange)
 						bar:SetParent(SSA["AuraGroup"..i])
 						
 						rowObj[v.order] = bar
-						rowList[v.order] = v.isEnabled and bar.condition()
+						rowList[v.order] = v.isEnabled and (bar.condition() or db.elements[spec].isMoving or auras.cooldowns.groups[i].isPreview)
 						rowVerify[v.order] = v.isInUse or auras.groups[i].isAdjust
+						if (i == 3) then
+							print(k..": "..tostring(auras.cooldowns.groups[i].isPreview))
+						end
 					end
 				end
 				

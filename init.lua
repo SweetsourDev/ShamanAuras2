@@ -266,7 +266,7 @@ IntroFrame.dbFrame.button:SetScript("OnClick",function(self,button)
 end)
 _G["SSA_IntroFrame"] = IntroFrame
 -- Initialize Check Button Frames
-SSA.MoveEle = CreateFrame('Frame','MoveEle',UIParent)
+--SSA.MoveEle = CreateFrame('Frame','MoveEle',UIParent)
 --SSA.MoveEnh = CreateFrame('Frame','MoveEnh',UIParent)
 --SSA.MoveRes = CreateFrame('Frame','MoveRes',UIParent)
 
@@ -376,19 +376,22 @@ local function BuildAuraGroups()
 				local AuraGroup = Auras:CreateGroup('AuraGroup',SSA.AuraBase,j)
 				
 				AuraGroup:SetScript('OnUpdate',function(self,button)
-					Auras:ToggleFrameMove(self,Auras.db.char.elements.isMoving)
+					Auras:ToggleFrameMove(self,Auras.db.char.elements[i].isMoving)
 				end)
 
 				AuraGroup:SetScript('OnMouseDown',function(self,button)
-					if (Auras.db.char.elements.isMoving) then
-						Auras:MoveOnMouseDown(self,'AuraBase',button)
+					if (Auras.db.char.elements[i].isMoving) then
+						print("MOVING")
+						Auras:MoveOnMouseDown(self,button)
+					else
+						print("NOT MOVING")
 					end
 				end)
 
 				AuraGroup:SetScript('OnMouseUp',function(self,button)
-					if (Auras.db.char.elements.isMoving) then
+					if (Auras.db.char.elements[i].isMoving) then
 						Auras:MoveOnMouseUp(self,button)
-						Auras:UpdateLayout(self,auras.frames[j])
+						--Auras:UpdateLayout(self,auras.frames[j])
 					end
 				end)
 				
@@ -405,7 +408,7 @@ local function BuildAuraGroups()
 
 				BarGroup:SetScript('OnMouseDown',function(self,button)
 					if (Auras.db.char.elements.isMoving) then
-						Auras:MoveOnMouseDown(self,'AuraBase',button)
+						Auras:MoveOnMouseDown(self,button)
 					end
 				end)
 
@@ -595,7 +598,7 @@ function Auras:OnEnable()
 	--Auras:InitializeCooldowns('AuraBase',2)
 	--Auras:InitializeCooldowns('AuraBase',3)
 
-	SSA.Move1 = CreateFrame('Frame','Move1',UIParent);
+	--SSA.Move1 = CreateFrame('Frame','Move1',UIParent);
 	
 	
 	-- Clean up old version checks

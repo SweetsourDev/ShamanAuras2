@@ -1,7 +1,8 @@
 local SSA, Auras, L, LSM = unpack(select(2,...))
 
 -- Prepare All Move Functionality
---Auras:BuildMoveUI(1);
+SSA.Move = CreateFrame('Frame','Move',UIParent);
+Auras:BuildMoveUI(SSA.Move);
 --Auras:BuildMoveUI(2);
 --Auras:BuildMoveUI(3);
 
