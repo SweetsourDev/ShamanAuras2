@@ -76,6 +76,8 @@ function Auras:SetGlowStartTime(obj,start,duration,spellID,triggerType)
 	--end
 end
 
+
+
 function Auras:GlowHandler(obj)
 	local glow = Auras.db.char.auras[SSA.spec].auras[obj:GetName()].glow
 	

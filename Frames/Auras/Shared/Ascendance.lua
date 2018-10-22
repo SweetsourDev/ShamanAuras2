@@ -8,6 +8,7 @@ local GetTalentInfo = GetTalentInfo
 local Ascendance = SSA.Ascendance
 
 -- Initialize Data Variables
+Ascendance.spellID = 114050
 Ascendance.pulseTime = 0
 Ascendance.condition = function()
 	return select(4,GetTalentInfo(7,3,1))

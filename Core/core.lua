@@ -87,7 +87,7 @@ function Auras:CharacterCheck(obj,spec,...)
 				if (spec == 0) then
 					local auras = self.db.char.auras[curSpec]
 					isAuraInUse = auras.auras[obj:GetName()].isInUse
-					isPreview = db.elements[curSpec].isMoving or auras.cooldowns.groups[auras.auras[obj:GetName()].group].isPreview
+					isPreview = db.elements[curSpec].isMoving or auras.groups[auras.auras[obj:GetName()].group].isAdjust or (auras.cooldowns.adjust and auras.cooldowns.selected == auras.auras[obj:GetName()].group)
 					--[[if (Auras.db.char.auras[curSpec].auras[obj:GetName()]) then
 						
 						isAuraInUse = Auras.db.char.auras[curSpec].auras[obj:GetName()].isInUse
@@ -97,7 +97,7 @@ function Auras:CharacterCheck(obj,spec,...)
 				else
 					local auras = self.db.char.auras[spec]
 					isAuraInUse = auras.auras[obj:GetName()].isInUse
-					isPreview = db.elements[spec].isMoving or auras.cooldowns.groups[auras.auras[obj:GetName()].group].isPreview
+					isPreview = db.elements[spec].isMoving or auras.groups[auras.auras[obj:GetName()].group].isAdjust or (auras.cooldowns.adjust and auras.cooldowns.selected == auras.auras[obj:GetName()].group)
 				end
 			elseif (objDb == "timerbars") then
 				if (spec == 0) then

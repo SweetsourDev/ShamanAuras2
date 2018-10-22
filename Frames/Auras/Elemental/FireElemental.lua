@@ -16,7 +16,7 @@ FireElemental.condition = function()
 end
 
 FireElemental:SetScript('OnUpdate',function(self)
-	if (Auras:CharacterCheck(self,1,self.spellID) and not Auras:CharacterCheck(self,1,4,2)) then
+	if (Auras:CharacterCheck(self,1,self.spellID) and self.condition()) then
 		local groupID = Auras:GetAuraGroupID(self,self:GetName())
 		local start,duration = GetSpellCooldown(Auras:GetSpellName(self.spellID))
 		
@@ -31,6 +31,7 @@ FireElemental:SetScript('OnUpdate',function(self)
 			Auras:NoCombatDisplay(self,groupID)
 		end
 	else
+		print("Fire Elemental: "..tostring(not Auras:CharacterCheck(self,1,4,2)))
 		Auras:ToggleAuraVisibility(self,false,'showhide')
 	end
 end)

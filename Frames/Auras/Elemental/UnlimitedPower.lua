@@ -19,7 +19,7 @@ UnlimitedPower:SetScript('OnUpdate',function(self)
 		local groupID = Auras:GetAuraGroupID(self,self:GetName())
 		local buff,_,count,_,duration,expires,caster = Auras:RetrieveAuraInfo("player", 272737)
 		
-		self.charges = count
+		self.charges = count or 0
 		
 		Auras:SetGlowStartTime(self,((expires or 0) - (duration or 0)),duration,272373,"buff")
 		Auras:GlowHandler(self)

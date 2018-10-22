@@ -632,9 +632,15 @@ local function BuildHorizontalIconRow(rowObj,rowList,rowVerify,spec,group)
 	
 	for i=1,#rowList do
 		if (rowList[i] and rowVerify[i]) then
+			if (group == 3 and rowObj[i]:GetName() == "UnlimitedPower") then
+				print("*** VALID OBJ ***")
+			end
 			rowCtr = rowCtr + 1
 			rowObj[i]:Show()
 		else
+			if (group == 3 and rowObj[i]:GetName() == "UnlimitedPower") then
+				print("*** INVALID OBJ ***")
+			end
 			rowObj[i]:Hide()
 		end
 	end
@@ -885,6 +891,23 @@ local function ToggleCombatEvent(spec)
 	--end
 end
 --/script print(SSA_EarthbindTotem:IsEventRegistered("COMBAT_LOG_EVENT_UNFILTERED"))
+
+function Auras:GetNumActiveAurasByGroupID(groupID,spec)
+	local numActiveAuras = 0
+	
+	for k,v in pairs(self.db.char.auras[spec].auras) do
+		if (v.group == groupID) then
+			local aura = SSA[k]
+			
+			if (v.isEnabled and aura.condition() and v.isInUse) then
+				numActiveAuras = numActiveAuras + 1
+			end
+		end
+	end
+	
+	return numActiveAuras
+end
+
 function Auras:UpdateTalents(isTalentChange)
 	
 	--SSA.spec = GetSpecialization()
@@ -950,8 +973,19 @@ function Auras:UpdateTalents(isTalentChange)
 		
 		for i=1,#auras.groups do
 			local rowObj,rowList,rowVerify = {},{},{}
-
+			local numActiveAuras = Auras:GetNumActiveAurasByGroupID(i,spec)
+			
 			if (auras.groups[i].auraCount > 0) then
+				local talentRows = {
+					[1] = true,
+					[2] = true,
+					[3] = true,
+					[4] = true,
+					[5] = true,
+					[6] = true,
+					[7] = true,
+				}
+							
 				for k,v in pairs(auras.auras) do
 					if (v.group == i) then
 						local bar = SSA[k]
@@ -959,10 +993,24 @@ function Auras:UpdateTalents(isTalentChange)
 						bar:SetParent(SSA["AuraGroup"..i])
 						
 						rowObj[v.order] = bar
-						rowList[v.order] = v.isEnabled and (bar.condition() or db.elements[spec].isMoving or auras.cooldowns.groups[i].isPreview)
-						rowVerify[v.order] = v.isInUse or auras.groups[i].isAdjust
-						if (i == 3) then
-							print(k..": "..tostring(auras.cooldowns.groups[i].isPreview))
+
+						--rowList[v.order] = v.isEnabled and (bar.condition() or db.elements[spec].isMoving or auras.cooldowns.groups[i].isPreview)
+						--if (numActiveAuras == 0 and v.order == 1 and (db.elements[spec].isMoving or auras.groups[i].isAdjust or (auras.cooldowns.adjust and auras.cooldowns.selected == i))) then
+						if (numActiveAuras == 0 and (db.elements[spec].isMoving or auras.groups[i].isAdjust or (auras.cooldowns.adjust and auras.cooldowns.selected == i))) then
+							if ((v.talentRow > 0 and talentRows[v.talentRow]) or v.talentRow == 0) then
+								talentRows[v.talentRow] = false
+								rowList[v.order] = true
+								rowVerify[v.order] = true
+							else
+								rowList[v.order] = false
+								rowVerify[v.order] = false
+							end
+						else
+							if (i == 2) then
+								print(k)
+							end
+							rowList[v.order] = v.isEnabled and bar.condition()
+							rowVerify[v.order] = v.isInUse or auras.groups[i].isAdjust
 						end
 					end
 				end
