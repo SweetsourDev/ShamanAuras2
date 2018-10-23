@@ -1,5 +1,6 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
 	<Script file="cooldowns.lua"/>
+	<Script file="move.lua"/>
 	<Script file="Config\toolbox.lua"/>
 	<Script file="Config\functions.lua"/>
 	<Script file="Config\config.lua"/>

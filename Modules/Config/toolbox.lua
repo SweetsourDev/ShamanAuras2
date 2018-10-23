@@ -24,6 +24,7 @@ function Auras:Execute_MoveAuras(db,order,spec,name)
 			db.isMoving = true
 			SSA.Move.Info:Show()
 			self:InitMoveAuraGroups(spec)
+			Auras:UpdateTalents()
 		end,
 	}
 	

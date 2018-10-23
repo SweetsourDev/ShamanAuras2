@@ -390,6 +390,8 @@ function Auras:BuildMoveUI(obj)
 		
 		Auras.db.char.elements[spec].isMoving = false
 		
+		Auras:UpdateTalents()
+		
 		Move:Hide()
 		SSA.grid:Hide()
 
@@ -698,6 +700,8 @@ local function BuildHorizontalIconRow(rowObj,rowList,rowVerify,spec,group)
 	twipe(rowObj)
 	twipe(rowList)
 	twipe(rowVerify)
+	
+	return validAuraCtr
 end
 
 local function BuildVerticalIconRow(rowObj,rowList,rowVerify,spec,group)
@@ -783,6 +787,8 @@ local function BuildVerticalIconRow(rowObj,rowList,rowVerify,spec,group)
 	twipe(rowObj)
 	twipe(rowList)
 	twipe(rowVerify)
+	
+	return validAuraCtr
 end
 --[[
 	Champion of Azeroth (82)
@@ -829,21 +835,23 @@ end
     end
 ]]
 
-local function UpdateParentDimensions(spec,group)
+local function UpdateParentDimensions(spec,group,validAuraCtr)
 	local layout = Auras.db.char.auras[spec].groups[group]
 	local parent = SSA["AuraGroup"..group]
 	local padding = 15
-	local numInUse = 0
+	--[[local numInUse = 0
 	
 	for k,v in pairs(Auras.db.char.auras[spec].auras) do
 		--SSA.DataFrame.text:SetText("CONDITION ERROR: "..k)
 		if (v.group == group and SSA[k].condition() and v.isInUse) then
 			numInUse = numInUse + 1
 		end
-	end
+	end]]
 	
-	if (numInUse > 0) then
-		local x = (numInUse * layout.spacing) + padding
+	--if (numInUse > 0) then
+	if (validAuraCtr > 0) then
+		--local x = (numInUse * layout.spacing) + padding
+		local x = (validAuraCtr * layout.spacing) + padding
 		local y = layout.icon + padding
 
 		if (layout.orientation == "Horizontal") then
@@ -970,6 +978,7 @@ function Auras:UpdateTalents(isTalentChange)
 		Auras:InitializeTimerBars(spec)
 		
 		local auras = Auras.db.char.auras[spec]
+		local validAuraCtr = 0
 		
 		for i=1,#auras.groups do
 			local rowObj,rowList,rowVerify = {},{},{}
@@ -1016,13 +1025,13 @@ function Auras:UpdateTalents(isTalentChange)
 				end
 				
 				if (auras.groups[i].orientation == "Horizontal") then
-					BuildHorizontalIconRow(rowObj,rowList,rowVerify,spec,i)
+					validAuraCtr = BuildHorizontalIconRow(rowObj,rowList,rowVerify,spec,i)
 				else
-					BuildVerticalIconRow(rowObj,rowList,rowVerify,spec,i)
+					validAuraCtr = BuildVerticalIconRow(rowObj,rowList,rowVerify,spec,i)
 				end	
 			end
 			
-			UpdateParentDimensions(spec,i)
+			UpdateParentDimensions(spec,i,validAuraCtr)
 			
 			twipe(rowObj)
 			twipe(rowList)

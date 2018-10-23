@@ -353,7 +353,10 @@ end
 
 -- Aura Group Builder
 function Auras:CreateGroup(name,parent,itr)
-	local Group = CreateFrame('Frame',name,parent)
+	if (not itr) then
+		SSA.DataFrame.text:SetText(Auras:CurText('DataFrame').."GROUP ERROR: "..tostring(name).."\n")
+	end
+	local Group = CreateFrame('Frame',name..(itr or ''),parent)
 	Group:SetFrameStrata("BACKGROUND")
 	Group:RegisterForDrag('LeftButton')
 	
@@ -363,7 +366,7 @@ end
 
 _G["SSA_private_db"] = SSA
 	
-local function BuildAuraGroups()
+function Auras:BuildAuraGroups()
 	
 	--local AuraGroup = {}
 
@@ -381,17 +384,14 @@ local function BuildAuraGroups()
 
 				AuraGroup:SetScript('OnMouseDown',function(self,button)
 					if (Auras.db.char.elements[i].isMoving) then
-						print("MOVING")
 						Auras:MoveOnMouseDown(self,button)
-					else
-						print("NOT MOVING")
 					end
 				end)
 
 				AuraGroup:SetScript('OnMouseUp',function(self,button)
 					if (Auras.db.char.elements[i].isMoving) then
 						Auras:MoveOnMouseUp(self,button)
-						--Auras:UpdateLayout(self,auras.frames[j])
+						Auras:UpdateLayout(self,auras.frames[j])
 					end
 				end)
 				
@@ -448,7 +448,7 @@ function Auras:OnInitialize()
 	self:SetupOptions()
 
 	if (not self.db.char.isFirstEverLoad) then
-		BuildAuraGroups()
+		Auras:BuildAuraGroups()
 	end
 	
 end

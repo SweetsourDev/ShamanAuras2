@@ -2074,7 +2074,7 @@ function Auras:RefreshAuraGroupList(options,spec)
 	local listPos = 0
 	local selectedAura = 1
 	local isLayoutToggle = false
-	local AURA_LIST, sortTable = {},{}
+	local AURA_LIST, AURA_NAME,sortTable = {},{},{}
 	
 	args["addGroup"] = {
 		order = 1,
@@ -2101,13 +2101,14 @@ function Auras:RefreshAuraGroupList(options,spec)
 			auras.groups[numGroups + 1].orientation = groupOrientation
 			--db.layout[spec].auras.groupCount = db.layout[spec].auras.groupCount + 1
 			
-			if (not SSA["AuraGroup"..#auras.groups]) then
+			--[[if (not SSA["AuraGroup"..#auras.groups]) then
 				local AuraGroup = Auras:CreateGroup("AuraGroup",SSA.AuraBase,#auras.groups)
 				
 				AuraGroup:SetWidth(50)
 				AuraGroup:SetHeight(50)
 				AuraGroup:SetPoint("CENTER",0,0)
-			end
+			end]]
+			Auras:BuildAuraGroups()
 			Auras:RefreshAuraGroupList(this.options,spec)
 		end,
 	}
@@ -2120,10 +2121,13 @@ function Auras:RefreshAuraGroupList(options,spec)
 	table.sort(sortTable)
 	
 	for i=1,#sortTable do
-		local name,_,icon = GetSpellInfo(auras.auras[sortTable[i]].spellID)
+		--local name,_,icon = GetSpellInfo(auras.auras[sortTable[i]].spellID)
+		local name,_,icon = GetSpellInfo(SSA[sortTable[i]].spellID)
 	
 		if (not auras.auras[sortTable[i]].isInUse) then
-			tinsert(AURA_LIST,"|T"..icon..":0|t "..name..";"..sortTable[i])
+			--tinsert(AURA_LIST,"|T"..tostring(icon)..":0|t "..tostring(name)..";"..sortTable[i])
+			tinsert(AURA_LIST,"|T"..tostring(icon)..":0|t "..tostring(name))
+			tinsert(AURA_NAME,sortTable[i])
 		end
 	end
 	
@@ -2194,15 +2198,18 @@ function Auras:RefreshAuraGroupList(options,spec)
 					func = function(this)
 						--local splitStr = {strsplit(" ",AURA_LIST[selectedAura],2)}
 						--local auraName = gsub(splitStr[2]," ","")
-						local auraName = { strsplit(";",AURA_LIST[selectedAura]) }
-						auras.auras[auraName[2]].group = i
-						auras.auras[auraName[2]].isInUse = true
+						--local auraName = { strsplit(";",AURA_LIST[selectedAura]) }
+						--auras.auras[auraName[2]].group = i
+						--auras.auras[auraName[2]].isInUse = true
+						auras.auras[AURA_NAME[selectedAura]].group = i
+						auras.auras[AURA_NAME[selectedAura]].isInUse = true
 						
 						if (listPos <= auras.groups[i].auraCount) then
 							ReorderAuraList(spec,i,listPos,auraName,"add")	
 						end
 						
-						auras.auras[auraName[2]].order = listPos
+						--auras.auras[auraName[2]].order = listPos
+						auras.auras[AURA_NAME[selectedAura]].order = listPos
 						auras.groups[i].auraCount = auras.groups[i].auraCount + 1
 						Auras:RefreshAuraGroupList(this.options,spec)
 						Auras:UpdateTalents()

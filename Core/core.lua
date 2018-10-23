@@ -87,7 +87,10 @@ function Auras:CharacterCheck(obj,spec,...)
 				if (spec == 0) then
 					local auras = self.db.char.auras[curSpec]
 					isAuraInUse = auras.auras[obj:GetName()].isInUse
-					isPreview = db.elements[curSpec].isMoving or auras.groups[auras.auras[obj:GetName()].group].isAdjust or (auras.cooldowns.adjust and auras.cooldowns.selected == auras.auras[obj:GetName()].group)
+					
+					if (isAuraInUse) then
+						isPreview = db.elements[curSpec].isMoving or auras.groups[auras.auras[obj:GetName()].group].isAdjust or (auras.cooldowns.adjust and auras.cooldowns.selected == auras.auras[obj:GetName()].group)
+					end
 					--[[if (Auras.db.char.auras[curSpec].auras[obj:GetName()]) then
 						
 						isAuraInUse = Auras.db.char.auras[curSpec].auras[obj:GetName()].isInUse
@@ -97,7 +100,10 @@ function Auras:CharacterCheck(obj,spec,...)
 				else
 					local auras = self.db.char.auras[spec]
 					isAuraInUse = auras.auras[obj:GetName()].isInUse
-					isPreview = db.elements[spec].isMoving or auras.groups[auras.auras[obj:GetName()].group].isAdjust or (auras.cooldowns.adjust and auras.cooldowns.selected == auras.auras[obj:GetName()].group)
+					
+					if (isAuraInUse) then
+						isPreview = db.elements[spec].isMoving or auras.groups[auras.auras[obj:GetName()].group].isAdjust or (auras.cooldowns.adjust and auras.cooldowns.selected == auras.auras[obj:GetName()].group)
+					end
 				end
 			elseif (objDb == "timerbars") then
 				if (spec == 0) then
@@ -667,7 +673,7 @@ function Auras:ResetAuraGroupPosition(objName)
 end
 
 -- FIX THIS
-function Auras:ConfigureMove(db,obj,backdrop)
+--[[function Auras:ConfigureMove(db,obj,backdrop)
 	if (db.isMoving) then
 		if (not obj:IsMouseEnabled()) then
 			obj:EnableMouse(true)
@@ -688,10 +694,10 @@ function Auras:ConfigureMove(db,obj,backdrop)
 			--obj:SetBackdrop(nil)
 		end
 	end
-end
+end]]
 
 -- FIX THIS
-function Auras:MoveOnMouseDown(obj,button)
+--[[function Auras:MoveOnMouseDown(obj,button)
 	local framePt,_,parentPt,x,y = obj:GetPoint(1)
 
 	if (not IsShiftKeyDown() and not IsControlKeyDown() and button == 'LeftButton') then
@@ -714,10 +720,10 @@ function Auras:MoveOnMouseDown(obj,button)
 	elseif (not IsShiftKeyDown() and IsControlKeyDown() and button == "RightButton") then
 		self:ResetAuraGroupPosition(obj:GetName())
 	end
-end
+end]]
 
 -- FIX THIS
-function Auras:MoveOnMouseUp(obj,button)
+--[[function Auras:MoveOnMouseUp(obj,button)
 	local framePt,_,parentPt,x,y = obj:GetPoint(1)
 
 	if (button == 'LeftButton' and obj.framePt) then
@@ -733,10 +739,10 @@ function Auras:MoveOnMouseUp(obj,button)
 		obj.screenX = nil
 		obj.screenY = nil
 	end
-end
+end]]
 
 -- FIX THIS
-function Auras:UpdateLayout(obj,db)
+--[[function Auras:UpdateLayout(obj,db)
 	local point,relativeTo,relativePoint,x,y = obj:GetPoint(1)
 	
 	if (obj.icon and obj:GetName() ~= "Cloudburst") then
@@ -764,11 +770,7 @@ function Auras:UpdateLayout(obj,db)
 		db.x = x
 		db.y = y
 	end
-end
-
-function Auras:ParseClick(isClicked,button,spec)
-	Auras.db.char.layout[spec][button] = isClicked
-end
+end]]
 
 local function GetVersionNumber()
 	return tonumber(sub(Auras.version,2,3))
