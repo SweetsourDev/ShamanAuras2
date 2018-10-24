@@ -12,22 +12,22 @@ GroundingTotemBar.icon = 136039
 GroundingTotemBar.start = 0
 GroundingTotemBar.duration = 3
 GroundingTotemBar.condition = function() 
-	local spellID
-	local spec = GetSpecialization()
-	
-	if (spec == 1) then
+	local spec = SSA.spec or GetSpecialization()
+	local spellID = (spec == 1 and 3620) or (spec == 2 and 3622) or (spec == 3 and 715)
+	local _,_,_,_,_,_,_,_,_,selected = GetPvpTalentInfoByID(spellID)
+	--[[if (spec == 1) then
 		spellID = 3620
 	elseif (spec == 2) then
 		spellID = 3622
 	elseif (spec == 3) then
 		spellID = 715
-	end
+	end]]
 	
-	return select(10,GetPvpTalentInfoByID(spellID)) and Auras:IsPvPZone()
+	return selected and Auras:IsPvPZone()
 end
 
 GroundingTotemBar:SetScript('OnUpdate',function(self)
-	if (Auras:CharacterCheck(self,1,"3620") or Auras:CharacterCheck(self,2,"3622") or Auras:CharacterCheck(self,3,"715")) then
+	if ((Auras:CharacterCheck(self,1) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
 		Auras:RunTimerBarCode(self)
 	end
 end)

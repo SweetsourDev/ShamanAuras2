@@ -11,11 +11,13 @@ local Stormkeeper = SSA.Stormkeeper
 Stormkeeper.spellID = 191634
 Stormkeeper.pulseTime = 0
 Stormkeeper.condition = function()
-	return select(4,GetTalentInfo(7,2,1))
+	local _,_,_,selected = GetTalentInfo(7,2,1)
+	
+	return selected
 end
 
 Stormkeeper:SetScript('OnUpdate',function(self)
-	if (Auras:CharacterCheck(self,1,7,2)) then
+	if ((Auras:CharacterCheck(self,1) and self.condition()) or Auras:IsPreviewingAura(self)) then
 		local groupID = Auras:GetAuraGroupID(self,self:GetName())
 		--local spell = Auras:GetSpellName(191634)
 		local buff,_,_,count,buffDuration,expires = Auras:RetrieveAuraInfo("player", self.spellID)

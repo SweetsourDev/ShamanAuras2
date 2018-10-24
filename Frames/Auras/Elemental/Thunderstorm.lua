@@ -14,7 +14,7 @@ Thunderstorm.condition = function()
 end
 
 Thunderstorm:SetScript('OnUpdate',function(self)
-	if (Auras:CharacterCheck(self,1,self.spellID)) then
+	if ((Auras:CharacterCheck(self,1) and self.condition()) or Auras:IsPreviewingAura(self)) then
 		local groupID = Auras:GetAuraGroupID(self,self:GetName())
 		local start,duration = GetSpellCooldown(Auras:GetSpellName(self.spellID))
 		

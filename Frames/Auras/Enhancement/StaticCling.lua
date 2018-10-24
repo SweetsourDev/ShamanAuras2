@@ -10,7 +10,9 @@ local StaticCling = SSA.StaticCling
 StaticCling.spellID = 211062
 StaticCling.pulseTime = 0
 StaticCling.condition = function()
-	return select(10,GetPvpTalentInfoByID(720))
+	local _,_,_,_,_,_,_,_,_,selected = GetPvpTalentInfoByID(720)
+	
+	return selected and Auras:IsPvPZone()
 end
 
 StaticCling:SetScript('OnUpdate', function(self)

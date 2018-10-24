@@ -13,7 +13,7 @@ HealingTideTotemBar.condition = function()
 end
 
 HealingTideTotemBar:SetScript('OnUpdate',function(self)
-	if (Auras:CharacterCheck(self,3,108280)) then
+	if ((Auras:CharacterCheck(self,3) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
 		Auras:RunTimerBarCode(self)
 	end
 end)

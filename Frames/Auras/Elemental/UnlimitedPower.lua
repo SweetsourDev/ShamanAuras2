@@ -11,11 +11,13 @@ UnlimitedPower.spellID = 260895
 UnlimitedPower.pulseTime = 0
 UnlimitedPower.charges = 0
 UnlimitedPower.condition = function()
-	return select(4,GetTalentInfo(7,1,1))
+	local _,_,_,selected = GetTalentInfo(7,1,1)
+	
+	return selected
 end
 
 UnlimitedPower:SetScript('OnUpdate',function(self)
-	if (Auras:CharacterCheck(self,1,7,1)) then
+	if ((Auras:CharacterCheck(self,1) and self.condition()) or Auras:IsPreviewingAura(self)) then
 		local groupID = Auras:GetAuraGroupID(self,self:GetName())
 		local buff,_,count,_,duration,expires,caster = Auras:RetrieveAuraInfo("player", 272737)
 		

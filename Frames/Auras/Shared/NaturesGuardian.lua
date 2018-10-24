@@ -11,11 +11,13 @@ local NaturesGuardian = SSA.NaturesGuardian
 NaturesGuardian.spellID = 31616
 NaturesGuardian.pulseTime = 0
 NaturesGuardian.condition = function()
-	return select(4,GetTalentInfo(5,1,1))
+	local _,_,_,selected = GetTalentInfo(5,1,1)
+	
+	return selected
 end
 
 NaturesGuardian:SetScript('OnUpdate',function(self)
-	if (Auras:CharacterCheck(self,0,5,1)) then
+	if ((Auras:CharacterCheck(self,0) and self.condition()) or Auras:IsPreviewingAura(self)) then
 		local spec = SSA.spec or GetSpecialization()
 		local groupID = Auras:GetAuraGroupID(self,self:GetName())
 		local trigger = Auras.db.char.auras[spec].auras[self:GetName()].glow.triggers[1]

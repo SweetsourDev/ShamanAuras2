@@ -17,10 +17,13 @@ FireElementalBar.icon = 135790
 FireElementalBar.start = 0
 FireElementalBar.duration = 30
 FireElementalBar.GUID = ''
-FireElementalBar.condition = function() return not select(4,GetTalentInfo(4,2,1)) and IsSpellKnown(198067) end
+FireElementalBar.condition = function()
+	return not select(4,GetTalentInfo(4,2,1)) and IsSpellKnown(198067)
+end
 
 FireElementalBar:SetScript('OnUpdate',function(self)
-	if (Auras:CharacterCheck(self,1,198067) and not select(4,GetTalentInfo(4,2,1)) and not select(4,GetTalentInfo(6,2,1))) then
+	--if (Auras:CharacterCheck(self,1,198067) and not select(4,GetTalentInfo(4,2,1)) and not select(4,GetTalentInfo(6,2,1))) then
+	if ((Auras:CharacterCheck(self,1,198067) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
 		Auras:RunTimerBarCode(self)
 	end
 end)
@@ -42,7 +45,7 @@ EmberElementalBar.GUID = ''
 EmberElementalBar.condition = function() return not select(4,GetTalentInfo(4,2,1)) and IsSpellKnown(198067) end
 
 EmberElementalBar:SetScript('OnUpdate',function(self)
-	if (Auras:CharacterCheck(self,1)) then
+	if ((Auras:CharacterCheck(self,1) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
 		Auras:RunTimerBarCode(self)
 	end
 end)
@@ -61,10 +64,10 @@ PrimalFireElementalBar.start = 0
 PrimalFireElementalBar.duration = 30
 PrimalFireElementalBar.GUID = ''
 PrimalFireElementalBar.isPrimal = true
-PrimalFireElementalBar.condition = function() return select(4,GetTalentInfo(6,2,1)) end
+PrimalFireElementalBar.condition = function() return select(4,GetTalentInfo(6,2,1)) and not select(4,GetTalentInfo(4,2,1)) end
 
 PrimalFireElementalBar:SetScript('OnUpdate',function(self)
-	if (Auras:CharacterCheck(self,1,6,2) and not select(4,GetTalentInfo(4,2,1))) then
+	if ((Auras:CharacterCheck(self,1,6,2) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
 		Auras:RunTimerBarCode(self)
 	end
 end)

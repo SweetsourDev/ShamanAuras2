@@ -11,11 +11,13 @@ local Icefury = SSA.Icefury
 Icefury.spellID = 210714
 Icefury.pulseTime = 0
 Icefury.condition = function()
-	return select(4,GetTalentInfo(6,3,1))
+	local _,_,_,selected = GetTalentInfo(6,3,1)
+	
+	return selected
 end
 
 Icefury:SetScript('OnUpdate',function(self)
-	if (Auras:CharacterCheck(self,1,6,3)) then
+	if ((Auras:CharacterCheck(self,1) and self.condition()) or Auras:IsPreviewingAura(self)) then
 		local groupID = Auras:GetAuraGroupID(self,self:GetName())
 		local start,duration = GetSpellCooldown(Auras:GetSpellName(self.spellID))
 		local _,_,_,_,buffDuration,expires = Auras:RetrieveAuraInfo("player",self.spellID)

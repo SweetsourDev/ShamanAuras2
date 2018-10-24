@@ -13,11 +13,13 @@ local EarthenSpike = SSA.EarthenSpike
 EarthenSpike.spellID = 188089
 EarthenSpike.pulseTime = 0
 EarthenSpike.condition = function()
-	return select(4,GetTalentInfo(7,2,1))
+	local _,_,_,selected = GetTalentInfo(7,2,1)
+	
+	return selected
 end
 
 EarthenSpike:SetScript('OnUpdate', function(self)
-	if (Auras:CharacterCheck(self,2,7,2)) then
+	if ((Auras:CharacterCheck(self,2) and self.condition()) or Auras:IsPreviewingAura(self)) then
 		local groupID = Auras:GetAuraGroupID(self,self:GetName())
 		local start,duration = GetSpellCooldown(Auras:GetSpellName(self.spellID))
 		local power = UnitPower('player',Enum.PowerType.Maelstrom)

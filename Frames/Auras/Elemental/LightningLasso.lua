@@ -11,11 +11,13 @@ local LightningLasso = SSA.LightningLasso
 LightningLasso.spellID = 204437
 LightningLasso.pulseTime = 0
 LightningLasso.condition = function()
-	return select(10,GetPvpTalentInfoByID(731)) and Auras:IsPvPZone()
+	local _,_,_,_,_,_,_,_,_,selected = GetPvpTalentInfoByID(731)
+	
+	return selected and Auras:IsPvPZone()
 end
 
 LightningLasso:SetScript('OnUpdate',function(self)
-	if (Auras:CharacterCheck(self,1,"731")) then
+	if ((Auras:CharacterCheck(self,1) and self.condition()) or Auras:IsPreviewingAura(self)) then
 		local groupID = Auras:GetAuraGroupID(self,self:GetName())
 		local start,duration = GetSpellCooldown(Auras:GetSpellName(self.spellID))
 		

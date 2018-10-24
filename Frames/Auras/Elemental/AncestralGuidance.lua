@@ -11,11 +11,13 @@ local AncestralGuidance = SSA.AncestralGuidance
 AncestralGuidance.spellID = 108281
 AncestralGuidance.pulseTime = 0
 AncestralGuidance.condition = function()
-	return select(4,GetTalentInfo(5,2,1))
+	local _,_,_,selected = GetTalentInfo(5,2,1)
+	
+	return selected
 end
 
 AncestralGuidance:SetScript('OnUpdate',function(self)
-	if (Auras:CharacterCheck(self,1,5,2)) then
+	if ((Auras:CharacterCheck(self,1) and self.condition()) or Auras:IsPreviewingAura(self)) then
 		local groupID = Auras:GetAuraGroupID(self,self:GetName())
 		local start,duration = GetSpellCooldown(Auras:GetSpellName(self.spellID))
 		

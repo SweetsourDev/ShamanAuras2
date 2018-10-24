@@ -7,10 +7,12 @@ local HeroismBar = SSA.HeroismBar
 HeroismBar.spellID = 32182
 HeroismBar.start = 0
 HeroismBar.duration = 40
-HeroismBar.condition = function() return true end
+HeroismBar.condition = function()
+	return true
+end
 
 HeroismBar:SetScript('OnUpdate',function(self)
-	if (Auras:CharacterCheck(self,0)) then
+	if ((Auras:CharacterCheck(self,0) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
 		Auras:RunTimerBarCode(self)
 	end
 end)

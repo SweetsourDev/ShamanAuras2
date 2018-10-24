@@ -15,7 +15,7 @@ LavaBurst.condition = function()
 end
 
 LavaBurst:SetScript('OnUpdate', function(self)
-	if (Auras:CharacterCheck(self,1,self.spellID) or Auras:CharacterCheck(self,3,self.spellID)) then
+	if (((Auras:CharacterCheck(self,1) or Auras:CharacterCheck(self,3)) and self.condition()) or Auras:IsPreviewingAura(self)) then
 		local groupID = Auras:GetAuraGroupID(self,self:GetName())
 		local ascendance,_,_,_,ascDuration,ascExpires = Auras:RetrieveAuraInfo("player", (SSA.spec == 1 and 114050) or (SSA.spec == 3 and 114052))
 		local start,duration = GetSpellCooldown(Auras:GetSpellName(self.spellID))

@@ -18,7 +18,7 @@ end
 FlameShock:SetScript('OnUpdate', function(self)
 	self.spellID = (SSA.spec == 1 and 188389) or (SSA.spec == 2 and 0) or (SSA.spec == 3 and 188838)
 
-	if (Auras:CharacterCheck(self,1,self.spellID) or Auras:CharacterCheck(self,3,self.spellID)) then
+	if (((Auras:CharacterCheck(self,1) or Auras:CharacterCheck(self,3)) and self.condition()) or Auras:IsPreviewingAura(self)) then
 		local groupID = Auras:GetAuraGroupID(self,'FlameShock')
 		local db = Auras.db.char
 		--local debuff,_,_,_,_,expires,caster = Auras:RetrieveDebuffInfo("target", Auras:GetSpellName(spellID))

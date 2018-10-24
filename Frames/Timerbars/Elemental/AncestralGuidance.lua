@@ -9,10 +9,14 @@ local AncestralGuidanceBar = SSA.AncestralGuidanceBar
 AncestralGuidanceBar.spellID = 108281
 AncestralGuidanceBar.start = 0
 AncestralGuidanceBar.duration = 10
-AncestralGuidanceBar.condition = function() return select(4,GetTalentInfo(5,2,1)) end
+AncestralGuidanceBar.condition = function()
+	local _,_,_,selected = GetTalentInfo(5,2,1)
+	
+	return selected
+end
 
 AncestralGuidanceBar:SetScript('OnUpdate',function(self)
-	if (Auras:CharacterCheck(self,1,5,2)) then
+	if ((Auras:CharacterCheck(self,1) and self.condition) or Auras:IsPreviewingTimerbar(self)) then
 		Auras:RunTimerBarCode(self)
 	end
 end)

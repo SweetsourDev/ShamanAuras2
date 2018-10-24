@@ -8,10 +8,12 @@ EarthbindTotemBar.spellID = 2484
 EarthbindTotemBar.icon = 136102
 EarthbindTotemBar.start = 0
 EarthbindTotemBar.duration = 20
-EarthbindTotemBar.condition = function() return IsSpellKnown(2484) end
+EarthbindTotemBar.condition = function()
+	return IsSpellKnown(2484)
+end
 
 EarthbindTotemBar:SetScript('OnUpdate',function(self)
-	if (Auras:CharacterCheck(self,0,2484)) then
+	if ((Auras:CharacterCheck(self,0) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
 		Auras:RunTimerBarCode(self)
 	end
 end)

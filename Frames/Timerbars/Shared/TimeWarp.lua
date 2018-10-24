@@ -7,10 +7,12 @@ local TimeWarpBar = SSA.TimeWarpBar
 TimeWarpBar.spellID = 80353
 TimeWarpBar.start = 0
 TimeWarpBar.duration = 40
-TimeWarpBar.condition = function() return true end
+TimeWarpBar.condition = function()
+	return true
+end
 
 TimeWarpBar:SetScript('OnUpdate',function(self)
-	if (Auras:CharacterCheck(self,0)) then
+	if ((Auras:CharacterCheck(self,0) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
 		Auras:RunTimerBarCode(self)
 	end
 end)

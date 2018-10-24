@@ -12,12 +12,13 @@ GroundingTotem.spellID = 204336
 GroundingTotem.pulseTime = 0
 GroundingTotem.condition = function()
 	local talentID = (SSA.spec == 1 and 3620) or (SSA.spec == 2 and 3622) or (SSA.spec == 3 and 715)
+	local _,_,_,_,_,_,_,_,_,selected = GetPvpTalentInfoByID(talentID)
 	
-	return select(10,GetPvpTalentInfoByID(talentID)) and Auras:IsPvPZone()
+	return selected and Auras:IsPvPZone()
 end
 
 GroundingTotem:SetScript('OnUpdate',function(self)
-	if (Auras:CharacterCheck(self,1,"3620") or Auras:CharacterCheck(self,2,"3622") or Auras:CharacterCheck(self,3,"715")) then
+	if ((Auras:CharacterCheck(self,0) and self.condition()) or Auras:IsPreviewingAura(self)) then
 		local groupID = Auras:GetAuraGroupID(self,self:GetName())
 		local start,duration = GetSpellCooldown(Auras:GetSpellName(self.spellID))
 		

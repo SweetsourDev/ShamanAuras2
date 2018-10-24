@@ -17,7 +17,7 @@ LavaLash.condition = function()
 end
 
 LavaLash:SetScript('OnUpdate', function(self)
-	if (Auras:CharacterCheck(self,2,self.spellID)) then
+	if ((Auras:CharacterCheck(self,2) and self.condition()) or Auras:IsPreviewingAura(self)) then
 		local groupID = Auras:GetAuraGroupID(self,self:GetName())
 		local db = Auras.db.char
 		local start,duration = GetSpellCooldown(Auras:GetSpellName(self.spellID))

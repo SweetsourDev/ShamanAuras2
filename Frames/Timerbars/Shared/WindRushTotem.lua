@@ -8,10 +8,14 @@ WindRushTotemBar.spellID = 192077
 WindRushTotemBar.icon = 538576
 WindRushTotemBar.start = 0
 WindRushTotemBar.duration = 15
-WindRushTotemBar.condition = function() return select(4,GetTalentInfo(5,3,1)) end
+WindRushTotemBar.condition = function()
+	local _,_,_,selected = GetTalentInfo(5,3,1)
+	
+	return selected
+end
 
 WindRushTotemBar:SetScript('OnUpdate',function(self)
-	if (Auras:CharacterCheck(self,0,5,3)) then
+	if ((Auras:CharacterCheck(self,0) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
 		Auras:RunTimerBarCode(self)
 	end
 end)

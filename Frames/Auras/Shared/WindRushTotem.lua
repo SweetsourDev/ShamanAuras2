@@ -11,11 +11,13 @@ local WindRushTotem = SSA.WindRushTotem
 WindRushTotem.spellID = 192077
 WindRushTotem.pulseTime = 0
 WindRushTotem.condition = function()
-	return select(4,GetTalentInfo(5,3,1))
+	local _,_,_,selected = GetTalentInfo(5,3,1)
+	
+	return selected
 end
 
 WindRushTotem:SetScript('OnUpdate',function(self)
-	if (Auras:CharacterCheck(self,0,5,3)) then
+	if ((Auras:CharacterCheck(self,0) and self.condition()) or Auras:IsPreviewingAura(self)) then
 		local groupID = Auras:GetAuraGroupID(self,self:GetName())
 		local start,duration = GetSpellCooldown(Auras:GetSpellName(self.spellID))
 		

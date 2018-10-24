@@ -14,8 +14,9 @@ Adaptation.spellID = 214027
 Adaptation.pulseTime = 0
 Adaptation.condition = function()
 	local talentID = (SSA.spec == 1 and 3597) or (SSA.spec == 2 and 3552) or (SSA.spec == 3 and 3485)
-
-	return select(10,GetPvpTalentInfoByID(talentID)) and Auras:IsPvPZone()
+	local _,_,_,_,_,_,_,_,_,selected = GetPvpTalentInfoByID(talentID)
+	
+	return selected and Auras:IsPvPZone()
 end
 
 Adaptation:SetScript('OnUpdate',function(self)

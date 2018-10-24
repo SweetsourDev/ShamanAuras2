@@ -11,10 +11,14 @@ LiquidMagmaTotemBar.spellID = 192222
 LiquidMagmaTotemBar.icon = 971079
 LiquidMagmaTotemBar.start = 0
 LiquidMagmaTotemBar.duration = 15
-LiquidMagmaTotemBar.condition = function() return select(4,GetTalentInfo(4,3,1)) end
+LiquidMagmaTotemBar.condition = function()
+	local _,_,_,selected = GetTalentInfo(4,3,1)
+	
+	return selected
+end
 
 LiquidMagmaTotemBar:SetScript('OnUpdate',function(self)
-	if (Auras:CharacterCheck(self,1,4,3)) then
+	if ((Auras:CharacterCheck(self,1) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
 		Auras:RunTimerBarCode(self)
 	end
 end)

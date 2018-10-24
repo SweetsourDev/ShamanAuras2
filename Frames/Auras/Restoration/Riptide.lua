@@ -16,7 +16,7 @@ Riptide.condition = function()
 end
 
 Riptide:SetScript('OnUpdate', function(self)
-	if (Auras:CharacterCheck(self,3,self.spellID)) then
+	if ((Auras:CharacterCheck(self,3) and self.condition()) or Auras:IsPreviewingAura(self)) then
 		local groupID = Auras:GetAuraGroupID(self,self:GetName())
 		local cdStart,cdDuration = GetSpellCooldown(Auras:GetSpellName(self.spellID))
 		local charges,maxCharges,chgStart,chgDuration = GetSpellCharges(self.spellID)

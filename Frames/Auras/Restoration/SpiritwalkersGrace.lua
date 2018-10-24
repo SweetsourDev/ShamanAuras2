@@ -15,7 +15,7 @@ SpiritwalkersGrace.condition = function()
 end
 
 SpiritwalkersGrace:SetScript('OnUpdate',function(self)
-	if (Auras:CharacterCheck(self,3,self.spellID)) then
+	if ((Auras:CharacterCheck(self,3) and self.condition()) or Auras:IsPreviewingAura(self)) then
 		local groupID = Auras:GetAuraGroupID(self,self:GetName())
 		local start,duration = GetSpellCooldown(Auras:GetSpellName(self.spellID))
 		local _,_,_,_,buffDuration,buffExpire = Auras:RetrieveAuraInfo("player",self.spellID,"HELPFUL")

@@ -7,10 +7,12 @@ local FlametongueBar = SSA.FlametongueBar
 FlametongueBar.spellID = 194084
 FlametongueBar.start = 0
 FlametongueBar.duration = 16
-FlametongueBar.condition = function() return IsSpellKnown(193796) end
+FlametongueBar.condition = function()
+	return IsSpellKnown(193796)
+end
 
 FlametongueBar:SetScript('OnUpdate',function(self)
-	if (Auras:CharacterCheck(self,2,193796)) then
+	if ((Auras:CharacterCheck(self,2) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
 		Auras:RunTimerBarCode(self)
 	end
 end)

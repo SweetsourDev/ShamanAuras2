@@ -8,10 +8,14 @@ AncestralProtectionTotemBar.spellID = 207399
 AncestralProtectionTotemBar.icon = 136080
 AncestralProtectionTotemBar.start = 0
 AncestralProtectionTotemBar.duration = 30
-AncestralProtectionTotemBar.condition = function() return select(4,GetTalentInfo(4,3,1)) end
+AncestralProtectionTotemBar.condition = function() 
+	local _,_,_,selected = GetTalentInfo(4,3,1)
+	
+	return selected
+end
 
 AncestralProtectionTotemBar:SetScript('OnUpdate',function(self)
-	if (Auras:CharacterCheck(self,3,4,3)) then
+	if ((Auras:CharacterCheck(self,3) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
 		Auras:RunTimerBarCode(self,spec,db)
 	end
 end)

@@ -17,10 +17,15 @@ StormElementalBar.icon = 2065626
 StormElementalBar.start = 0
 StormElementalBar.duration = 30
 StormElementalBar.GUID = ''
-StormElementalBar.condition = function() return select(4,GetTalentInfo(4,2,1)) end
+StormElementalBar.condition = function() 
+	local _,_,_,selected1 = GetTalentInfo(4,2,1)
+	local _,_,_,selected2 = GetTalentInfo(6,2,1)
+
+	return selected1 and not selected2
+end
 
 StormElementalBar:SetScript('OnUpdate',function(self)
-	if (Auras:CharacterCheck(self,1,4,2) and not select(4,GetTalentInfo(6,2,1))) then
+	if ((Auras:CharacterCheck(self,1) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
 		Auras:RunTimerBarCode(self)
 	end
 end)
@@ -40,10 +45,15 @@ PrimalStormElementalBar.start = 0
 PrimalStormElementalBar.duration = 30
 PrimalStormElementalBar.GUID = ''
 PrimalStormElementalBar.isPrimal = true
-PrimalStormElementalBar.condition = function() return select(4,GetTalentInfo(6,2,1)) and select(4,GetTalentInfo(4,2,1)) end
+PrimalStormElementalBar.condition = function()
+	local _,_,_,selected1 = GetTalentInfo(6,2,1)
+	local _,_,_,selected2 = GetTalentInfo(4,2,1)
+	
+	return selected1 and selected2
+end
 
 PrimalStormElementalBar:SetScript('OnUpdate',function(self)
-	if (Auras:CharacterCheck(self,1,4,2) and select(4,GetTalentInfo(6,2,1))) then
+	if ((Auras:CharacterCheck(self,1) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
 		Auras:RunTimerBarCode(self)
 	end
 end)

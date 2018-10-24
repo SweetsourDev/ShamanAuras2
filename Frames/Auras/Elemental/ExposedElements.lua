@@ -7,11 +7,13 @@ local ExposedElements = SSA.ExposedElements
 ExposedElements.spellID = 260694
 ExposedElements.pulseTime = 0
 ExposedElements.condition = function()
-	return select(4,GetTalentInfo(1,1,1))
+	local _,_,_,selected = GetTalentInfo(1,1,1)
+	
+	return selected
 end
 
 ExposedElements:SetScript('OnUpdate', function(self)
-	if (Auras:CharacterCheck(self,1,1,1)) then
+	if ((Auras:CharacterCheck(self,1) and self.condition()) or Auras:IsPreviewingAura(self)) then
 		local groupID = Auras:GetAuraGroupID(self,self:GetName())
 		local debuff,_,_,_,duration,expires,caster = Auras:RetrieveAuraInfo("target", 269808, "HARMFUL PLAYER")
 

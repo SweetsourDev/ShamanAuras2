@@ -7,10 +7,14 @@ local EtherealFormBar = SSA.EtherealFormBar
 EtherealFormBar.spellID = 210918
 EtherealFormBar.start = 0
 EtherealFormBar.duration = 15
-EtherealFormBar.condition = function() return select(10,GetPvpTalentInfoByID(1944)) and Auras:IsPvPZone() end
+EtherealFormBar.condition = function()
+	local _,_,_,_,_,_,_,_,_,selected = GetPvpTalentInfoByID(1944)
+
+	return selected and Auras:IsPvPZone()
+end
 
 EtherealFormBar:SetScript('OnUpdate',function(self)
-	if (Auras:CharacterCheck(self,2,"1944")) then
+	if ((Auras:CharacterCheck(self,2) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
 		Auras:RunTimerBarCode(self)
 	end
 end)

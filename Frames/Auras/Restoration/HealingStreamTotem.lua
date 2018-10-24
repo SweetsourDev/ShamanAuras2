@@ -12,11 +12,12 @@ local HealingStreamTotem = SSA.HealingStreamTotem
 HealingStreamTotem.spellID = 5394
 HealingStreamTotem.pulseTime = 0
 HealingStreamTotem.condition = function()
-	return not select(4,GetTalentInfo(6,3,1)) and IsSpellKnown(5394)
+	local _,_,_,selected = GetTalentInfo(6,3,1)
+	return not selected and IsSpellKnown(5394)
 end
 --/script SSA2_db.char["Sweetsours - Firetree"].auras[3].auras["HealingStreamTotem"].glow.triggers[1].start = 0
 HealingStreamTotem:SetScript('OnUpdate', function(self)
-	if (Auras:CharacterCheck(self,3,self.spellID)) then
+	if ((Auras:CharacterCheck(self,3) and self.condition()) or Auras:IsPreviewingAura(self)) then
 		local groupID = Auras:GetAuraGroupID(self,self:GetName())
 		local start,duration = GetSpellCooldown(Auras:GetSpellName(self.spellID))
 		local charges,maxCharges,chgStart,chgDuration = GetSpellCharges(self.spellID)

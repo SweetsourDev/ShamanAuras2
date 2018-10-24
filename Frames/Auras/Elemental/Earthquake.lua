@@ -16,7 +16,7 @@ Earthquake.condition = function()
 end
 
 Earthquake:SetScript('OnUpdate', function(self)
-	if (Auras:CharacterCheck(self,1,self.spellID)) then
+	if ((Auras:CharacterCheck(self,1) and self.condition()) or Auras:IsPreviewingAura(self)) then
 		local groupID = Auras:GetAuraGroupID(self,self:GetName())
 		local _,_,_,_,duration,expires = Auras:RetrieveAuraInfo("player", 208723)
 		local power = UnitPower('player',Enum.PowerType.Maelstrom)

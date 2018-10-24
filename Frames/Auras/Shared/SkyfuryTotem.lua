@@ -12,12 +12,13 @@ SkyfuryTotem.spellID = 204330
 SkyfuryTotem.pulseTime = 0
 SkyfuryTotem.condition = function()
 	local talentID = (SSA.spec == 1 and 3488) or (SSA.spec == 2 and 3487) or (SSA.spec == 3 and 707)
+	local _,_,_,_,_,_,_,_,_,selected = GetPvpTalentInfoByID(talentID)
 	
-	return select(10,GetPvpTalentInfoByID(talentID)) and Auras:IsPvPZone()
+	return selected and Auras:IsPvPZone()
 end
 
 SkyfuryTotem:SetScript('OnUpdate',function(self)
-	if (Auras:CharacterCheck(self,1,"3488") or Auras:CharacterCheck(self,2,"3487") or Auras:CharacterCheck(self,3,"707")) then
+	if ((Auras:CharacterCheck(self,0) and self.condition()) or Auras:IsPreviewingAura(self)) then
 		local groupID = Auras:GetAuraGroupID(self,self:GetName())
 		local start,duration = GetSpellCooldown(Auras:GetSpellName(self.spellID))
 		

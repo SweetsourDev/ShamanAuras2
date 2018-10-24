@@ -88,9 +88,9 @@ function Auras:CharacterCheck(obj,spec,...)
 					local auras = self.db.char.auras[curSpec]
 					isAuraInUse = auras.auras[obj:GetName()].isInUse
 					
-					if (isAuraInUse) then
+					--[[if (isAuraInUse) then
 						isPreview = db.elements[curSpec].isMoving or auras.groups[auras.auras[obj:GetName()].group].isAdjust or (auras.cooldowns.adjust and auras.cooldowns.selected == auras.auras[obj:GetName()].group)
-					end
+					end]]
 					--[[if (Auras.db.char.auras[curSpec].auras[obj:GetName()]) then
 						
 						isAuraInUse = Auras.db.char.auras[curSpec].auras[obj:GetName()].isInUse
@@ -101,19 +101,29 @@ function Auras:CharacterCheck(obj,spec,...)
 					local auras = self.db.char.auras[spec]
 					isAuraInUse = auras.auras[obj:GetName()].isInUse
 					
-					if (isAuraInUse) then
+					--[[if (isAuraInUse) then
 						isPreview = db.elements[spec].isMoving or auras.groups[auras.auras[obj:GetName()].group].isAdjust or (auras.cooldowns.adjust and auras.cooldowns.selected == auras.auras[obj:GetName()].group)
-					end
+					end]]
 				end
 			elseif (objDb == "timerbars") then
+				
 				if (spec == 0) then
-					if (Auras.db.char.timerbars[curSpec].bars[obj:GetName()]) then
+					--local timerbars = self.db.char.timerbars[curSpec]
+					--if (Auras.db.char.timerbars[curSpec].bars[obj:GetName()]) then
 						isAuraInUse = Auras.db.char.timerbars[curSpec].bars[obj:GetName()].isInUse
-					else
-						isAuraInUse = false
-					end
-				else			
+					--else
+						--isAuraInUse = false
+					--end
+					--[[if (isAuraInUse) then
+						isPreview = db.elements[curSpec].isMoving or timerbars.groups[timerbars.bars[obj:GetName()].group].isAdjust or timerbars.bars[obj:GetName()].isAdjust
+					end]]
+				else
+					--local timerbars = self.db.char.timerbars[spec]
 					isAuraInUse = Auras.db.char.timerbars[spec].bars[obj:GetName()].isInUse
+					
+					--[[if (isAuraInUse) then
+						isPreview = db.elements[spec].isMoving or timerbars.groups[timerbars.bars[obj:GetName()].group].isAdjust or timerbars.bars[obj:GetName()].isAdjust
+					end]]
 				end
 			elseif (objDb == "statusbar") then
 				if (spec == 0) then
@@ -147,7 +157,7 @@ function Auras:CharacterCheck(obj,spec,...)
 			isCorrectSpecializationAndClass = false
 		end
 
-		if (select('#',...) > 1) then
+		--[[if (select('#',...) > 1) then
 			local row,col = ...
 
 			if (type(obj) == "number") then
@@ -176,12 +186,14 @@ function Auras:CharacterCheck(obj,spec,...)
 			end
 		else
 			isValidSpell = true
-		end
+		end]]
 
 		--[[if (type(obj) == "table" and obj:GetName() == "EarthShield") then
 			SSA.DataFrame.text:SetText("Earth Shield: "..tostring(isPreview or (isAuraInUse and isCorrectSpecializationAndClass and isValidSpell)))
 		end]]
-		return isPreview or (isAuraInUse and isCorrectSpecializationAndClass and isValidSpell)
+		--return isPreview or (isAuraInUse and isCorrectSpecializationAndClass and isValidSpell)
+		--return isAuraInUse and isCorrectSpecializationAndClass and isValidSpell
+		return isAuraInUse and isCorrectSpecializationAndClass
 	else
 		return false
 	end

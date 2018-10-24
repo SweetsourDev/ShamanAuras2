@@ -17,7 +17,7 @@ Frostbrand.condition = function()
 end
 
 Frostbrand:SetScript('OnUpdate', function(self)
-	if (Auras:CharacterCheck(self,2,self.spellID)) then
+	if ((Auras:CharacterCheck(self,2) and self.condition()) or Auras:IsPreviewingAura(self)) then
 		local groupID = Auras:GetAuraGroupID(self,self:GetName())
 		local buff,_,_,_,duration,expires = Auras:RetrieveAuraInfo('player',self.spellID)
 		local power = UnitPower('player',Enum.PowerType.Maelstrom)

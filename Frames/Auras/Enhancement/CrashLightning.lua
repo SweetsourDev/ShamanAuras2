@@ -19,7 +19,9 @@ local CrashLightning = SSA.CrashLightning
 CrashLightning.spellID = 187874
 CrashLightning.auraID = 242286
 CrashLightning.pulseTime = 0
-CrashLightning.condition = function() return IsSpellKnown(187874) end
+CrashLightning.condition = function()
+	return IsSpellKnown(187874)
+end
 CrashLightning.GetT21SetCount = function()
 	local numSetPieces = 0
 	local setPieces = {
@@ -43,7 +45,7 @@ CrashLightning.GetT21SetCount = function()
 end
 
 CrashLightning:SetScript('OnUpdate', function(self)
-	if (Auras:CharacterCheck(self,2,self.spellID)) then
+	if ((Auras:CharacterCheck(self,2) and self.condition()) or Auras:IsPreviewingAura(self)) then
 		local groupID = Auras:GetAuraGroupID(self,self:GetName())
 		local start,duration = GetSpellCooldown(Auras:GetSpellName(self.spellID))
 		local power = UnitPower('player',Enum.PowerType.Maelstrom)

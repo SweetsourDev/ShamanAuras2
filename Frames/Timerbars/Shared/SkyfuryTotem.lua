@@ -9,22 +9,22 @@ SkyfuryTotemBar.icon = 135829
 SkyfuryTotemBar.start = 0
 SkyfuryTotemBar.duration = 15
 SkyfuryTotemBar.condition = function() 
-	local spellID
 	local spec = GetSpecialization()
-	
-	if (spec == 1) then
+	local spellID = (spec == 1 and 3488) or (spec == 2 and 3487) or (spec == 3 and 707)
+	local _,_,_,_,_,_,_,_,_,selected = GetPvpTalentInfoByID(spellID)
+	--[[if (spec == 1) then
 		spellID = 3488
 	elseif (spec == 2) then
 		spellID = 3487
 	elseif (spec == 3) then
 		spellID = 707
-	end
+	end]]
 	
-	return select(10,GetPvpTalentInfoByID(spellID)) and Auras:IsPvPZone()
+	return selected and Auras:IsPvPZone()
 end
 
 SkyfuryTotemBar:SetScript('OnUpdate',function(self)
-	if (Auras:CharacterCheck(self,1,"3488") or Auras:CharacterCheck(self,2,"3487") or Auras:CharacterCheck(self,3,"707")) then
+	if ((Auras:CharacterCheck(self,1) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
 		Auras:RunTimerBarCode(self)
 	end
 end)

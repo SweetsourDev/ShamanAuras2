@@ -12,10 +12,14 @@ local ElementalBlastBarMastery = SSA.ElementalBlastBarMastery
 ElementalBlastBarCrit.spellID = 118522
 ElementalBlastBarCrit.start = 0
 ElementalBlastBarCrit.duration = 10
-ElementalBlastBarCrit.condition = function() return select(4,GetTalentInfo(1,3,1)) end
+ElementalBlastBarCrit.condition = function()
+	local _,_,_,selected = GetTalentInfo(1,3,1)
+	
+	return selected
+end
 
 ElementalBlastBarCrit:SetScript('OnUpdate',function(self)
-	if (Auras:CharacterCheck(self,1,1,3)) then
+	if ((Auras:CharacterCheck(self,1) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
 		Auras:RunTimerBarCode(self)
 	end
 end)
@@ -32,10 +36,14 @@ end)
 ElementalBlastBarHaste.spellID = 173183
 ElementalBlastBarHaste.start = 0
 ElementalBlastBarHaste.duration = 10
-ElementalBlastBarHaste.condition = function() return select(4,GetTalentInfo(1,3,1)) end
+ElementalBlastBarHaste.condition = function()
+	local _,_,_,selected = GetTalentInfo(1,3,1)
+	
+	return selected
+end
 
 ElementalBlastBarHaste:SetScript('OnUpdate',function(self)
-	if (Auras:CharacterCheck(self,1,1,3)) then
+	if ((Auras:CharacterCheck(self,1) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
 		Auras:RunTimerBarCode(self)
 	end
 end)
@@ -52,10 +60,14 @@ end)
 ElementalBlastBarMastery.spellID = 173184
 ElementalBlastBarMastery.start = 0
 ElementalBlastBarMastery.duration = 10
-ElementalBlastBarMastery.condition = function() return select(4,GetTalentInfo(1,3,1)) end
+ElementalBlastBarMastery.condition = function()
+	local _,_,_,selected = GetTalentInfo(1,3,1)
+	
+	return selected
+end
 
 ElementalBlastBarMastery:SetScript('OnUpdate',function(self)
-	if (Auras:CharacterCheck(self,1,1,3)) then
+	if ((Auras:CharacterCheck(self,1) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
 		Auras:RunTimerBarCode(self)
 	end
 end)

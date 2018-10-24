@@ -7,10 +7,12 @@ local AstralShiftBar = SSA.AstralShiftBar
 AstralShiftBar.spellID = 108271
 AstralShiftBar.start = 0
 AstralShiftBar.duration = 8
-AstralShiftBar.condition = function() return IsSpellKnown(108271) end
+AstralShiftBar.condition = function()
+	return IsSpellKnown(108271)
+end
 
 AstralShiftBar:SetScript('OnUpdate',function(self)
-	if (Auras:CharacterCheck(self,0,108271)) then
+	if ((Auras:CharacterCheck(self,0) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
 		Auras:RunTimerBarCode(self)
 	end
 end)

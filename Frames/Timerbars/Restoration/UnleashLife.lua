@@ -8,11 +8,13 @@ UnleashLifeBar.spellID = 73685
 UnleashLifeBar.start = 0
 UnleashLifeBar.duration = 10
 UnleashLifeBar.condition = function()
-	return select(4,GetTalentInfo(1,3,1))
+	local _,_,_,selected = GetTalentInfo(1,3,1)
+
+	return selected
 end
 
 UnleashLifeBar:SetScript('OnUpdate',function(self)
-	if (Auras:CharacterCheck(self,3,1,3)) then
+	if ((Auras:CharacterCheck(self,3) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
 		Auras:RunTimerBarCode(self)
 	end
 end)

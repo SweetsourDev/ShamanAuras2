@@ -11,11 +11,13 @@ local AncestralProtectionTotem = SSA.AncestralProtectionTotem
 AncestralProtectionTotem.spellID = 207399
 AncestralProtectionTotem.pulseTime = 0
 AncestralProtectionTotem.condition = function()
-	return select(4,GetTalentInfo(4,3,1))
+	local _,_,_,selected = GetTalentInfo(4,3,1)
+	
+	return selected
 end
 
 AncestralProtectionTotem:SetScript('OnUpdate',function(self)
-	if (Auras:CharacterCheck(self,3,4,3)) then
+	if ((Auras:CharacterCheck(self,3) and self.condition()) or Auras:IsPreviewingAura(self)) then
 		local groupID = Auras:GetAuraGroupID(self,self:GetName())
 		local start,duration = GetSpellCooldown(Auras:GetSpellName(self.spellID))
 		

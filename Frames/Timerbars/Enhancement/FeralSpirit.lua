@@ -9,10 +9,12 @@ FeralSpiritBar.icon = 237577
 FeralSpiritBar.start = 0
 FeralSpiritBar.duration = 15
 FeralSpiritBar.lives = 2
-FeralSpiritBar.condition = function() return IsSpellKnown(51533) end
+FeralSpiritBar.condition = function()
+	return IsSpellKnown(51533)
+end
 
 FeralSpiritBar:SetScript('OnUpdate',function(self)
-	if (Auras:CharacterCheck(self,2,51533)) then
+	if ((Auras:CharacterCheck(self,2) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
 		Auras:RunTimerBarCode(self)
 	end
 end)

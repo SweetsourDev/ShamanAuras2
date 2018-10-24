@@ -18,7 +18,7 @@ HealingStreamTotemBarOne.condition = function()
 end
 
 HealingStreamTotemBarOne:SetScript('OnUpdate',function(self)
-	if (Auras:CharacterCheck(self,3,5394)) then
+	if ((Auras:CharacterCheck(self,3) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
 		Auras:RunTimerBarCode(self)
 	end
 end)
@@ -69,7 +69,7 @@ HealingStreamTotemBarTwo.condition = function()
 end
 
 HealingStreamTotemBarTwo:SetScript('OnUpdate',function(self)
-	if (Auras:CharacterCheck(self,3,5394)) then
+	if ((Auras:CharacterCheck(self,3) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
 		Auras:RunTimerBarCode(self)
 	end
 end)

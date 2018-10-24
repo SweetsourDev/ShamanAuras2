@@ -10,11 +10,13 @@ local FlashFlood = SSA.FlashFlood
 FlashFlood.spellID = 280614
 FlashFlood.pulseTime = 0
 FlashFlood.condition = function()
-	return select(4,GetTalentInfo(6,1,1))
+	local _,_,_,selected = GetTalentInfo(6,1,1)
+	
+	return selected
 end
 
 FlashFlood:SetScript('OnUpdate', function(self)
-	if (Auras:CharacterCheck(spec,3,6,1)) then
+	if ((Auras:CharacterCheck(spec,3) and self.condition()) or Auras:IsPreviewingAura(self)) then
 		local groupID = Auras:GetAuraGroupID(self,self:GetName())
 		local buff,_,_,_,duration,expires = Auras:RetrieveAuraInfo("player", self.spellID)
 

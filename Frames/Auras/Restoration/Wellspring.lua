@@ -11,11 +11,13 @@ local Wellspring = SSA.Wellspring
 Wellspring.spellID = 197995
 Wellspring.pulseTime = 0
 Wellspring.condition = function()
-	return select(4,GetTalentInfo(7,2,1))
+	local _,_,_,selected = GetTalentInfo(7,2,1)
+	
+	return selected
 end
 
 Wellspring:SetScript('OnUpdate',function(self)
-	if (Auras:CharacterCheck(self,3,7,2)) then
+	if ((Auras:CharacterCheck(self,3) and self.condition()) or Auras:IsPreviewingAura(self)) then
 		local groupID = Auras:GetAuraGroupID(self,self:GetName())
 		local start,duration = GetSpellCooldown(Auras:GetSpellName(self.spellID))
 	

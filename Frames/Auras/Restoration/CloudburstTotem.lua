@@ -11,11 +11,13 @@ local CloudburstTotem = SSA.CloudburstTotem
 CloudburstTotem.spellID = 157153
 CloudburstTotem.pulsetime = 0
 CloudburstTotem.condition = function()
-	return select(4,GetTalentInfo(6,3,1))
+	local _,_,_,selected = GetTalentInfo(6,3,1)
+	
+	return selected
 end
 
 CloudburstTotem:SetScript('OnUpdate',function(self)
-	if (Auras:CharacterCheck(self,3,6,3)) then
+	if ((Auras:CharacterCheck(self,3) and self.condition()) or Auras:IsPreviewingAura(self)) then
 		local groupID = Auras:GetAuraGroupID(self,self:GetName())
 		local start,duration = GetSpellCooldown(Auras:GetSpellName(self.spellID))
 		local charges,maxCharges,chgStart,chgDuration = GetSpellCharges(self.spellID)

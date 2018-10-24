@@ -11,11 +11,13 @@ local FeralLunge = SSA.FeralLunge
 FeralLunge.spellID = 196884
 FeralLunge.pulseTime = 0
 FeralLunge.condition = function()
-	return select(4,GetTalentInfo(5,2,1))
+	local _,_,_,selected = GetTalentInfo(5,2,1)
+	
+	return selected
 end
 
 FeralLunge:SetScript('OnUpdate',function(self)
-	if (Auras:CharacterCheck(self,2,5,2)) then
+	if ((Auras:CharacterCheck(self,2) and self.condition()) or Auras:IsPreviewingAura(self)) then
 		local groupID = Auras:GetAuraGroupID(self,self:GetName())
 		local start,duration = GetSpellCooldown(Auras:GetSpellName(self.spellID))
 		

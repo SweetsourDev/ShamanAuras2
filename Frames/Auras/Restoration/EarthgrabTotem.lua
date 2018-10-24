@@ -11,11 +11,13 @@ local EarthgrabTotem = SSA.EarthgrabTotem
 EarthgrabTotem.spellID = 51485
 EarthgrabTotem.pulseTime = 0
 EarthgrabTotem.condition = function()
-	return select(4,GetTalentInfo(3,2,1))
+	local _,_,_,selected = GetTalentInfo(3,2,1)
+	
+	return selected
 end
 
 EarthgrabTotem:SetScript('OnUpdate',function(self)
-	if (Auras:CharacterCheck(self,3,3,2)) then
+	if ((Auras:CharacterCheck(self,3) and self.condition()) or Auras:IsPreviewingAura(self)) then
 		local groupID = Auras:GetAuraGroupID(self,self:GetName())
 		local start,duration = GetSpellCooldown(Auras:GetSpellName(self.spellID))
 	

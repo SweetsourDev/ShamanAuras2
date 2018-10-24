@@ -11,11 +11,13 @@ local LiquidMagmaTotem = SSA.LiquidMagmaTotem
 LiquidMagmaTotem.spellID = 192222
 LiquidMagmaTotem.pulseTime = 0
 LiquidMagmaTotem.condition = function()
-	return select(4,GetTalentInfo(4,3,1))
+	local _,_,_,selected = GetTalentInfo(4,3,1)
+	
+	return selected
 end
 
 LiquidMagmaTotem:SetScript('OnUpdate',function(self)
-	if (Auras:CharacterCheck(self,1,4,3)) then
+	if ((Auras:CharacterCheck(self,1) and self.condition()) or Auras:IsPreviewingAura(self)) then
 		local groupID = Auras:GetAuraGroupID(self,self:GetName())
 		local start,duration = GetSpellCooldown(Auras:GetSpellName(self.spellID))
 		

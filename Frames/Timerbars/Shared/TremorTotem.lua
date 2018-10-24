@@ -8,10 +8,12 @@ TremorTotemBar.spellID = 8143
 TremorTotemBar.icon = 136108
 TremorTotemBar.start = 0
 TremorTotemBar.duration = 10
-TremorTotemBar.condition = function() return IsSpellKnown(8143) end
+TremorTotemBar.condition = function()
+	return IsSpellKnown(8143)
+end
 
 TremorTotemBar:SetScript('OnUpdate',function(self)
-	if (Auras:CharacterCheck(self,0,8143)) then
+	if ((Auras:CharacterCheck(self,0) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
 		Auras:RunTimerBarCode(self)
 	end
 end)

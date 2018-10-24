@@ -7,10 +7,12 @@ local CrashLightningBar = SSA.CrashLightningBar
 CrashLightningBar.spellID = 187878
 CrashLightningBar.start = 0
 CrashLightningBar.duration = 10
-CrashLightningBar.condition = function() return IsSpellKnown(187874) end
+CrashLightningBar.condition = function()
+	return IsSpellKnown(187874)
+end
 
 CrashLightningBar:SetScript('OnUpdate',function(self)
-	if (Auras:CharacterCheck(self,2,187874)) then
+	if ((Auras:CharacterCheck(self,2) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
 		Auras:RunTimerBarCode(self)
 	end
 end)

@@ -11,10 +11,12 @@ local HexBar = SSA.HexBar
 HexBar.spellID = 51514
 HexBar.start = 0
 HexBar.duration = 60
-HexBar.condition = function() return IsSpellKnown(51514) end
+HexBar.condition = function()
+	return IsSpellKnown(51514)
+end
 
 HexBar:SetScript('OnUpdate',function(self)
-	if (Auras:CharacterCheck(self,0,51514)) then
+	if ((Auras:CharacterCheck(self,0) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
 		Auras:RunTimerBarCode(self)
 	end
 end)

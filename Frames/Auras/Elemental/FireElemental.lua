@@ -12,11 +12,13 @@ local FireElemental = SSA.FireElemental
 FireElemental.spellID = 198067
 FireElemental.pulseTime = 0
 FireElemental.condition = function()
-	return not select(4,GetTalentInfo(4,2,1)) and IsSpellKnown(198067)
+	local _,_,_,selected = GetTalentInfo(4,2,1)
+	
+	return not selected and IsSpellKnown(198067)
 end
 
 FireElemental:SetScript('OnUpdate',function(self)
-	if (Auras:CharacterCheck(self,1,self.spellID) and self.condition()) then
+	if ((Auras:CharacterCheck(self,1) and self.condition()) or Auras:IsPreviewingAura(self)) then
 		local groupID = Auras:GetAuraGroupID(self,self:GetName())
 		local start,duration = GetSpellCooldown(Auras:GetSpellName(self.spellID))
 		

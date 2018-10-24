@@ -11,13 +11,15 @@ local Ascendance = SSA.Ascendance
 Ascendance.spellID = 114050
 Ascendance.pulseTime = 0
 Ascendance.condition = function()
-	return select(4,GetTalentInfo(7,3,1))
+	local _,_,_,selected = GetTalentInfo(7,3,1)
+	
+	return selected
 end
 
 Ascendance:SetScript('OnUpdate',function(self)
 	self.spellID = (SSA.spec == 1 and 114050) or (SSA.spec == 2 and 114051) or (SSA.spec == 3 and 114052)
 	
-	if (Auras:CharacterCheck(self,0,7,3)) then
+	if ((Auras:CharacterCheck(self,0) and self.condition()) or Auras:IsPreviewingAura(self)) then
 		local groupID = Auras:GetAuraGroupID(self,self:GetName())
 		local start,duration = GetSpellCooldown(Auras:GetSpellName(self.spellID))
 		

@@ -11,11 +11,13 @@ local EtherealForm = SSA.EtherealForm
 EtherealForm.spellID = 210918
 EtherealForm.pulseTime = 0
 EtherealForm.condition = function()
-	return select(10,GetPvpTalentInfoByID(1944)) and Auras:IsPvPZone()
+	local _,_,_,_,_,_,_,_,_,selected = GetPvpTalentInfoByID(1944)
+	
+	return selected and Auras:IsPvPZone()
 end
 
 EtherealForm:SetScript('OnUpdate',function(self)
-	if (Auras:CharacterCheck(self,2,"1944")) then
+	if ((Auras:CharacterCheck(self,2) and self.condition()) or Auras:IsPreviewingAura(self)) then
 		local groupID = Auras:GetAuraGroupID(self,self:GetName())
 		local start,duration = GetSpellCooldown(Auras:GetSpellName(self.spellID))
 		

@@ -7,10 +7,12 @@ local SpiritWalkBar = SSA.SpiritWalkBar
 SpiritWalkBar.spellID = 58875
 SpiritWalkBar.start = 0
 SpiritWalkBar.duration = 8
-SpiritWalkBar.condition = function() return IsSpellKnown(58875) end
+SpiritWalkBar.condition = function()
+	return IsSpellKnown(58875)
+end
 
 SpiritWalkBar:SetScript('OnUpdate',function(self)
-	if (Auras:CharacterCheck(self,2,58875)) then
+	if ((Auras:CharacterCheck(self,2) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
 		Auras:RunTimerBarCode(self)
 	end
 end)

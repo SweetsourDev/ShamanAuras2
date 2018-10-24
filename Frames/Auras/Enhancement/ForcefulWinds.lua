@@ -10,11 +10,13 @@ local ForcefulWinds = SSA.ForcefulWinds
 ForcefulWinds.spellID = 262652
 ForcefulWinds.pulseTime = 0
 ForcefulWinds.condition = function()
-	return select(4,GetTalentInfo(2,2,1))
+	local _,_,_,selected = GetTalentInfo(2,2,1)
+	
+	return selected
 end
 
 SSA.ForcefulWinds:SetScript('OnUpdate', function(self)
-	if (Auras:CharacterCheck(self,2,2,2)) then
+	if ((Auras:CharacterCheck(self,2) and self.condition()) or Auras:IsPreviewingAura(self)) then
 		local groupID = Auras:GetAuraGroupID(self,self:GetName())
 		local buff,_,count,_,duration,expires = Auras:RetrieveAuraInfo('player', self.spellID)
 

@@ -11,11 +11,13 @@ local EarthenWallTotem = SSA.EarthenWallTotem
 EarthenWallTotem.spellID = 198838
 EarthenWallTotem.pulseTime = 0
 EarthenWallTotem.condition = function()
-	return select(4,GetTalentInfo(4,2,1))
+	local _,_,_,selected = GetTalentInfo(4,2,1)
+	
+	return selected
 end
 
 EarthenWallTotem:SetScript('OnUpdate',function(self)
-	if (Auras:CharacterCheck(self,3,4,2)) then
+	if ((Auras:CharacterCheck(self,3) and self.condition()) or Auras:IsPreviewingAura(self)) then
 		local groupID = Auras:GetAuraGroupID(self,self:GetName())
 		local start,duration = GetSpellCooldown(Auras:GetSpellName(self.spellID))
 	

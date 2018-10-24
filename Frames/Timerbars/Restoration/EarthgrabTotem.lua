@@ -9,11 +9,13 @@ EarthgrabTotemBar.icon = 136100
 EarthgrabTotemBar.start = 0
 EarthgrabTotemBar.duration = 20
 EarthgrabTotemBar.condition = function()
-	return select(4,GetTalentInfo(3,2,1))
+	local _,_,_,selected = GetTalentInfo(3,2,1)
+	
+	return selected
 end
 
 EarthgrabTotemBar:SetScript('OnUpdate',function(self)
-	if (Auras:CharacterCheck(self,3,3,2)) then
+	if ((Auras:CharacterCheck(self,3) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
 		Auras:RunTimerBarCode(self)
 	end
 end)

@@ -16,12 +16,14 @@ end]]
 -- Initialize Data Variables
 Tidebringer.spellID = 236501
 Tidebringer.condition = function()
-	return select(10,GetPvpTalentInfoByID(1930)) and Auras:IsPvPZone()
+	local _,_,_,_,_,_,_,_,_,selected = GetPvpTalentInfoByID(1930)
+	
+	return selected and Auras:IsPvPZone()
 end
 
 --SSA.Tidebringer.isTimerActive = false
 Tidebringer:SetScript('OnUpdate',function(self)
-	if (Auras:CharacterCheck(self,3,"1930")) then
+	if ((Auras:CharacterCheck(self,3) and self.condition()) or Auras:IsPreviewingAura(self)) then
 		local groupID = Auras:GetAuraGroupID(self,self:GetName())
 		local buff,_,count = Auras:RetrieveAuraInfo("player",236502)
 		local pvpBuff = Auras:RetrieveAuraInfo("player",269083)

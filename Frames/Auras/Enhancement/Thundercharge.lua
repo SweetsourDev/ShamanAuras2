@@ -11,11 +11,13 @@ local Thundercharge = SSA.Thundercharge
 Thundercharge.spellID = 204366
 Thundercharge.pulseTime = 0
 Thundercharge.condition = function()
-	return select(10,GetPvpTalentInfoByID(725))
+	local _,_,_,_,_,_,_,_,_,selected = GetPvpTalentInfoByID(725)
+	
+	return selected and Auras:IsPvPZone()
 end
 
 Thundercharge:SetScript('OnUpdate',function(self)
-	if (Auras:CharacterCheck(self,2,"725")) then
+	if ((Auras:CharacterCheck(self,2) and self.condition()) or Auras:IsPreviewingAura(self)) then
 		local groupID = Auras:GetAuraGroupID(self,self:GetName())
 		local start,duration = GetSpellCooldown(Auras:GetSpellName(self.spellID))
 		

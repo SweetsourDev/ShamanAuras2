@@ -11,11 +11,13 @@ local Downpour = SSA.Downpour
 Downpour.spellID = 207778
 Downpour.pulseTime = 0
 Downpour.condition = function()
-	return select(4,GetTalentInfo(6,2,1))
+	local _,_,_,selected = GetTalentInfo(6,2,1)
+	
+	return selected
 end
 
 Downpour:SetScript('OnUpdate',function(self)
-	if (Auras:CharacterCheck(self,3,6,2)) then
+	if ((Auras:CharacterCheck(self,3) and self.condition()) or Auras:IsPreviewingAura(self)) then
 		local groupID = Auras:GetAuraGroupID(self,self:GetName())
 		local start,duration = GetSpellCooldown(Auras:GetSpellName(self.spellID))
 		

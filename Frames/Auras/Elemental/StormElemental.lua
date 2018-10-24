@@ -11,11 +11,13 @@ local StormElemental = SSA.StormElemental
 StormElemental.spellID = 192249
 StormElemental.pulseTime = 0
 StormElemental.condition = function()
-	return select(4,GetTalentInfo(4,2,1))
+	local _,_,_,selected = GetTalentInfo(4,2,1)
+	
+	return selected
 end
 
 StormElemental:SetScript('OnUpdate',function(self)
-	if (Auras:CharacterCheck(self,1,4,2)) then
+	if ((Auras:CharacterCheck(self,1) and self.condition()) or Auras:IsPreviewingAura(self)) then
 		local groupID = Auras:GetAuraGroupID(self,self:GetName())
 		local start,duration = GetSpellCooldown(Auras:GetSpellName(self.spellID))
 		

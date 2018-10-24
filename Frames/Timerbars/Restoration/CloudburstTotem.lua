@@ -9,11 +9,13 @@ CloudburstTotemBar.icon = 971076
 CloudburstTotemBar.start = 0
 CloudburstTotemBar.duration = 15
 CloudburstTotemBar.condition = function()
-	return select(4,GetTalentInfo(6,3,1))
+	local _,_,_,selected = GetTalentInfo(6,3,1)
+	
+	return selected
 end
 
 CloudburstTotemBar:SetScript('OnUpdate',function(self)
-	if (Auras:CharacterCheck(self,3,6,3)) then
+	if ((Auras:CharacterCheck(self,3) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
 		Auras:RunTimerBarCode(self)
 	end
 end)

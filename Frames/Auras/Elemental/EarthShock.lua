@@ -17,7 +17,7 @@ EarthShock.condition = function()
 end
 
 EarthShock:SetScript('OnUpdate', function(self)
-	if (Auras:CharacterCheck(self,1,self.spellID)) then
+	if ((Auras:CharacterCheck(self,1) and self.condition()) or Auras:IsPreviewingAura(self)) then
 		local groupID = Auras:GetAuraGroupID(self,self:GetName())
 		local power = UnitPower('player',Enum.PowerType.Maelstrom)
 		local glow = Auras.db.char.auras[1].auras[self:GetName()].glow

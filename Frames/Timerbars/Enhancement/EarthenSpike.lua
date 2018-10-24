@@ -7,10 +7,14 @@ local EarthenSpikeBar = SSA.EarthenSpikeBar
 EarthenSpikeBar.spellID = 188089
 EarthenSpikeBar.start = 0
 EarthenSpikeBar.duration = 10
-EarthenSpikeBar.condition = function() return select(4,GetTalentInfo(7,2,1)) end
+EarthenSpikeBar.condition = function()
+	local _,_,_,selected = GetTalentInfo(7,2,1)
+	
+	return selected
+end
 
 EarthenSpikeBar:SetScript('OnUpdate',function(self)
-	if (Auras:CharacterCheck(self,2,7,2)) then
+	if ((Auras:CharacterCheck(self,2) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
 		Auras:RunTimerBarCode(self)
 	end
 end)

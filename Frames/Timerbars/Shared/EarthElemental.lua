@@ -10,10 +10,12 @@ EarthElementalBar.icon = 136024
 EarthElementalBar.start = 0
 EarthElementalBar.duration = 60
 EarthElementalBar.GUID = ''
-EarthElementalBar.condition = function() return IsSpellKnown(198103) end
+EarthElementalBar.condition = function()
+	return IsSpellKnown(198103)
+end
 
 EarthElementalBar:SetScript('OnUpdate',function(self)
-	if (Auras:CharacterCheck(self,0,198103)) then
+	if ((Auras:CharacterCheck(self,0) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
 		Auras:RunTimerBarCode(self)
 	end
 end)
@@ -32,10 +34,14 @@ PrimalEarthElementalBar.start = 0
 PrimalEarthElementalBar.duration = 60
 PrimalEarthElementalBar.GUID = ''
 PrimalEarthElementalBar.isPrimal = true
-PrimalEarthElementalBar.condition = function() return select(4,GetTalentInfo(6,2,1)) end
+PrimalEarthElementalBar.condition = function()
+	local _,_,_,selected = GetTalentInfo(6,2,1)
+	
+	return selected
+end
 
 PrimalEarthElementalBar:SetScript('OnUpdate',function(self)
-	if (Auras:CharacterCheck(self,1,6,2)) then
+	if ((Auras:CharacterCheck(self,1) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
 		Auras:RunTimerBarCode(self)
 	end
 end)

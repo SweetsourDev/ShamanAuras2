@@ -12,14 +12,15 @@ EarthShield.pulseTime = 0
 EarthShield.charges = 0
 EarthShield.condition = function()
 	local row,col = (SSA.spec == 1 and 3) or (SSA.spec == 2 and 3) or (SSA.spec == 3 and 2), (SSA.spec == 1 and 2) or (SSA.spec == 2 and 2) or (SSA.spec == 3 and 3)
+	local _,_,_,selected = GetTalentInfo(row,col,1)
 	
-	return select(4,GetTalentInfo(row,col,1))
+	return selected
 end
 
 EarthShield:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 
 EarthShield:SetScript('OnUpdate',function(self)
-	if (Auras:CharacterCheck(self,0,self.spellID)) then
+	if ((Auras:CharacterCheck(self,0) and self.condition()) or Auras:IsPreviewingAura(self)) then
 		--local spec,groupID = Auras:GetAuraInfo(self,self:GetName())
 		local groupID = Auras:GetAuraGroupID(self,self:GetName())
 		local buff,_,count,_,duration,expires = Auras:RetrieveAuraInfo("player",self.spellID,"HELPFUL")

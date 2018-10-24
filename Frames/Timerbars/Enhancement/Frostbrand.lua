@@ -7,10 +7,12 @@ local FrostbrandBar = SSA.FrostbrandBar
 FrostbrandBar.spellID = 196834
 FrostbrandBar.start = 0
 FrostbrandBar.duration = 16
-FrostbrandBar.condition = function() return IsSpellKnown(196834) end
+FrostbrandBar.condition = function()
+	return IsSpellKnown(196834)
+end
 
 FrostbrandBar:SetScript('OnUpdate',function(self)
-	if (Auras:CharacterCheck(self,2,196834)) then
+	if ((Auras:CharacterCheck(self,2) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
 		Auras:RunTimerBarCode(self)
 	end
 end)
