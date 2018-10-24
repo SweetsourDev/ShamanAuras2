@@ -62,7 +62,7 @@ MaelstromBar.Lightning:SetAlpha(0)
 MaelstromBar.Lightning:SetSequence(37)
 
 MaelstromBar:SetScript('OnUpdate',function(self,elaps)
-	if (Auras:CharacterCheck(nil,1) or Auras:CharacterCheck(nil,2)) then
+	if (Auras:CharacterCheck(nil,1) or Auras:CharacterCheck(nil,2) or Auras:IsPreviewingStatusbar(self)) then
 		local powerID = Enum.PowerType.Maelstrom
 		--local spec = GetSpecialization()
 		local isCombat = UnitAffectingCombat('player')
@@ -70,7 +70,7 @@ MaelstromBar:SetScript('OnUpdate',function(self,elaps)
 
 		local db = Auras.db.char
 		local bar = db.statusbars[SSA.spec].bars.MaelstromBar
-		local isMoving = db.elements.isMoving
+		local isMoving = db.elements[SSA.spec].isMoving
 
 		local _,maxVal = self:GetMinMaxValues()
 		
@@ -85,7 +85,7 @@ MaelstromBar:SetScript('OnUpdate',function(self,elaps)
 			self.text:SetText(maxPower)
 		end
 		
-		if (bar.adjust.isEnabled) then
+		if (Auras:IsPreviewingStatusbar(self)) then
 			local tempPower = floor(maxPower - (maxPower * 0.75))
 			self.text:SetText(tostring(tempPower))
 			
@@ -155,15 +155,15 @@ MaelstromBar:SetScript('OnUpdate',function(self,elaps)
 end)
 
 MaelstromBar:SetScript('OnMouseDown',function(self,button)
-	if (Auras.db.char.elements.isMoving) then
-		Auras:MoveOnMouseDown(self,'AuraBase',button)
+	if (Auras.db.char.elements[SSA.spec].isMoving) then
+		Auras:MoveOnMouseDown(self,button)
 	end
 end)
 
 MaelstromBar:SetScript('OnMouseUp',function(self,button)
-	if (Auras.db.char.elements.isMoving) then
+	if (Auras.db.char.elements[SSA.spec].isMoving) then
 		Auras:MoveOnMouseUp(self,button)
-		Auras:UpdateLayout(self,Auras.db.char.elements[GetSpecialization()].statusbars.maelstromBar)
+		Auras:UpdateLayout(self,Auras.db.char.statusbars[SSA.spec].bars.MaelstromBar)
 	end
 end)
 

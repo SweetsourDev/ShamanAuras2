@@ -363,10 +363,23 @@ function Auras:GlowHandler(obj)
 	end]]
 end
 
+function Auras:IsPreviewingAura(obj,grp)
+	local auras = self.db.char.auras[SSA.spec]
+
+	-- Because all specs are being funneled into this function, we need to cancel its process if it's trying to check for an aura that does NOT exist within the respective spec
+	if (not auras.auras[obj:GetName()]) then
+		return false
+	end
+	
+	local group = (grp and grp) or auras.auras[obj:GetName()].group
+	
+	return self.db.char.elements[SSA.spec].isMoving or auras.groups[group].isAdjust or (auras.cooldowns.adjust and auras.cooldowns.selected == group)
+end
+
 function Auras:IsPreviewingTimerbar(obj)
-	--local spec = SSA.spec or GetSpecialization()
 	local timerbars = self.db.char.timerbars[SSA.spec]
 	
+	-- Because all specs are being funneled into this function, we need to cancel its process if it's trying to check for a timerbar that does NOT exist within the respective spec
 	if (not timerbars.bars[obj:GetName()]) then
 		return false
 	end
@@ -374,15 +387,16 @@ function Auras:IsPreviewingTimerbar(obj)
 	return self.db.char.elements[SSA.spec].isMoving or timerbars.groups[timerbars.bars[obj:GetName()].layout.group].isAdjust or timerbars.bars[obj:GetName()].isAdjust
 end
 
-function Auras:IsPreviewingAura(obj)
-	local auras = self.db.char.auras[SSA.spec]
+function Auras:IsPreviewingStatusbar(obj)
+	local statusbars = self.db.char.statusbars[SSA.spec]
 	
-	if (not auras.auras[obj:GetName()]) then
+	if (not statusbars.bars[obj:GetName()]) then
 		return false
 	end
 	
-	return self.db.char.elements[SSA.spec].isMoving or auras.groups[auras.auras[obj:GetName()].group].isAdjust or (auras.cooldowns.adjust and auras.cooldowns.selected == auras.auras[obj:GetName()].group)
+	return self.db.char.elements[SSA.spec].isMoving or statusbars.bars[obj:GetName()].adjust.isEnabled
 end
+
 -- Returns the current spec as well as group ID for the specified aura
 --function Auras:GetAuraInfo(obj,debugHelper)
 function Auras:GetAuraGroupID(obj,debugHelper)

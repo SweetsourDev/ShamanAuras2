@@ -39,13 +39,14 @@ end
 function Auras:ToggleProgressBarMove(self,isMoving,db)
 	if (isMoving) then
 		db.adjust.isEnabled = false
-		
+		print(self:GetName()..": MOVING BAR")
 		if (not self:IsMouseEnabled()) then
 			self:EnableMouse(true)
 			self:SetMovable(true)
 		end
 		self:SetAlpha(1)
 	else
+		print(self:GetName()..": NOT MOVING BAR")
 		if (self:IsMouseEnabled()) then
 			self:EnableMouse(false)
 			self:SetMovable(false)

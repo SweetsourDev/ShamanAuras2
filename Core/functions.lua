@@ -185,29 +185,6 @@ function Auras:RetrieveAuraInfo(unit,spellID,filter)
 	return false
 end
 
--- Searches through the unit's buffs for a specific buff, by name
-function Auras:RetrieveBuffInfo(unit,spellName)
-	for i=1,BUFF_MAX_DISPLAY do
-		local name = UnitBuff(unit,i)
-
-		if (name == spellName) then
-			return UnitBuff(unit,i)
-		end
-	end
-end
-
-
--- Searches through the unit's debuffs for a specific debuff, by name
-function Auras:RetrieveDebuffInfo(unit,spellName)
-	for i=1,DEBUFF_MAX_DISPLAY do
-		local name = UnitDebuff(unit,i)
-		
-		if (name == spellName) then
-			return UnitDebuff(unit,i)
-		end
-	end
-end
-
 -------------------------------------------------------------------------------------------------------
 ----- Miscellaneous Utility Functions
 -------------------------------------------------------------------------------------------------------
@@ -350,7 +327,7 @@ function Auras:BuildMoveUI(obj)
 	Move.Info = CreateFrame("Frame","MoveInfoFrame",UIParent)
 
 	Move.Info:SetWidth(446)
-	Move.Info:SetHeight(115)
+	Move.Info:SetHeight(125)
 	Move.Info:SetPoint("TOPLEFT",UIParent,"TOPLEFT",100,-100)
 	Move.Info:SetBackdrop(SSA.BackdropSB)
 	Move.Info:SetBackdropColor(0.15,0.15,0.15,0.9)
@@ -1051,7 +1028,8 @@ function Auras:UpdateTalents(isTalentChange)
 
 						--rowList[v.order] = v.isEnabled and (bar.condition() or db.elements[spec].isMoving or auras.cooldowns.groups[i].isPreview)
 						--if (numActiveAuras == 0 and v.order == 1 and (db.elements[spec].isMoving or auras.groups[i].isAdjust or (auras.cooldowns.adjust and auras.cooldowns.selected == i))) then
-						if (numActiveAuras == 0 and (db.elements[spec].isMoving or auras.groups[i].isAdjust or (auras.cooldowns.adjust and auras.cooldowns.selected == i))) then
+						--if (numActiveAuras == 0 and (db.elements[spec].isMoving or auras.groups[i].isAdjust or (auras.cooldowns.adjust and auras.cooldowns.selected == i))) then
+						if (numActiveAuras == 0 and Auras:IsPreviewingAura(bar,i)) then
 							if ((v.talentRow > 0 and talentRows[v.talentRow]) or v.talentRow == 0) then
 								talentRows[v.talentRow] = false
 								rowList[v.order] = true

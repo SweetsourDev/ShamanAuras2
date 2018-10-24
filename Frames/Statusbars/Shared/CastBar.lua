@@ -62,7 +62,7 @@ CastBar:SetScript('OnUpdate',function(self)
 		local spec = GetSpecialization()
 		local db = Auras.db.char
 		local bar = Auras.db.char.statusbars[spec].bars.CastBar
-		local isMoving = db.elements.isMoving
+		local isMoving = db.elements[spec].isMoving
 
 		Auras:ToggleProgressBarMove(self,isMoving,bar)
 		
@@ -85,7 +85,8 @@ CastBar:SetScript('OnUpdate',function(self)
 			self.spark:Hide()
 		end
 		
-		if (bar.adjust.isEnabled) then
+		--if (bar.adjust.isEnabled) then
+		if (Auras:IsPreviewingStatusbar(self)) then
 			local name,_,texture = GetSpellInfo(51505)
 			self.nametext:SetText(name)
 			self.timetext:SetText('3.0')
@@ -163,15 +164,15 @@ CastBar:SetScript('OnUpdate',function(self)
 end)
 
 CastBar:SetScript('OnMouseDown',function(self,button)
-	if (Auras.db.char.elements.isMoving) then
-		Auras:MoveOnMouseDown(self,'AuraBase',button)
+	if (Auras.db.char.elements[SSA.spec].isMoving) then
+		Auras:MoveOnMouseDown(self,button)
 	end
 end)
 
 CastBar:SetScript('OnMouseUp',function(self,button)
-	if (Auras.db.char.elements.isMoving) then
+	if (Auras.db.char.elements[SSA.spec].isMoving) then
 		Auras:MoveOnMouseUp(self,button)
-		Auras:UpdateLayout(self,Auras.db.char.elements[GetSpecialization()].statusbars.castBar)
+		Auras:UpdateLayout(self,Auras.db.char.statusbar[SSA.spec].bars.CastBar)
 	end
 end)
 

@@ -34,11 +34,17 @@ IcefuryBar.Timer:SetMinMaxValues(0,15)
 IcefuryBar.counttext = IcefuryBar.Timer:CreateFontString(nil, 'HIGH', 'GameFontHighlightLarge')
 IcefuryBar.timetext = IcefuryBar.Timer:CreateFontString(nil, 'HIGH', 'GameFontHighlightLarge')
 
+IcefuryBar.condition = function()
+	local _,_,_,selected = GetTalentInfo(6,3,1)
+	
+	return selected
+end
+
 IcefuryBar:SetScript('OnUpdate',function(self)
-	if (Auras:CharacterCheck(nil,1,6,3)) then
+	if ((Auras:CharacterCheck(nil,1) and self.condition()) or Auras:IsPreviewingStatusbar(self)) then
 		local db = Auras.db.char
 		local bar = db.statusbars[1].bars.IcefuryBar
-		local isMoving = db.elements.isMoving
+		local isMoving = db.elements[1].isMoving
 
 		Auras:ToggleProgressBarMove(self,isMoving,bar)
 		
@@ -49,7 +55,7 @@ IcefuryBar:SetScript('OnUpdate',function(self)
 			self.timetext:SetText('15')
 		end
 		
-		if (bar.adjust.isEnabled) then
+		if (Auras:IsPreviewingStatusbar(self)) then
 			self:SetAlpha(1)
 			
 			Auras:AdjustStatusBarText(self.counttext,bar.counttext)
@@ -96,7 +102,7 @@ IcefuryBar:SetScript('OnUpdate',function(self)
 		end		
 
 		if (bar.isEnabled and not isMoving and not bar.adjust.isEnabled) then
-			local buff,_,count,_,_,expires = Auras:RetrieveBuffInfo("player", Auras:GetSpellName(210714))
+			local buff,_,count,_,_,expires = Auras:RetrieveAuraInfo("player", Auras:GetSpellName(210714))
 			
 			if (buff) then
 				local timer,seconds = Auras:parseTime(expires - GetTime(),false)
@@ -134,15 +140,15 @@ IcefuryBar:SetScript('OnUpdate',function(self)
 end)
 
 IcefuryBar:SetScript('OnMouseDown',function(self,button)
-	if (Auras.db.char.elements.isMoving) then
-		Auras:MoveOnMouseDown(self,'AuraBase',button)
+	if (Auras.db.char.elements[1].isMoving) then
+		Auras:MoveOnMouseDown(self,button)
 	end
 end)
 
 IcefuryBar:SetScript('OnMouseUp',function(self,button)
-	if (Auras.db.char.elements.isMoving) then
+	if (Auras.db.char.elements[1].isMoving) then
 		Auras:MoveOnMouseUp(self,button)
-		Auras:UpdateLayout(self,Auras.db.char.elements[1].statusbars.icefuryBar)
+		Auras:UpdateLayout(self,Auras.db.char.statusbars[1].bars.IcefuryBar)
 	end
 end);
 

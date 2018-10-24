@@ -45,7 +45,7 @@ ChannelBar:SetScript('OnUpdate',function(self)
 		local spec = GetSpecialization()
 		local db = Auras.db.char
 		local bar = Auras.db.char.statusbars[spec].bars.ChannelBar
-		local isMoving = db.elements.isMoving
+		local isMoving = db.elements[spec].isMoving
 		
 		Auras:ToggleProgressBarMove(self,isMoving,bar)
 		
@@ -64,7 +64,8 @@ ChannelBar:SetScript('OnUpdate',function(self)
 			self.spark:Hide()
 		end
 		
-		if (bar.adjust.isEnabled) then
+		--if (bar.adjust.isEnabled) then
+		if (Auras:IsPreviewingStatusbar(self)) then
 			local name,_,texture = GetSpellInfo(6196)
 			self.nametext:SetText(name)
 			self:SetAlpha(1)
@@ -130,15 +131,15 @@ ChannelBar:SetScript('OnUpdate',function(self)
 end)
 
 ChannelBar:SetScript('OnMouseDown',function(self,button)
-	if (Auras.db.char.elements.isMoving) then
-		Auras:MoveOnMouseDown(self,'AuraBase',button)
+	if (Auras.db.char.elements[SSA.spec].isMoving) then
+		Auras:MoveOnMouseDown(self,button)
 	end
 end)
 
 ChannelBar:SetScript('OnMouseUp',function(self,button)
-	if (Auras.db.char.elements.isMoving) then
+	if (Auras.db.char.elements[SSA.spec].isMoving) then
 		Auras:MoveOnMouseUp(self,button)
-		Auras:UpdateLayout(self,Auras.db.char.elements[GetSpecialization()].statusbars.channelBar)
+		Auras:UpdateLayout(self,Auras.db.char.statusbars[SSA.spec].bars.ChannelBar)
 	end
 end)
 
