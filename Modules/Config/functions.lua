@@ -2837,6 +2837,7 @@ function Auras:RefreshTimerBarGroupList(options,spec)
 					set = function(this,value)
 						timerbars.groups[i].isAdjust = value
 						
+						Auras:UpdateTalents()
 						
 						for k,v in pairs(timerbars.bars) do
 							if (v.layout.group == i and value) then
@@ -2850,7 +2851,7 @@ function Auras:RefreshTimerBarGroupList(options,spec)
 							end
 						end
 						
-						Auras:UpdateTalents()
+						
 						Auras:RefreshTimerBarGroupList(this.options,spec)
 						
 						

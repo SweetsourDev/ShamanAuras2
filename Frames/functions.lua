@@ -3,6 +3,7 @@ local SSA, Auras, _, _, LBG = unpack(select(2,...))
 -- Cache Global Lua Functions
 local floor = math.floor
 local gsub, tonumber, tostring = gsub, tonumber, tostring
+local twipe = table.wipe
 
 -- Cache Global WoW API Functions
 local GetSpecialization = GetSpecialization
@@ -397,69 +398,103 @@ function Auras:SortTimerBars(spec)
 	local timerbars = db.timerbars[spec]
 	local direction = 1
 
+	-- Create a sub-table for each group of bars
+	for i=1,#timerbars.groups do
+		barsShowing[i] = {}
+	end
+	
 	-- Collect timer bars that have a start time that's greater than 0
 	for k,v in pairs(timerbars.bars) do
 		local bar = SSA[k]
 		if (bar.start > 0) then
-			tinsert(barsShowing,bar.start)
+			tinsert(barsShowing[v.layout.group],bar.start)
 		elseif (v.isAdjust) then
 			--print("Inserting: "..k..";"..tostring(v.group))
-			tinsert(barsShowing,k..";"..v.layout.group)
+			tinsert(barsShowing[v.layout.group],k..";"..v.layout.group)
 		end
 	end
 	
-	table.sort(barsShowing)
+	SSA.DataFrame.text:SetText('')
 	
-	for i=1,#barsShowing do
-		if (type(barsShowing[i]) == "number") then
-			for k,v in pairs(timerbars.bars) do
-				local bar = SSA[k]
-				
-				if (bar.start == barsShowing[i]) then
-					local layout = timerbars.groups[v.layout.group].layout
+	for j=1,#barsShowing do
+		table.sort(barsShowing[j])
+		for i=1,#barsShowing[j] do
+			if (type(barsShowing[j][i]) == "number") then
+				for k,v in pairs(timerbars.bars) do
+					local bar = SSA[k]
 					
-					if (layout.growth == "RIGHT" or layout.growth == "UP") then
-						direction = 1
-					elseif (layout.growth == "LEFT" or layout.growth == "DOWN") then
-						direction = -1
-					end
-		
-					local offset = (((i - 1) * layout.spacing) + ((i - 1) * layout.height)) * direction
-					
-					if (k == "AncestralGuidanceBar") then
-						print("Offset: "..tostring(offset))
-					end
-					SSA[k]:ClearAllPoints()
-					
-					if (layout.orientation == "VERTICAL") then
-						SSA[k]:SetPoint("CENTER",offset,0)
-					else
-						SSA[k]:SetPoint("TOP",0,offset)
+					if (bar.start == barsShowing[j][i]) then
+						local layout = timerbars.groups[v.layout.group].layout
+						
+						if (layout.growth == "RIGHT" or layout.growth == "UP") then
+							direction = 1
+						elseif (layout.growth == "LEFT" or layout.growth == "DOWN") then
+							direction = -1
+						end
+			
+						local offset = (((i - 1) * layout.spacing) + ((i - 1) * layout.height)) * direction
+						if (j == 1) then
+							SSA.DataFrame.text:SetText(Auras:CurText('DataFrame')..k..": "..offset.."\n")
+						end
+						if (k == "AncestralGuidanceBar") then
+							print("Offset: "..tostring(offset))
+						end
+						SSA[k]:ClearAllPoints()
+						
+						if (layout.orientation == "VERTICAL") then
+							SSA[k]:SetPoint("CENTER",offset,0)
+						else
+							SSA[k]:SetPoint("TOP",0,offset)
+						end
 					end
 				end
-			end
-		else
-			local barName,barGroup = strsplit(";",barsShowing[i])
-			--print("BAR GROUP: "..tostring(barInfo[1]).." ("..tostring(barsShowing[i])..")")
-			local layout = timerbars.groups[tonumber(barGroup)].layout
-					
-			if (layout.growth == "RIGHT" or layout.growth == "UP") then
-				direction = 1
-			elseif (layout.growth == "LEFT" or layout.growth == "DOWN") then
-				direction = -1
-			end
-
-			local offset = (((i - 1) * layout.spacing) + ((i - 1) * layout.height)) * direction
-
-			SSA[barName]:ClearAllPoints()
-			--SSA[barName]:SetPoint(layout.anchor,offset,0)
-			if (layout.orientation == "VERTICAL") then
-				SSA[barName]:SetPoint("CENTER",offset,0)
 			else
-				SSA[barName]:SetPoint("TOPLEFT",0,offset)
+				local anchor = ''
+				local barName,barGroupID = strsplit(";",barsShowing[j][i])
+				--print("BAR GROUP: "..tostring(barInfo[1]).." ("..tostring(barsShowing[i])..")")
+				local layout = timerbars.groups[tonumber(barGroupID)].layout
+				local barGroup = timerbars.groups[tonumber(barGroupID)]
+						
+				if (barGroup.layout.growth == "RIGHT" or barGroup.layout.growth == "UP") then
+					direction = 1
+				elseif (barGroup.layout.growth == "LEFT" or barGroup.layout.growth == "DOWN") then
+					direction = -1
+				end
+
+				local offset = ((((i - 1) * barGroup.layout.spacing) + ((i - 1) * barGroup.layout.height)) + 7.5) * direction
+				if (j == 1) then
+					SSA.DataFrame.text:SetText(Auras:CurText('DataFrame')..barName..": "..offset.."\n")
+				end
+				SSA[barName]:ClearAllPoints()
+				--SSA[barName]:SetPoint(layout.anchor,offset,0)
+				if (barGroup.layout.orientation == "VERTICAL") then
+					if (barGroup.barCount <= 1) then
+						anchor = "CENTER"
+					else
+						if (barGroup.layout.growth == "RIGHT") then
+							anchor = "LEFT"
+						elseif (barGroup.layout.growth == "LEFT") then
+							anchor = "RIGHT"
+						end
+					end
+					SSA[barName]:SetPoint(anchor,offset,0)
+				else
+					if (barGroup.barCount <= 1) then
+						anchor = "CENTER"
+					else
+						if (barGroup.layout.growth == "UP") then
+							anchor = "BOTTOM"
+						elseif (barGroup.layout.growth == "DOWN") then
+							anchor = "TOP"
+						end
+					end
+					SSA[barName]:SetPoint(anchor,0,offset)
+				end
 			end
 		end
 	end
+	
+	--twipe(barsShowing)
 end
 
 local function RunTimer(bar,db,start,duration)
@@ -495,7 +530,7 @@ local function PreviewTimerBar(bar,group,isAdjust)
 	if (isAdjust) then
 		Auras:SortTimerBars(spec)
 	else
-		if (Auras.db.char.layout[spec].timerbars.groups[group].layout.orientation == "VERTICAL") then
+		if (Auras.db.char.timerbars[spec].groups[group].layout.orientation == "VERTICAL") then
 			bar:SetPoint("CENTER",0,0)
 		else
 			bar:SetPoint("TOPLEFT",0,0)

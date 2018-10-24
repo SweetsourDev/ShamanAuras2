@@ -89,7 +89,7 @@ function Auras:AdjustStatusBarText(self,db)
 		self:SetAlpha(0)
 	end
 end
-
+--[[
 -- Toggles the movement of a frame.
 function Auras:ToggleFrameMove(obj,isMoving)
 	if (isMoving) then
@@ -132,7 +132,7 @@ function Auras:ToggleProgressBarMove(self,isMoving,db)
 	end
 end
 
-
+]]
 
 -------------------------------------------------------------------------------------------------------
 ----- Functions that retrieve and return information
@@ -835,7 +835,53 @@ end
     end
 ]]
 
-local function UpdateParentDimensions(spec,group,validAuraCtr)
+local function UpdateTimerbarParentDimensions(spec)
+	--local timerbars = Auras.db.char.timerbars[spec]
+	for i=1,#Auras.db.char.timerbars[spec].groups do
+		local barGroup = Auras.db.char.timerbars[spec].groups[i]
+		local parent = SSA["BarGroup"..i]
+		local padding = 15
+		local width,height,x,y = 0,0,0,0
+		local anchor = ''
+		
+		if (barGroup.layout.growth == "RIGHT") then
+			anchor = "LEFT"
+		elseif (barGroup.layout.growth == "LEFT") then
+			anchor = "RIGHT"
+		elseif (barGroup.layout.growth == "UP") then
+			anchor = "BOTTOM"
+		else
+			anchor = "TOP"
+		end
+		
+		local point,relativeTo,relativePoint,parentX,parentY = parent:GetPoint()
+		
+		if (barGroup.barCount <= 1) then
+			parent:SetPoint("CENTER",relativeTo,"CENTER",parentX,parentY)
+		else
+			parent:SetPoint(anchor,relativeTo,"CENTER",parentX,parentY)
+		end
+		
+		if (barGroup.layout.orientation == "VERTICAL") then
+			width = barGroup.layout.height
+			height = barGroup.layout.width
+		else
+			width = barGroup.layout.width
+			height = barGroup.layout.height
+		end
+		
+		--if (barGroup.barCount > 0) then	
+			x = (barGroup.barCount * (barGroup.layout.spacing + width)) + padding
+			y = height + padding
+			
+			parent:SetSize(x,y)
+		--[[else
+		
+		end]]
+	end
+end
+
+local function UpdateAuraParentDimensions(spec,group,validAuraCtr)
 	local layout = Auras.db.char.auras[spec].groups[group]
 	local parent = SSA["AuraGroup"..group]
 	local padding = 15
@@ -1031,12 +1077,15 @@ function Auras:UpdateTalents(isTalentChange)
 				end	
 			end
 			
-			UpdateParentDimensions(spec,i,validAuraCtr)
+			UpdateAuraParentDimensions(spec,i,validAuraCtr)
+			
 			
 			twipe(rowObj)
 			twipe(rowList)
 			twipe(rowVerify)
-		end		
+		end
+		
+		UpdateTimerbarParentDimensions(spec)
 	elseif (spec == 2) then -- Enhancement
 		Auras:InitializeCooldowns(spec)
 		
@@ -1076,7 +1125,7 @@ function Auras:UpdateTalents(isTalentChange)
 				end	
 			end
 			
-			UpdateParentDimensions(spec,i)
+			UpdateAuraParentDimensions(spec,i)
 			
 			twipe(rowObj)
 			twipe(rowList)
@@ -1128,7 +1177,7 @@ function Auras:UpdateTalents(isTalentChange)
 				end	
 			end
 			
-			UpdateParentDimensions(spec,i)
+			UpdateAuraParentDimensions(spec,i)
 			
 			twipe(rowObj)
 			twipe(rowList)

@@ -5431,7 +5431,7 @@ local defaults = {
 					isAdjust = false,
 				},
 				[2] = {
-					barCount = 7,
+					barCount = 15,
 					name = "Utility Timers",
 					layout = {
 						width = 175,

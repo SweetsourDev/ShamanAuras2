@@ -2965,8 +2965,8 @@ InterfaceOptionsFrame:HookScript("OnHide",function(self)
 	for k,v in pairs(db.timerbars[1].bars) do
 		if (v.isAdjust) then
 			v.isAdjust = false
-			if (db.timerbars[1].groups[v.group].isAdjust) then
-				db.timerbars[1].groups[v.group].isAdjust = false
+			if (db.timerbars[1].groups[v.layout.group].isAdjust) then
+				db.timerbars[1].groups[v.layout.group].isAdjust = false
 			end
 		end
 	end

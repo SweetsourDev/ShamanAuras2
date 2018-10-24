@@ -178,9 +178,9 @@ function Auras:CharacterCheck(obj,spec,...)
 			isValidSpell = true
 		end
 
-		if (type(obj) == "table" and obj:GetName() == "EarthShield") then
+		--[[if (type(obj) == "table" and obj:GetName() == "EarthShield") then
 			SSA.DataFrame.text:SetText("Earth Shield: "..tostring(isPreview or (isAuraInUse and isCorrectSpecializationAndClass and isValidSpell)))
-		end
+		end]]
 		return isPreview or (isAuraInUse and isCorrectSpecializationAndClass and isValidSpell)
 	else
 		return false

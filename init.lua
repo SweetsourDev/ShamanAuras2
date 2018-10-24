@@ -353,9 +353,6 @@ end
 
 -- Aura Group Builder
 function Auras:CreateGroup(name,parent,itr)
-	if (not itr) then
-		SSA.DataFrame.text:SetText(Auras:CurText('DataFrame').."GROUP ERROR: "..tostring(name).."\n")
-	end
 	local Group = CreateFrame('Frame',name..(itr or ''),parent)
 	Group:SetFrameStrata("BACKGROUND")
 	Group:RegisterForDrag('LeftButton')
@@ -403,17 +400,17 @@ function Auras:BuildAuraGroups()
 				local BarGroup = Auras:CreateGroup('BarGroup',SSA.AuraBase,j)
 				
 				BarGroup:SetScript('OnUpdate',function(self,button)
-					Auras:ToggleFrameMove(self,Auras.db.char.elements.isMoving)
+					Auras:ToggleFrameMove(self,Auras.db.char.elements[i].isMoving,j)
 				end)
 
 				BarGroup:SetScript('OnMouseDown',function(self,button)
-					if (Auras.db.char.elements.isMoving) then
+					if (Auras.db.char.elements[i].isMoving) then
 						Auras:MoveOnMouseDown(self,button)
 					end
 				end)
 
 				BarGroup:SetScript('OnMouseUp',function(self,button)
-					if (Auras.db.char.elements.isMoving) then
+					if (Auras.db.char.elements[i].isMoving) then
 						Auras:MoveOnMouseUp(self,button)
 						Auras:UpdateLayout(self,timerbars.frames[j])
 					end

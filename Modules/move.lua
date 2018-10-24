@@ -2,6 +2,57 @@ local SSA, _, L, LSM = unpack(select(2,...))
 
 local Auras = LibStub("AceAddon-3.0"):GetAddon("ShamanAurasDev")
 
+-- Toggles the movement of a frame.
+function Auras:ToggleFrameMove(obj,isMoving,group)
+	if (isMoving) then
+		if (not obj:IsMouseEnabled()) then
+			obj:EnableMouse(true)
+			obj:SetMovable(true)
+		end
+		
+		if (not obj:GetBackdrop()) then
+			obj:SetBackdrop(SSA.BackdropSB)
+			obj:SetBackdropColor(0,0,0,0.85)
+		end
+		
+		if (group) then
+			for k,v in pairs(self.db.char.timerbars[SSA.spec].bars) do
+				if (v.layout.group == group) then
+					v.isAdjust = true
+					SSA[k]:Show()
+				end
+			end
+		end
+	else
+		if (obj:IsMouseEnabled()) then
+			obj:EnableMouse(false)
+			obj:SetMovable(false)
+		end
+		
+		if (obj:GetBackdrop()) then
+			obj:SetBackdrop(nil)
+		end
+	end
+end
+
+-- Toggles the movement of a progress bar.
+function Auras:ToggleProgressBarMove(self,isMoving,db)
+	if (isMoving) then
+		db.adjust.isEnabled = false
+		
+		if (not self:IsMouseEnabled()) then
+			self:EnableMouse(true)
+			self:SetMovable(true)
+		end
+		self:SetAlpha(1)
+	else
+		if (self:IsMouseEnabled()) then
+			self:EnableMouse(false)
+			self:SetMovable(false)
+		end
+	end
+end
+
 function Auras:ConfigureMove(db,obj,backdrop)
 	if (db.isMoving) then
 		if (not obj:IsMouseEnabled()) then
