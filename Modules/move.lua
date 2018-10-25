@@ -15,6 +15,10 @@ function Auras:ToggleFrameMove(obj,isMoving,group)
 			obj:SetBackdropColor(0,0,0,0.85)
 		end
 		
+		if (obj.header) then
+			obj.header:Show()
+		end
+		
 		if (group) then
 			for k,v in pairs(self.db.char.timerbars[SSA.spec].bars) do
 				if (v.layout.group == group) then
@@ -27,6 +31,10 @@ function Auras:ToggleFrameMove(obj,isMoving,group)
 		if (obj:IsMouseEnabled()) then
 			obj:EnableMouse(false)
 			obj:SetMovable(false)
+		end
+		
+		if (obj.header) then
+			obj.header:Hide()
 		end
 		
 		if (obj:GetBackdrop()) then

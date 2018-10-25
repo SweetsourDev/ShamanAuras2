@@ -135,8 +135,6 @@ IntroFrame:SetAlpha(0)
 IntroFrame.logo = IntroFrame:CreateTexture(nil,'HIGH')
 IntroFrame.logo:SetTexture([[Interface\AddOns\ShamanAuras2\Media\textures\logo]])
 IntroFrame.logo:SetSize(1024,512)
---IntroFrame.logo:SetPoint("LEFT",IntroFrame,"CENTER",0,0)
---IntroFrame.logo:SetPoint("RIGHT",IntroFrame,"CENTER",0,0)
 IntroFrame.logo:SetPoint("TOP",IntroFrame,"TOP",0,-3)
 
 IntroFrame.elapsedTime = 0
@@ -264,6 +262,232 @@ IntroFrame.dbFrame.button:SetScript("OnClick",function(self,button)
 	Auras.db.char.isFirstEverLoad = false
 	ReloadUI()
 end)
+
+IntroFrame.contacts = CreateFrame("Frame",nil,IntroFrame)
+IntroFrame.contacts:SetSize(50,142)
+IntroFrame.contacts:SetBackdrop(SSA.BackdropSB)
+IntroFrame.contacts:SetBackdropColor(0.1,0.1,0.1,0.9)
+IntroFrame.contacts:SetBackdropBorderColor(1,1,1,1)
+IntroFrame.contacts:SetFrameStrata("HIGH")
+IntroFrame.contacts:SetPoint("BOTTOMLEFT",IntroFrame,"BOTTOMRIGHT",-4,5)
+IntroFrame.contacts:SetAlpha(0.5)
+IntroFrame.contacts:SetScript("OnEnter",function(self,motion)
+	if (self.isClosed and not self.isOpening) then
+		self:SetAlpha(1)
+	end
+end)
+
+IntroFrame.contacts:SetScript("OnLeave",function(self,motion)
+	if (self.isClosed and not self.isOpening) then
+		self:SetAlpha(0.5)
+	end
+end)
+
+IntroFrame.contacts.discord = IntroFrame.contacts:CreateTexture(nil,'HIGH')
+IntroFrame.contacts.discord:SetTexture([[Interface\AddOns\ShamanAuras2\Media\icons\config\discord_logo]])
+IntroFrame.contacts.discord:SetSize(40,40)
+IntroFrame.contacts.discord:SetPoint("TOPRIGHT",IntroFrame.contacts,"TOPRIGHT",-6,-6)
+
+IntroFrame.contacts.discord.text = IntroFrame.contacts:CreateFontString(nil,"MEDIUM", "GameFontHighlightLarge")
+IntroFrame.contacts.discord.text:SetFont([[Interface\addons\ShamanAuras\media\fonts\PT_Sans_Narrow.TTF]], 14,'OUTLINE')
+IntroFrame.contacts.discord.text:SetPoint("TOPRIGHT",IntroFrame.contacts,"TOPRIGHT",-45,-20)
+IntroFrame.contacts.discord.text:SetSize(175,128)
+IntroFrame.contacts.discord.text:SetTextColor(1,1,1,1)
+IntroFrame.contacts.discord.text:SetJustifyV("TOP")
+IntroFrame.contacts.discord.text:SetJustifyH("LEFT")
+IntroFrame.contacts.discord.text:SetText("https://|cFF7289dasweetsour.live|r/discord")
+IntroFrame.contacts.discord.text:SetAlpha(0)
+
+IntroFrame.contacts.discord.click = CreateFrame("Frame",nil,IntroFrame.contacts)
+IntroFrame.contacts.discord.click:SetSize(175,20)
+IntroFrame.contacts.discord.click:SetFrameStrata("HIGH")
+IntroFrame.contacts.discord.click:SetPoint("TOPRIGHT",IntroFrame.contacts,"TOPRIGHT",-45,-17)
+IntroFrame.contacts.discord.click:SetScript("OnMouseDown",function(self,button)
+	if (button == "LeftButton" and IntroFrame.contacts.isTextShowing) then
+		local editbox = ChatFrame1EditBox
+		
+		if (not editbox:IsShown()) then
+			editbox:Show()
+		end
+		
+		if (editbox:GetAlpha() < 1) then
+			editbox:SetAlpha(1)
+		end
+		
+		editbox:SetFocus()
+		editbox:SetText(IntroFrame.contacts.discord.text:GetText())
+		editbox:HighlightText()
+	end
+end)
+
+IntroFrame.contacts.patreon = IntroFrame.contacts:CreateTexture(nil,'HIGH')
+IntroFrame.contacts.patreon:SetTexture([[Interface\AddOns\ShamanAuras2\Media\icons\config\patreon_logo]])
+IntroFrame.contacts.patreon:SetSize(40,40)
+IntroFrame.contacts.patreon:SetPoint("TOPRIGHT",IntroFrame.contacts,"TOPRIGHT",-6,-51)
+
+IntroFrame.contacts.patreon.text = IntroFrame.contacts:CreateFontString(nil,"MEDIUM", "GameFontHighlightLarge")
+IntroFrame.contacts.patreon.text:SetFont([[Interface\addons\ShamanAuras\media\fonts\PT_Sans_Narrow.TTF]], 14,'OUTLINE')
+IntroFrame.contacts.patreon.text:SetPoint("TOPRIGHT",IntroFrame.contacts,"TOPRIGHT",-45,-65)
+IntroFrame.contacts.patreon.text:SetSize(175,128)
+IntroFrame.contacts.patreon.text:SetTextColor(1,1,1,1)
+IntroFrame.contacts.patreon.text:SetJustifyV("TOP")
+IntroFrame.contacts.patreon.text:SetJustifyH("LEFT")
+IntroFrame.contacts.patreon.text:SetText("https://|cFFF96854sweetsour.live|r/patreon")
+IntroFrame.contacts.patreon.text:SetAlpha(0)
+
+IntroFrame.contacts.patreon.click = CreateFrame("Frame",nil,IntroFrame.contacts)
+IntroFrame.contacts.patreon.click:SetSize(175,20)
+IntroFrame.contacts.patreon.click:SetFrameStrata("HIGH")
+IntroFrame.contacts.patreon.click:SetPoint("TOPRIGHT",IntroFrame.contacts,"TOPRIGHT",-45,-65)
+IntroFrame.contacts.patreon.click:SetScript("OnMouseDown",function(self,button)
+	if (button == "LeftButton" and IntroFrame.contacts.isTextShowing) then
+		local editbox = ChatFrame1EditBox
+		
+		if (not editbox:IsShown()) then
+			editbox:Show()
+		end
+		
+		if (editbox:GetAlpha() < 1) then
+			editbox:SetAlpha(1)
+		end
+		
+		editbox:SetFocus()
+		editbox:SetText(IntroFrame.contacts.patreon.text:GetText())
+		editbox:HighlightText()
+	end
+end)
+
+IntroFrame.contacts.paypal = IntroFrame.contacts:CreateTexture(nil,'HIGH')
+IntroFrame.contacts.paypal:SetTexture([[Interface\AddOns\ShamanAuras2\Media\icons\config\paypal_logo]])
+IntroFrame.contacts.paypal:SetSize(40,40)
+IntroFrame.contacts.paypal:SetPoint("TOPRIGHT",IntroFrame.contacts,"TOPRIGHT",-6,-96)
+
+IntroFrame.contacts.paypal.text = IntroFrame.contacts:CreateFontString(nil,"MEDIUM", "GameFontHighlightLarge")
+IntroFrame.contacts.paypal.text:SetFont([[Interface\addons\ShamanAuras\media\fonts\PT_Sans_Narrow.TTF]], 14,'OUTLINE')
+IntroFrame.contacts.paypal.text:SetPoint("TOPRIGHT",IntroFrame.contacts,"TOPRIGHT",-45,-110)
+IntroFrame.contacts.paypal.text:SetSize(175,128)
+IntroFrame.contacts.paypal.text:SetTextColor(1,1,1,1)
+IntroFrame.contacts.paypal.text:SetJustifyV("TOP")
+IntroFrame.contacts.paypal.text:SetJustifyH("LEFT")
+IntroFrame.contacts.paypal.text:SetText("https://|cFF169BD7sweetsour.live|r/donate")
+IntroFrame.contacts.paypal.text:SetAlpha(0)
+
+IntroFrame.contacts.paypal.click = CreateFrame("Frame",nil,IntroFrame.contacts)
+IntroFrame.contacts.paypal.click:SetSize(175,20)
+IntroFrame.contacts.paypal.click:SetFrameStrata("HIGH")
+IntroFrame.contacts.paypal.click:SetPoint("TOPRIGHT",IntroFrame.contacts,"TOPRIGHT",-45,-106)
+IntroFrame.contacts.paypal.click:SetScript("OnMouseDown",function(self,button)
+	if (button == "LeftButton" and IntroFrame.contacts.isTextShowing) then
+		local editbox = ChatFrame1EditBox
+		
+		if (not editbox:IsShown()) then
+			editbox:Show()
+		end
+		
+		if (editbox:GetAlpha() < 1) then
+			editbox:SetAlpha(1)
+		end
+		
+		editbox:SetFocus()
+		editbox:SetText(IntroFrame.contacts.paypal.text:GetText())
+		editbox:HighlightText()
+	end
+end)
+
+IntroFrame.contacts.isOpening = false
+IntroFrame.contacts.isOpened = false
+IntroFrame.contacts.isClosing = false
+IntroFrame.contacts.isClosed = true
+IntroFrame.contacts.isTextShowing = false
+IntroFrame.contacts.currentSpeed = 0
+IntroFrame.contacts:SetScript("OnUpdate",function(self)
+	if (self.isOpening) then
+		local acceleration = 0.1
+		local maxSpeed = 10
+		local maxWidth = 225
+		local minWidth = 53
+		
+		if (self.currentSpeed < maxSpeed) then
+			self.currentSpeed = self.currentSpeed + acceleration
+		end
+		
+		if (self:GetWidth() < maxWidth) then
+			self:SetWidth(self:GetWidth() + self.currentSpeed)
+		else
+			self.isOpening = false
+			self.isOpened = true
+			self.isClosed = false
+		end
+	end
+	
+	if (self.isClosing and not self.isTextShowing) then
+		local acceleration = 0.1
+		local maxSpeed = 10
+		local maxWidth = 225
+		local minWidth = 53
+		
+		if (self.currentSpeed < maxSpeed) then
+			self.currentSpeed = self.currentSpeed + acceleration
+		end
+		
+		if (self:GetWidth() > minWidth) then
+			self:SetWidth(self:GetWidth() - self.currentSpeed)
+		else
+			self.isClosing = false
+			self.isClosed = true
+			self.isOpened = false
+			self:SetAlpha(0.5)
+		end
+	end
+	
+	if (self.isOpened and not self.isTextShowing and not self.isClosing) then
+		if (self.discord.text:GetAlpha() < 1) then
+			local appearSpeed = 0.02
+			local newAlpha = self.discord.text:GetAlpha() + appearSpeed
+			
+			if (newAlpha > 1) then
+				newAlpha = 1
+				self.isTextShowing = true
+			end
+			
+			self.discord.text:SetAlpha(newAlpha)
+			self.patreon.text:SetAlpha(newAlpha)
+			self.paypal.text:SetAlpha(newAlpha)
+		end
+	end
+	
+	if (self.isClosing and self.isTextShowing) then
+		if (self.discord.text:GetAlpha() > 0) then
+			local appearSpeed = 0.02 
+			local newAlpha = self.discord.text:GetAlpha() - appearSpeed
+			
+			if (newAlpha < 0) then
+				newAlpha = 0
+				self.isTextShowing = false
+			end
+			
+			self.discord.text:SetAlpha(newAlpha)
+			self.patreon.text:SetAlpha(newAlpha)
+			self.paypal.text:SetAlpha(newAlpha)
+		end
+	end
+	
+	--SSA.DataFrame.text:SetText("Is Opened: "..tostring(self.isOpened).."\nIs Opening: "..tostring(self.isOpening).."\n\nIs Closed: "..tostring(self.isClosed).."\nIs Closing: "..tostring(self.isClosing).."\n\nIs Text Showing: "..tostring(self.isTextShowing))
+end)
+
+IntroFrame.contacts:SetScript("OnMouseDown",function(self,button)
+	if (button == "LeftButton" and not self.isOpening and not self.isClosing) then
+		self.currentSpeed = 0
+		if (self.isClosed) then
+			self.isOpening = true
+		end
+		
+		if (self.isOpened and self.isTextShowing) then
+			self.isClosing = true
+		end
+	end
+end)
+--/run SSA_IntroFrame:SetAlpha(1)
 _G["SSA_IntroFrame"] = IntroFrame
 -- Initialize Check Button Frames
 --SSA.MoveEle = CreateFrame('Frame','MoveEle',UIParent)
@@ -375,6 +599,13 @@ function Auras:BuildAuraGroups()
 			if (not SSA["AuraGroup"..j]) then
 				local AuraGroup = Auras:CreateGroup('AuraGroup',SSA.AuraBase,j)
 				
+				AuraGroup.header = AuraGroup:CreateFontString(nil, 'MEDIUM', 'GameFontHighlightLarge')
+				AuraGroup.header:SetFont([[Interface\addons\ShamanAuras\media\fonts\PT_Sans_Narrow.TTF]], 12,'OUTLINE')
+				AuraGroup.header:SetPoint('TOPLEFT',5,5)
+				AuraGroup.header:SetTextColor(1,1,1,1)
+				AuraGroup.header:SetText(auras.groups[j].name)
+				AuraGroup.header:Hide()
+				
 				AuraGroup:SetScript('OnUpdate',function(self,button)
 					Auras:ToggleFrameMove(self,Auras.db.char.elements[i].isMoving)
 				end)
@@ -398,6 +629,13 @@ function Auras:BuildAuraGroups()
 		for j=1,#timerbars.groups do
 			if (not SSA["BarGroup"..j]) then
 				local BarGroup = Auras:CreateGroup('BarGroup',SSA.AuraBase,j)
+				
+				BarGroup.header = BarGroup:CreateFontString(nil, 'MEDIUM', 'GameFontHighlightLarge')
+				BarGroup.header:SetFont([[Interface\addons\ShamanAuras\media\fonts\PT_Sans_Narrow.TTF]], 12,'OUTLINE')
+				BarGroup.header:SetPoint('TOPLEFT',5,5)
+				BarGroup.header:SetTextColor(1,1,1,1)
+				BarGroup.header:SetText(timerbars.groups[j].name)
+				BarGroup.header:Hide()
 				
 				BarGroup:SetScript('OnUpdate',function(self,button)
 					Auras:ToggleFrameMove(self,Auras.db.char.elements[i].isMoving,j)
