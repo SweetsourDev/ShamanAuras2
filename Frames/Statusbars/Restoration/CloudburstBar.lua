@@ -56,7 +56,7 @@ Cloudburst:SetScript('OnUpdate',function(self,elapsed)
 	if (Auras:CharacterCheck(nil,3)) then
 		local db = Auras.db.char
 	
-		local _,_,_,_,_,_,_,_,_,_,_,_,_,_,_,absorbed = Auras:RetrieveBuffInfo('player',Auras:GetSpellName(157153))
+		local _,_,_,_,_,_,_,_,_,_,_,_,_,_,_,absorbed = Auras:RetrieveAuraInfo('player',Auras:GetSpellName(157153))
 	
 		Auras:ToggleAuraVisibility(self,true,'showhide')
 		Auras:ToggleFrameMove(self,db.elements.isMoving)
@@ -72,7 +72,7 @@ Cloudburst:SetScript('OnUpdate',function(self,elapsed)
 			end
 		end
 
-		if (not db.elements.isMoving) then
+		if (not db.elements[3].isMoving) then
 			if (not self:GetBackdrop()) then
 				self:SetBackdrop(BackdropCB)
 			end
@@ -97,15 +97,15 @@ Cloudburst:SetScript('OnUpdate',function(self,elapsed)
 end)
 
 Cloudburst:SetScript('OnMouseDown',function(self,button)
-	if (Auras.db.char.elements.isMoving) then
-		Auras:MoveOnMouseDown(self,'AuraBase',button)
+	if (Auras.db.char.elements[3].isMoving) then
+		Auras:MoveOnMouseDown(self,button)
 	end
 end)
 
 Cloudburst:SetScript('OnMouseUp',function(self,button)
-	if (Auras.db.char.elements.isMoving) then
+	if (Auras.db.char.elements[3].isMoving) then
 		Auras:MoveOnMouseUp(self,button)
-		Auras:UpdateLayout(self,Auras.db.char.elements[3].frames[self:GetName()])
+		Auras:UpdateLayout(self,Auras.db.char.statusbars[3].bars[self:GetName()])
 	end
 end)
 

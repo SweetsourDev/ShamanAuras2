@@ -172,7 +172,7 @@ end)
 CastBar:SetScript('OnMouseUp',function(self,button)
 	if (Auras.db.char.elements[SSA.spec].isMoving) then
 		Auras:MoveOnMouseUp(self,button)
-		Auras:UpdateLayout(self,Auras.db.char.statusbar[SSA.spec].bars.CastBar)
+		Auras:UpdateLayout(self,Auras.db.char.statusbars[SSA.spec].bars.CastBar)
 	end
 end)
 

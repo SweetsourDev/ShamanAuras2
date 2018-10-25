@@ -19,6 +19,10 @@ EarthElemental:SetScript('OnUpdate',function(self)
 		local groupID = Auras:GetAuraGroupID(self,self:GetName())
 		local start,duration = GetSpellCooldown(Auras:GetSpellName(self.spellID))
 		
+		if (groupID == 0) then
+			return
+		end
+		
 		Auras:SetGlowStartTime(self,start,duration,self.spellID,"cooldown")
 		Auras:GlowHandler(self)
 		Auras:ToggleAuraVisibility(self,true,'showhide')
@@ -27,6 +31,7 @@ EarthElemental:SetScript('OnUpdate',function(self)
 		if (Auras:IsPlayerInCombat()) then
 			self:SetAlpha(1)
 		else
+			print("EarthElementalID: "..tostring(groupID))
 			Auras:NoCombatDisplay(self,groupID)
 		end
 	else

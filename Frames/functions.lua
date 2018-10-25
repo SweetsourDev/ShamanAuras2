@@ -10,7 +10,11 @@ local GetSpecialization = GetSpecialization
 
 -- Set the aura's opacity to the user-specified level when the player is out of combat.
 function Auras:NoCombatDisplay(self,group)
-	local spec = SSA.spec
+	local spec = SSA.spec or GetSpecialization()
+	
+	if (not Auras.db.char.auras[spec].cooldowns.groups[group]) then
+		--SSA.DataFrame.text:SetText(Auras:CurText('DataFrame').."BAD COMBAT: "..tostring(self:GetName()).."\n")
+	end
 	
 	if (Auras.db.char.auras[spec].cooldowns.groups[group].isPreview or Auras.db.char.auras[spec].groups[group].isAdjust) then
 		self:SetAlpha(1)
@@ -364,6 +368,10 @@ function Auras:GlowHandler(obj)
 end
 
 function Auras:IsPreviewingAura(obj,grp)
+	if (self.db.char.isFirstEverLoad) then
+		return false
+	end
+	
 	local auras = self.db.char.auras[SSA.spec]
 
 	-- Because all specs are being funneled into this function, we need to cancel its process if it's trying to check for an aura that does NOT exist within the respective spec
@@ -377,6 +385,10 @@ function Auras:IsPreviewingAura(obj,grp)
 end
 
 function Auras:IsPreviewingTimerbar(obj)
+	if (self.db.char.isFirstEverLoad) then
+		return false
+	end
+	
 	local timerbars = self.db.char.timerbars[SSA.spec]
 	
 	-- Because all specs are being funneled into this function, we need to cancel its process if it's trying to check for a timerbar that does NOT exist within the respective spec
@@ -388,6 +400,10 @@ function Auras:IsPreviewingTimerbar(obj)
 end
 
 function Auras:IsPreviewingStatusbar(obj)
+	if (self.db.char.isFirstEverLoad) then
+		return false
+	end
+	
 	local statusbars = self.db.char.statusbars[SSA.spec]
 	
 	if (not statusbars.bars[obj:GetName()]) then

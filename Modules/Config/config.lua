@@ -1853,7 +1853,7 @@ local function GetRestorationOptions()
 		local settingDefaults = db.settings.defaults
 		
 		-- Element Tables
-		--local elements = db.elements[3]
+		local elements = db.elements[3]
 		local cooldowns = db.auras[3].cooldowns
 		local timerbars = db.timerbars[3]
 		local statusbars = db.statusbars[3]
@@ -2016,8 +2016,10 @@ local function GetRestorationOptions()
 							order = 3,
 							guiInline = true,
 							args = {
-								OoCAlpha = Auras:Slider_VerifyDefaults(settings,1,3,L["LABEL_ALPHA_NO_COMBAT"],L["TOOLTIP_AURAS_ALPHA_NO_COMBAT"],0,1,nil,nil,'OoCAlpha','Settings'),
-								OoRColor = Auras:Color_VerifyDefaults(settings,3,3,L["LABEL_COLOR_NO_RANGE"],L["TOOLTIP_COLOR_OUT_OF_RANGE"],true,"full",nil,'OoRColor','Settings'),
+								MoveAuras = Auras:Execute_MoveAuras(elements,1,3,"|cFFFFCC00"..L["BUTTON_MOVE_AURAS_RESTORATION"].."|r"),
+								ResetAuras = Auras:Execute_ResetAuras(2,"|cFFFFCC00"..L["BUTTON_RESET_AURAS_RESTORATION"].."|r"),
+								OoCAlpha = Auras:Slider_VerifyDefaults(settings,3,3,L["LABEL_ALPHA_NO_COMBAT"],L["TOOLTIP_AURAS_ALPHA_NO_COMBAT"],0,1,nil,nil,'OoCAlpha','Settings'),
+								OoRColor = Auras:Color_VerifyDefaults(settings,4,3,L["LABEL_COLOR_NO_RANGE"],L["TOOLTIP_COLOR_OUT_OF_RANGE"],true,"full",nil,'OoRColor','Settings'),
 								reset = {
 									order = 4,
 									type = "execute",

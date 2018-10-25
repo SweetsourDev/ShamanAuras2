@@ -32,7 +32,7 @@ ManaBar:SetScript('OnUpdate',function(self)
 		
 		local db = Auras.db.char
 		local bar = Auras.db.char.statusbars[3].bars.ManaBar
-		local isMoving = db.elements.isMoving
+		local isMoving = db.elements[3].isMoving
 		
 		local _,maxVal = self:GetMinMaxValues()
 		
@@ -47,7 +47,7 @@ ManaBar:SetScript('OnUpdate',function(self)
 			self.text:SetText(maxPower)
 		end
 
-		if (bar.adjust.isEnabled) then
+		if (Auras:IsPreviewingStatusbar(self)) then
 			local tempPower = floor(maxPower - (maxPower * 0.75))
 			
 			self:SetAlpha(1)
@@ -102,15 +102,15 @@ ManaBar:SetScript('OnUpdate',function(self)
 end)
 
 ManaBar:SetScript('OnMouseDown',function(self,button)
-	if (Auras.db.char.elements.isMoving) then
-		Auras:MoveOnMouseDown(self,'AuraBase',button)
+	if (Auras.db.char.elements[3].isMoving) then
+		Auras:MoveOnMouseDown(self,button)
 	end
 end)
 
 ManaBar:SetScript('OnMouseUp',function(self,button)
-	if (Auras.db.char.elements.isMoving) then
+	if (Auras.db.char.elements[3].isMoving) then
 		Auras:MoveOnMouseUp(self,button)
-		Auras:UpdateLayout(self,Auras.db.char.elements[3].statusbars.manaBar)
+		Auras:UpdateLayout(self,Auras.db.char.statusbars[3].bars[self:GetName()])
 	end
 end)
 

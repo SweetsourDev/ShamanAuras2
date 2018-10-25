@@ -44,7 +44,7 @@ EarthenWallTotemBar:SetScript('OnUpdate',function(self,elapsed)
 		local db = Auras.db.char
 		--local bar = db.elements[3].statusbars.earthenWallBar
 		local bar = Auras.db.char.statusbars[3].bars[self:GetName()]
-		local isMoving = db.elements.isMoving
+		local isMoving = db.elements[3].isMoving
 		local maxHealth = UnitHealthMax('player')
 		
 		local timer,seconds = Auras:parseTime(((bar.data.start + bar.data.duration) - GetTime()),true)
@@ -64,7 +64,7 @@ EarthenWallTotemBar:SetScript('OnUpdate',function(self,elapsed)
 			self.Timer:SetValue(15)
 		end
 		
-		if (bar.adjust.isEnabled) then
+		if (Auras:IsPreviewingStatusbar(self)) then
 			self.healthtext:SetText('75%')
 			self.timetext:SetText('5.0')
 			
@@ -149,15 +149,15 @@ EarthenWallTotemBar:SetScript('OnUpdate',function(self,elapsed)
 end)
 
 EarthenWallTotemBar:SetScript('OnMouseDown',function(self,button)
-	if (Auras.db.char.elements.isMoving) then
-		Auras:MoveOnMouseDown(self,'AuraBase',button)
+	if (Auras.db.char.elements[3].isMoving) then
+		Auras:MoveOnMouseDown(self,button)
 	end
 end)
 
 EarthenWallTotemBar:SetScript('OnMouseUp',function(self,button)
-	if (Auras.db.char.elements.isMoving) then
+	if (Auras.db.char.elements[3].isMoving) then
 		Auras:MoveOnMouseUp(self,button)
-		Auras:UpdateLayout(self,Auras.db.char.elements[3].statusbars.earthenWallBar)
+		Auras:UpdateLayout(self,Auras.db.char.statusbars[3].bars[self:GetName()])
 	end
 end)
 

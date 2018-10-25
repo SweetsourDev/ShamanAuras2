@@ -1026,9 +1026,6 @@ function Auras:UpdateTalents(isTalentChange)
 						
 						rowObj[v.order] = bar
 
-						--rowList[v.order] = v.isEnabled and (bar.condition() or db.elements[spec].isMoving or auras.cooldowns.groups[i].isPreview)
-						--if (numActiveAuras == 0 and v.order == 1 and (db.elements[spec].isMoving or auras.groups[i].isAdjust or (auras.cooldowns.adjust and auras.cooldowns.selected == i))) then
-						--if (numActiveAuras == 0 and (db.elements[spec].isMoving or auras.groups[i].isAdjust or (auras.cooldowns.adjust and auras.cooldowns.selected == i))) then
 						if (numActiveAuras == 0 and Auras:IsPreviewingAura(bar,i)) then
 							if ((v.talentRow > 0 and talentRows[v.talentRow]) or v.talentRow == 0) then
 								talentRows[v.talentRow] = false
@@ -1039,9 +1036,6 @@ function Auras:UpdateTalents(isTalentChange)
 								rowVerify[v.order] = false
 							end
 						else
-							if (i == 2) then
-								print(k)
-							end
 							rowList[v.order] = v.isEnabled and bar.condition()
 							rowVerify[v.order] = v.isInUse or auras.groups[i].isAdjust
 						end
@@ -1079,12 +1073,13 @@ function Auras:UpdateTalents(isTalentChange)
 		Auras:InitializeTimerBars(spec)
 
 		local auras = Auras.db.char.auras[spec]
+		local validAuraCtr = 0
 		
 		for i=1,#auras.groups do
 			local rowObj,rowList,rowVerify = {},{},{}
 
 			if (auras.groups[i].auraCount > 0) then
-				for k,v in pairs(auras.auras) do
+				--[[for k,v in pairs(auras.auras) do
 					if (v.group == i) then
 						local bar = SSA[k]
 						
@@ -1100,15 +1095,56 @@ function Auras:UpdateTalents(isTalentChange)
 					BuildHorizontalIconRow(rowObj,rowList,rowVerify,spec,i)
 				else
 					BuildVerticalIconRow(rowObj,rowList,rowVerify,spec,i)
+				end	]]
+				local talentRows = {
+					[1] = true,
+					[2] = true,
+					[3] = true,
+					[4] = true,
+					[5] = true,
+					[6] = true,
+					[7] = true,
+				}
+							
+				for k,v in pairs(auras.auras) do
+					if (v.group == i) then
+						local bar = SSA[k]
+						
+						bar:SetParent(SSA["AuraGroup"..i])
+						
+						rowObj[v.order] = bar
+
+						if (numActiveAuras == 0 and Auras:IsPreviewingAura(bar,i)) then
+							if ((v.talentRow > 0 and talentRows[v.talentRow]) or v.talentRow == 0) then
+								talentRows[v.talentRow] = false
+								rowList[v.order] = true
+								rowVerify[v.order] = true
+							else
+								rowList[v.order] = false
+								rowVerify[v.order] = false
+							end
+						else
+							rowList[v.order] = v.isEnabled and bar.condition()
+							rowVerify[v.order] = v.isInUse or auras.groups[i].isAdjust
+						end
+					end
+				end
+				
+				if (auras.groups[i].orientation == "Horizontal") then
+					validAuraCtr = BuildHorizontalIconRow(rowObj,rowList,rowVerify,spec,i)
+				else
+					validAuraCtr = BuildVerticalIconRow(rowObj,rowList,rowVerify,spec,i)
 				end	
 			end
 			
-			UpdateAuraParentDimensions(spec,i)
+			UpdateAuraParentDimensions(spec,i,validAuraCtr)
 			
 			twipe(rowObj)
 			twipe(rowList)
 			twipe(rowVerify)
 		end
+		
+		UpdateTimerbarParentDimensions(spec)
 	else -- Restoration
 		Auras:InitializeCooldowns(spec)
 
@@ -1127,12 +1163,13 @@ function Auras:UpdateTalents(isTalentChange)
 		--SSA.DataFrame.text:SetText(Auras:CurText('DataFrame').."BAR DURATION #1: "..tostring(SSA.AscendanceBar.duration).."\n")
 		--end
 		local auras = Auras.db.char.auras[spec]
+		local validAuraCtr = 0
 		
 		for i=1,#auras.groups do
 			local rowObj,rowList,rowVerify = {},{},{}
 
 			if (auras.groups[i].auraCount > 0) then
-				for k,v in pairs(auras.auras) do
+				--[[for k,v in pairs(auras.auras) do
 					
 					if (v.group == i) then
 						local bar = SSA[k]
@@ -1142,9 +1179,6 @@ function Auras:UpdateTalents(isTalentChange)
 						rowObj[v.order] = bar
 						rowList[v.order] = v.isEnabled and bar.condition()
 						rowVerify[v.order] = v.isInUse or auras.groups[i].isAdjust
-						
-						--SSA.DataFrame.text:SetText(Auras:CurText('DataFrame')..k.." ("..tostring(rowObj[v.order]:GetName())..")\n")
-						--SSA.DataFrame.text:SetText(Auras:CurText('DataFrame')..k.." ("..tostring(SSA[k]:GetParent():GetName())..")\n")
 					end
 				end
 				
@@ -1152,15 +1186,56 @@ function Auras:UpdateTalents(isTalentChange)
 					BuildHorizontalIconRow(rowObj,rowList,rowVerify,spec,i)
 				else
 					BuildVerticalIconRow(rowObj,rowList,rowVerify,spec,i)
+				end	]]
+				local talentRows = {
+					[1] = true,
+					[2] = true,
+					[3] = true,
+					[4] = true,
+					[5] = true,
+					[6] = true,
+					[7] = true,
+				}
+							
+				for k,v in pairs(auras.auras) do
+					if (v.group == i) then
+						local bar = SSA[k]
+						
+						bar:SetParent(SSA["AuraGroup"..i])
+						
+						rowObj[v.order] = bar
+
+						if (numActiveAuras == 0 and Auras:IsPreviewingAura(bar,i)) then
+							if ((v.talentRow > 0 and talentRows[v.talentRow]) or v.talentRow == 0) then
+								talentRows[v.talentRow] = false
+								rowList[v.order] = true
+								rowVerify[v.order] = true
+							else
+								rowList[v.order] = false
+								rowVerify[v.order] = false
+							end
+						else
+							rowList[v.order] = v.isEnabled and bar.condition()
+							rowVerify[v.order] = v.isInUse or auras.groups[i].isAdjust
+						end
+					end
+				end
+				
+				if (auras.groups[i].orientation == "Horizontal") then
+					validAuraCtr = BuildHorizontalIconRow(rowObj,rowList,rowVerify,spec,i)
+				else
+					validAuraCtr = BuildVerticalIconRow(rowObj,rowList,rowVerify,spec,i)
 				end	
 			end
 			
-			UpdateAuraParentDimensions(spec,i)
+			UpdateAuraParentDimensions(spec,i,validAuraCtr)
 			
 			twipe(rowObj)
 			twipe(rowList)
 			twipe(rowVerify)
 		end
+		
+		UpdateTimerbarParentDimensions(spec)
 	end
 	
 	--Auras:SetupCharges()
