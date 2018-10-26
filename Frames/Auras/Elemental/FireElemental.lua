@@ -33,7 +33,6 @@ FireElemental:SetScript('OnUpdate',function(self)
 			Auras:NoCombatDisplay(self,groupID)
 		end
 	else
-		print("Fire Elemental: "..tostring(not Auras:CharacterCheck(self,1,4,2)))
 		Auras:ToggleAuraVisibility(self,false,'showhide')
 	end
 end)

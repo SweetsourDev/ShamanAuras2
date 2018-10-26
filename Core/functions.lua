@@ -49,8 +49,6 @@ function Auras:AdjustStatusBarIcon(self,db,texture)
 			parentJustify = 'RIGHT'
 			--self:SetPoint(db.layout.point,self:GetParent(),'CENTER',db.layout.x + floor(db.layout.height / 2),db.layout.y)
 			self:SetPoint(db.layout.point,self:GetParent(),'CENTER',db.layout.x + (self.icon:GetHeight() / 2),db.layout.y)
-			local _,_,_,x = self:GetPoint()
-			print(x.." ("..self.icon:GetSize()..")")
 		else
 			parentJustify = 'LEFT'
 			--self:SetPoint(db.layout.point,self:GetParent(),'CENTER',db.layout.x - floor(db.layout.height / 2),db.layout.y)

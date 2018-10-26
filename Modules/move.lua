@@ -104,15 +104,17 @@ function Auras:MoveOnMouseDown(obj,button)
 		obj.screenX = x
 		obj.screenY = y
 	elseif (IsShiftKeyDown() and not IsControlKeyDown()) then
+		local point = obj:GetPoint()
+		
 		if (button == "LeftButton") then
 			obj.isSnapping = true
-			obj:SetPoint("CENTER",obj:GetParent(),"CENTER",0,y)
+			obj:SetPoint(point,obj:GetParent(),"CENTER",0,y)
 		elseif (button == "RightButton") then
 			obj.isSnapping = true
-			obj:SetPoint("CENTER",obj:GetParent(),"CENTER",x,0)
+			obj:SetPoint(point,obj:GetParent(),"CENTER",x,0)
 		elseif (button == "MiddleButton") then
 			obj.isSnapping = true
-			obj:SetPoint("CENTER",obj:GetParent(),"CENTER",0,0)
+			obj:SetPoint(point,obj:GetParent(),"CENTER",0,0)
 		end
 	elseif (not IsShiftKeyDown() and IsControlKeyDown() and button == "RightButton") then
 		self:ResetAuraGroupPosition(obj:GetName())

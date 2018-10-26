@@ -350,9 +350,7 @@ function Auras:InitializeAuraFrameGroups(spec)
 				group:EnableMouse(false)
 				group:SetMovable(false)
 				group:RegisterForDrag('LeftButton')
-				if (i == 6) then
-					print("FRAME: "..frame.x..", "..frame.y)
-				end
+
 				group:SetPoint(frame.point,(SSA[frame.relativeTo] or UIParent),frame.relativePoint,frame.x,frame.y)
 
 				group.header:SetText(auras.groups[i].name)
@@ -408,21 +406,23 @@ function Auras:InitializeTimerBarFrameGroups(spec)
 	
 	for i=1,#timerbars.groups do
 		if (SSA["BarGroup"..i]) then
-			if (timerbars.frames[i].isEnabled) then
+			local frame = timerbars.frames[i]
+			
+			if (frame.isEnabled) then
 				local group = SSA["BarGroup"..i]
 				
 				
 				group:Show()
-				group:SetWidth(timerbars.frames[i].width)
-				group:SetHeight(timerbars.frames[i].height)
+				group:SetWidth(frame.width)
+				group:SetHeight(frame.height)
 
 				group:EnableMouse(false)
 				group:SetMovable(false)
 				group:RegisterForDrag('LeftButton')
 				
-				group:SetPoint(timerbars.frames[i].point,(SSA[timerbars.frames[i].relativeTo] or UIParent),timerbars.frames[i].relativePoint,timerbars.frames[i].x,timerbars.frames[i].y)
+				group:SetPoint(frame.point,(SSA[frame.relativeTo] or UIParent),frame.relativePoint,frame.x,frame.y)
 
-				if (not timerbars.frames[i].isEnabled or not Auras:CharacterCheck(nil,0)) then
+				if (not frame.isEnabled or not Auras:CharacterCheck(nil,0)) then
 					group:Hide()
 				else
 					group:Show()
@@ -450,6 +450,26 @@ function Auras:InitializeTimerBarFrameGroups(spec)
 					end
 				end
 				
+				group:SetScript('OnUpdate',nil)
+				group:SetScript('OnUpdate',function(self,button)
+					Auras:ToggleFrameMove(self,Auras.db.char.settings.move.isMoving)
+				end)
+
+				group:SetScript('OnMouseDown',nil)
+				group:SetScript('OnMouseDown',function(self,button)
+					if (Auras.db.char.settings.move.isMoving) then
+						Auras:MoveOnMouseDown(self,button)
+					end
+				end)
+
+				group:SetScript('OnMouseUp',nil)
+				group:SetScript('OnMouseUp',function(self,button)
+					if (Auras.db.char.settings.move.isMoving) then
+						Auras:MoveOnMouseUp(self,button)
+						Auras:UpdateLayout(self,frame)
+					end
+				end)
+				
 				--[[SSA["BarGroup"..i]:SetBackdrop(SSA.BackdropSB)
 				if (i == 1) then
 					SSA["BarGroup"..i]:SetBackdropColor(1,0,0,1)
@@ -466,7 +486,7 @@ function Auras:InitializeTimerBarFrameGroups(spec)
 				end
 				
 				
-				SSA["BarGroup"..i]:SetBackdropBorderColor(0,0,0,1)]]
+				SSA["BarGroup"..i]:SetBackdropBorderColor(0,0,0,1)
 				
 				if (group:GetName() == "Undulation") then
 					group.Model:SetModel('SPELLS/Monk_ForceSpere_Orb.m2')
@@ -477,7 +497,7 @@ function Auras:InitializeTimerBarFrameGroups(spec)
 					group.Charge1.Lightning:SetModel('spells/Monk_chiblast_precast.m2')
 					group.Charge2.Lightning:SetModel('spells/Monk_chiblast_precast.m2')
 					group.Charge3.Lightning:SetModel('spells/Monk_chiblast_precast.m2')
-				end
+				end]]
 			else
 				SSA["BarGroup"..i]:Hide()
 			end
@@ -538,11 +558,9 @@ function Auras:InitializeProgressBar(bar1,bar2,text1,text2,spec)
 				
 				--bar1:SetWidth(db.layout.width - db.layout.height)
 				bar1:SetWidth(db.layout.width - bar1.icon:GetHeight())
-				print("BAR ICON: "..db.layout.height)
 				
 
 				bar1.icon:SetPoint(parentJustify,bar1,db.icon.justify,0,0)
-				print("BAR ICON: "..bar1.icon:GetSize())
 				--bar1.border:SetPoint("TOPLEFT",((CastBar:GetHeight() + 2) * -1),2)
 				--bar1.border:SetPoint("BOTTOMRIGHT",2,-2)
 			else

@@ -35,4 +35,3 @@ Thundercharge:SetScript('OnUpdate',function(self)
 		Auras:ToggleAuraVisibility(self,false,'showhide')
 	end
 end)
---/script local name = {AuraUtil.FindAuraByName("Resounding Protection","player")}; for k,v in pairs(name) do print(k.." = "..tostring(v)) end
