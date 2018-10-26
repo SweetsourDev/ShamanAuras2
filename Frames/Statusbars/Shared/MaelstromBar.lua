@@ -70,7 +70,7 @@ MaelstromBar:SetScript('OnUpdate',function(self,elaps)
 
 		local db = Auras.db.char
 		local bar = db.statusbars[SSA.spec].bars.MaelstromBar
-		local isMoving = db.elements[SSA.spec].isMoving
+		local isMoving = db.settings.move.isMoving
 
 		local _,maxVal = self:GetMinMaxValues()
 		
@@ -155,13 +155,13 @@ MaelstromBar:SetScript('OnUpdate',function(self,elaps)
 end)
 
 MaelstromBar:SetScript('OnMouseDown',function(self,button)
-	if (Auras.db.char.elements[SSA.spec].isMoving) then
+	if (Auras.db.char.settings.move.isMoving) then
 		Auras:MoveOnMouseDown(self,button)
 	end
 end)
 
 MaelstromBar:SetScript('OnMouseUp',function(self,button)
-	if (Auras.db.char.elements[SSA.spec].isMoving) then
+	if (Auras.db.char.settings.move.isMoving) then
 		Auras:MoveOnMouseUp(self,button)
 		Auras:UpdateLayout(self,Auras.db.char.statusbars[SSA.spec].bars.MaelstromBar)
 	end

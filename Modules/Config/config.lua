@@ -118,16 +118,13 @@ local function GetElementalOptions()
 		local db = Auras.db.char
 	
 		-- Database Shortcuts
-		local settings = db.settings[1]
-		local settingDefaults = db.settings.defaults
-		
-		-- Element Tables
-		local elements = db.elements[1]
+		local auras = db.auras[1]
 		local cooldowns = db.auras[1].cooldowns
 		local timerbars = db.timerbars[1]
 		local statusbars = db.statusbars[1]
-		local frames = db.elements[1].frames
-		local auras = db.auras[1]
+		local settings = db.settings
+		local settingsDefaults = SSA.defaults.settings
+		
 		
 		-- Layout Table
 		--local layout = db.layout[1]
@@ -296,22 +293,22 @@ local function GetElementalOptions()
 							order = 3,
 							guiInline = true,
 							args = {
-								MoveAuras = Auras:Execute_MoveAuras(elements,1,1,"|cFFFFCC00"..L["BUTTON_MOVE_AURAS_ELEMENTAL"].."|r"),
+								MoveAuras = Auras:Execute_MoveAuras(settings,1,1,"|cFFFFCC00"..L["BUTTON_MOVE_AURAS_ELEMENTAL"].."|r"),
 								ResetAuras = Auras:Execute_ResetAuras(2,"|cFFFFCC00"..L["BUTTON_RESET_AURAS_ELEMENTAL"].."|r"),
 								OoCAlpha = Auras:Slider_VerifyDefaults(settings,3,1,L["LABEL_ALPHA_NO_COMBAT"],L["TOOLTIP_AURAS_ALPHA_NO_COMBAT"],0,1,nil,false,'OoCAlpha','Settings'),
-								TotemMastery = Auras:Slider_VerifyDefaults(settings,4,1,Auras:GetSpellName(210643),L["TOOLTIP_TOTEM_MASTERY_TRIGGER_TIMER"],5,30,nil,false,'totemMastery','Settings'),
-								OoRColor = Auras:Color_VerifyDefaults(settings,5,1,L["LABEL_COLOR_NO_RANGE"],L["TOOLTIP_COLOR_OUT_OF_RANGE"],true,nil,false,'OoRColor','Settings'),
+								TotemMastery = Auras:Slider_VerifyDefaults(settings[1],4,1,Auras:GetSpellName(210643),L["TOOLTIP_TOTEM_MASTERY_TRIGGER_TIMER"],5,30,nil,false,'totemMastery','Settings'),
+								OoRColor = Auras:Color_VerifyDefaults(settings[1],5,1,L["LABEL_COLOR_NO_RANGE"],L["TOOLTIP_COLOR_OUT_OF_RANGE"],true,nil,false,'OoRColor','Settings'),
 								reset = {
 									order = 5,
 									type = "execute",
 									name = L["BUTTON_RESET_SETTINGS"],
 									func = function()
-										settings.totemMastery = settingDefaults[1].totemMastery
-										settings.OoCAlpha = settingDefaults.OoCAlpha
-										settings.OoRColor.r = settingDefaults.OoRColor.r
-										settings.OoRColor.g = settingDefaults.OoRColor.g
-										settings.OoRColor.b = settingDefaults.OoRColor.b
-										settings.OoRColor.a = settingDefaults.OoRColor.a
+										--settings.totemMastery = settingDefaults[1].totemMastery
+										settings[1].OoCAlpha = settingsDefaults[1].OoCAlpha
+										settings[1].OoRColor.r = settingsDefaults[1].OoRColor.r
+										settings[1].OoRColor.g = settingsDefaults[1].OoRColor.g
+										settings[1].OoRColor.b = settingsDefaults[1].OoRColor.b
+										settings[1].OoRColor.a = settingsDefaults[1].OoRColor.a
 										ele_options.args.general.args.settings.args.reset.disabled = true
 										ele_options.args.general.args.settings.args.reset.name = "|cFF666666"..L["BUTTON_RESET_SETTINGS"].."|r"
 									end,
@@ -1117,18 +1114,14 @@ local enh_options
 local function GetEnhancementOptions()
 	if not enh_options then
 		local db = Auras.db.char
-	
-		-- Database Shortcuts
-		local settings = db.settings[2]
-		local settingDefaults = db.settings.defaults
 		
-		-- Element Tables
-		--local elements = db.elements[2]
+		-- Database Shortcuts
+		local auras = db.auras[2]
 		local cooldowns = db.auras[2].cooldowns
 		local timerbars = db.timerbars[2]
 		local statusbars = db.statusbars[2]
-		--local frames = db.elements[2].frames
-		local auras = db.auras[2]
+		local settings = db.settings
+		local settingsDefaults = SSA.defaults.settings
 		
 		-- Layout Table
 		--local layout = db.layout[2]
@@ -1291,18 +1284,20 @@ local function GetEnhancementOptions()
 							order = 3,
 							guiInline = true,
 							args = {
-								OoCAlpha = Auras:Slider_VerifyDefaults(settings,1,2,L["LABEL_ALPHA_NO_COMBAT"],L["TOOLTIP_AURAS_ALPHA_NO_COMBAT"],0,1,nil,false,'OoCAlpha','Settings'),
-								OoRColor = Auras:Color_VerifyDefaults(settings,2,2,L["LABEL_COLOR_NO_RANGE"],L["TOOLTIP_COLOR_OUT_OF_RANGE"],true,"double",false,'OoRColor','Settings'),
+								MoveAuras = Auras:Execute_MoveAuras(settings,1,2,"|cFFFFCC00"..L["BUTTON_MOVE_AURAS_ENHANCEMENT"].."|r"),
+								ResetAuras = Auras:Execute_ResetAuras(2,"|cFFFFCC00"..L["BUTTON_RESET_AURAS_ENHANCEMENT"].."|r"),
+								OoCAlpha = Auras:Slider_VerifyDefaults(settings[2],3,2,L["LABEL_ALPHA_NO_COMBAT"],L["TOOLTIP_AURAS_ALPHA_NO_COMBAT"],0,1,nil,false,'OoCAlpha','Settings'),
+								OoRColor = Auras:Color_VerifyDefaults(settings[2],4,2,L["LABEL_COLOR_NO_RANGE"],L["TOOLTIP_COLOR_OUT_OF_RANGE"],true,"double",false,'OoRColor','Settings'),
 								reset = {
 									order = 4,
 									type = "execute",
 									name = L["BUTTON_RESET_SETTINGS"],
 									func = function()
-										settings.OoCAlpha = settingDefaults.OoCAlpha
-										settings.OoRColor.r = settingDefaults.OoRColor.r
-										settings.OoRColor.g = settingDefaults.OoRColor.g
-										settings.OoRColor.b = settingDefaults.OoRColor.b
-										settings.OoRColor.a = settingDefaults.OoRColor.a
+										settings[2].OoCAlpha = settingsDefaults[2].OoCAlpha
+										settings[2].OoRColor.r = settingsDefaults[2].OoRColor.r
+										settings[2].OoRColor.g = settingsDefaults[2].OoRColor.g
+										settings[2].OoRColor.b = settingsDefaults[2].OoRColor.b
+										settings[2].OoRColor.a = settingsDefaults[2].OoRColor.a
 										enh_options.args.general.args.settings.args.reset.disabled = true
 										enh_options.args.general.args.settings.args.reset.name = "|cFF666666"..L["BUTTON_RESET_SETTINGS"].."|r"
 									end,
@@ -1849,16 +1844,12 @@ local function GetRestorationOptions()
 		local db = Auras.db.char
 		
 		-- Database Shortcuts
-		local settings = db.settings[3]
-		local settingDefaults = db.settings.defaults
-		
-		-- Element Tables
-		local elements = db.elements[3]
+		local auras = db.auras[3]
 		local cooldowns = db.auras[3].cooldowns
 		local timerbars = db.timerbars[3]
 		local statusbars = db.statusbars[3]
-		--local frames = db.elements[3].frames
-		local auras = db.auras[3]
+		local settings = db.settings
+		local settingsDefaults = SSA.defaults.settings
 		
 		-- Layout Table
 		--local layout = db.layout[3]
@@ -2016,10 +2007,10 @@ local function GetRestorationOptions()
 							order = 3,
 							guiInline = true,
 							args = {
-								MoveAuras = Auras:Execute_MoveAuras(elements,1,3,"|cFFFFCC00"..L["BUTTON_MOVE_AURAS_RESTORATION"].."|r"),
+								MoveAuras = Auras:Execute_MoveAuras(settings,1,3,"|cFFFFCC00"..L["BUTTON_MOVE_AURAS_RESTORATION"].."|r"),
 								ResetAuras = Auras:Execute_ResetAuras(2,"|cFFFFCC00"..L["BUTTON_RESET_AURAS_RESTORATION"].."|r"),
-								OoCAlpha = Auras:Slider_VerifyDefaults(settings,3,3,L["LABEL_ALPHA_NO_COMBAT"],L["TOOLTIP_AURAS_ALPHA_NO_COMBAT"],0,1,nil,nil,'OoCAlpha','Settings'),
-								OoRColor = Auras:Color_VerifyDefaults(settings,4,3,L["LABEL_COLOR_NO_RANGE"],L["TOOLTIP_COLOR_OUT_OF_RANGE"],true,"full",nil,'OoRColor','Settings'),
+								OoCAlpha = Auras:Slider_VerifyDefaults(settings[3],3,3,L["LABEL_ALPHA_NO_COMBAT"],L["TOOLTIP_AURAS_ALPHA_NO_COMBAT"],0,1,nil,nil,'OoCAlpha','Settings'),
+								OoRColor = Auras:Color_VerifyDefaults(settings[3],4,3,L["LABEL_COLOR_NO_RANGE"],L["TOOLTIP_COLOR_OUT_OF_RANGE"],true,"full",nil,'OoRColor','Settings'),
 								reset = {
 									order = 4,
 									type = "execute",
@@ -2027,11 +2018,11 @@ local function GetRestorationOptions()
 									--disabled = false,
 									name = L["BUTTON_RESET_SETTINGS"],
 									func = function()
-										settings.OoCAlpha = Auras.db.char.triggers.default.OoCAlpha
-										settings.OoRColor.r = Auras.db.char.triggers.default.OoRColor.r
-										settings.OoRColor.g = Auras.db.char.triggers.default.OoRColor.g
-										settings.OoRColor.b = Auras.db.char.triggers.default.OoRColor.b
-										settings.OoRColor.a = Auras.db.char.triggers.default.OoRColor.a
+										settings[3].OoCAlpha = settingDefaults[3].OoCAlpha
+										settings[3].OoRColor.r = settingDefaults[3].OoRColor.r
+										settings[3].OoRColor.g = settingDefaults[3].OoRColor.g
+										settings[3].OoRColor.b = settingDefaults[3].OoRColor.b
+										settings[3].OoRColor.a = settingDefaults[3].OoRColor.a
 										
 										res_options.args.bars.args.triggers.args.reset.disabled = true
 										res_options.args.bars.args.triggers.args.reset.name = "|cFF666666"..L["BUTTON_RESET_SETTINGS"].."|r"

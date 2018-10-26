@@ -44,7 +44,7 @@ EarthenWallTotemBar:SetScript('OnUpdate',function(self,elapsed)
 		local db = Auras.db.char
 		--local bar = db.elements[3].statusbars.earthenWallBar
 		local bar = Auras.db.char.statusbars[3].bars[self:GetName()]
-		local isMoving = db.elements[3].isMoving
+		local isMoving = db.settings.move.isMoving
 		local maxHealth = UnitHealthMax('player')
 		
 		local timer,seconds = Auras:parseTime(((bar.data.start + bar.data.duration) - GetTime()),true)
@@ -101,7 +101,7 @@ EarthenWallTotemBar:SetScript('OnUpdate',function(self,elapsed)
 			
 			self:SetWidth(bar.layout.width)
 			self:SetHeight(bar.layout.height)
-			self:SetPoint(bar.layout.point,AuraBase,bar.layout.point,bar.layout.x,bar.layout.y)
+			--self:SetPoint(bar.layout.point,AuraBase,bar.layout.point,bar.layout.x,bar.layout.y)
 			self:SetFrameStrata(bar.layout.strata)
 			
 			self.Timer:SetWidth(bar.layout.width)
@@ -149,13 +149,13 @@ EarthenWallTotemBar:SetScript('OnUpdate',function(self,elapsed)
 end)
 
 EarthenWallTotemBar:SetScript('OnMouseDown',function(self,button)
-	if (Auras.db.char.elements[3].isMoving) then
+	if (Auras.db.char.settings.move.isMoving) then
 		Auras:MoveOnMouseDown(self,button)
 	end
 end)
 
 EarthenWallTotemBar:SetScript('OnMouseUp',function(self,button)
-	if (Auras.db.char.elements[3].isMoving) then
+	if (Auras.db.char.settings.move.isMoving) then
 		Auras:MoveOnMouseUp(self,button)
 		Auras:UpdateLayout(self,Auras.db.char.statusbars[3].bars[self:GetName()])
 	end
@@ -246,9 +246,7 @@ EarthenWallTotemBar:SetScript('OnEvent',function(self,event)
 					buffIDs[spellID]:Hide()
 				end]]
 			elseif (subevent == 'SPELL_SUMMON' and spellID == bar.data.spellID) then
-				print("SUMMON REQUEST EWT")
 				if (bar.isEnabled) then
-					print("EWT ENABLED")
 					--[[local EWT = EarthenShieldTotemBar
 					
 					EWT.expires = GetTime() + 15

@@ -47,10 +47,14 @@ function Auras:AdjustStatusBarIcon(self,db,texture)
 		
 		if (db.icon.justify == 'LEFT') then
 			parentJustify = 'RIGHT'
-			self:SetPoint(db.layout.point,self:GetParent(),'CENTER',db.layout.x + floor(db.layout.height / 2),db.layout.y)
+			--self:SetPoint(db.layout.point,self:GetParent(),'CENTER',db.layout.x + floor(db.layout.height / 2),db.layout.y)
+			self:SetPoint(db.layout.point,self:GetParent(),'CENTER',db.layout.x + (self.icon:GetHeight() / 2),db.layout.y)
+			local _,_,_,x = self:GetPoint()
+			print(x.." ("..self.icon:GetSize()..")")
 		else
 			parentJustify = 'LEFT'
-			self:SetPoint(db.layout.point,self:GetParent(),'CENTER',db.layout.x - floor(db.layout.height / 2),db.layout.y)
+			--self:SetPoint(db.layout.point,self:GetParent(),'CENTER',db.layout.x - floor(db.layout.height / 2),db.layout.y)
+			self:SetPoint(db.layout.point,self:GetParent(),'CENTER',db.layout.x - (self.icon:GetHeight() / 2),db.layout.y)
 		end
 		
 		self.icon:ClearAllPoints()
@@ -61,7 +65,7 @@ function Auras:AdjustStatusBarIcon(self,db,texture)
 	
 		self:SetWidth(db.layout.width - db.layout.height)
 	else
-		self:SetPoint(db.layout.point,self:GetParent(),db.layout.point,db.layout.x,db.layout.y)
+		SetPoint(db.layout.point,self:GetParent(),db.layout.point,db.layout.x,db.layout.y)
 		self:SetWidth(db.layout.width)
 		self.icon:Hide()
 	end
@@ -190,7 +194,8 @@ end
 -------------------------------------------------------------------------------------------------------
 
 local function CreateGrid()
-	local grid = SSA.grid
+	local grid = SSA.Move.Grid
+	
 	grid.boxSize = 128
 	grid.isCreated = true
 	grid:SetAllPoints(UIParent)
@@ -245,8 +250,8 @@ local function NavigateInterfaceOptions(index)
 
 	InterfaceOptionsFrame:Show()
 	InterfaceOptionsFrameTab2:Click()
-	Auras.db.char.settings.grid.gridPreview = false
-	SSA.grid:Hide()
+	Auras.db.char.settings.move.grid.gridPreview = false
+	SSA.Move.Grid:Hide()
 
 	for i=2,InterfaceOptionsFrameAddOns:GetNumChildren() do
 		if (select(i,InterfaceOptionsFrameAddOns:GetChildren()):GetText() == "ShamanAuras") then
@@ -298,18 +303,28 @@ function Auras:ChatCommand(input)
 end
 
 function Auras:InitMoveAuraGroups(spec)
-	if (not SSA.grid.isCreated) then
+	local move = self.db.char.settings.move
+	local grid = SSA.grid
+	local moveFrame = SSA.Move
+	
+	if (not moveFrame.Grid.isCreated) then
 		CreateGrid()
 	end
 
-	if (Auras.db.char.isMoveGrid) then
-		SSA.grid:Show()
+	if (move.grid.isEnabled) then
+		moveFrame.Grid:Show()
 	else
-		SSA.grid:Hide()
+		moveFrame.Grid:Hide()
+	end
+	
+	if (move.info.isEnabled) then
+		moveFrame.Info:Show()
+	else
+		moveFrame.Info:Hide()
 	end
 	--SSA.IsMovingAuras = true
-	SSA.Move:Show()
-	SSA.Move.Grid:SetChecked(Auras.db.char.isMoveGrid)
+	moveFrame:Show()
+	moveFrame.GridDisplay:SetChecked(move.grid.isEnabled)
 	
 	InterfaceOptionsFrame:Hide()
 	GameMenuFrame:Hide()
@@ -322,7 +337,7 @@ function Auras:BuildMoveUI(obj)
 	local Move = obj
 	
 	Move.Close = CreateFrame("Button","CloseButton",Move)
-	Move.Grid = CreateFrame("CheckButton","MoveGrid",Move,"ChatConfigCheckButtonTemplate")
+	Move.GridDisplay = CreateFrame("CheckButton","MoveGrid",Move,"ChatConfigCheckButtonTemplate")
 	Move.InfoDisplay = CreateFrame("CheckButton","MoveInfoDisplay",Move,"ChatConfigCheckButtonTemplate")
 	Move.Info = CreateFrame("Frame","MoveInfoFrame",UIParent)
 
@@ -365,16 +380,15 @@ function Auras:BuildMoveUI(obj)
 	Move.Close:SetScript("OnClick",function(self,button)
 		local spec = GetSpecialization()
 		
-		Auras.db.char.elements[spec].isMoving = false
+		--Auras.db.char.elements[spec].isMoving = false
+		Auras.db.char.settings.move.isMoving = false
 		
 		Auras:UpdateTalents()
 		
+		Move.Grid:Hide()
+		Move.Info:Hide()
 		Move:Hide()
-		SSA.grid:Hide()
-
-		if (Move.Info:IsShown()) then
-			Move.Info:Hide()
-		end
+		
 		
 		if (button ~= "MiddleButton") then
 			InterfaceOptionsFrame:Show()
@@ -395,17 +409,17 @@ function Auras:BuildMoveUI(obj)
 		self:SetBackdropColor(0,0,0)
 	end)
 	
-	Move.Grid:SetPoint("TOPLEFT",10,-10)
-	_G[Move.Grid:GetName().."Text"]:SetFont((LSM.MediaTable.font['PT Sans Narrow'] or LSM.DefaultMedia.font), 12)
-	_G[Move.Grid:GetName().."Text"]:SetText(L["TOGGLE_MOVE_GRID"])
-	_G[Move.Grid:GetName().."Text"]:SetPoint("LEFT",25,0)
-	Move.Grid:SetScript("OnClick",function(self)
+	Move.GridDisplay:SetPoint("TOPLEFT",10,-10)
+	_G[Move.GridDisplay:GetName().."Text"]:SetFont((LSM.MediaTable.font['PT Sans Narrow'] or LSM.DefaultMedia.font), 12)
+	_G[Move.GridDisplay:GetName().."Text"]:SetText(L["TOGGLE_MOVE_GRID"])
+	_G[Move.GridDisplay:GetName().."Text"]:SetPoint("LEFT",25,0)
+	Move.GridDisplay:SetScript("OnClick",function(self)
 		if (self:GetChecked()) then
-			Auras.db.char.isMoveGrid = true
-			SSA.grid:Show()
+			Auras.db.char.settings.move.grid.isEnabled = true
+			SSA.Move.Grid:Show()
 		else
-			Auras.db.char.isMoveGrid = false
-			SSA.grid:Hide()
+			Auras.db.char.settings.move.grid.isEnabled = false
+			SSA.Move.Grid:Hide()
 		end
 	end)
 	
@@ -416,8 +430,10 @@ function Auras:BuildMoveUI(obj)
 	_G[Move.InfoDisplay:GetName().."Text"]:SetPoint("LEFT",25,0)
 	Move.InfoDisplay:SetScript("OnClick",function(self)
 		if (self:GetChecked()) then
+			Auras.db.char.settings.move.info.isEnabled = true
 			Move.Info:Show()
 		else
+			Auras.db.char.settings.move.info.isEnabled = false
 			Move.Info:Hide()
 		end
 	end)
@@ -557,8 +573,8 @@ function Auras:CreateVerticalStatusBar(statusbar,spec,ctr)
 			if (statusbar:GetName() == "AncestralGuidanceBar") then
 				
 				--print("X: "..tostring(width))
-				local point,parent,relative,x,y = statusbar.nametext:GetPoint()
-				print(statusbar.nametext:GetParent():GetWidth()..", "..y)
+				--local point,parent,relative,x,y = statusbar.nametext:GetPoint()
+				--print(statusbar.nametext:GetParent():GetWidth()..", "..y)
 				--print(point..", "..parent:GetName()..", "..relative..", "..x..", "..y.." ("..diff1.." - "..diff2..")")
 			end
 			--statusbar.rotatebar:Play()
@@ -611,15 +627,9 @@ local function BuildHorizontalIconRow(rowObj,rowList,rowVerify,spec,group)
 	
 	for i=1,#rowList do
 		if (rowList[i] and rowVerify[i]) then
-			if (group == 3 and rowObj[i]:GetName() == "UnlimitedPower") then
-				print("*** VALID OBJ ***")
-			end
 			rowCtr = rowCtr + 1
 			rowObj[i]:Show()
 		else
-			if (group == 3 and rowObj[i]:GetName() == "UnlimitedPower") then
-				print("*** INVALID OBJ ***")
-			end
 			rowObj[i]:Hide()
 		end
 	end
@@ -930,6 +940,9 @@ function Auras:GetNumActiveAurasByGroupID(groupID,spec)
 		if (v.group == groupID) then
 			local aura = SSA[k]
 			
+			if (not aura.condition()) then
+				SSA.DataFrame.text:SetText("BAD CONDITION: "..k)
+			end
 			if (v.isEnabled and aura.condition() and v.isInUse) then
 				numActiveAuras = numActiveAuras + 1
 			end
@@ -1077,7 +1090,8 @@ function Auras:UpdateTalents(isTalentChange)
 		
 		for i=1,#auras.groups do
 			local rowObj,rowList,rowVerify = {},{},{}
-
+			local numActiveAuras = Auras:GetNumActiveAurasByGroupID(i,spec)
+			
 			if (auras.groups[i].auraCount > 0) then
 				--[[for k,v in pairs(auras.auras) do
 					if (v.group == i) then
@@ -1154,7 +1168,7 @@ function Auras:UpdateTalents(isTalentChange)
 		Auras:InitializeProgressBar('ManaBar',nil,'text',nil,spec)
 		Auras:InitializeProgressBar('TidalWavesBar',nil,nil,nil,spec)
 		Auras:InitializeProgressBar('EarthenWallTotemBar','Timer','healthtext','timetext',spec)
-
+		SSA.CloudburstBar:Show()
 		-- Initialize Frame Groups Upon Specialization Change
 		Auras:InitializeAuraFrameGroups(spec)
 		Auras:InitializeTimerBarFrameGroups(spec)
@@ -1167,7 +1181,8 @@ function Auras:UpdateTalents(isTalentChange)
 		
 		for i=1,#auras.groups do
 			local rowObj,rowList,rowVerify = {},{},{}
-
+			local numActiveAuras = Auras:GetNumActiveAurasByGroupID(i,spec)
+			
 			if (auras.groups[i].auraCount > 0) then
 				--[[for k,v in pairs(auras.auras) do
 					

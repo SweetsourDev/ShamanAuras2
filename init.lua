@@ -67,7 +67,7 @@ SSA.BackdropFrm = {
 
 SSA.activeTotems = {}
 SSA.spec = GetSpecialization()
-SSA.grid = CreateFrame('Frame', 'AuraGrid', UIParent)
+--SSA.grid = CreateFrame('Frame', 'AuraGrid', UIParent)
 --SSA.IsMovingAuras = false;
 SSA.ButtonFont = CreateFont('SSAButtonFont')
 local ButtonFont = SSA.ButtonFont
@@ -606,22 +606,22 @@ function Auras:BuildAuraGroups()
 				AuraGroup.header:SetText(auras.groups[j].name)
 				AuraGroup.header:Hide()
 				
-				AuraGroup:SetScript('OnUpdate',function(self,button)
-					Auras:ToggleFrameMove(self,Auras.db.char.elements[i].isMoving)
+				--[[AuraGroup:SetScript('OnUpdate',function(self,button)
+					Auras:ToggleFrameMove(self,Auras.db.char.settings.move.isMoving)
 				end)
 
 				AuraGroup:SetScript('OnMouseDown',function(self,button)
-					if (Auras.db.char.elements[i].isMoving) then
+					if (Auras.db.char.settings.move.isMoving) then
 						Auras:MoveOnMouseDown(self,button)
 					end
 				end)
 
 				AuraGroup:SetScript('OnMouseUp',function(self,button)
-					if (Auras.db.char.elements[i].isMoving) then
+					if (Auras.db.char.settings.move.isMoving) then
 						Auras:MoveOnMouseUp(self,button)
 						Auras:UpdateLayout(self,auras.frames[j])
 					end
-				end)
+				end)]]
 				
 				_G["SSA_AuraGroup"..j] = AuraGroup
 			end
@@ -638,17 +638,17 @@ function Auras:BuildAuraGroups()
 				BarGroup.header:Hide()
 				
 				BarGroup:SetScript('OnUpdate',function(self,button)
-					Auras:ToggleFrameMove(self,Auras.db.char.elements[i].isMoving,j)
+					Auras:ToggleFrameMove(self,Auras.db.char.settings.move.isMoving,j)
 				end)
 
 				BarGroup:SetScript('OnMouseDown',function(self,button)
-					if (Auras.db.char.elements[i].isMoving) then
+					if (Auras.db.char.settings.move.isMoving) then
 						Auras:MoveOnMouseDown(self,button)
 					end
 				end)
 
 				BarGroup:SetScript('OnMouseUp',function(self,button)
-					if (Auras.db.char.elements[i].isMoving) then
+					if (Auras.db.char.settings.move.isMoving) then
 						Auras:MoveOnMouseUp(self,button)
 						Auras:UpdateLayout(self,timerbars.frames[j])
 					end

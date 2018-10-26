@@ -4,9 +4,13 @@ local Auras = LibStub("AceAddon-3.0"):GetAddon("ShamanAurasDev")
 
 -- Toggles the movement of a frame.
 function Auras:ToggleFrameMove(obj,isMoving,group)
+	
 	if (isMoving) then
 		if (not obj:IsMouseEnabled()) then
 			obj:EnableMouse(true)
+		end
+		
+		if (not obj:IsMovable()) then
 			obj:SetMovable(true)
 		end
 		
@@ -30,6 +34,9 @@ function Auras:ToggleFrameMove(obj,isMoving,group)
 	else
 		if (obj:IsMouseEnabled()) then
 			obj:EnableMouse(false)
+		end
+		
+		if (obj:IsMovable()) then
 			obj:SetMovable(false)
 		end
 		
@@ -98,10 +105,13 @@ function Auras:MoveOnMouseDown(obj,button)
 		obj.screenY = y
 	elseif (IsShiftKeyDown() and not IsControlKeyDown()) then
 		if (button == "LeftButton") then
+			obj.isSnapping = true
 			obj:SetPoint("CENTER",obj:GetParent(),"CENTER",0,y)
 		elseif (button == "RightButton") then
+			obj.isSnapping = true
 			obj:SetPoint("CENTER",obj:GetParent(),"CENTER",x,0)
 		elseif (button == "MiddleButton") then
+			obj.isSnapping = true
 			obj:SetPoint("CENTER",obj:GetParent(),"CENTER",0,0)
 		end
 	elseif (not IsShiftKeyDown() and IsControlKeyDown() and button == "RightButton") then
@@ -127,10 +137,10 @@ function Auras:MoveOnMouseUp(obj,button)
 	end
 end
 
-function Auras:UpdateLayout(obj,db)
+function Auras:UpdateLayout(obj,db,groupID)
 	local point,relativeTo,relativePoint,x,y = obj:GetPoint(1)
-	
-	if (obj.icon and obj:GetName() ~= "Cloudburst") then
+
+	if (obj.icon and obj:GetName() ~= "CloudburstBar") then
 		if (db.icon.isEnabled) then
 			if (db.icon.justify == "LEFT") then
 				x = x - floor(db.layout.height / 2)
@@ -141,7 +151,7 @@ function Auras:UpdateLayout(obj,db)
 		
 		end
 	end
-	
+
 	if (db.layout) then
 		db.layout.point = point
 		db.layout.relativeTo = relativeTo:GetName()
@@ -154,5 +164,9 @@ function Auras:UpdateLayout(obj,db)
 		db.relativePoint = relativePoint
 		db.x = x
 		db.y = y
+	end
+	
+	if (obj.isSnapping) then
+		obj.isSnapping = false
 	end
 end

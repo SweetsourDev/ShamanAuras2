@@ -31,7 +31,6 @@ EarthElemental:SetScript('OnUpdate',function(self)
 		if (Auras:IsPlayerInCombat()) then
 			self:SetAlpha(1)
 		else
-			print("EarthElementalID: "..tostring(groupID))
 			Auras:NoCombatDisplay(self,groupID)
 		end
 	else

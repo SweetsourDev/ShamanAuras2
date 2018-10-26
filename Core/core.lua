@@ -1,5 +1,5 @@
 --[[
-
+ NOTES: "Ready" debuff for shell game: 271571
 ]]
 local SSA, Auras, L, LSM, LBG = unpack(select(2,...))
 
@@ -9,7 +9,7 @@ local _G = _G
 local floor, fmod = math.floor, math.fmod
 local pairs, select, tonumber, tostring = pairs, select, tonumber, tostring
 local twipe = table.wipe
-local format, lower, split, sub = string.format, string.lower, string.split, string.sub
+local format, lower, match, split, sub = string.format, string.lower, string.match, string.split, string.sub
 -- WoW API / Variables
 local BreakUpLargeNumbers = BreakUpLargeNumbers
 local C_ArtifactUI = C_ArtifactUI
@@ -350,16 +350,39 @@ function Auras:InitializeAuraFrameGroups(spec)
 				group:EnableMouse(false)
 				group:SetMovable(false)
 				group:RegisterForDrag('LeftButton')
-				
+				if (i == 6) then
+					print("FRAME: "..frame.x..", "..frame.y)
+				end
 				group:SetPoint(frame.point,(SSA[frame.relativeTo] or UIParent),frame.relativePoint,frame.x,frame.y)
 
+				group.header:SetText(auras.groups[i].name)
+				
 				if (not frame.isEnabled or not Auras:CharacterCheck(nil,0)) then
 					group:Hide()
 				else
 					group:Show()
 				end
 				
-				if (group:GetName() == "Undulation") then
+				group:SetScript('OnUpdate',nil)
+				group:SetScript('OnUpdate',function(self,button)
+					Auras:ToggleFrameMove(self,Auras.db.char.settings.move.isMoving)
+				end)
+
+				group:SetScript('OnMouseDown',nil)
+				group:SetScript('OnMouseDown',function(self,button)
+					if (Auras.db.char.settings.move.isMoving) then
+						Auras:MoveOnMouseDown(self,button)
+					end
+				end)
+
+				group:SetScript('OnMouseUp',nil)
+				group:SetScript('OnMouseUp',function(self,button)
+					if (Auras.db.char.settings.move.isMoving) then
+						Auras:MoveOnMouseUp(self,button)
+						Auras:UpdateLayout(self,frame)
+					end
+				end)
+				--[[if (group:GetName() == "Undulation") then
 					group.Model:SetModel('SPELLS/Monk_ForceSpere_Orb.m2')
 				elseif (group:GetName() == 'StormstrikeChargeGrp') then
 					group.Charge1.Lightning:SetModel('spells/Monk_chiblast_precast.m2')
@@ -368,7 +391,7 @@ function Auras:InitializeAuraFrameGroups(spec)
 					group.Charge1.Lightning:SetModel('spells/Monk_chiblast_precast.m2')
 					group.Charge2.Lightning:SetModel('spells/Monk_chiblast_precast.m2')
 					group.Charge3.Lightning:SetModel('spells/Monk_chiblast_precast.m2')
-				end
+				end]]
 			else
 				SSA["AuraGroup"..i]:Hide()
 			end
@@ -500,19 +523,26 @@ function Auras:InitializeProgressBar(bar1,bar2,text1,text2,spec)
 			if (bar1.icon and db.icon.isEnabled) then
 				local parentJustify
 				
-				if (db.icon.justify == 'LEFT') then
-					parentJustify = 'RIGHT';
-					bar1:SetPoint(db.layout.point,SSA[db.layout.relativeTo],db.layout.relativePoint,(db.layout.x + floor(db.layout.height / 2)) + 1,db.layout.y)
-				else
-					parentJustify = 'LEFT'
-					bar1:SetPoint(db.layout.point,SSA[db.layout.relativeTo],db.layout.relativePoint,(db.layout.x - floor(db.layout.height / 2)) - 1,db.layout.y)
-				end
-				bar1:SetWidth(db.layout.width - db.layout.height)
-				
 				bar1.icon:SetWidth(db.layout.height)
 				bar1.icon:SetHeight(db.layout.height)
-				bar1.icon:SetPoint(parentJustify,bar1,db.icon.justify,0,0)
 				
+				if (db.icon.justify == 'LEFT') then
+					parentJustify = 'RIGHT';
+					--bar1:SetPoint(db.layout.point,SSA[db.layout.relativeTo],db.layout.relativePoint,(db.layout.x + floor(db.layout.height / 2)) + 1,db.layout.y)
+					bar1:SetPoint(db.layout.point,SSA[db.layout.relativeTo],db.layout.relativePoint,(db.layout.x + (bar1.icon:GetHeight() / 2)) + 1,db.layout.y)
+				else
+					parentJustify = 'LEFT'
+					--bar1:SetPoint(db.layout.point,SSA[db.layout.relativeTo],db.layout.relativePoint,(db.layout.x - floor(db.layout.height / 2)) - 1,db.layout.y)
+					bar1:SetPoint(db.layout.point,SSA[db.layout.relativeTo],db.layout.relativePoint,(db.layout.x - (bar1.icon:GetHeight() / 2)) - 1,db.layout.y)
+				end
+				
+				--bar1:SetWidth(db.layout.width - db.layout.height)
+				bar1:SetWidth(db.layout.width - bar1.icon:GetHeight())
+				print("BAR ICON: "..db.layout.height)
+				
+
+				bar1.icon:SetPoint(parentJustify,bar1,db.icon.justify,0,0)
+				print("BAR ICON: "..bar1.icon:GetSize())
 				--bar1.border:SetPoint("TOPLEFT",((CastBar:GetHeight() + 2) * -1),2)
 				--bar1.border:SetPoint("BOTTOMRIGHT",2,-2)
 			else
@@ -612,76 +642,52 @@ end
 -- FIX THIS
 function Auras:ResetAuraGroupPosition(objName)
 	local spec = GetSpecialization()
-	
-	local db = Auras.db.char
-	local elements = db.elements[spec]
-	local objName, obj, subName
+	local db = self.db.char
 
-	for i=1,#SSA.defaults.auras[spec].frames do
-		if (not objName or objName == "AuraGroup"..i) then
+	if (not objName) then
+		for i=1,#SSA.defaults.auras[spec].frames do
 			local frame = self.db.char.auras[spec].frames[i]
 			local frameDefault = SSA.defaults.auras[spec].frames[i]
 			
-			SSA["AuraGroup"..i]:SetPoint(frameDefault.point,SSA[frameDefault.relativeTo],frameDefault.relativePoint,frameDefault.x,frameDefault.y)
-			frame.point,_,frame.relativePoint,frame.x,frame.y = SSA["AuraGroup"..i]:GetPoint()
+			SSA[objName or ("AuraGroup"..i)]:SetPoint(frameDefault.point,SSA[frameDefault.relativeTo],frameDefault.relativePoint,frameDefault.x,frameDefault.y)
+			frame.point,_,frame.relativePoint,frame.x,frame.y = SSA[objName or ("AuraGroup"..i)]:GetPoint()
 		end
-	end
-	
-	for i=1,#SSA.defaults.timerbars[spec].frames do
-		if (not objName or objName == "BarGroup"..i) then
+		
+		for i=1,#SSA.defaults.timerbars[spec].frames do
 			local frame = self.db.char.timerbars[spec].frames[i]
 			local frameDefault = SSA.defaults.timerbars[spec].frames[i]
 			
 			SSA["BarGroup"..i]:SetPoint(frameDefault.point,SSA[frameDefault.relativeTo],frameDefault.relativePoint,frameDefault.x,frameDefault.y)
-			frame.point,_,frame.relativePoint,frame.x,frame.y = SSA["AuraGroup"..i]:GetPoint()
+			frame.point,_,frame.relativePoint,frame.x,frame.y = SSA["BarGroup"..i]:GetPoint()
 		end
-	end
-	
-	for k,v in pairs(SSA.defaults.statusbars[spec].bars) do
-		if (not objName or objName == k) then
+		
+		for k,v in pairs(SSA.defaults.statusbars[spec].bars) do
 			local bar = self.db.char.statusbars[spec].bars[k]
 			
 			SSA[k]:SetPoint(v.layout.point,SSA[v.layout.relativeTo],v.layout.relativePoint,v.layout.x,v.layout.y)
 			bar.layout.point,_,bar.layout.relativePoint,bar.layout.x,bar.layout.y = SSA[k]:GetPoint()
 		end
-	end
-	--[[for i=1,SSA[auraGroup]:GetNumChildren() do
-		objName = select(i,SSA[auraGroup]:GetChildren()):GetName()
+	elseif (objName and match(objName,"AuraGroup")) then
+		local groupID = strsub(objName,10)
+		local frame = self.db.char.auras[spec].frames[tonumber(groupID)]
+		local frameDefault = SSA.defaults.auras[spec].frames[tonumber(groupID)]
 		
-		if (elements.frames[objName]) then
-			obj = db.elements.defaults[spec].frames[objName]
-
-			SSA[objName]:SetPoint(obj.point,SSA[auraGroup],obj.relativePoint,obj.x,obj.y)
-			Auras:UpdateLayout(SSA[objName],elements.frames[objName])
-		else			
-			subName = gsub(objName,"^%a",lower)
-			subName = gsub(subName,spec,'')
-			subName = gsub(subName,'Totem','')
+		SSA[objName]:SetPoint(frameDefault.point,SSA[frameDefault.relativeTo],frameDefault.relativePoint,frameDefault.x,frameDefault.y)
+		frame.point,_,frame.relativePoint,frame.x,frame.y = SSA[objName]:GetPoint()
+	elseif (objName and match(objName,"BarGroup")) then
+		local groupID = strsub(objName,9)
+		local frame = self.db.char.timerbars[spec].frames[tonumber(groupID)]
+		local frameDefault = SSA.defaults.timerbars[spec].frames[tonumber(groupID)]
+		
+		SSA[objName]:SetPoint(frameDefault.point,SSA[frameDefault.relativeTo],frameDefault.relativePoint,frameDefault.x,frameDefault.y)
+		frame.point,_,frame.relativePoint,frame.x,frame.y = SSA[objName]:GetPoint()
+	elseif (objName and db.statusbars[spec].bars[objName]) then
+		local default = SSA.defaults.statusbars[spec].bars[objName]
+		local bar = self.db.char.statusbars[spec].bars[objName]
 			
-			obj = db.elements.defaults[spec].statusbars[subName]
-			bar = elements.statusbars[subName]
-
-			
-			
-			if (SSA[objName].icon and bar.icon.isEnabled) then
-				local parentJustify
-				
-				if (obj.icon.justify == 'LEFT') then
-					parentJustify = 'RIGHT';
-					SSA[objName]:SetPoint(obj.layout.point,SSA[obj.layout.relativeTo],obj.layout.relativePoint,(obj.layout.x + floor(obj.layout.height / 2)) + 1,obj.layout.y)
-				else
-					parentJustify = 'LEFT'
-					SSA[objName]:SetPoint(obj.layout.point,SSA[obj.layout.relativeTo],obj.layout.relativePoint,(obj.layout.x - floor(obj.layout.height / 2)) - 1,obj.layout.y)
-				end
-
-				SSA[objName].icon:SetPoint(parentJustify,SSA[objName],bar.icon.justify,0,0)
-				Auras:UpdateLayout(SSA[objName],elements.statusbars[subName])
-			else
-				SSA[objName]:SetPoint(obj.layout.point,SSA[auraGroup],obj.layout.relativePoint,obj.layout.x,obj.layout.y)
-				Auras:UpdateLayout(SSA[objName],elements.statusbars[subName])
-			end
-		end	
-	end]]
+		SSA[objName]:SetPoint(default.layout.point,SSA[default.layout.relativeTo],default.layout.relativePoint,default.layout.x,default.layout.y)
+		bar.layout.point,_,bar.layout.relativePoint,bar.layout.x,bar.layout.y = SSA[objName]:GetPoint()
+	end
 end
 
 -- FIX THIS

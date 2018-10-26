@@ -21,8 +21,12 @@ function Auras:Execute_MoveAuras(db,order,spec,name)
 		type = "execute",
 		name = name,
 		func = function()
-			db.isMoving = true
-			SSA.Move.Info:Show()
+			db.move.isMoving = true
+			
+			--[[if (db.move.info.isEnabled) then
+				SSA.Move.Info:Show()
+			end]]
+			
 			self:InitMoveAuraGroups(spec)
 			Auras:UpdateTalents()
 		end,
@@ -139,7 +143,6 @@ function Auras:Toggle_VerifyDefaults(db,order,spec,name,desc,width,disabled,dbKe
 			self:VerifyDefaultValues(spec,this.options,optionsGroup,optionsSubgroup)
 			
 			if (isUpdateTalents) then
-				print("--UPDATING TALENTS--")
 				self:UpdateTalents()
 			end
 		end,
@@ -150,10 +153,6 @@ function Auras:Toggle_VerifyDefaults(db,order,spec,name,desc,width,disabled,dbKe
 end
 
 function Auras:Toggle_Statusbar(db,order,name,desc,dbKey,barName)
-	if (not db) then
-		print("Bad Bar: "..tostring(barName))
-	end
-	
 	local toggle = {
 		order = order,
 		type = "toggle",
@@ -214,6 +213,7 @@ function Auras:Color_VerifyDefaults(db,order,spec,name,desc,hasAlpha,width,disab
 		hasAlpha = hasAlpha,
 		get = function(info)
 			local color = db[dbKey]
+
 			return color.r, color.g, color.b, color.a
 		end,
 		set = function(this, r, g, b, a)

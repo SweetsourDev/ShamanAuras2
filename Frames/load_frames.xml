@@ -66,6 +66,7 @@
 	<Script file="Auras\Restoration\SpiritLinkTotem.lua"/>
 	<Script file="Auras\Restoration\SpiritwalkersGrace.lua"/>
 	<Script file="Auras\Restoration\Tidebringer.lua"/>
+	<Script file="Auras\Restoration\Undulation.lua"/>
 	<Script file="Auras\Restoration\UnleashLife.lua"/>
 	<Script file="Auras\Restoration\Wellspring.lua"/>
 	

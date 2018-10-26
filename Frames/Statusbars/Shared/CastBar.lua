@@ -56,17 +56,18 @@ CastBar.duration = 0
 CastBar.spellName = ''
 CastBar.isCast = false
 CastBar.progress = 0
+CastBar.isSnapping = false
 
 CastBar:SetScript('OnUpdate',function(self)
 	if (Auras:CharacterCheck(nil,0)) then
 		local spec = GetSpecialization()
 		local db = Auras.db.char
 		local bar = Auras.db.char.statusbars[spec].bars.CastBar
-		local isMoving = db.elements[spec].isMoving
+		local isMoving = db.settings.move.isMoving
 
 		Auras:ToggleProgressBarMove(self,isMoving,bar)
 		
-		if (not db.elements[spec].statusbars.defaultBar and CastingBarFrame:IsShown()) then
+		if (not db.statusbars[spec].defaultBar and CastingBarFrame:IsShown()) then
 			CastingBarFrame:Hide()
 		end
 		
@@ -94,7 +95,9 @@ CastBar:SetScript('OnUpdate',function(self)
 			
 			Auras:AdjustStatusBarText(self.nametext,bar.nametext)
 			Auras:AdjustStatusBarText(self.timetext,bar.timetext)
-			Auras:AdjustStatusBarIcon(self,bar,texture)
+			if (not self.isSnapping) then
+				Auras:AdjustStatusBarIcon(self,bar,texture)
+			end
 			--AdjustStatusBarSpark(self,bar)
 			
 			if (bar.adjust.showBG) then
@@ -137,7 +140,6 @@ CastBar:SetScript('OnUpdate',function(self)
 				if (bar.spark) then
 					self.progress = self.endTime - GetTime()
 
-					print(self.duration..", "..self.progress)
 					if (self.duration > 0 and self.progress > 0) then
 						local position = self:GetWidth() - (self:GetWidth() / (self.duration / self.progress))
 						self.spark:SetPoint('CENTER', self, 'LEFT', position, 0)
@@ -164,13 +166,13 @@ CastBar:SetScript('OnUpdate',function(self)
 end)
 
 CastBar:SetScript('OnMouseDown',function(self,button)
-	if (Auras.db.char.elements[SSA.spec].isMoving) then
+	if (Auras.db.char.settings.move.isMoving) then
 		Auras:MoveOnMouseDown(self,button)
 	end
 end)
 
 CastBar:SetScript('OnMouseUp',function(self,button)
-	if (Auras.db.char.elements[SSA.spec].isMoving) then
+	if (Auras.db.char.settings.move.isMoving) then
 		Auras:MoveOnMouseUp(self,button)
 		Auras:UpdateLayout(self,Auras.db.char.statusbars[SSA.spec].bars.CastBar)
 	end

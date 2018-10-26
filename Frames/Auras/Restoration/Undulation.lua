@@ -4,23 +4,23 @@ local SSA, Auras = unpack(select(2,...))
 local GetTalentInfo = GetTalentInfo
 
 -- Cache Global Addon Variables
-local FlashFlood = SSA.FlashFlood
+local Undulation = SSA.Undulation
 
 -- Initialize Data Variables
-FlashFlood.spellID = 280614
-FlashFlood.pulseTime = 0
-FlashFlood.condition = function()
-	local _,_,_,selected = GetTalentInfo(6,1,1)
+Undulation.spellID = 200071
+Undulation.pulseTime = 0
+Undulation.condition = function()
+	local _,_,_,selected = GetTalentInfo(1,2,1)
 	
 	return selected
 end
 
-FlashFlood:SetScript('OnUpdate', function(self)
+Undulation:SetScript('OnUpdate', function(self)
 	if ((Auras:CharacterCheck(spec,3) and self.condition()) or Auras:IsPreviewingAura(self)) then
 		local groupID = Auras:GetAuraGroupID(self,self:GetName())
-		local buff,_,_,_,duration,expires = Auras:RetrieveAuraInfo("player", 280615)
+		local buff,_,_,_,duration,expires = Auras:RetrieveAuraInfo("player", 216251)
 
-		Auras:SetGlowStartTime(self,((expires or 0) - (duration or 0)),duration,280615,"buff")
+		Auras:SetGlowStartTime(self,((expires or 0) - (duration or 0)),duration,216251,"buff")
 		Auras:GlowHandler(self)
 		Auras:ToggleAuraVisibility(self,true,'showhide')
 		Auras:CooldownHandler(self,groupID,((expires or 0) - (duration or 0)),duration)

@@ -353,7 +353,7 @@ end
 function Auras:SetCooldownOptions(spec,options)
 	local db = Auras.db.char
 	local cooldown = Auras.db.char.auras[spec].cooldowns
-	local default = Auras.db.char.auras.templates.cooldowns
+	local defaults = SSA.defaults.auras[spec].cooldowns
 	local option = options.args.cooldowns.args
 	
 	if (cooldown.sweep and cooldown.isEnabled) then
@@ -403,7 +403,7 @@ function Auras:SetCooldownOptions(spec,options)
 			option.cdGroups.args["cd"..i.."_adjustGroup"].args.shadow.args.shadowY.disabled = true
 		end
 		
-		if (not Auras:GetResetButtonState(cooldown.groups[i],default,'text')) then
+		if (not Auras:GetResetButtonState(cooldown.groups[i],defaults.groups[i],'text')) then
 			option.cdGroups.args["cd"..i.."_adjustGroup"].args.reset.disabled = false
 			option.cdGroups.args["cd"..i.."_adjustGroup"].args.reset.name = "|cFFFFCC00"..RESET_TO_DEFAULT.."|r"
 		else
@@ -498,7 +498,6 @@ end
 
 function Auras:VerifyDefaultValues(spec,options,group)
 	if (group == "Cooldowns") then
-		print("Options: "..tostring(options))
 		Auras:SetCooldownOptions(spec,options)
 		Auras:RefreshCooldownList(options,spec,Auras.db.char.auras[spec].cooldowns)
 	elseif (group == "Cast" or group == "Channel") then
@@ -556,11 +555,11 @@ function Auras:VerifyDefaultValues(spec,options,group)
 	elseif (group == 'Settings') then
 		local db = Auras.db.char
 		local settings = db.settings[spec]
-		local defaults = Auras.db.char.settings.defaults
+		local defaults = SSA.defaults.settings[spec]
 		local option = options.args.general.args.settings.args
 		
 		if (settings.OoCAlpha ~= defaults.OoCAlpha or 
-			(settings.totemMastery and settings.totemMastery ~= defaults[spec].totemMastery) or 
+			--(settings.totemMastery and settings.totemMastery ~= defaults[spec].totemMastery) or 
 			settings.OoRColor.r ~= defaults.OoRColor.r or 
 			settings.OoRColor.g ~= defaults.OoRColor.g or 
 			settings.OoRColor.b ~= defaults.OoRColor.b or 
@@ -586,41 +585,6 @@ function Auras:VerifyDefaultValues(spec,options,group)
 			--option.reset.disabled = true
 			--option.reset.name = "|cFF666666"..L["BUTTON_RESET_STATUSBAR_"..upper(group)].."|r"
 		end
-	elseif (group == "Primary") then
-		local db = Auras.db.char
-		--local layout = db.layout[spec]
-		--local defaults = db.layout.defaults
-		
-		--[[if (layout.orientation.top ~= defaults.orientation.top or
-			layout.orientation.bottom ~= defaults.orientation.bottom or
-			layout.primary.top.icon ~= defaults.primary.top.icon or
-			layout.primary.top.spacing ~= defaults.primary.top.spacing or
-			layout.primary.top.charges ~= defaults.primary.top.charges or
-			layout.primary.bottom.icon ~= defaults.primary.bottom.icon or
-			layout.primary.bottom.spacing ~= defaults.primary.bottom.spacing) then
-			options.args.layout.args.primaryAuras.args.ResetPrimaryLayout.disabled = false
-			options.args.layout.args.primaryAuras.args.ResetPrimaryLayout.name = "|cFFFFCC00"..L["BUTTON_RESET_LAYOUT_PRIMARY"].."|r"
-		else
-			options.args.layout.args.primaryAuras.args.ResetPrimaryLayout.disabled = true
-			options.args.layout.args.primaryAuras.args.ResetPrimaryLayout.name = "|cFF666666"..L["BUTTON_RESET_LAYOUT_PRIMARY"].."|r"
-		end]]
-	elseif (group == "Secondary") then
-		local db = Auras.db.char
-		--local layout = db.layout[spec]
-		--local defaults = db.layout.defaults
-	
-		--[[if (layout.orientation.left ~= defaults.orientation.left or
-			layout.orientation.right ~= defaults.orientation.right or
-			layout.secondary.left.icon ~= defaults.secondary.left.icon or
-			layout.secondary.left.spacing ~= defaults.secondary.left.spacing or
-			layout.secondary.right.icon ~= defaults.secondary.right.icon or
-			layout.secondary.right.spacing ~= defaults.secondary.right.spacing) then
-			options.args.layout.args.secondaryAuras.args.ResetSecondaryLayout.disabled = false
-			options.args.layout.args.secondaryAuras.args.ResetSecondaryLayout.name = "|cFFFFCC00"..L["BUTTON_RESET_LAYOUT_SECONDARY"].."|r"
-		else
-			options.args.layout.args.secondaryAuras.args.ResetSecondaryLayout.disabled = true
-			options.args.layout.args.secondaryAuras.args.ResetSecondaryLayout.name = "|cFF666666"..L["BUTTON_RESET_LAYOUT_SECONDARY"].."|r"
-		end]]
 	elseif (group == "Icefury") then
 		local db = Auras.db.char
 		local bar = db.statusbars[spec].bars.IcefuryBar
@@ -764,7 +728,6 @@ end
 function Auras:RefreshCooldownList(options,spec)
 	local args = {}
 	local orderCtr = 9
-	print("REFRESHING COOLDOWN LIST")
 	local COOLDOWN_VALUES = {}
 	local auras = Auras.db.char.auras[spec]
 	for i=1,#auras.groups do
@@ -841,11 +804,7 @@ function Auras:RefreshCooldownList(options,spec)
 			},
 		}
 	end
-	if (spec == 2) then
-		if (not _G["SSA_CD_ARGS"]) then
-			_G["SSA_CD_ARGS"] = args
-		end
-	end
+
 	options.args.cooldowns.args.cdGroups.args = args
 	options.args.cooldowns.args.cdGroups.name = "Group "..Auras.db.char.auras[spec].cooldowns.selected.." Cooldown Settings"
 end
@@ -891,12 +850,7 @@ local function ReorderAuraList(spec,grp,oldOrder,newOrder,method)
 			end
 		end
 	elseif (method == "add") then
-		print("Old Order: "..tostring(oldOrder))
-		
 		for k,v in pairs(auras) do
-			if (v.group == grp) then
-				print(k..": "..v.order..tostring(v.order >= oldOrder))
-			end
 			if (v.group == grp and v.order >= oldOrder and k ~= newOrder) then
 				auras[k].order = auras[k].order + 1
 			end
@@ -949,47 +903,25 @@ local function ReorderTimerBarGroups(spec,oldPos,method)
 end
 
 local function ReorderAuraGlow(obj,triggers,oldPos,newPos)
-	--for i=1,#triggers do
-		--print(triggers[i].name)
-		--local aura = SSA[obj]
+	local tempTable = {}
 		
-		--local auraTempTable = {}
-		local tempTable = {}
-		
-		--[[for k,v in pairs(aura.triggers[newPos]) do
-			auraTempTable[k] = v
-		end]]
-		
-		for k,v in pairs(triggers[newPos]) do
-			tempTable[k] = v
-		end
-		
-		--aura.triggers[newPos] = nil
-		--aura.triggers[newPos] = {}
-		triggers[newPos] = nil
-		triggers[newPos] = {}
-		
-		--[[for k,v in pairs(aura.triggers[oldPos]) do
-			aura.triggers[newPos][k] = v
-		end]]
-		
-		for k,v in pairs(triggers[oldPos])  do
-			triggers[newPos][k] = v
-		end
-		
-		--aura.triggers[oldPos] = nil
-		--aura.triggers[oldPos] = {}
-		triggers[oldPos] = nil
-		triggers[oldPos] = {}
-		
-		--[[for k,v in pairs(auraTempTable) do
-			aura.triggers[oldPos][k] = v
-		end]]
-		
-		for k,v in pairs(tempTable) do
-			triggers[oldPos][k] = v
-		end
-	--end
+	for k,v in pairs(triggers[newPos]) do
+		tempTable[k] = v
+	end
+
+	triggers[newPos] = nil
+	triggers[newPos] = {}
+	
+	for k,v in pairs(triggers[oldPos])  do
+		triggers[newPos][k] = v
+	end
+
+	triggers[oldPos] = nil
+	triggers[oldPos] = {}
+	
+	for k,v in pairs(tempTable) do
+		triggers[oldPos][k] = v
+	end
 end
 
 local function AddGlowTools(auraTbl,grp)
@@ -1100,7 +1032,6 @@ local function AddGlowTools(auraTbl,grp)
 								imageWidth = 25,
 								imageHeight = 25,
 								disabled = function()
-									--print("PRIORITY: "..tostring(val.priority)..", TRIGGERS: "..tostring(v.glow.triggers.numTriggers))
 									return (i == #v.glow.triggers and true) or false
 								end,
 								--disabled = function()
@@ -1869,7 +1800,6 @@ local function BuildCurrentAuraList(db,spec,grp)
 						imageWidth = 25,
 						imageHeight = 25,
 						disabled = function()
-							print(v.order.." - "..auras.groups[grp].auraCount)
 							return (v.order == auras.groups[grp].auraCount and true) or false
 						end,
 						--[[disabled = function()
@@ -2512,7 +2442,6 @@ local function BuildCurrentBarList(db,spec,grp)
 						set = function(this,value)
 							timerbars.bars[barTitle].isCustomize = value
 							
-							print(barTitle.." ("..grp..")")
 							for k,v in pairs(timerbars.bars) do
 								if (v.layout.group == grp and k ~= barTitle) then
 									--print(k)
@@ -2676,15 +2605,10 @@ function Auras:RefreshTimerBarGroupList(options,spec)
 	for i=1,#sortTable do
 		local barTitle = sortTable[i]
 		local bar = SSA[barTitle]
-		
-		if (not timerbars.bars[barTitle]) then
-			print("Bad Index: "..tostring(barTitle))
-		end
 		local _,_,icon = GetSpellInfo(bar.spellID)
 	
 		-- If the bar is enabled, but not currently in use, show it in the "Available Bars" list
 		if (timerbars.bars[barTitle].isEnabled and not timerbars.bars[barTitle].isInUse) then
-			print("Inserting: ".."|T"..icon..":0|t "..timerbars.bars[barTitle].layout.text..";"..barTitle)
 			tinsert(BAR_LIST,"|T"..icon..":0|t "..timerbars.bars[barTitle].layout.text..";"..barTitle)
 		end
 	end
@@ -2789,7 +2713,7 @@ function Auras:RefreshTimerBarGroupList(options,spec)
 							local barInfo = { strsplit(";",BAR_LIST[i]) }
 							tinsert(items,barInfo[1])
 						end
-						print("Num Items: "..#items)
+
 						return items
 					end,
 				},

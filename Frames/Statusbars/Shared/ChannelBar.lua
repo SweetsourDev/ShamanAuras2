@@ -39,13 +39,14 @@ ChannelBar.endTime = 0
 ChannelBar.isChannel = false
 ChannelBar.duration = 0
 ChannelBar.progress = 0
+ChannelBar.isSnapping = false
 
 ChannelBar:SetScript('OnUpdate',function(self)
 	if (Auras:CharacterCheck(nil,0)) then
 		local spec = GetSpecialization()
 		local db = Auras.db.char
 		local bar = Auras.db.char.statusbars[spec].bars.ChannelBar
-		local isMoving = db.elements[spec].isMoving
+		local isMoving = db.settings.move.isMoving
 		
 		Auras:ToggleProgressBarMove(self,isMoving,bar)
 		
@@ -72,7 +73,9 @@ ChannelBar:SetScript('OnUpdate',function(self)
 			
 			Auras:AdjustStatusBarText(self.nametext,bar.nametext)
 			Auras:AdjustStatusBarText(self.timetext,bar.timetext)
-			Auras:AdjustStatusBarIcon(self,bar,texture)
+			if (not self.isSnapping) then
+				Auras:AdjustStatusBarIcon(self,bar,texture)
+			end
 			
 			if (bar.adjust.showBG) then
 				self:SetMinMaxValues(0,1)
@@ -131,13 +134,13 @@ ChannelBar:SetScript('OnUpdate',function(self)
 end)
 
 ChannelBar:SetScript('OnMouseDown',function(self,button)
-	if (Auras.db.char.elements[SSA.spec].isMoving) then
+	if (Auras.db.char.settings.move.isMoving) then
 		Auras:MoveOnMouseDown(self,button)
 	end
 end)
 
 ChannelBar:SetScript('OnMouseUp',function(self,button)
-	if (Auras.db.char.elements[SSA.spec].isMoving) then
+	if (Auras.db.char.settings.move.isMoving) then
 		Auras:MoveOnMouseUp(self,button)
 		Auras:UpdateLayout(self,Auras.db.char.statusbars[SSA.spec].bars.ChannelBar)
 	end

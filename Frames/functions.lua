@@ -21,17 +21,6 @@ function Auras:NoCombatDisplay(self,group)
 	else
 		self:SetAlpha(Auras.db.char.settings[spec].OoCAlpha)
 	end
-	
-	--[[if (self.glow) then
-		if (self:GetName() == "MasterOfElements") then
-			print("TURN OFF GLOW")
-		end
-		Auras:ToggleOverlayGlow(self.glow,false)
-	else
-		if (self:GetName() == "MasterOfElements") then
-			print("WTF?!")
-		end
-	end]]
 end
 
 function Auras:SetGlowStartTime(obj,start,duration,spellID,triggerType)
@@ -51,7 +40,6 @@ function Auras:SetGlowStartTime(obj,start,duration,spellID,triggerType)
 						end
 					end
 					if (trigger.start == 0) then
-						--print("START: "..start)
 						trigger.start = start
 					end
 				else
@@ -187,7 +175,7 @@ function Auras:GlowHandler(obj)
 		
 		if (trigger.isActive) then
 			if (not obj.pulseTime) then
-				print(obj:GetName())
+				--print(obj:GetName())
 			end
 			if (trigger.pulseRate > 0 and GetTime() >= obj.pulseTime) then
 				obj.pulseTime = GetTime() + trigger.pulseRate
@@ -381,7 +369,7 @@ function Auras:IsPreviewingAura(obj,grp)
 	
 	local group = (grp and grp) or auras.auras[obj:GetName()].group
 	
-	return self.db.char.elements[SSA.spec].isMoving or auras.groups[group].isAdjust or (auras.cooldowns.adjust and auras.cooldowns.selected == group)
+	return self.db.char.settings.move.isMoving or auras.groups[group].isAdjust or (auras.cooldowns.adjust and auras.cooldowns.selected == group)
 end
 
 function Auras:IsPreviewingTimerbar(obj)
@@ -396,7 +384,7 @@ function Auras:IsPreviewingTimerbar(obj)
 		return false
 	end
 
-	return self.db.char.elements[SSA.spec].isMoving or timerbars.groups[timerbars.bars[obj:GetName()].layout.group].isAdjust or timerbars.bars[obj:GetName()].isAdjust
+	return self.db.char.settings.move.isMoving or timerbars.groups[timerbars.bars[obj:GetName()].layout.group].isAdjust or timerbars.bars[obj:GetName()].isAdjust
 end
 
 function Auras:IsPreviewingStatusbar(obj)
@@ -410,7 +398,7 @@ function Auras:IsPreviewingStatusbar(obj)
 		return false
 	end
 	
-	return self.db.char.elements[SSA.spec].isMoving or statusbars.bars[obj:GetName()].adjust.isEnabled
+	return self.db.char.settings.move.isMoving or statusbars.bars[obj:GetName()].adjust.isEnabled
 end
 
 -- Returns the current spec as well as group ID for the specified aura
@@ -459,7 +447,6 @@ function Auras:SortTimerBars(spec)
 		if (bar.start > 0) then
 			tinsert(barsShowing[v.layout.group],bar.start)
 		elseif (v.isAdjust) then
-			--print("Inserting: "..k..";"..tostring(v.group))
 			tinsert(barsShowing[v.layout.group],k..";"..v.layout.group)
 		end
 	end
@@ -586,9 +573,6 @@ local function PreviewTimerBar(bar,group,isAdjust)
 	
 	bar:SetMinMaxValues(0,10)
 	bar:SetValue(seconds)
-	if (not (bar.timetext)) then
-		print("NO TIME TEXT: "..tostring(bar:GetName()))
-	end
 	bar.timetext:SetText(timer)
 	
 	if (isAdjust) then
@@ -637,10 +621,7 @@ end
 function Auras:RunTimerEvent_Aura(bar,isAnyCaster,...)
 	local timerbar = Auras.db.char.timerbars[SSA.spec].bars[bar:GetName()]
 	local _,subevent,_,srcGUID,_,_,_,destGUID,_,_,_,spellID = ...
-	
-	--[[if (spellID == 193796) then
-		print("FLAMETONGUE BAR")
-	end]]
+
 	if (((not isAnyCaster and srcGUID == UnitGUID("player")) or (isAnyCaster and destGUID == UnitGUID("player"))) and bar.spellID == spellID) then
 		if (subevent == "SPELL_AURA_APPLIED" or subevent == "SPELL_AURA_REFRESH") then
 			local _,_,_,_,duration = AuraUtil.FindAuraByName(Auras:GetSpellName(spellID),"player")

@@ -44,7 +44,7 @@ IcefuryBar:SetScript('OnUpdate',function(self)
 	if ((Auras:CharacterCheck(nil,1) and self.condition()) or Auras:IsPreviewingStatusbar(self)) then
 		local db = Auras.db.char
 		local bar = db.statusbars[1].bars.IcefuryBar
-		local isMoving = db.elements[1].isMoving
+		local isMoving = db.settings.move.isMoving
 
 		Auras:ToggleProgressBarMove(self,isMoving,bar)
 		
@@ -140,13 +140,13 @@ IcefuryBar:SetScript('OnUpdate',function(self)
 end)
 
 IcefuryBar:SetScript('OnMouseDown',function(self,button)
-	if (Auras.db.char.elements[1].isMoving) then
+	if (Auras.db.char.settings.move.isMoving) then
 		Auras:MoveOnMouseDown(self,button)
 	end
 end)
 
 IcefuryBar:SetScript('OnMouseUp',function(self,button)
-	if (Auras.db.char.elements[1].isMoving) then
+	if (Auras.db.char.settings.move.isMoving) then
 		Auras:MoveOnMouseUp(self,button)
 		Auras:UpdateLayout(self,Auras.db.char.statusbars[1].bars.IcefuryBar)
 	end

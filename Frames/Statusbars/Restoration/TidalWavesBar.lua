@@ -69,7 +69,7 @@ TidalWavesBar:SetScript('OnUpdate',function(self)
 	if (Auras:CharacterCheck(nil,3)) then
 		local db = Auras.db.char
 		local bar = Auras.db.char.statusbars[3].bars[self:GetName()]
-		local isMoving = db.elements[3].isMoving
+		local isMoving = db.settings.move.isMoving
 
 		if (isMoving or bar.adjust.isEnabled) then
 			if (self.Flash:IsPlaying()) then
@@ -103,7 +103,7 @@ TidalWavesBar:SetScript('OnUpdate',function(self)
 			
 			self:SetWidth(bar.layout.width)
 			self:SetHeight(bar.layout.height)
-			self:SetPoint(bar.layout.point,AuraBase,bar.layout.point,bar.layout.x,bar.layout.y)
+			--self:SetPoint(bar.layout.point,AuraBase,bar.layout.point,bar.layout.x,bar.layout.y)
 			self:SetFrameStrata(bar.layout.strata)
 		end
 		
@@ -215,13 +215,13 @@ TidalWavesBar:SetScript('OnUpdate',function(self)
 end)
 
 TidalWavesBar:SetScript('OnMouseDown',function(self,button)
-	if (Auras.db.char.elements[3].isMoving) then
+	if (Auras.db.char.settings.move.isMoving) then
 		Auras:MoveOnMouseDown(self,button)
 	end
 end)
 
 TidalWavesBar:SetScript('OnMouseUp',function(self,button)
-	if (Auras.db.char.elements[3].isMoving) then
+	if (Auras.db.char.settings.move.isMoving) then
 		Auras:MoveOnMouseUp(self,button)
 		Auras:UpdateLayout(self,Auras.db.char.statusbars[3].bars.TidalWavesBar)
 	end

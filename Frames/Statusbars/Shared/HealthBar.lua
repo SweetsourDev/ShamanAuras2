@@ -32,7 +32,7 @@ HealthBar:SetScript('OnUpdate',function(self)
 		
 		local db = Auras.db.char
 		local bar = db.elements[1].statusbars.healthBar
-		local isMoving = db.elements[1].isMoving
+		local isMoving = db.settings.move.isMoving
 		
 		local _,maxVal = self:GetMinMaxValues()
 		
@@ -110,15 +110,15 @@ HealthBar:SetScript('OnUpdate',function(self)
 end)
 
 HealthBar:SetScript('OnMouseDown',function(self,button)
-	if (Auras.db.char.elements[1].isMoving) then
-		Auras:MoveOnMouseDown(self,'AuraGroupRes',button)
+	if (Auras.db.char.settings.move.isMoving) then
+		Auras:MoveOnMouseDown(self,button)
 	end
 end)
 
 HealthBar:SetScript('OnMouseUp',function(self,button)
-	if (Auras.db.char.elements[1].isMoving) then
+	if (Auras.db.char.settings.move.isMoving) then
 		Auras:MoveOnMouseUp(self,button)
-		Auras:UpdateLayout(self,Auras.db.char.elements[1].statusbars.healthBar)
+		Auras:UpdateLayout(self,Auras.db.char.statusbars[1].bars.HealthBar)
 	end
 end)
 
