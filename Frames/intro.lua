@@ -116,8 +116,31 @@ IntroFrame.desc.text:SetSize(1024,128)
 IntroFrame.desc.text:SetTextColor(1,1,1,1)
 IntroFrame.desc.text:SetJustifyH("LEFT")
 IntroFrame.desc.text:SetJustifyV("TOP")
-IntroFrame.desc.text:SetText("Welcome to my new and improved Shaman Auras!\n\n• Many bugs from the previous version have been squashed!\n• You can now organize auras and create aura groups to your liking!\n• You can now customize and organize timer bars!")
+IntroFrame.desc.text:SetText("FIXES\n\n    • Fixed the glow timing for |cFFFFe961Flame Shock|r")
 
+IntroFrame.desc.button = CreateFrame("Button",nil,IntroFrame.desc,"UIPanelButtonTemplate")
+IntroFrame.desc.button:SetSize(75,20)
+IntroFrame.desc.button:SetPoint("BOTTOMRIGHT",-10,10)
+IntroFrame.desc.button:SetText("Close")
+IntroFrame.desc.button:SetAlpha(0)
+IntroFrame.desc.button:SetScript("OnUpdate",function(self)
+	if (not Auras.db.char.isFirstEverLoad and not self.isHideClicked) then
+		self:SetAlpha(1)
+	elseif (self.isHideClicked) then
+		local appearSpeed = 0.02
+		local newAlpha = IntroFrame:GetAlpha() - appearSpeed
+		
+		if (newAlpha < 0) then
+			IntroFrame:Hide()
+		else
+			IntroFrame:SetAlpha(newAlpha)
+		end
+	end
+end)
+IntroFrame.desc.button:SetScript("OnClick",function(self)
+	self.isHideClicked = true
+end)
+--/run SSA2_db.char["Sweetsours - Firetree"].version = "r1-alpha1"
 IntroFrame.dbFrame = CreateFrame("Frame",nil,IntroFrame)
 IntroFrame.dbFrame:SetSize(280,128)
 IntroFrame.dbFrame:SetBackdrop(SSA.BackdropSB)
