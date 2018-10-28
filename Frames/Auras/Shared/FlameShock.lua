@@ -35,13 +35,13 @@ FlameShock:SetScript('OnUpdate', function(self)
 			self.text:SetTextColor(1,1,0,1)
 		end
 		
-		if (debuff) then
+		--[[if (debuff) then
 			Auras:SetGlowStartTime(self,((expires or 0) - (debuffDuration or 0)),debuffDuration,self.spellID,"debuff")
 		else
 			local trigger = Auras.db.char.auras[SSA.spec].auras[self:GetName()].glow.triggers[1]
 			
 			trigger.start = 0
-		end
+		end]]
 		Auras:GlowHandler(self)
 		Auras:ToggleAuraVisibility(self,true,'showhide')
 		Auras:SpellRangeCheck(self,self.spellID,true)	
@@ -85,5 +85,26 @@ FlameShock:SetScript('OnUpdate', function(self)
 	else
 		Auras:ToggleAuraVisibility(self,false,'showhide')
 		--Auras:ToggleOverlayGlow(self.glow,false)
+	end
+end)
+
+FlameShock:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+FlameShock:SetScript("OnEvent",function(self,event)
+	if (event ~= "COMBAT_LOG_EVENT_UNFILTERED" or Auras.db.char.isFirstEverLoad) then
+		return
+	end
+	local spec = SSA.spec or GetSpecialization()
+	
+	local glow = Auras.db.char.auras[spec].auras[self:GetName()].glow
+	local _,subevent,_,srcGUID,_,_,_,destGUID,_,_,_,spellID = CombatLogGetCurrentEventInfo()
+	
+	if ((subevent == "SPELL_AURA_APPLIED" or subevent == "SPELL_AURA_REFRESH" or subevent == "SPELL_AURA_REMOVED") and srcGUID == UnitGUID("player") and spellID == glow.triggers[1].spellID) then
+		if (subevent == "SPELL_AURA_APPLIED" or subevent == "SPELL_AURA_REFRESH") then
+			local _,_,_,_,duration = Auras:RetrieveAuraInfo("target", glow.triggers[1].spellID, "HARMFUL PLAYER")
+			glow.triggers[1].start = GetTime()
+			glow.triggers[1].duration = duration
+		elseif (subevent == "SPELL_AURA_REMOVED") then
+			glow.triggers[1].start = 0
+		end
 	end
 end)
