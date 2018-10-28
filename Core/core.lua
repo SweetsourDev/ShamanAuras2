@@ -331,12 +331,12 @@ end
 
 -- Aura Group Builder
 function Auras:InitializeAuraFrameGroups(spec)
-	SSA.AuraBase:SetPoint("CENTER",0,0)
-	SSA.AuraBase:SetWidth(math.ceil(GetScreenWidth() - 500))
-	SSA.AuraBase:SetHeight(math.ceil(GetScreenHeight() - 250))
-	--for groupObj in pairs(db.frames) do
 	local auras = Auras.db.char.auras[spec]
 
+	SSA.AuraBase:SetPoint(auras.base.point,SSA.AuraBase:GetParent(),auras.base.relativePoint,auras.base.x,auras.base.y)
+	SSA.AuraBase:SetWidth(math.ceil(GetScreenWidth() - 500))
+	SSA.AuraBase:SetHeight(math.ceil(GetScreenHeight() - 250))
+	
 	for i=1,#auras.frames do
 		if (SSA["AuraGroup"..i]) then
 			local frame = auras.frames[i]
@@ -685,6 +685,12 @@ function Auras:ResetAuraGroupPosition(objName)
 			SSA[k]:SetPoint(v.layout.point,SSA[v.layout.relativeTo],v.layout.relativePoint,v.layout.x,v.layout.y)
 			bar.layout.point,_,bar.layout.relativePoint,bar.layout.x,bar.layout.y = SSA[k]:GetPoint()
 		end
+	elseif (objName and objName == "AuraBase") then
+		local frame = self.db.char.auras[spec].base
+		local frameDefault = SSA.defaults.auras[spec].base
+		
+		SSA[objName]:SetPoint(frameDefault.point,frameDefault.relativeTo,frameDefault.relativePoint,frameDefault.x,frameDefault.y)
+		frame.point,_,frame.relativePoint,frame.x,frame.y = SSA[objName]:GetPoint()
 	elseif (objName and match(objName,"AuraGroup")) then
 		local groupID = strsub(objName,10)
 		local frame = self.db.char.auras[spec].frames[tonumber(groupID)]

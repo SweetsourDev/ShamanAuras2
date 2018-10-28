@@ -133,17 +133,17 @@ end
 local AuraBase = Auras:CreateGroup('AuraBase',UIParent)
 AuraBase:SetPoint("CENTER",0,0)
 AuraBase:SetScript('OnUpdate',function(self,button)
-	Auras:ToggleFrameMove(self,Auras.db.char.elements.isMoving)
+	Auras:ToggleFrameMove(self,Auras.db.char.settings.move.isMoving)
 end)
 
 AuraBase:SetScript('OnMouseDown',function(self,button)
-	if (Auras.db.char.elements.isMoving) then
-		Auras:MoveOnMouseDown(self,'AuraBase',button)
+	if (Auras.db.char.settings.move.isMoving) then
+		Auras:MoveOnMouseDown(self,button)
 	end
 end)
 
 AuraBase:SetScript('OnMouseUp',function(self,button)
-	if (Auras.db.char.elements.isMoving) then
+	if (Auras.db.char.settings.move.isMoving) then
 		Auras:MoveOnMouseUp(self,button)
 		Auras:UpdateLayout(self,Auras.db.char.elements[self:GetName()])
 	end
@@ -433,6 +433,11 @@ function Auras:InitializeTimerBars(spec)
 		
 		Auras:CreateVerticalStatusBar(SSA[k],spec,ctr)
 		ctr = ctr + 1
+		
+		if (self.db.char.settings.move.isMoving and v.isEnabled and v.isInUse) then
+			v.isAdjust = true
+			SSA[k]:Show()
+		end
 	end
 	--[[
 	-- Initialize Shared Timer Bars

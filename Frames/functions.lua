@@ -610,7 +610,7 @@ function Auras:RunTimerBarCode(bar)
 	
 	if (remains > 0) then
 		RunTimer(bar,timerbar,bar.start,duration)
-	elseif ((timerbar.isAdjust or timerbar.isCustomize) and timerbar.isInUse) then
+	elseif ((timerbar.isAdjust or timerbar.isCustomize or self.db.char.settings.move.isMoving) and timerbar.isInUse) then
 		PreviewTimerBar(bar,timerbar.layout.group,timerbar.isAdjust)
 	elseif (remains <= 0) then
 		bar.start = 0

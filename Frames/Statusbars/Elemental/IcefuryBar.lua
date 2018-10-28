@@ -136,6 +136,8 @@ IcefuryBar:SetScript('OnUpdate',function(self)
 		elseif (not bar.isEnabled and not isMoving and not bar.adjust.isEnabled) then
 			self:SetAlpha(0)
 		end
+	else
+		self:SetAlpha(0)
 	end
 end)
 

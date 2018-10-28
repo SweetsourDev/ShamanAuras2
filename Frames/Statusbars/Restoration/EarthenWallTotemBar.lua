@@ -36,10 +36,15 @@ EarthenWallTotemBar.timetext = EarthenWallTotemBar.Timer:CreateFontString(nil, '
 EarthenWallTotemBar.expires = 0
 EarthenWallTotemBar.GUID = 0
 EarthenWallTotemBar.isSummoned = false
+EarthenWallTotemBar.condition = function()
+	local _,_,_,selected = GetTalentInfo(4,2,1)
+	
+	return selected
+end
 
 EarthenWallTotemBar:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 EarthenWallTotemBar:SetScript('OnUpdate',function(self,elapsed)
-	if (Auras:CharacterCheck(self,3,4,2)) then
+	if ((Auras:CharacterCheck(nil,3) and self.condition()) or Auras:IsPreviewingStatusbar(self)) then
 		--SSA.DataFrame.text:SetText("ACTIVATE")
 		local db = Auras.db.char
 		--local bar = db.elements[3].statusbars.earthenWallBar

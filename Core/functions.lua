@@ -309,6 +309,8 @@ function Auras:InitMoveAuraGroups(spec)
 		CreateGrid()
 	end
 
+	--self:ToggleFrameMove(SSA.AuraBase,true)
+	
 	if (move.grid.isEnabled) then
 		moveFrame.Grid:Show()
 	else

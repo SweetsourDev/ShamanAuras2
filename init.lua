@@ -153,20 +153,22 @@ end
 local function ResetAdjustable()
 	local db = Auras.db.char
 
-	--db.auras[1].cooldowns.adjust = false
-	for i=1,#db.auras[1].groups do
-		db.auras[1].groups[i].isAdjust = false
-		db.auras[1].cooldowns.groups[i].isPreview = false
-	end
-	--[[db.elements[1].cooldowns.primary[2].isPreview = false
-	db.elements[1].cooldowns.primary[2].isPreview = false
-	db.elements[1].cooldowns.secondary[1].isPreview = false
-	db.elements[1].cooldowns.secondary[2].isPreview = false]]
-	--db.elements[1].statusbars.healthBar.adjust.isEnabled = false
-	--db.elements[1].statusbars.healthBar.adjust.showBG = false
-	for k,v in pairs(Auras.db.char.statusbars[1].bars) do
-		v.adjust.isEnabled = false
-		v.adjust.showBG = false
+	for i=1,3 do
+		--db.auras[1].cooldowns.adjust = false
+		for j=1,#db.auras[i].groups do
+			db.auras[i].groups[j].isAdjust = false
+			db.auras[i].cooldowns.groups[j].isPreview = false
+		end
+		--[[db.elements[1].cooldowns.primary[2].isPreview = false
+		db.elements[1].cooldowns.primary[2].isPreview = false
+		db.elements[1].cooldowns.secondary[1].isPreview = false
+		db.elements[1].cooldowns.secondary[2].isPreview = false]]
+		--db.elements[1].statusbars.healthBar.adjust.isEnabled = false
+		--db.elements[1].statusbars.healthBar.adjust.showBG = false
+		for k,v in pairs(Auras.db.char.statusbars[i].bars) do
+			v.adjust.isEnabled = false
+			v.adjust.showBG = false
+		end
 	end
 	--[[db.elements[1].statusbars.maelstromBar.adjust.isEnabled = false
 	db.elements[1].statusbars.maelstromBar.adjust.showBG = false
@@ -298,9 +300,7 @@ end
 local function ResetMovable()
 	local db = Auras.db.char
 	
-	db.elements[1].isMoving = false 
-	db.elements[2].isMoving = false
-	db.elements[3].isMoving = false
+	db.settings.move.isMoving = false
 end
 
 -- Event: ADDON_LOADED

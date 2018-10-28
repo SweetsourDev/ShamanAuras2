@@ -51,19 +51,25 @@ function Auras:ToggleFrameMove(obj,isMoving,group)
 end
 
 -- Toggles the movement of a progress bar.
-function Auras:ToggleProgressBarMove(self,isMoving,db)
+function Auras:ToggleProgressBarMove(obj,isMoving,db)
 	if (isMoving) then
 		db.adjust.isEnabled = false
 		
-		if (not self:IsMouseEnabled()) then
-			self:EnableMouse(true)
-			self:SetMovable(true)
+		if (not obj:IsMouseEnabled()) then
+			obj:EnableMouse(true)
 		end
-		self:SetAlpha(1)
+		
+		if (not obj:IsMovable()) then
+			obj:SetMovable(true)
+		end
+		obj:SetAlpha(1)
 	else
-		if (self:IsMouseEnabled()) then
-			self:EnableMouse(false)
-			self:SetMovable(false)
+		if (obj:IsMouseEnabled()) then
+			obj:EnableMouse(false)
+		end
+		
+		if (obj:IsMovable()) then
+			obj:SetMovable(false)
 		end
 	end
 end

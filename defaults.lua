@@ -15,6 +15,14 @@ end
 local defaults = {
 	auras = {
 		[1] = {
+			base = {
+				isEnabled = true,
+				point = "CENTER",
+				relativeTo = UIParent,
+				relativePoint = "CENTER",
+				x = 0,
+				y = 0,
+			},
 			groups = {
 				[1] = {
 					auraCount = 5,
@@ -1068,7 +1076,7 @@ local defaults = {
 						isCustomize = false,
 						triggers = {
 							[1] = {
-								isEnabled = false,
+								isEnabled = true,
 								isActive = false,
 								target = {
 									locked = true,
@@ -1845,6 +1853,14 @@ local defaults = {
 			},
 		},
 		[2] = {
+			base = {
+				isEnabled = true,
+				point = "CENTER",
+				relativeTo = UIParent,
+				relativePoint = "CENTER",
+				x = 0,
+				y = 0,
+			},
 			groups = {
 				[1] = {
 					auraCount = 5,
@@ -3559,6 +3575,14 @@ local defaults = {
 			},
 		},
 		[3] = {
+			base = {
+				isEnabled = true,
+				point = "CENTER",
+				relativeTo = UIParent,
+				relativePoint = "CENTER",
+				x = 0,
+				y = 0,
+			},
 			groups = {
 				[1] = {
 					auraCount = 6,
@@ -4485,7 +4509,7 @@ local defaults = {
 						isCustomize = false,
 						triggers = {
 							[1] = {
-								isEnabled = false,
+								isEnabled = true,
 								isActive = false,
 								target = {
 									locked = true,
