@@ -12,11 +12,7 @@ local GetSpecialization = GetSpecialization
 function Auras:NoCombatDisplay(self,group)
 	local spec = SSA.spec or GetSpecialization()
 	
-	if (not Auras.db.char.auras[spec].cooldowns.groups[group]) then
-		--SSA.DataFrame.text:SetText(Auras:CurText('DataFrame').."BAD COMBAT: "..tostring(self:GetName()).."\n")
-	end
-	
-	if (Auras.db.char.auras[spec].cooldowns.groups[group].isPreview or Auras.db.char.auras[spec].groups[group].isAdjust) then
+	if ((Auras.db.char.auras[spec].cooldowns.groups[group] and Auras.db.char.auras[spec].cooldowns.groups[group].isPreview) or (Auras.db.char.auras[spec].groups[group] and Auras.db.char.auras[spec].groups[group].isAdjust)) then
 		self:SetAlpha(1)
 	else
 		self:SetAlpha(Auras.db.char.settings[spec].OoCAlpha)
@@ -86,7 +82,7 @@ function Auras:GlowHandler(obj)
 					local remains = expire - GetTime()
 
 					if (obj:GetName() == "FlameShock") then
-						SSA.DataFrame.text:SetText(GetTime().."\n"..trigger.start.." + "..trigger.duration.." = "..expire.."\n"..remains)
+						--SSA.DataFrame.text:SetText(GetTime().."\n"..trigger.start.." + "..trigger.duration.." = "..expire.."\n"..remains)
 					end
 					-- Check if the trigger's combat conditions are met
 					if (trigger.combat == "all" or (trigger.combat == "on" and Auras:IsPlayerInCombat(true)) or (trigger.combat == "off" and not Auras:IsPlayerInCombat(true))) then
@@ -368,8 +364,8 @@ function Auras:IsPreviewingAura(obj,grp)
 	end
 	
 	local group = (grp and grp) or auras.auras[obj:GetName()].group
-	
-	return self.db.char.settings.move.isMoving or auras.groups[group].isAdjust or (auras.cooldowns.adjust and auras.cooldowns.selected == group)
+
+	return self.db.char.settings.move.isMoving or (auras.groups[group] and auras.groups[group].isAdjust) or (auras.cooldowns.adjust and auras.cooldowns.selected == group)
 end
 
 function Auras:IsPreviewingTimerbar(obj)
@@ -384,7 +380,7 @@ function Auras:IsPreviewingTimerbar(obj)
 		return false
 	end
 
-	return self.db.char.settings.move.isMoving or timerbars.groups[timerbars.bars[obj:GetName()].layout.group].isAdjust or timerbars.bars[obj:GetName()].isAdjust
+	return self.db.char.settings.move.isMoving or (timerbars.groups[timerbars.bars[obj:GetName()].layout.group] and timerbars.groups[timerbars.bars[obj:GetName()].layout.group].isAdjust) or timerbars.bars[obj:GetName()].isAdjust or timerbars.bars[obj:GetName()].isCustomize
 end
 
 function Auras:IsPreviewingStatusbar(obj)
@@ -444,6 +440,7 @@ function Auras:SortTimerBars(spec)
 	-- Collect timer bars that have a start time that's greater than 0
 	for k,v in pairs(timerbars.bars) do
 		local bar = SSA[k]
+		
 		if (bar.start > 0) then
 			tinsert(barsShowing[v.layout.group],bar.start)
 		elseif (v.isAdjust) then
@@ -451,7 +448,7 @@ function Auras:SortTimerBars(spec)
 		end
 	end
 	
-	SSA.DataFrame.text:SetText('')
+	--SSA.DataFrame.text:SetText('')
 	
 	for j=1,#barsShowing do
 		table.sort(barsShowing[j])
@@ -477,6 +474,8 @@ function Auras:SortTimerBars(spec)
 						SSA[k]:ClearAllPoints()
 						
 						if (barGroup.layout.orientation == "VERTICAL") then
+							SSA["BarGroup"..v.layout.group]:SetWidth((barGroup.layout.height * (barGroup.barCount)) + (barGroup.layout.spacing * (barGroup.barCount + 2)))
+							SSA["BarGroup"..v.layout.group]:SetHeight(barGroup.layout.width + (barGroup.layout.spacing * 2))
 							if (barGroup.barCount <= 1) then
 								anchor = "CENTER"
 							else
@@ -488,6 +487,8 @@ function Auras:SortTimerBars(spec)
 							end
 							SSA[k]:SetPoint(anchor,offset,0)
 						else
+							SSA["BarGroup"..v.layout.group]:SetWidth((barGroup.layout.width * (barGroup.barCount)) + (barGroup.layout.spacing * (barGroup.barCount + 2)))
+							SSA["BarGroup"..v.layout.group]:SetHeight(barGroup.layout.height + (barGroup.layout.spacing * 2))
 							if (barGroup.barCount <= 1) then
 								anchor = "CENTER"
 							else
@@ -514,11 +515,13 @@ function Auras:SortTimerBars(spec)
 
 				local offset = ((((i - 1) * barGroup.layout.spacing) + ((i - 1) * barGroup.layout.height)) + 7.5) * direction
 				if (j == 1) then
-					SSA.DataFrame.text:SetText(Auras:CurText('DataFrame')..barName..": "..offset.."\n")
+					--SSA.DataFrame.text:SetText(Auras:CurText('DataFrame')..barName..": "..offset.."\n")
 				end
 				SSA[barName]:ClearAllPoints()
 				--SSA[barName]:SetPoint(layout.anchor,offset,0)
 				if (barGroup.layout.orientation == "VERTICAL") then
+					SSA["BarGroup"..barGroupID]:SetWidth((barGroup.layout.height * (barGroup.barCount)) + (barGroup.layout.spacing * (barGroup.barCount + 2)))
+					SSA["BarGroup"..barGroupID]:SetHeight(barGroup.layout.width + (barGroup.layout.spacing * 2))
 					if (barGroup.barCount <= 1) then
 						anchor = "CENTER"
 					else
@@ -530,6 +533,8 @@ function Auras:SortTimerBars(spec)
 					end
 					SSA[barName]:SetPoint(anchor,offset,0)
 				else
+					SSA["BarGroup"..barGroupID]:SetWidth((barGroup.layout.width * (barGroup.barCount)) + (barGroup.layout.spacing * (barGroup.barCount + 2)))
+					SSA["BarGroup"..barGroupID]:SetHeight(barGroup.layout.height + (barGroup.layout.spacing * 2))
 					if (barGroup.barCount <= 1) then
 						anchor = "CENTER"
 					else
@@ -594,6 +599,50 @@ local function HideTimerBar(bar)
 	bar:Hide()
 end
 
+function Auras:RefreshRateHandler(delay,elapsed)
+	local db = Auras.db.char.settings.lowCPUMode
+	local rate = delay * (db.reduceRate / 100)
+	
+	if (db.isEnabled) then
+		if (db.isAlways) then
+			if (elapsed > rate) then
+				return true
+			else
+				return false
+			end
+		else
+			if (not db.isInScenario and not db.isInDungeon and not db.isInRaid and not db.isInArena and not db.isInBG and not db.isInWorld) then
+				return true
+			elseif (IsInInstance() and (db.isInScenario or db.isInDungeon or db.isInRaid or db.isInArena or db.isInBG)) then
+				local _,instanceType = GetInstanceInfo()
+				
+				if (((instanceType == "scenario" and db.isInScenario) or 
+				    (instanceType == "party" and db.isInDungeon) or 
+				    (instanceType == "raid" and db.isInRaid) or
+					(instanceType == "arena" and db.isInArena) or
+					(instanceType == "pvp" and db.isInBG)) and
+					elapsed > rate) then
+					return true
+				else
+					return false
+				end
+			elseif (db.isInWorld) then
+				local _,instanceType = GetInstanceInfo()
+				
+				if (instanceType == "none" and db.isInWorld and elapsed > rate) then
+					return true
+				else
+					return false
+				end
+			else
+				return true
+			end
+		end
+	else
+		return true
+	end
+end
+
 function Auras:RunTimerBarCode(bar)
 	local timerbar = Auras.db.char.timerbars[SSA.spec].bars[bar:GetName()]
 	
@@ -615,6 +664,14 @@ function Auras:RunTimerBarCode(bar)
 	elseif (remains <= 0) then
 		bar.start = 0
 		bar:Hide()
+		
+		if (bar.newDuration) then
+			bar.newDuration = 0
+		end
+		
+		if (bar.baseDuration) then
+			bar.duration = bar.baseDuration
+		end
 	end
 end
 
@@ -657,7 +714,13 @@ function Auras:RunTimerEvent_Elemental(bar,primalIDs,...)
 	local timerbar = Auras.db.char.timerbars[SSA.spec].bars[bar:GetName()]
 	local _,subevent,_,srcGUID,_,_,_,destGUID,_,_,_,spellID = CombatLogGetCurrentEventInfo()
 	
+	-- Fix Broken Elemental Timer Bar DB Entries
+	if (not timerbar.spellID) then
+		timerbar.spellID = bar.spellID
+	end
+	
 	if (srcGUID == UnitGUID("player") and subevent == "SPELL_SUMMON") then
+		
 		-- If the player casts Primal Earth Elemental while the Primal Fire Elemental is already active,
 		-- hide the timer bar for Primal Fire Elemental
 		if (primalIDs and bar.start > 0) then
@@ -707,5 +770,13 @@ function Auras:RunTimerEvent_Elemental(bar,primalIDs,...)
 	elseif (subevent == "UNIT_DIED" and destGUID == bar.GUID) then
 		--timerbar.data.start = 0
 		bar.start = 0
+		
+		if (bar.newDuration) then
+			bar.newDuration = 0
+		end
+		
+		if (bar.baseDuration) then
+			bar.duration = bar.baseDuration
+		end
 	end
 end

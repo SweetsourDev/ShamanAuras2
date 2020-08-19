@@ -9,13 +9,20 @@ FeralSpiritBar.icon = 237577
 FeralSpiritBar.start = 0
 FeralSpiritBar.duration = 15
 FeralSpiritBar.lives = 2
+FeralSpiritBar.elapsed = 0
 FeralSpiritBar.condition = function()
 	return IsSpellKnown(51533)
 end
 
-FeralSpiritBar:SetScript('OnUpdate',function(self)
-	if ((Auras:CharacterCheck(self,2) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
-		Auras:RunTimerBarCode(self)
+FeralSpiritBar:SetScript('OnUpdate',function(self,elapsed)
+	if (Auras:RefreshRateHandler(0.1,self.elapsed)) then
+		self.elapsed = 0
+		
+		if ((Auras:CharacterCheck(self,2) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
+			Auras:RunTimerBarCode(self)
+		end
+	else
+		self.elapsed = self.elapsed + elapsed
 	end
 end)
 
@@ -24,5 +31,7 @@ FeralSpiritBar:SetScript("OnEvent",function(self,event)
 		return
 	end
 	
-	Auras:RunTimerEvent_Elemental(self,nil,CombatLogGetCurrentEventInfo())
+	if ((Auras:CharacterCheck(self,2) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
+		Auras:RunTimerEvent_Elemental(self,nil,CombatLogGetCurrentEventInfo())
+	end
 end)

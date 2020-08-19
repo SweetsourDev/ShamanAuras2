@@ -1,10 +1,9 @@
-local SSA, Auras = unpack(select(2,...))
+local SSA, Auras, _, LSM = unpack(select(2,...))
 
 -- Cache Global WoW Functions
 local GetAddOnMetadata, IsAddOnLoaded = GetAddOnMetadata, IsAddOnLoaded
 
-
-local IntroFrame = CreateFrame('Frame',nil,UIParent)
+local IntroFrame = CreateFrame('Frame',nil,UIParent,BackdropTemplateMixin and "BackdropTemplate")
 IntroFrame:SetSize(1024,512)
 IntroFrame:SetPoint("CENTER",0,0)
 IntroFrame:SetBackdrop(SSA.BackdropSB)
@@ -13,6 +12,25 @@ IntroFrame:SetBackdropBorderColor(1,1,1,1)
 IntroFrame:SetFrameStrata("TOOLTIP")
 IntroFrame:SetAlpha(0)
 --IntroFrame:Hide()
+
+IntroFrame.version = IntroFrame:CreateFontString(nil,"MEDIUM", "GameFontHighlightLarge")
+IntroFrame.version:SetFont([[Interface\addons\ShamanAuras2\media\fonts\PT_Sans_Narrow.TTF]], 14,'OUTLINE')
+IntroFrame.version:SetPoint("BOTTOMLEFT",IntroFrame,10,10)
+IntroFrame.version:SetTextColor(1,1,1,1)
+IntroFrame.version:SetText("Version: "..GetAddOnMetadata("ShamanAuras2","Version"))
+
+IntroFrame.isAnimate = CreateFrame("CheckButton","AnimateIntro",IntroFrame,"ChatConfigCheckButtonTemplate")
+IntroFrame.isAnimate:SetPoint("BOTTOMRIGHT",-10,10)
+_G[IntroFrame.isAnimate:GetName().."Text"]:SetFont((LSM.MediaTable.font['PT Sans Narrow'] or LSM.DefaultMedia.font), 12)
+_G[IntroFrame.isAnimate:GetName().."Text"]:SetText("Animate Intro Panel")
+_G[IntroFrame.isAnimate:GetName().."Text"]:SetPoint("LEFT",-97,-1)
+IntroFrame.isAnimate:SetScript("OnClick",function(self)
+	if (self:GetChecked()) then
+		Auras.db.char.isIntroAnimated = true
+	else
+		Auras.db.char.isIntroAnimated = false
+	end
+end)
 
 IntroFrame.logo = IntroFrame:CreateTexture(nil,'HIGH')
 IntroFrame.logo:SetTexture([[Interface\AddOns\ShamanAuras2\Media\textures\logo]])
@@ -25,82 +43,96 @@ IntroFrame.currentAlpha = 0
 IntroFrame.maxAlphaTime = 0
 IntroFrame.descReady = false
 IntroFrame.dbReady = false
+IntroFrame.isSlashCommand = false
+local isTesting = false
 IntroFrame:SetScript("OnUpdate",function(self,elapsed)
-	if ((GetAddOnMetadata("ShamanAuras2","Version") ~= Auras.db.char.version or Auras.db.char.isFirstEverLoad) and not IsAddOnLoaded("ShamanAuras")) then
-		self.elapsedTime = self.elapsedTime + elapsed
-
-		if (self.elapsedTime >= 3.5) then
-			if (self:GetAlpha() < 1) then
-				local appearSpeed = 0.015
-				--local maxAppearSpeed = 
-				local newAlpha = self:GetAlpha() + appearSpeed
-				self:SetAlpha(newAlpha)
-			elseif (not self.descReady) then
-				if (self.maxAlphaTime == 0) then
-					self.maxAlphaTime = self.elapsedTime
-				end
-				
-				local alphaTimeDiff = self.elapsedTime - self.maxAlphaTime
-				
-				if (alphaTimeDiff >= 1) then
-					local acceleration = 0.05
-					local maxSpeed = 8
-					local maxY = 200
-					local _,_,_,_,y = self:GetPoint(1)
-					
-					if (y < maxY) then
-						if (self.currentSpeed < maxSpeed) then
-							self.currentSpeed = self.currentSpeed + acceleration
-						end
-						y = y + self.currentSpeed
-						self:SetPoint("CENTER",0,y)
-					else
-						self.descReady = true
-						self.currentSpeed = 0
-					end
-				end
-			elseif (self.descReady and not self.dbReady) then
-				if (self.desc:GetAlpha() < 1) then
-					local appearSpeed = 0.03
+	if (((GetAddOnMetadata("ShamanAuras2","Version") ~= Auras.db.char.version or Auras.db.char.isFirstEverLoad) and not IsAddOnLoaded("ShamanAuras")) or isTesting or self.isSlashCommand) then
+		self.isAnimate:SetChecked(Auras.db.char.isIntroAnimated)
+		
+		if (Auras.db.char.isIntroAnimated) then
+			self.elapsedTime = self.elapsedTime + elapsed
+			
+			if (self.elapsedTime >= 3.5) then
+				if (self:GetAlpha() < 1) then
+					local appearSpeed = 0.015
 					--local maxAppearSpeed = 
-					local newAlpha = self.desc:GetAlpha() + appearSpeed
-					self.desc:SetAlpha(newAlpha)
-				else
-					self.dbReady = true
-				end
-			elseif (self.dbReady) then
-				if (Auras.db.char.isFirstEverLoad) then
-					local acceleration = 0.05
-					local maxSpeed = 8
-					local maxX = 750
-					local width = self.desc:GetWidth()
+					local newAlpha = self:GetAlpha() + appearSpeed
+					self:SetAlpha(newAlpha)
+				elseif (not self.descReady) then
+					if (self.maxAlphaTime == 0) then
+						self.maxAlphaTime = self.elapsedTime
+					end
 					
-					if (width > maxX) then
-						if (self.currentSpeed < maxSpeed) then
-							self.currentSpeed = self.currentSpeed + acceleration
-						end
+					local alphaTimeDiff = self.elapsedTime - self.maxAlphaTime
+					
+					if (alphaTimeDiff >= 1) then
+						local acceleration = 0.05
+						local maxSpeed = 8
+						local maxY = 200
+						local _,_,_,_,y = self:GetPoint(1)
 						
-						width = width - self.currentSpeed
-						self.desc:SetWidth(width)
-					else
-						if (self.dbFrame:GetAlpha() < 1) then
-							local appearSpeed = 0.03
-							--local maxAppearSpeed = 
-							local newAlpha = self.dbFrame:GetAlpha() + appearSpeed
-							self.dbFrame:SetAlpha(newAlpha)
+						if (y < maxY) then
+							if (self.currentSpeed < maxSpeed) then
+								self.currentSpeed = self.currentSpeed + acceleration
+							end
+							y = y + self.currentSpeed
+							self:SetPoint("CENTER",0,y)
 						else
-							Auras.db.char.version = GetAddOnMetadata("ShamanAuras2","Version")
+							self.descReady = true
+							self.currentSpeed = 0
 						end
 					end
-				else
-					Auras.db.char.version = GetAddOnMetadata("ShamanAuras2","Version")
+				elseif (self.descReady and not self.dbReady) then
+					if (self.desc:GetAlpha() < 1) then
+						local appearSpeed = 0.03
+						--local maxAppearSpeed = 
+						local newAlpha = self.desc:GetAlpha() + appearSpeed
+						self.desc:SetAlpha(newAlpha)
+					else
+						self.dbReady = true
+					end
+				elseif (self.dbReady) then
+					if (Auras.db.char.isFirstEverLoad) then
+						local acceleration = 0.05
+						local maxSpeed = 8
+						local maxX = 750
+						local width = self.desc:GetWidth()
+						
+						if (width > maxX) then
+							if (self.currentSpeed < maxSpeed) then
+								self.currentSpeed = self.currentSpeed + acceleration
+							end
+							
+							width = width - self.currentSpeed
+							self.desc:SetWidth(width)
+						else
+							if (self.dbFrame:GetAlpha() < 1) then
+								local appearSpeed = 0.03
+								--local maxAppearSpeed = 
+								local newAlpha = self.dbFrame:GetAlpha() + appearSpeed
+								self.dbFrame:SetAlpha(newAlpha)
+							else
+								--Auras.db.char.version = GetAddOnMetadata("ShamanAuras2","Version")
+							end
+						end
+					else
+						--Auras.db.char.version = GetAddOnMetadata("ShamanAuras2","Version")
+					end
 				end
 			end
+		else
+			if (not self.isHideClicked) then
+				self:SetPoint("CENTER",0,200)
+				self.desc:SetAlpha(1)
+				self:SetAlpha(1)
+			end
 		end
+	else
+		self:Hide()
 	end
 end)
 
-IntroFrame.desc = CreateFrame("Frame",nil,IntroFrame)
+IntroFrame.desc = CreateFrame("Frame",nil,IntroFrame,BackdropTemplateMixin and "BackdropTemplate")
 IntroFrame.desc:SetSize(1024,128)
 IntroFrame.desc:SetBackdrop(SSA.BackdropSB)
 IntroFrame.desc:SetBackdropColor(0.1,0.1,0.1,0.9)
@@ -110,13 +142,17 @@ IntroFrame.desc:SetPoint("TOPLEFT",IntroFrame,"BOTTOMLEFT",0,2)
 IntroFrame.desc:SetAlpha(0)
 
 IntroFrame.desc.text = IntroFrame.desc:CreateFontString(nil,"MEDIUM", "GameFontHighlightLarge")
-IntroFrame.desc.text:SetFont([[Interface\addons\ShamanAuras\media\fonts\PT_Sans_Narrow.TTF]], 14,'OUTLINE')
+IntroFrame.desc.text:SetFont([[Interface\addons\ShamanAuras2\media\fonts\PT_Sans_Narrow.TTF]], 13,'OUTLINE')
 IntroFrame.desc.text:SetPoint("TOPLEFT",10,-10)
 IntroFrame.desc.text:SetSize(1024,128)
 IntroFrame.desc.text:SetTextColor(1,1,1,1)
 IntroFrame.desc.text:SetJustifyH("LEFT")
 IntroFrame.desc.text:SetJustifyV("TOP")
-IntroFrame.desc.text:SetText("FIXES\n\n    • Fixed the glow timing for |cFFFFe961Flame Shock|r")
+IntroFrame.desc.text:SetText("NEW\n    • The Earth Shield aura has been re-designed.\n"..
+								  "        • The aura will now track party/raid members buff duration and stacks.\n"..
+								  "        • If a party/raid member goes out of range, the aura will turn red, but resume when back in range.\n\n"..
+								  "FIXES\n       • Timerbars for Elementals should be working again.\n"..
+								  "       • The texture for the Totem Mastery alert should display properly\n")
 
 IntroFrame.desc.button = CreateFrame("Button",nil,IntroFrame.desc,"UIPanelButtonTemplate")
 IntroFrame.desc.button:SetSize(75,20)
@@ -127,13 +163,41 @@ IntroFrame.desc.button:SetScript("OnUpdate",function(self)
 	if (not Auras.db.char.isFirstEverLoad and not self.isHideClicked) then
 		self:SetAlpha(1)
 	elseif (self.isHideClicked) then
-		local appearSpeed = 0.02
-		local newAlpha = IntroFrame:GetAlpha() - appearSpeed
-		
-		if (newAlpha < 0) then
-			IntroFrame:Hide()
+		if (Auras.db.char.isIntroAnimated) then
+			local appearSpeed = 0.02
+			local newAlpha = IntroFrame:GetAlpha() - appearSpeed
+			
+			if (newAlpha <= 0) then
+				IntroFrame:Hide()
+				IntroFrame:SetPoint("CENTER",0,0)
+				IntroFrame.elapsedTime = 0
+				IntroFrame.currentSpeed = 0
+				IntroFrame.currentAlpha = 0
+				IntroFrame.maxAlphaTime = 0
+				IntroFrame.descReady = false
+				IntroFrame.dbReady = false
+				IntroFrame.isSlashCommand = false
+				IntroFrame.desc:SetAlpha(0)
+				self.isHideClicked = false
+				self.isSlashCommand = false
+				Auras.db.char.version = GetAddOnMetadata("ShamanAuras2","Version")
+			else
+				IntroFrame:SetAlpha(newAlpha)
+			end
 		else
-			IntroFrame:SetAlpha(newAlpha)
+			IntroFrame:Hide()
+			IntroFrame:SetPoint("CENTER",0,0)
+			IntroFrame.elapsedTime = 0
+			IntroFrame.currentSpeed = 0
+			IntroFrame.currentAlpha = 0
+			IntroFrame.maxAlphaTime = 0
+			IntroFrame.descReady = false
+			IntroFrame.dbReady = false
+			IntroFrame.isSlashCommand = false
+			IntroFrame.desc:SetAlpha(0)
+			self.isHideClicked = false
+			self.isSlashCommand = false
+			Auras.db.char.version = GetAddOnMetadata("ShamanAuras2","Version")
 		end
 	end
 end)
@@ -141,7 +205,7 @@ IntroFrame.desc.button:SetScript("OnClick",function(self)
 	self.isHideClicked = true
 end)
 --/run SSA2_db.char["Sweetsours - Firetree"].version = "r1-alpha1"
-IntroFrame.dbFrame = CreateFrame("Frame",nil,IntroFrame)
+IntroFrame.dbFrame = CreateFrame("Frame",nil,IntroFrame,BackdropTemplateMixin and "BackdropTemplate")
 IntroFrame.dbFrame:SetSize(280,128)
 IntroFrame.dbFrame:SetBackdrop(SSA.BackdropSB)
 IntroFrame.dbFrame:SetBackdropColor(0.1,0.1,0.1,0.9)
@@ -151,7 +215,7 @@ IntroFrame.dbFrame:SetPoint("TOPRIGHT",IntroFrame,"BOTTOMRIGHT",0,2)
 IntroFrame.dbFrame:SetAlpha(0)
 
 IntroFrame.dbFrame.text = IntroFrame.dbFrame:CreateFontString(nil,"MEDIUM", "GameFontHighlightLarge")
-IntroFrame.dbFrame.text:SetFont([[Interface\addons\ShamanAuras\media\fonts\PT_Sans_Narrow.TTF]], 14,'OUTLINE')
+IntroFrame.dbFrame.text:SetFont([[Interface\addons\ShamanAuras2\media\fonts\PT_Sans_Narrow.TTF]], 14,'OUTLINE')
 IntroFrame.dbFrame.text:SetPoint("TOPLEFT",2,-8)
 IntroFrame.dbFrame.text:SetSize(280,128)
 IntroFrame.dbFrame.text:SetTextColor(1,1,1,1)
@@ -168,7 +232,7 @@ IntroFrame.dbFrame.button:SetScript("OnClick",function(self,button)
 	ReloadUI()
 end)
 
-IntroFrame.contacts = CreateFrame("Frame",nil,IntroFrame)
+IntroFrame.contacts = CreateFrame("Frame",nil,IntroFrame,BackdropTemplateMixin and "BackdropTemplate")
 IntroFrame.contacts:SetSize(50,142)
 IntroFrame.contacts:SetBackdrop(SSA.BackdropSB)
 IntroFrame.contacts:SetBackdropColor(0.1,0.1,0.1,0.9)
@@ -194,7 +258,7 @@ IntroFrame.contacts.discord:SetSize(40,40)
 IntroFrame.contacts.discord:SetPoint("TOPRIGHT",IntroFrame.contacts,"TOPRIGHT",-6,-6)
 
 IntroFrame.contacts.discord.text = IntroFrame.contacts:CreateFontString(nil,"MEDIUM", "GameFontHighlightLarge")
-IntroFrame.contacts.discord.text:SetFont([[Interface\addons\ShamanAuras\media\fonts\PT_Sans_Narrow.TTF]], 14,'OUTLINE')
+IntroFrame.contacts.discord.text:SetFont([[Interface\addons\ShamanAuras2\media\fonts\PT_Sans_Narrow.TTF]], 14,'OUTLINE')
 IntroFrame.contacts.discord.text:SetPoint("TOPRIGHT",IntroFrame.contacts,"TOPRIGHT",-45,-20)
 IntroFrame.contacts.discord.text:SetSize(175,128)
 IntroFrame.contacts.discord.text:SetTextColor(1,1,1,1)
@@ -231,7 +295,7 @@ IntroFrame.contacts.patreon:SetSize(40,40)
 IntroFrame.contacts.patreon:SetPoint("TOPRIGHT",IntroFrame.contacts,"TOPRIGHT",-6,-51)
 
 IntroFrame.contacts.patreon.text = IntroFrame.contacts:CreateFontString(nil,"MEDIUM", "GameFontHighlightLarge")
-IntroFrame.contacts.patreon.text:SetFont([[Interface\addons\ShamanAuras\media\fonts\PT_Sans_Narrow.TTF]], 14,'OUTLINE')
+IntroFrame.contacts.patreon.text:SetFont([[Interface\addons\ShamanAuras2\media\fonts\PT_Sans_Narrow.TTF]], 14,'OUTLINE')
 IntroFrame.contacts.patreon.text:SetPoint("TOPRIGHT",IntroFrame.contacts,"TOPRIGHT",-45,-65)
 IntroFrame.contacts.patreon.text:SetSize(175,128)
 IntroFrame.contacts.patreon.text:SetTextColor(1,1,1,1)
@@ -268,7 +332,7 @@ IntroFrame.contacts.paypal:SetSize(40,40)
 IntroFrame.contacts.paypal:SetPoint("TOPRIGHT",IntroFrame.contacts,"TOPRIGHT",-6,-96)
 
 IntroFrame.contacts.paypal.text = IntroFrame.contacts:CreateFontString(nil,"MEDIUM", "GameFontHighlightLarge")
-IntroFrame.contacts.paypal.text:SetFont([[Interface\addons\ShamanAuras\media\fonts\PT_Sans_Narrow.TTF]], 14,'OUTLINE')
+IntroFrame.contacts.paypal.text:SetFont([[Interface\addons\ShamanAuras2\media\fonts\PT_Sans_Narrow.TTF]], 14,'OUTLINE')
 IntroFrame.contacts.paypal.text:SetPoint("TOPRIGHT",IntroFrame.contacts,"TOPRIGHT",-45,-110)
 IntroFrame.contacts.paypal.text:SetSize(175,128)
 IntroFrame.contacts.paypal.text:SetTextColor(1,1,1,1)
@@ -393,4 +457,5 @@ IntroFrame.contacts:SetScript("OnMouseDown",function(self,button)
 	end
 end)
 --/run SSA_IntroFrame:SetAlpha(1)
+SSA.IntroFrame = IntroFrame
 _G["SSA_IntroFrame"] = IntroFrame

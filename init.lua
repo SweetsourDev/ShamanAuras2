@@ -7,8 +7,10 @@
 local FOLDER_NAME, Engine = ...
 
 local SSA = {
-	spec = GetSpecialization()
+	spec = GetSpecialization(),
+	isFlametongue = false,
 }
+
 local Auras = LibStub('AceAddon-3.0'):NewAddon('ShamanAurasDev', 'AceConsole-3.0','AceEvent-3.0', 'AceHook-3.0', 'AceTimer-3.0');
 Auras.version = GetAddOnMetadata('ShamanAurasDev', 'Version')
 Auras:RegisterChatCommand('ssa','ChatCommand')
@@ -38,7 +40,7 @@ local UnitCastingInfo, UnitChannelInfo = UnitCastingInfo, UnitChannelInfo
 -------------------------------------------------------------------------------------------------------
 SSA.BackdropCB = {
 	bgFile    = [[Interface\Tooltips\UI-Tooltip-Background]],
-	edgeFile  = [[Interface\AddOns\ShamanAuras\Media\textures\UI-Tooltip-Border]],
+	edgeFile  = [[Interface\AddOns\ShamanAuras2\Media\textures\UI-Tooltip-Border]],
 	tile      = false,
 	tileSize  = 16, 
 	edgeSize  = 16, 
@@ -71,7 +73,7 @@ SSA.spec = GetSpecialization()
 --SSA.IsMovingAuras = false;
 SSA.ButtonFont = CreateFont('SSAButtonFont')
 local ButtonFont = SSA.ButtonFont
-ButtonFont:SetFont([[Interface\addons\ShamanAuras\Media\fonts\Continuum_Medium.ttf]],12,'OUTLINE')
+ButtonFont:SetFont([[Interface\addons\ShamanAuras2\Media\fonts\Continuum_Medium.ttf]],12,'OUTLINE')
 ButtonFont:SetJustifyH('CENTER')
 
 local Frame = CreateFrame('Frame')
@@ -81,7 +83,7 @@ local UpdateFrame = CreateFrame('Frame')
 --- For Debugging Purposes ---
 ------------------------------
 
-SSA.ErrorFrame = CreateFrame('Frame',nil,UIParent)
+SSA.ErrorFrame = CreateFrame('Frame',nil,UIParent,BackdropTemplateMixin and "BackdropTemplate")
 _G['SSA_ErrorFrame'] = SSA.ErrorFrame
 local ErrorFrame = SSA.ErrorFrame
 ErrorFrame:SetWidth(260)
@@ -101,7 +103,7 @@ ErrorFrame.text:SetJustifyH('LEFT')
 ------------------------------
 --- For Debugging Purposes ---
 ------------------------------
-local DataFrame = CreateFrame('Frame',nil,UIParent)
+local DataFrame = CreateFrame('Frame',nil,UIParent,BackdropTemplateMixin and "BackdropTemplate")
 DataFrame:SetWidth(700)
 DataFrame:SetHeight(300)
 DataFrame:SetPoint('TOPLEFT',UIParent,'TOPLEFT',100,-100)
@@ -122,6 +124,7 @@ _G['SSA_DataFrame'] = DataFrame
 ----------------------------
 --- Introduction Display ---
 ----------------------------
+
 
 -- Initialize Check Button Frames
 --SSA.MoveEle = CreateFrame('Frame','MoveEle',UIParent)
@@ -213,7 +216,7 @@ end
 
 -- Aura Group Builder
 function Auras:CreateGroup(name,parent,itr)
-	local Group = CreateFrame('Frame',name..(itr or ''),parent)
+	local Group = CreateFrame('Frame',name..(itr or ''),parent,BackdropTemplateMixin and "BackdropTemplate")
 	Group:SetFrameStrata("BACKGROUND")
 	Group:RegisterForDrag('LeftButton')
 	
@@ -322,14 +325,86 @@ function Auras:OnInitialize()
 	
 end
 
-local function PopulateDatabase()
-
+local function VerifyDatabaseContents()
+	local db = Auras.db.char
+	local defaults = SSA.defaults
+	
+	for i=1,3 do
+		-- Verify Auras #1: Create new table if doesn't exist in database.
+		for k,v in pairs(defaults.auras[i].auras) do
+			if (not db.auras[i].auras[k]) then
+				db.auras[i].auras[k] = {}
+				Auras:CopyTableValues(db.auras[i].auras[k],defaults.auras[i].auras[k])
+			end
+		end
+		
+		-- Verify Auras #1: Create new table if doesn't exist in database.
+		for k,v in pairs(defaults.totems[i].totems) do
+			if (not db.totems) then
+				db.totems = {
+					[1] = {
+						totems = {},
+					},
+					[2] = {
+						totems = {},
+					},
+					[3] = {
+						totems = {},
+					},
+				}
+			end
+			
+			if (not db.totems[i].totems[k]) then
+				db.totems[i].totems[k] = {}
+				Auras:CopyTableValues(db.totems[i].totems[k],defaults.totems[i].totems[k])
+			end
+		end
+		
+		-- Verify Auras #2: Delete old table if not found in defaults table.
+		for k,v in pairs(db.auras[i].auras) do
+			if (not defaults.auras[i].auras[k]) then
+				db.auras[i].auras[k] = nil
+			end
+		end
+		
+		-- Verify Statusbars #1: Create new table if doesn't exist in database.
+		for k,v in pairs(defaults.statusbars[i].bars) do
+			if (not db.statusbars[i].bars[k]) then
+				db.statusbars[i].bars[k] = {}
+				Auras:CopyTableValues(db.statusbars[i].bars[k],defaults.statusbars[i].bars[k])
+			end
+		end
+		
+		-- Verify Statusbars #2: Delete old table if not found in defaults table.
+		for k,v in pairs(db.statusbars[i].bars) do
+			if (not defaults.statusbars[i].bars[k]) then
+				db.statusbars[i].bars[k] = nil
+			end
+		end
+		
+		-- Verify Timerbars #1: Create new table if doesn't exist in database.
+		for k,v in pairs(defaults.timerbars[i].bars) do
+			if (not db.timerbars[i].bars[k]) then
+				db.timerbars[i].bars[k] = {}
+				Auras:CopyTableValues(db.timerbars[i].bars[k],defaults.timerbars[i].bars[k])
+			end
+		end
+		
+		-- Verify Timerbars #2: Delete old table if not found in defaults table.
+		for k,v in pairs(db.timerbars[i].bars) do
+			if (not defaults.timerbars[i].bars[k]) then
+				db.timerbars[i].bars[k] = nil
+			end
+		end
+	end
 end
 
-
+--/script SSA2_db.char["Sweetsours - Firetree"].auras[1].auras.SurgeOfPower = nil
 
 -- Event: PLAYER_LOGIN
 function Auras:OnEnable()
+	VerifyDatabaseContents()
+	
 	local db = Auras.db.char
 	
 	if (db.isFirstEverLoad or IsAddOnLoaded("ShamanAuras")) then
@@ -376,7 +451,7 @@ function Auras:OnEnable()
 	Frame:RegisterUnitEvent("UNIT_SPELLCAST_SENT")
 	Frame:RegisterUnitEvent("UNIT_SPELLCAST_CHANNEL_START","player")
 	Frame:RegisterUnitEvent("UNIT_SPELLCAST_CHANNEL_STOP","player")
-	
+
 	-- If the addon is loaded for the first time ever,
 	-- populate the database with default group values.
 	if (db.isFirstEverLoad) then
@@ -454,13 +529,16 @@ function Auras:OnEnable()
 		
 		ResetAdjustable()
 		
-		SSA.MaelstromBar:SetAlpha(0)
+		SSA.FulminationBar:SetAlpha(0)
 		--SSA.MaelstromBar2:SetAlpha(0)
 		--SSA.EarthenWallTotemBar:SetAlpha(0)
 		--SSA.TidalWavesBar:SetAlpha(0)
 	end);
 
+	self.db.char.settings.move.isMoving = false
+	
 	Auras:UpdateTalents()
+	Auras:ResetCustomization()
 	ResetAdjustable()
 	ResetMovable()
 	

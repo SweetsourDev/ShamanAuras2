@@ -8,15 +8,22 @@ AncestralProtectionTotemBar.spellID = 207399
 AncestralProtectionTotemBar.icon = 136080
 AncestralProtectionTotemBar.start = 0
 AncestralProtectionTotemBar.duration = 30
+AncestralProtectionTotemBar.elapsed = 0
 AncestralProtectionTotemBar.condition = function() 
 	local _,_,_,selected = GetTalentInfo(4,3,1)
 	
 	return selected
 end
 
-AncestralProtectionTotemBar:SetScript('OnUpdate',function(self)
-	if ((Auras:CharacterCheck(self,3) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
-		Auras:RunTimerBarCode(self,spec,db)
+AncestralProtectionTotemBar:SetScript('OnUpdate',function(self,elapsed)
+	if (Auras:RefreshRateHandler(0.1,self.elapsed)) then
+		self.elapsed = 0
+		
+		if ((Auras:CharacterCheck(self,3) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
+			Auras:RunTimerBarCode(self,spec,db)
+		end
+	else
+		self.elapsed = self.elapsed + elapsed
 	end
 end)
 
@@ -25,5 +32,7 @@ AncestralProtectionTotemBar:SetScript("OnEvent",function(self,event)
 		return
 	end
 	
-	Auras:RunTimerEvent_Totem(self,CombatLogGetCurrentEventInfo())
+	if ((Auras:CharacterCheck(self,3) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
+		Auras:RunTimerEvent_Totem(self,CombatLogGetCurrentEventInfo())
+	end
 end)

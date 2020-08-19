@@ -7,13 +7,20 @@ local FlametongueBar = SSA.FlametongueBar
 FlametongueBar.spellID = 194084
 FlametongueBar.start = 0
 FlametongueBar.duration = 16
+FlametongueBar.elapsed = 0
 FlametongueBar.condition = function()
 	return IsSpellKnown(193796)
 end
 
-FlametongueBar:SetScript('OnUpdate',function(self)
-	if ((Auras:CharacterCheck(self,2) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
-		Auras:RunTimerBarCode(self)
+FlametongueBar:SetScript('OnUpdate',function(self,elapsed)
+	if (Auras:RefreshRateHandler(0.1,self.elapsed)) then
+		self.elapsed = 0
+		
+		if ((Auras:CharacterCheck(self,2) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
+			Auras:RunTimerBarCode(self)
+		end
+	else
+		self.elapsed = self.elapsed + elapsed
 	end
 end)
 
@@ -22,5 +29,7 @@ FlametongueBar:SetScript("OnEvent",function(self,event)
 		return
 	end
 
-	Auras:RunTimerEvent_Aura(self,false,CombatLogGetCurrentEventInfo())
+	if ((Auras:CharacterCheck(self,2) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
+		Auras:RunTimerEvent_Aura(self,false,CombatLogGetCurrentEventInfo())
+	end
 end)

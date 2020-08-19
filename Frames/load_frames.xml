@@ -12,6 +12,7 @@
 	<Script file="Auras\Shared\EarthElemental.lua"/>
 	<Script file="Auras\Shared\EarthShield.lua"/>
 	<Script file="Auras\Shared\EarthbindTotem.lua"/>
+	<Script file="Auras\Shared\ElementalBlast.lua"/>
 	<Script file="Auras\Shared\FlameShock.lua"/>
 	<Script file="Auras\Shared\GladiatorsMedallion.lua"/>
 	<Script file="Auras\Shared\GroundingTotem.lua"/>
@@ -19,6 +20,7 @@
 	<Script file="Auras\Shared\LavaBurst.lua"/>
 	<Script file="Auras\Shared\NaturesGuardian.lua"/>
 	<Script file="Auras\Shared\SkyfuryTotem.lua"/>
+	<Script file="Auras\Shared\Stormkeeper.lua"/>
 	<Script file="Auras\Shared\TremorTotem.lua"/>
 	<Script file="Auras\Shared\WindRushTotem.lua"/>
 	<Script file="Auras\Shared\WindShear.lua"/>
@@ -26,15 +28,16 @@
 	<Script file="Auras\Elemental\EarthenStrength.lua"/>
 	<Script file="Auras\Elemental\Earthquake.lua"/>
 	<Script file="Auras\Elemental\EarthShock.lua"/>
-	<Script file="Auras\Elemental\ElementalBlast.lua"/>
-	<Script file="Auras\Elemental\ExposedElements.lua"/>
+	<Script file="Auras\Elemental\EchoingShock.lua"/>
+	<!--<Script file="Auras\Elemental\ExposedElements.lua"/> REMOVED IN 8.1 -->
 	<Script file="Auras\Elemental\FireElemental.lua"/>
 	<Script file="Auras\Elemental\Icefury.lua"/>
 	<Script file="Auras\Elemental\LightningLasso.lua"/>
 	<Script file="Auras\Elemental\LiquidMagmaTotem.lua"/>
 	<Script file="Auras\Elemental\MasterOfElements.lua"/>
+	<Script file="Auras\Elemental\StaticDischarge.lua"/>
 	<Script file="Auras\Elemental\StormElemental.lua"/>
-	<Script file="Auras\Elemental\Stormkeeper.lua"/>
+	<Script file="Auras\Elemental\SurgeOfPower.lua"/>
 	<Script file="Auras\Elemental\Thunderstorm.lua"/>
 	<Script file="Auras\Elemental\UnlimitedPower.lua"/>
 	<Script file="Auras\Enhancement\CrashLightning.lua"/>
@@ -42,11 +45,14 @@
 	<Script file="Auras\Enhancement\EtherealForm.lua"/>
 	<Script file="Auras\Enhancement\FeralLunge.lua"/>
 	<Script file="Auras\Enhancement\FeralSpirit.lua"/>
-	<Script file="Auras\Enhancement\Flametongue.lua"/>
+	<Script file="Auras\Enhancement\FireNova.lua"/>
+	<!-- <Script file="Auras\Enhancement\Flametongue.lua"/> REMOVED IN 9.0 -->
 	<Script file="Auras\Enhancement\ForcefulWinds.lua"/>
-	<Script file="Auras\Enhancement\Frostbrand.lua"/>
+	<!-- <Script file="Auras\Enhancement\Frostbrand.lua"/> REMOVED IN 9.0 -->
+	<Script file="Auras\Enhancement\Hailstorm.lua"/>
+	<Script file="Auras\Enhancement\IceStrike.lua"/>
 	<Script file="Auras\Enhancement\LavaLash.lua"/>
-	<Script file="Auras\Enhancement\Rockbiter.lua"/>
+	<!-- <Script file="Auras\Enhancement\Rockbiter.lua"/> REMOVED IN 9.0 -->
 	<Script file="Auras\Enhancement\SpiritWalk.lua"/>
 	<Script file="Auras\Enhancement\StaticCling.lua"/>
 	<Script file="Auras\Enhancement\Stormstrike.lua"/>
@@ -61,10 +67,12 @@
 	<Script file="Auras\Restoration\HealingRain.lua"/>
 	<Script file="Auras\Restoration\HealingStreamTotem.lua"/>
 	<Script file="Auras\Restoration\HealingTideTotem.lua"/>
+	<Script file="Auras\Restoration\ManaTideTotem.lua"/>
 	<Script file="Auras\Restoration\PurifySpirit.lua"/>
 	<Script file="Auras\Restoration\Riptide.lua"/>
 	<Script file="Auras\Restoration\SpiritLinkTotem.lua"/>
 	<Script file="Auras\Restoration\SpiritwalkersGrace.lua"/>
+	<Script file="Auras\Restoration\SurgeOfEarth.lua"/>
 	<Script file="Auras\Restoration\Tidebringer.lua"/>
 	<Script file="Auras\Restoration\Undulation.lua"/>
 	<Script file="Auras\Restoration\UnleashLife.lua"/>
@@ -75,9 +83,9 @@
 	
 	<!--<Script file="Statusbars\Shared\HealthBar.lua"/>-->
 	
-	<Script file="Statusbars\Shared\MaelstromBar.lua"/>
+	<Script file="Statusbars\Elemental\FulminationBar.lua"/>
 	<Script file="Statusbars\Elemental\IcefuryBar.lua"/>
-	
+	<Script file="Statusbars\Enhancement\MaelstromWeaponBar.lua"/>
 	<Script file="Statusbars\Restoration\CloudburstBar.lua"/>
 	<Script file="Statusbars\Restoration\EarthenWallTotemBar.lua"/>
 	<Script file="Statusbars\Restoration\ManaBar.lua"/>
@@ -88,15 +96,16 @@
 	<Script file="Timerbars\Shared\CounterstrikeTotem.lua"/>
 	<Script file="Timerbars\Shared\EarthElemental.lua"/>
 	<Script file="Timerbars\Shared\EarthbindTotem.lua"/>
+	<Script file="Timerbars\Shared\ElementalBlast.lua"/>
 	<Script file="Timerbars\Shared\GroundingTotem.lua"/>
 	<Script file="Timerbars\Shared\Heroism.lua"/>
 	<Script file="Timerbars\Shared\Hex.lua"/>
+	<Script file="Timerbars\Shared\MountainDrums.lua"/>
 	<Script file="Timerbars\Shared\SkyfuryTotem.lua"/>
 	<Script file="Timerbars\Shared\TimeWarp.lua"/>
 	<Script file="Timerbars\Shared\TremorTotem.lua"/>
 	<Script file="Timerbars\Shared\WindRushTotem.lua"/>
 	<Script file="Timerbars\Elemental\AncestralGuidance.lua"/>
-	<Script file="Timerbars\Elemental\ElementalBlast.lua"/>
 	<Script file="Timerbars\Elemental\FireElemental.lua"/>
 	<Script file="Timerbars\Elemental\LiquidMagmaTotem.lua"/>
 	<Script file="Timerbars\Elemental\StormElemental.lua"/>
@@ -104,22 +113,29 @@
 	<Script file="Timerbars\Enhancement\EarthenSpike.lua"/>
 	<Script file="Timerbars\Enhancement\EtherealForm.lua"/>
 	<Script file="Timerbars\Enhancement\FeralSpirit.lua"/>
-	<Script file="Timerbars\Enhancement\Flametongue.lua"/>
+	<!-- <Script file="Timerbars\Enhancement\Flametongue.lua"/> REMOVED IN 9.0 -->
 	<Script file="Timerbars\Enhancement\ForcefulWinds.lua"/>
-	<Script file="Timerbars\Enhancement\Frostbrand.lua"/>
+	<!-- <Script file="Timerbars\Enhancement\Frostbrand.lua"/> REMOVED IN 9.0 -->
 	<Script file="Timerbars\Enhancement\SpiritWalk.lua"/>
 	<Script file="Timerbars\Restoration\AncestralProtectionTotem.lua"/>
 	<Script file="Timerbars\Restoration\CloudburstTotem.lua"/>
 	<Script file="Timerbars\Restoration\EarthgrabTotem.lua"/>
 	<Script file="Timerbars\Restoration\HealingStreamTotem.lua"/>
 	<Script file="Timerbars\Restoration\HealingTideTotem.lua"/>
+	<Script file="Timerbars\Restoration\ManaTideTotem.lua"/>
 	<Script file="Timerbars\Restoration\SpiritLinkTotem.lua"/>
 	<Script file="Timerbars\Restoration\SpiritwalkersGrace.lua"/>
 	<Script file="Timerbars\Restoration\UnleashLife.lua"/>
+	
+	<!--<Script file="Totems\Shared\EarthbindTotem.lua"/>-->
 	<!--<Script file="TimerBars\BuffTimerBars.lua"/>
 	<Script file="TimerBars\MainTimerBars.lua"/>
 	<Script file="TimerBars\UtilityTimerBars.lua"/>
 	<Script file="TextureAlerts\StormkeeperCharges.lua"/>
-	<Script file="TextureAlerts\StormstrikeCharges.lua"/>
-	<Script file="TextureAlerts\TotemMastery.lua"/>-->
+	<Script file="TextureAlerts\StormstrikeCharges.lua"/>-->
+	
+	<!-- <Script file="TextureAlerts\TotemMastery.lua"/> REMOVED IN 9.0 -->
+	<Script file="TextureAlerts\FlametongueWeapon.lua"/>
+	<Script file="TextureAlerts\LightningShield.lua"/>
+	
 </Ui>

@@ -7,13 +7,20 @@ local BloodlustBar = SSA.BloodlustBar
 BloodlustBar.spellID = 2825
 BloodlustBar.start = 0
 BloodlustBar.duration = 40
+BloodlustBar.elapsed = 0
 BloodlustBar.condition = function() 
 	return true
 end
 
-BloodlustBar:SetScript('OnUpdate',function(self)
-	if ((Auras:CharacterCheck(self,0) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
-		Auras:RunTimerBarCode(self)
+BloodlustBar:SetScript('OnUpdate',function(self,elapsed)
+	if (Auras:RefreshRateHandler(0.1,self.elapsed)) then
+		self.elapsed = 0
+		
+		if ((Auras:CharacterCheck(self,0) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
+			Auras:RunTimerBarCode(self)
+		end
+	else
+		self.elapsed = self.elapsed + elapsed
 	end
 end)
 
@@ -22,5 +29,7 @@ BloodlustBar:SetScript("OnEvent",function(self,event)
 		return
 	end
 	
-	Auras:RunTimerEvent_Aura(self,true,CombatLogGetCurrentEventInfo())
+	if ((Auras:CharacterCheck(self,0) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
+		Auras:RunTimerEvent_Aura(self,true,CombatLogGetCurrentEventInfo())
+	end
 end)

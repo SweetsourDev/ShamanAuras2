@@ -51,7 +51,8 @@ end)]]
 
 MaelstromBar.Elapsed = 0
 MaelstromBar.Lightning = CreateFrame('PlayerModel','MaelstromBarLightning',MaelstromBar)
-MaelstromBar.Lightning:SetModel('SPELLS/LIGHTNING_AREA_DISC_STATE.m2')
+--MaelstromBar.Lightning:SetModel('SPELLS/LIGHTNING_AREA_DISC_STATE.m2')
+MaelstromBar.Lightning:SetModel(797945)
 MaelstromBar.Lightning:SetFrameStrata('MEDIUM')
 MaelstromBar.Lightning:SetPosition(0,0,-2)
 MaelstromBar.Lightning:SetRotation(0)

@@ -86,7 +86,7 @@ function Auras:CharacterCheck(obj,spec,...)
 			if (objDb == "auras") then
 				if (spec == 0) then
 					local auras = self.db.char.auras[curSpec]
-					isAuraInUse = auras.auras[obj:GetName()].isInUse
+					isAuraInUse = auras.auras[obj:GetName()].isInUse and db.settings[curSpec].display.isShowAuras
 					
 					--[[if (isAuraInUse) then
 						isPreview = db.elements[curSpec].isMoving or auras.groups[auras.auras[obj:GetName()].group].isAdjust or (auras.cooldowns.adjust and auras.cooldowns.selected == auras.auras[obj:GetName()].group)
@@ -99,7 +99,7 @@ function Auras:CharacterCheck(obj,spec,...)
 					end]]
 				else
 					local auras = self.db.char.auras[spec]
-					isAuraInUse = auras.auras[obj:GetName()].isInUse
+					isAuraInUse = auras.auras[obj:GetName()].isInUse and db.settings[spec].display.isShowAuras
 					
 					--[[if (isAuraInUse) then
 						isPreview = db.elements[spec].isMoving or auras.groups[auras.auras[obj:GetName()].group].isAdjust or (auras.cooldowns.adjust and auras.cooldowns.selected == auras.auras[obj:GetName()].group)
@@ -110,7 +110,7 @@ function Auras:CharacterCheck(obj,spec,...)
 				if (spec == 0) then
 					--local timerbars = self.db.char.timerbars[curSpec]
 					--if (Auras.db.char.timerbars[curSpec].bars[obj:GetName()]) then
-						isAuraInUse = Auras.db.char.timerbars[curSpec].bars[obj:GetName()].isInUse
+						isAuraInUse = Auras.db.char.timerbars[curSpec].bars[obj:GetName()].isInUse and db.settings[curSpec].display.isShowTimerbars
 					--else
 						--isAuraInUse = false
 					--end
@@ -119,7 +119,7 @@ function Auras:CharacterCheck(obj,spec,...)
 					end]]
 				else
 					--local timerbars = self.db.char.timerbars[spec]
-					isAuraInUse = Auras.db.char.timerbars[spec].bars[obj:GetName()].isInUse
+					isAuraInUse = Auras.db.char.timerbars[spec].bars[obj:GetName()].isInUse and db.settings[spec].display.isShowTimerbars
 					
 					--[[if (isAuraInUse) then
 						isPreview = db.elements[spec].isMoving or timerbars.groups[timerbars.bars[obj:GetName()].group].isAdjust or timerbars.bars[obj:GetName()].isAdjust
@@ -510,8 +510,9 @@ function Auras:InitializeProgressBar(bar1,bar2,text1,text2,spec)
 
 	if (Auras.db.char.elements[spec].isEnabled) then
 		if (curSpec == spec) then
+			--SSA.DataFrame.text:SetText("'"..tostring(bar1).."' ("..tostring(spec)..")")
 			local bar1 = SSA[bar1]
-
+			
 			local db = Auras.db.char.statusbars[spec].bars[bar1:GetName()]
 			if (text1) then
 				if (db[text1].isDisplayText) then

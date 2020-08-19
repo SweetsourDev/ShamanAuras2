@@ -9,31 +9,38 @@ local StaticCling = SSA.StaticCling
 -- Initialize Data Variables
 StaticCling.spellID = 211062
 StaticCling.pulseTime = 0
+StaticCling.elapsed = 0
 StaticCling.condition = function()
 	local _,_,_,_,_,_,_,_,_,selected = GetPvpTalentInfoByID(720)
 	
 	return selected and Auras:IsPvPZone()
 end
 
-StaticCling:SetScript('OnUpdate', function(self)
-	if (Auras:CharacterCheck(self,2,"720")) then
-		local groupID = Auras:GetAuraGroupID(self,self:GetName())
-		local buff = Auras:RetrieveAuraInfo("player", 211400,"HELPFUL PLAYER")
+StaticCling:SetScript('OnUpdate', function(self,elapsed)
+	if (Auras:RefreshRateHandler(0.5,self.elapsed)) then
+		self.elapsed = 0
 		
-		Auras:GlowHandler(self)
-		Auras:ToggleAuraVisibility(self,true,'showhide')
-		
-		if (Auras:IsPlayerInCombat(true)) then
-			if (buff) then
-				self:SetAlpha(1)
+		if (Auras:CharacterCheck(self,2,"720")) then
+			local groupID = Auras:GetAuraGroupID(self,self:GetName())
+			local buff = Auras:RetrieveAuraInfo("player", 211400,"HELPFUL PLAYER")
+			
+			Auras:GlowHandler(self)
+			Auras:ToggleAuraVisibility(self,true,'showhide')
+			
+			if (Auras:IsPlayerInCombat(true)) then
+				if (buff) then
+					self:SetAlpha(1)
+				else
+					self:SetAlpha(0.5)
+				end
 			else
-				self:SetAlpha(0.5)
+				Auras:NoCombatDisplay(self,groupID)
 			end
 		else
-			Auras:NoCombatDisplay(self,groupID)
+			Auras:ToggleAuraVisibility(self,false,'showhide')
 		end
 	else
-		Auras:ToggleAuraVisibility(self,false,'showhide')
+		self.elapsed = self.elapsed + elapsed
 	end
 end)
 

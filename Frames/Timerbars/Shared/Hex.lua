@@ -11,13 +11,20 @@ local HexBar = SSA.HexBar
 HexBar.spellID = 51514
 HexBar.start = 0
 HexBar.duration = 60
+HexBar.elapsed = 0
 HexBar.condition = function()
 	return IsSpellKnown(51514)
 end
 
-HexBar:SetScript('OnUpdate',function(self)
-	if ((Auras:CharacterCheck(self,0) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
-		Auras:RunTimerBarCode(self)
+HexBar:SetScript('OnUpdate',function(self,elapsed)
+	if (Auras:RefreshRateHandler(0.1,self.elapsed)) then
+		self.elapsed = 0
+		
+		if ((Auras:CharacterCheck(self,0) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
+			Auras:RunTimerBarCode(self)
+		end
+	else
+		self.elapsed = self.elapsed + elapsed
 	end
 end)
 
@@ -39,18 +46,20 @@ HexBar:HookScript('OnEvent',function(self,event)
 		return
 	end
 	
-	local spec = GetSpecialization()
-	local hexBar = Auras.db.char.timerbars[spec].bars[self:GetName()]
-	local _,subevent,_,srcGUID,_,_,_,destGUID,_,_,_,spellID = CombatLogGetCurrentEventInfo()
-	
-	if ((subevent == "SPELL_AURA_APPLIED" or subevent == "SPELL_AURA_REFRESH" or subevent == "SPELL_AURA_REMOVED") and srcGUID == UnitGUID("player") and hexIDs[spellID]) then
-		if (subevent == "SPELL_AURA_APPLIED" or subevent == "SPELL_AURA_REFRESH") then
-			--hexBar.data.start = GetTime()
-			self.start = GetTime()
-			self:Show()
-		elseif (subevent == "SPELL_AURA_REMOVED") then
-			--hexBar.data.start = 0
-			self.start = 0
+	if ((Auras:CharacterCheck(self,0) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
+		local spec = GetSpecialization()
+		local hexBar = Auras.db.char.timerbars[spec].bars[self:GetName()]
+		local _,subevent,_,srcGUID,_,_,_,destGUID,_,_,_,spellID = CombatLogGetCurrentEventInfo()
+		
+		if ((subevent == "SPELL_AURA_APPLIED" or subevent == "SPELL_AURA_REFRESH" or subevent == "SPELL_AURA_REMOVED") and srcGUID == UnitGUID("player") and hexIDs[spellID]) then
+			if (subevent == "SPELL_AURA_APPLIED" or subevent == "SPELL_AURA_REFRESH") then
+				--hexBar.data.start = GetTime()
+				self.start = GetTime()
+				self:Show()
+			elseif (subevent == "SPELL_AURA_REMOVED") then
+				--hexBar.data.start = 0
+				self.start = 0
+			end
 		end
 	end
 end)

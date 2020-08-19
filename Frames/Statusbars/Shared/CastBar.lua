@@ -28,7 +28,7 @@ CastBar.bg = CastBar:CreateTexture(nil,'BACKGROUND')
 CastBar.bg:SetAllPoints(true)
 
 --SSA.DataFrame.text:SetText("Border Width: "..tostring(borderWidth))
-CastBar.border = CreateFrame("Frame",'nil',CastBar)
+CastBar.border = CreateFrame("Frame",'nil',CastBar,BackdropTemplateMixin and "BackdropTemplate")
 CastBar.border:SetBackdrop({
 	bgFile = "Interface/Tooltips/UI-Tooltip-Background",
 	edgeFile = "Interface/Tooltips/UI-Tooltip-Border", 

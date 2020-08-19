@@ -8,7 +8,7 @@ local GetTotemInfo, GetTotemTimeLeft = GetTotemInfo, GetTotemTimeLeft
 local BackdropCB = SSA.BackdropCB
 local AuraBase = SSA.AuraBase
 
-local CloudburstBar = CreateFrame('Frame','CloudburstBar',AuraBase)
+local CloudburstBar = CreateFrame('Frame','CloudburstBar',AuraBase,BackdropTemplateMixin and "BackdropTemplate")
 CloudburstBar:SetFrameLevel(1)
 CloudburstBar:SetWidth(150)
 CloudburstBar:SetHeight(40)
@@ -33,7 +33,7 @@ CloudburstBar.inner:SetBackdrop(BackdropCBInner)
 CloudburstBar.inner:SetBackdropColor(0.15,0.8,1,0)
 CloudburstBar.inner:SetBackdropBorderColor(1,1,1,1)]]
 
-CloudburstBar.icon = CreateFrame('Frame',nil,CloudburstBar)
+CloudburstBar.icon = CreateFrame('Frame',nil,CloudburstBar,BackdropTemplateMixin and "BackdropTemplate")
 CloudburstBar:SetFrameLevel(2)
 CloudburstBar.icon:SetWidth(40)
 CloudburstBar.icon:SetHeight(40)
@@ -43,14 +43,14 @@ CloudburstBar.icon:SetBackdropColor(1,1,1,0)
 CloudburstBar.icon:SetBackdropBorderColor(1,1,1,1)
 
 CloudburstBar.icon.texture = CloudburstBar.icon:CreateTexture(nil,'BACKGROUND')
-CloudburstBar.icon.texture:SetTexture([[Interface\addons\ShamanAuras\Media\icons\totems\cloudburst_totem_bevel]])
+CloudburstBar.icon.texture:SetTexture([[Interface\addons\ShamanAuras2\Media\icons\totems\cloudburst_totem_bevel]])
 CloudburstBar.icon.texture:SetAllPoints(CloudburstBar.icon)
 
 CloudburstBar.icon.text = CloudburstBar.icon:CreateFontString(nil, 'MEDIUM', 'GameFontHighlightLarge')
 CloudburstBar.icon.text:SetAllPoints(CloudburstBar.icon)
 CloudburstBar.icon.text:SetPoint('CENTER',0,0)
 CloudburstBar.icon.text:SetTextColor(1,1,0,1)
-CloudburstBar.icon.text:SetFont([[Interface\addons\ShamanAuras\media\fonts\PT_Sans_Narrow.TTF]], 20,'OUTLINE')
+CloudburstBar.icon.text:SetFont([[Interface\addons\ShamanAuras2\media\fonts\PT_Sans_Narrow.TTF]], 20,'OUTLINE')
 
 CloudburstBar.isLoaded = false
 CloudburstBar.condition = function()
@@ -59,12 +59,13 @@ CloudburstBar.condition = function()
 	return selected
 end
 
+CloudburstBar.spellID = 157504
 CloudburstBar:SetScript('OnUpdate',function(self,elapsed)
 	if ((Auras:CharacterCheck(nil,3) and self.condition()) or Auras.db.char.settings.move.isMoving) then
 		local db = Auras.db.char
 		local isMoving = db.settings.move.isMoving
 		local _,_,_,x,y = self:GetPoint()
-		local _,_,_,_,_,_,_,_,_,_,_,_,_,_,_,absorbed = Auras:RetrieveAuraInfo('player',Auras:GetSpellName(157153))
+		local names,_,_,_,_,_,_,_,_,_,_,_,_,_,_,absorbed = Auras:RetrieveAuraInfo('player',self.spellID)
 	
 		if (not self.isLoaded or not isMoving) then
 			if (x ~= db.miscellaneous[3][self:GetName()].layout.x or y ~= db.miscellaneous[3][self:GetName()].layout.y) then
@@ -78,18 +79,17 @@ CloudburstBar:SetScript('OnUpdate',function(self,elapsed)
 		Auras:ToggleFrameMove(self,isMoving)
 		
 		for i=1,5 do
-			_,name = GetTotemInfo(i)
+			local _,name = GetTotemInfo(i)
 			if (name == 'Cloudburst Totem') then
 				duration = GetTotemTimeLeft(i)
 			end
 		end
 
 		if (not isMoving) then
-			
 			if (not self:GetBackdrop()) then
 				self:SetBackdrop(BackdropCB)
 			end
-			
+			--print(tostring(absorbed).." + "..tostring(names))
 			if (absorbed and db.miscellaneous[3].CloudburstBar.isEnabled) then
 				self.icon.text:SetText(duration)
 				self:SetAlpha(1)

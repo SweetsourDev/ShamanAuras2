@@ -87,29 +87,32 @@ function Auras:InitializeCooldowns(spec)
 		--SSA.DataFrame.text:SetText("AURA: "..tostring(k))
 		local aura = SSA[k]
 		
-		--SSA.DataFrame.text:SetText("Error: "..k)
-		-- Set Cooldown's Text Visibility
-		aura.CD:SetHideCountdownNumbers(true)
-		aura.PCD:SetHideCountdownNumbers(true)
-		
-		-- Set Cooldown's Spiral Direction
-		aura.CD:SetReverse(cd.inverse)
-		aura.PCD:SetReverse(cd.inverse)
-		
-		if (aura.GCD) then
-			aura.GCD:SetReverse(cd.inverse)
-		end
-		
-		if (aura.ChargeCD) then
-			aura.ChargeCD:SetHideCountdownNumbers(true)
-		end
-		
-		if (cd.sweep) then
-			aura.PCD:SetDrawSwipe(true)
-			aura.PCD:SetDrawEdge(true)
+		if (aura) then
+			-- Set Cooldown's Text Visibility
+			aura.CD:SetHideCountdownNumbers(true)
+			aura.PCD:SetHideCountdownNumbers(true)
+			
+			-- Set Cooldown's Spiral Direction
+			aura.CD:SetReverse(cd.inverse)
+			aura.PCD:SetReverse(cd.inverse)
+			
+			if (aura.GCD) then
+				aura.GCD:SetReverse(cd.inverse)
+			end
+			
+			if (aura.ChargeCD) then
+				aura.ChargeCD:SetHideCountdownNumbers(true)
+			end
+			
+			if (cd.sweep) then
+				aura.PCD:SetDrawSwipe(true)
+				aura.PCD:SetDrawEdge(true)
+			else
+				aura.PCD:SetDrawSwipe(false)
+				aura.PCD:SetDrawEdge(false)
+			end
 		else
-			aura.PCD:SetDrawSwipe(false)
-			aura.PCD:SetDrawEdge(false)
+			Auras.db.char.auras[spec].auras[k] = nil
 		end
 	end
 	--for i=1,getn(frames) do
@@ -157,7 +160,7 @@ end
 function Auras:CooldownHandler(self,group,start,duration,bypass)
 	local spec = SSA.spec
 	local cd = Auras.db.char.auras[spec].cooldowns
-	
+
 	if (cd.adjust and not UnitAffectingCombat('player')) then
 		if (self.CD:IsShown()) then
 			self.CD:Hide()

@@ -9,15 +9,22 @@ local AncestralGuidanceBar = SSA.AncestralGuidanceBar
 AncestralGuidanceBar.spellID = 108281
 AncestralGuidanceBar.start = 0
 AncestralGuidanceBar.duration = 10
+AncestralGuidanceBar.elapsed = 0
 AncestralGuidanceBar.condition = function()
 	local _,_,_,selected = GetTalentInfo(5,2,1)
 	
 	return selected
 end
 
-AncestralGuidanceBar:SetScript('OnUpdate',function(self)
-	if ((Auras:CharacterCheck(self,1) and self.condition) or Auras:IsPreviewingTimerbar(self)) then
-		Auras:RunTimerBarCode(self)
+AncestralGuidanceBar:SetScript('OnUpdate',function(self,elapsed)
+	if (Auras:RefreshRateHandler(0.1,self.elapsed)) then
+		self.elapsed = 0
+		
+		if ((Auras:CharacterCheck(self,1) and self.condition) or Auras:IsPreviewingTimerbar(self)) then
+			Auras:RunTimerBarCode(self)
+		end
+	else
+		self.elapsed = self.elapsed + elapsed
 	end
 end)
 
@@ -26,5 +33,7 @@ AncestralGuidanceBar:SetScript("OnEvent",function(self,event)
 		return
 	end
 	
-	Auras:RunTimerEvent_Aura(self,false,CombatLogGetCurrentEventInfo())
+	if ((Auras:CharacterCheck(self,1) and self.condition) or Auras:IsPreviewingTimerbar(self)) then
+		Auras:RunTimerEvent_Aura(self,false,CombatLogGetCurrentEventInfo())
+	end
 end)

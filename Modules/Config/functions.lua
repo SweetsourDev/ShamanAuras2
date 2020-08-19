@@ -496,7 +496,7 @@ function Auras:SetCooldownOptions(spec,options)
 	end]]
 end
 
-function Auras:VerifyDefaultValues(spec,options,group)
+function Auras:VerifyDefaultValues(spec,options,group,subgroup)
 	if (group == "Cooldowns") then
 		Auras:SetCooldownOptions(spec,options)
 		Auras:RefreshCooldownList(options,spec,Auras.db.char.auras[spec].cooldowns)
@@ -523,21 +523,21 @@ function Auras:VerifyDefaultValues(spec,options,group)
 			option.reset.disabled = true
 			option.reset.name = "|cFF666666"..L["BUTTON_RESET_STATUSBAR_"..upper(group)].."|r"
 		end
-	elseif (group == "Maelstrom") then
+	elseif (group == "Fulmination") then
 		local db = Auras.db.char
-		local bar = db.statusbars[spec].bars.MaelstromBar
-		local default = SSA.defaults.statusbars[spec].defaults.MaelstromBar
-		local option = options.args.bars.args.MaelstromBar.args
+		local bar = db.statusbars[spec].bars.FulminationBar
+		local default = SSA.defaults.statusbars[spec].defaults.FulminationBar
+		local option = options.args.bars.args.FulminationBar.args
 		
-		Auras:SetBarOptions(bar,option,'text')
+		Auras:SetBarOptions(bar,option,'counttext','timetext',false,true)
 
 		if (bar.isEnabled) then
-			options.args.bars.args.MaelstromBar.disabled = false
+			options.args.bars.args.FulminationBar.disabled = false
 		else
-			options.args.bars.args.MaelstromBar.disabled = true
+			options.args.bars.args.FulminationBar.disabled = true
 		end
 
-		option.general.args.threshold.max = UnitPowerMax('player',POWER_MAELSTROM_ID)
+		--option.general.args.threshold.max = UnitPowerMax('player',POWER_MAELSTROM_ID)
 		
 		if (bar.alphaCombat ~= default.alphaCombat or
 			bar.alphaOoC ~= default.alphaOoC or
@@ -545,12 +545,41 @@ function Auras:VerifyDefaultValues(spec,options,group)
 			bar.threshold ~= default.threshold or
 			not bar.animate or
 			
-			not Auras:GetResetButtonState(bar,default,'text',nil,true,true,true)) then
+			not Auras:GetResetButtonState(bar,default,'counttext','timetext',true,true,true)) then
 			option.reset.disabled = false
-			option.reset.name = "|cFFFFCC00"..L["BUTTON_RESET_STATUSBAR_MAELSTROM"].."|r"
+			option.reset.name = "|cFFFFCC00"..L["BUTTON_RESET_STATUSBAR_FULMINATION"].."|r"
 		else
 			option.reset.disabled = true
-			option.reset.name = "|cFF666666"..L["BUTTON_RESET_STATUSBAR_MAELSTROM"].."|r"
+			option.reset.name = "|cFF666666"..L["BUTTON_RESET_STATUSBAR_FULMINATION"].."|r"
+		end
+	elseif (group == "MaelstromWeapon") then
+		local db = Auras.db.char
+		local bar = db.statusbars[spec].bars.MaelstromWeaponBar
+		local default = SSA.defaults.statusbars[spec].defaults.MaelstromWeaponBar
+		local option = options.args.bars.args.MaelstromWeaponBar.args
+		
+		Auras:SetBarOptions(bar,option,'counttext','timetext',false,true)
+
+		if (bar.isEnabled) then
+			options.args.bars.args.MaelstromWeaponBar.disabled = false
+		else
+			options.args.bars.args.MaelstromWeaponBar.disabled = true
+		end
+
+		--option.general.args.threshold.max = UnitPowerMax('player',POWER_MAELSTROM_ID)
+		
+		if (bar.alphaCombat ~= default.alphaCombat or
+			bar.alphaOoC ~= default.alphaOoC or
+			bar.alphaTar ~= default.alphaTar or
+			bar.threshold ~= default.threshold or
+			not bar.animate or
+			
+			not Auras:GetResetButtonState(bar,default,'counttext','timetext',true,true,true)) then
+			option.reset.disabled = false
+			option.reset.name = "|cFFFFCC00"..L["BUTTON_RESET_STATUSBAR_FULMINATION"].."|r"
+		else
+			option.reset.disabled = true
+			option.reset.name = "|cFF666666"..L["BUTTON_RESET_STATUSBAR_FULMINATION"].."|r"
 		end
 	elseif (group == 'Settings') then
 		local db = Auras.db.char
@@ -573,8 +602,9 @@ function Auras:VerifyDefaultValues(spec,options,group)
 	elseif (group == "Timerbar") then
 		local db = Auras.db.char
 		local layout = db.timerbars[spec].groups[subgroup]
-		local defaults = SSA.defaults.timerbars[spec].layout[spec]
-		
+		local defaults = SSA.defaults.timerbars.templates.groups
+
+		--print("SUBGROUP: "..tostring(subgroup))
 		if (layout.alphaOoC ~= defaults.alphaOoC or
 			layout.alphaCombat ~= defaults.alphaCombat or
 			
@@ -748,7 +778,7 @@ function Auras:RefreshCooldownList(options,spec)
 				copy = Auras:Select_CooldownCopy(2,spec,L["LABEL_COOLDOWN_COPY_FROM"],L["TOOLTIP_COOLDOWN_COPY_FROM"],'formatting',i,COOLDOWN_VALUES,'Cooldowns'),
 				alertFlash = Auras:Toggle_VerifyDefaults(cdGroup.text.formatting.alert,3,spec,L["LABEL_ALERT_ANIMATE"],L["TOOLTIP_ALERT_ANIMATE"],nil,not cdGroup.text.formatting.alert.isEnabled,'animate','Cooldowns'),
 				alertColor = Auras:Color_VerifyDefaults(cdGroup.text.formatting.alert,4,spec,L["LABEL_ALERT_COLOR"],L["TOOLTIP_ALERT_COLOR"],true,nil,not cdGroup.text.formatting.alert.isEnabled,'color','Cooldowns'),
-				alertThreshold = Auras:Slider_VerifyDefaults(cdGroup.text.formatting.alert,5,spec,L["LABEL_ALERT_THRESHOLD"],L["TOOLTIP_ALERT_THRESHOLD"],3,10,nil,not cdGroup.text.formatting.alert.isEnabled,'threshold','Cooldowns'),
+				alertThreshold = Auras:Slider_VerifyDefaults(cdGroup.text.formatting.alert,5,spec,L["LABEL_ALERT_THRESHOLD"],L["TOOLTIP_ALERT_THRESHOLD"],3,10,1,nil,not cdGroup.text.formatting.alert.isEnabled,'threshold','Cooldowns'),
 				decimals = Auras:Toggle_VerifyDefaults(cdGroup.text.formatting,6,spec,L["LABEL_DECIMALS"],L["TOOLTIP_DECIMALS"],nil,nil,'decimals','Cooldowns'),
 				format = Auras:Select_VerifyDefaults(cdGroup.text.formatting,7,spec,L["LABEL_MINUTE_FORMAT"],L["TOOLTIP_MINUTE_FORMAT"],nil,TIME_FORMATS,nil,nil,'length','Cooldowns'),
 			},
@@ -767,11 +797,11 @@ function Auras:RefreshCooldownList(options,spec)
 				color = Auras:Color_VerifyDefaults(cdGroup.text.font,1,spec,L["LABEL_FONT_COLOR"],L["TOOLTIP_FONT_COLOR"],true,'double',nil,'color','Cooldowns'),
 				copy = Auras:Select_CooldownCopy(2,spec,L["LABEL_COOLDOWN_COPY_FROM"],L["TOOLTIP_COOLDOWN_COPY_FROM"],'options',i,COOLDOWN_VALUES,'Cooldowns'),
 				fontName = Auras:Select_VerifyDefaults(cdGroup.text.font,3,spec,L["LABEL_FONT"],L["TOOLTIP_FONT_NAME"],"LSM30_Font",LSM:HashTable("font"),nil,nil,'name','Cooldowns'),
-				fontSize = Auras:Slider_VerifyDefaults(cdGroup.text.font,4,spec,FONT_SIZE,L["TOOLTIP_COOLDOWN_FONT_SIZE"],5,40,nil,nil,'size','Cooldowns'),
+				fontSize = Auras:Slider_VerifyDefaults(cdGroup.text.font,4,spec,FONT_SIZE,L["TOOLTIP_COOLDOWN_FONT_SIZE"],5,40,1,nil,nil,'size','Cooldowns'),
 				fontOutline = Auras:Select_VerifyDefaults(cdGroup.text.font,5,spec,L["LABEL_FONT_OUTLINE"],L["TOOLTIP_FONT_OUTLINE"],nil,FONT_OUTLINES,nil,nil,'flag','Cooldowns'),
 				textAnchor = Auras:Select_VerifyDefaults(cdGroup.text,6,spec,L["LABEL_FONT_ANCHOR"],L["TOOLTIP_FONT_ANCHOR_POINT"],nil,FRAME_ANCHOR_OPTIONS,nil,nil,'justify','Cooldowns'),
-				textX = Auras:Slider_VerifyDefaults(cdGroup.text,7,spec,"X",L["TOOLTIP_FONT_X_OFFSET"],-100,100,nil,nil,'x','Cooldowns'),
-				textY = Auras:Slider_VerifyDefaults(cdGroup.text,8,spec,"Y",L["TOOLTIP_FONT_Y_OFFSET"],-100,100,nil,nil,'y','Cooldowns'),
+				textX = Auras:Slider_VerifyDefaults(cdGroup.text,7,spec,"X",L["TOOLTIP_FONT_X_OFFSET"],-100,100,1,nil,nil,'x','Cooldowns'),
+				textY = Auras:Slider_VerifyDefaults(cdGroup.text,8,spec,"Y",L["TOOLTIP_FONT_Y_OFFSET"],-100,100,1,nil,nil,'y','Cooldowns'),
 				shadow = {
 					name = '|cFFFFFFFF'..L["LABEL_FONT_SHADOW"]..'|r',
 					type = "group",
@@ -782,8 +812,8 @@ function Auras:RefreshCooldownList(options,spec)
 						shadowToggle = Auras:Toggle_VerifyDefaults(cdGroup.text.font.shadow,1,spec,L["TOGGLE"],nil,nil,nil,'isEnabled','Cooldowns'),
 						shadowColor = Auras:Color_VerifyDefaults(cdGroup.text.font.shadow,2,spec,L["LABEL_FONT_SHADOW_COLOR"],L["TOOLTIP_FONT_SHADOW_COLOR"],true,nil,nil,'color','Cooldowns'),
 						--filler_0 = Auras:Spacer(3,nil),
-						shadowX = Auras:Slider_VerifyDefaults(cdGroup.text.font.shadow.offset,4,spec,"X",L["TOOLTIP_FONT_SHADOW_X_OFFSET"],-10,10,nil,nil,'x','Cooldowns'),
-						shadowY = Auras:Slider_VerifyDefaults(cdGroup.text.font.shadow.offset,5,spec,"Y",L["TOOLTIP_FONT_SHADOW_Y_OFFSET"],-10,10,nil,nil,'y','Cooldowns'),
+						shadowX = Auras:Slider_VerifyDefaults(cdGroup.text.font.shadow.offset,4,spec,"X",L["TOOLTIP_FONT_SHADOW_X_OFFSET"],-10,10,0.5,nil,nil,'x','Cooldowns'),
+						shadowY = Auras:Slider_VerifyDefaults(cdGroup.text.font.shadow.offset,5,spec,"Y",L["TOOLTIP_FONT_SHADOW_Y_OFFSET"],-10,10,0.5,nil,nil,'y','Cooldowns'),
 					},
 				},
 				reset = {
@@ -829,7 +859,7 @@ local function UpdateSpellTimerBarInfo(spec,group)
 			v.isInUse = false
 			SSA[k]:SetParent(nil)
 		elseif (v.layout.group > group) then
-			v.layout.group = v.group - 1
+			v.layout.group = v.layout.group - 1
 		end
 	end
 end
@@ -2010,6 +2040,7 @@ function Auras:RefreshAuraGroupList(options,spec)
 		order = 1,
 		type = "execute",
 		name = "Add Group",
+		disabled = function() return not db.settings[spec].display.isShowAuras end,
 		func = function(this)
 			local numGroups = #auras.groups
 			
@@ -2072,12 +2103,14 @@ function Auras:RefreshAuraGroupList(options,spec)
 		order = 2,
 		type = "input",
 		name = "Group Name (Optional)",
+		disabled = function() return not db.settings[spec].display.isShowAuras end,
 		get = function()
 			return groupName
 		end,
 		set = function(this,value)
 			groupName = value
 		end,
+		width = "normal",
 	}
 	
 	args["groupOrientation"] = {
@@ -2093,14 +2126,31 @@ function Auras:RefreshAuraGroupList(options,spec)
 		values = {
 			["Horizontal"] = "Horizontal",
 			["Vertical"] = "Vertical",
-		}
+		},
+		width = 0.75,
+	}
+	
+	args["toggle"] = {
+		order = 4,
+		type = "toggle",
+		name = "Enabled",
+		desc = "Enable or disable the aura builder.\n\n|cFFFF0000Disabling this will hide all the auras for this specialization.|r",
+		get = function()
+			return db.settings[spec].display.isShowAuras
+		end,
+		set = function(this,value)
+			db.settings[spec].display.isShowAuras = value
+			self:UpdateTalents()
+		end,
+		width = 0.4,
 	}
 	
 	args["groupList"] = {
-		order = 3,
+		order = 5,
 		type = "group",
 		name = "Group List",
 		inline = false,
+		disabled = function() return not db.settings[spec].display.isShowAuras end,
 		args = {
 		
 		}
@@ -2108,7 +2158,7 @@ function Auras:RefreshAuraGroupList(options,spec)
 	
 	for i=1,#auras.groups do
 		args["groupTab"..i] = {
-			order = i+3,
+			order = i+5,
 			type = "group",
 			childGroups = "tab",
 			name = function()
@@ -2120,6 +2170,7 @@ function Auras:RefreshAuraGroupList(options,spec)
 				end
 			end,
 			inline = false,
+			disabled = function() return not db.settings[spec].display.isShowAuras end,
 			args = {
 				addAuras = {
 					order = 1,
@@ -2293,6 +2344,7 @@ function Auras:RefreshAuraGroupList(options,spec)
 			name = ' ',
 			type = "group",
 			guiInline = true,
+			--disabled = function() return not db.settings[spec].display.isShowAuras end,
 			args = {
 				groupTitle = {
 					order = 1,
@@ -2403,7 +2455,10 @@ local function BuildCurrentBarList(db,spec,grp)
 			tinsert(sortTable,k)
 		end
 	end
-	
+	if (spec == 3) then
+		print("GROUP: "..tostring(grp))
+	end
+
 	table.sort(sortTable)
 	
 	for i=1,#sortTable do
@@ -2555,7 +2610,7 @@ function Auras:RefreshTimerBarGroupList(options,spec)
 	local args = {}
 	local orderCtr = 2
 	local db = Auras.db.char
-	local groupName,groupOrientation = '','VERTICAL'
+	local groupName,groupOrientation = '','Vertical'
 	--local listPos = 0
 	local selectedBar = 1
 	local isLayoutToggle = false
@@ -2566,14 +2621,15 @@ function Auras:RefreshTimerBarGroupList(options,spec)
 		order = 1,
 		type = "execute",
 		name = "Add Group",
+		disabled = function() return not db.settings[spec].display.isShowTimerbars end,
 		func = function(this)
 			local numGroups = #timerbars.groups
 			
 			timerbars.groups[numGroups + 1] = {}
 			timerbars.frames[numGroups + 1] = {}
 			
-			Auras:CopyTableValues(timerbars.groups[numGroups + 1],timerbars.templates.groups)
-			Auras:CopyTableValues(timerbars.frames[numGroups + 1],timerbars.templates.frames)
+			Auras:CopyTableValues(timerbars.groups[numGroups + 1],Auras.db.char.timerbars.templates.groups)
+			Auras:CopyTableValues(timerbars.frames[numGroups + 1],Auras.db.char.timerbars.templates.frames)
 
 			if (groupName == '') then
 				timerbars.groups[numGroups + 1].name = "Group #"..(numGroups + 1)
@@ -2595,7 +2651,7 @@ function Auras:RefreshTimerBarGroupList(options,spec)
 		end,
 	}
 	
-	-- Build the list of auras
+	-- Build the list of timer bars
 	for k,_ in pairs(timerbars.bars) do
 		tinsert(sortTable,k)
 	end
@@ -2624,18 +2680,21 @@ function Auras:RefreshTimerBarGroupList(options,spec)
 		order = 2,
 		type = "input",
 		name = "Group Name (Optional)",
+		disabled = function() return not db.settings[spec].display.isShowTimerbars end,
 		get = function()
 			return groupName
 		end,
 		set = function(this,value)
 			groupName = value
 		end,
+		width = "normal",
 	}
 	
 	args["groupOrientation"] = {
 		order = 3,
 		type = "select",
 		name = "Orientation",
+		disabled = function() return not db.settings[spec].display.isShowTimerbars end,
 		get = function()
 			return groupOrientation
 		end,
@@ -2645,442 +2704,462 @@ function Auras:RefreshTimerBarGroupList(options,spec)
 		values = {
 			["HORIZONTAL"] = "Horizontal",
 			["VERTICAL"] = "Vertical",
-		}
+		},
+		width = 0.75,
+	}
+	
+	args["toggle"] = {
+		order = 4,
+		type = "toggle",
+		name = "Enabled",
+		desc = "Enable or disable the timer bar builder.\n\n|cFFFF0000Disabling this will hide all the timer bars for this specialization.|r",
+		get = function()
+			return db.settings[spec].display.isShowTimerbars
+		end,
+		set = function(this,value)
+			db.settings[spec].display.isShowTimerbars = value
+			self:UpdateTalents()
+		end,
+		width = 0.4,
 	}
 	
 	args["groupList"] = {
-		order = 3,
+		order = 5,
 		type = "group",
 		name = "Group List",
 		inline = false,
+		disabled = function() return not db.settings[spec].display.isShowTimerbars end,
 		args = {
 		
 		}
 	}
 	
 	for i=1,#timerbars.groups do
-		args["groupTab"..i] = {
-			order = i+3,
-			type = "group",
-			childGroups = "tab",
-			name = function()
-				local name = timerbars.groups[i].name
-				if (name == '') then
-					return "Group #"..i
-				else
-					return timerbars.groups[i].name
-				end
-			end,
-			inline = false,
-			args = {
-				addBar = {
-					order = 1,
-					type = "execute",
-					name = "Add Bar",
-					disabled = timerbars.groups[i].isAdjust,
-					func = function(this)
-						--local splitStr = {strsplit(" ",BAR_LIST[selectedBar],2)}
-						--local barName = gsub(splitStr[2]," ","")
-						local barName = { strsplit(";",BAR_LIST[selectedBar]) }
-						timerbars.bars[barName[2]].layout.group = i
-						timerbars.bars[barName[2]].isEnabled = true
-						timerbars.bars[barName[2]].isInUse = true
-						
-						--[[if (listPos <= db.layout[spec].timerbars.groups[i].auraCount) then
-							ReorderAuraList(spec,i,listPos,barName,"add")	
-						end]]
-
-						timerbars.groups[i].barCount = timerbars.groups[i].barCount + 1
-						Auras:RefreshTimerBarGroupList(this.options,spec)
-						Auras:UpdateTalents()
-					end,
-					width = "half",
-				},
-				barList = {
-					order = 2,
-					type = "select",
-					name = "Timer Bar List",
-					disabled = timerbars.groups[i].isAdjust,
-					get = function()
-						return selectedBar
-					end,
-					set = function(this,value)
-						selectedBar = value
-					end,
-					values = function()
-						local items = {}
-						for i=1,#BAR_LIST do
-							local barInfo = { strsplit(";",BAR_LIST[i]) }
-							tinsert(items,barInfo[1])
-						end
-
-						return items
-					end,
-				},
-				--[[listPosition = {
-					order = 3,
-					type = "select",
-					name = "Position (Optional)",
-					get = function()
-						if (listPos == 0) then
-							listPos = db.layout[spec].timerbars.groups[i].auraCount + 1
-							return listPos
-						else
-							return listPos
-						end
-					end,
-					set = function(this,value)
-						listPos = value
-					end,
-					values = function()
-						local list = {}
-						
-						for i=1,(db.layout[spec].timerbars.groups[i].auraCount + 1) do
-							tinsert(list,i)
-						end
-						
-						return list
-						
-					end,
-					width = "half",
-				},]]
-				filler = {
-					order = 5,
-					type = "description",
-					name = " ",
-					width = "normal",
-				},
-				toggleLayout = {
-					order = 6,
-					type = "toggle",
-					name = "Layout",
-					desc = "Toggle to access controls to customize the group's layout",
-					get = function()
-						return timerbars.groups[i].isAdjust
-					end,
-					set = function(this,value)
-						timerbars.groups[i].isAdjust = value
-						
-						Auras:UpdateTalents()
-						
-						for k,v in pairs(timerbars.bars) do
-							if (v.layout.group == i and value) then
-								v.isAdjust = true
-								SSA[k]:Show()
-							else
-								if (timerbars.groups[v.layout.group].isAdjust) then
-									timerbars.groups[v.layout.group].isAdjust = false
-								end
-								v.isAdjust = false
-							end
-						end
-						
-						
-						Auras:RefreshTimerBarGroupList(this.options,spec)
-						
-						
-					end,
-					width = "half",
-				},
-				--[[barWidth = {
-					order = 7,
-					type = "range",
-					name = "Bar Length",
-					hidden = not db.layout[spec].timerbars.groups[i].isAdjust,
-					min = 16,
-					max = 256,
-					step = 1,
-					bigStep = 1,
-					get = function()
-						return db.layout[spec].timerbars.groups[i].layout.width
-					end,
-					set = function(_,value)
-						db.layout[spec].timerbars.groups[i].layout.width = value
-						Auras:InitializeTimerBars(spec)
-						--Auras:UpdateTalents()
-					end,
-				},
-				barHeight = {
-					order = 8,
-					type = "range",
-					name = "Bar Width",
-					hidden = not db.layout[spec].timerbars.groups[i].isAdjust,
-					min = 5,
-					max = 100,
-					step = 1,
-					bigStep = 1,
-					get = function()
-						return db.layout[spec].timerbars.groups[i].layout.height
-					end,
-					set = function(_,value)
-						db.layout[spec].timerbars.groups[i].layout.height = value
-						Auras:InitializeTimerBars(spec)
-						--Auras:UpdateTalents()
-					end,
-				},
-				barSpacing = {
-					order = 9,
-					type = "range",
-					name = "Bar Spacing",
-					hidden = not db.layout[spec].timerbars.groups[i].isAdjust,
-					min = 5,
-					max = 100,
-					step = 1,
-					bigStep = 1,
-					get = function()
-						return db.layout[spec].timerbars.groups[i].layout.spacing
-					end,
-					set = function(_,value)
-						db.layout[spec].timerbars.groups[i].layout.spacing = value
-						Auras:InitializeTimerBars(spec)
-						--Auras:UpdateTalents()
-					end,
-				},]]
-				general = {
-					name = "|cFFFFFFFF"..SETTINGS.."|r",
-					order = 7,
-					type = "group",
-					guiInline = true,
-					hidden = not timerbars.groups[i].isAdjust,
-					args = {
-						alphaCombat = Auras:Slider_VerifyDefaults(timerbars.groups[i],1,spec,L["LABEL_ALPHA_COMBAT"],L["TOOLTIP_STATUSBAR_ALPHA_COMBAT"],0,1,nil,false,'alphaCombat','Timerbar',i),
-						alphaOoC = Auras:Slider_VerifyDefaults(timerbars.groups[i],2,spec,L["LABEL_ALPHA_NO_TARGET_NO_COMBAT"],L["TOOLTIP_STATUSBAR_ALPHA_NO_COMBAT"],0,1,nil,false,'alphaOoC','Timerbar',i),
-					},
-				},
-				layout = {
-					name = L["LABEL_LAYOUT_DESIGN"],
-					type = "group",
-					order = 8,
-					hidden = not timerbars.groups[i].isAdjust,
-					guiInline = true,
-					args = {
-						--[[texture = Auras:Select_VerifyDefaults(db.layout[spec].timerbars.groups[i].foreground,1,1,L["LABEL_STATUSBAR_TEXTURE"],L["TOOLTIP_STATUSBAR_TEXTURE"],"LSM30_Statusbar",LSM:HashTable(LSM.MediaType.STATUSBAR),false,'texture','Timerbar',i),
-						textureColor = Auras:Color_VerifyDefaults(db.layout[spec].timerbars.groups[i].foreground,2,1,L["LABEL_STATUSBAR_COLOR"],nil,false,"double",false,'color','Timerbar',i),
-						backgroundTexture = Auras:Select_VerifyDefaults(db.layout[spec].timerbars.groups[i].background,3,1,L["LABEL_STATUSBAR_BG_TEXTURE"],L["TOOLTIP_STATUSBAR_BG_TEXTURE"],"LSM30_Statusbar",LSM:HashTable(LSM.MediaType.STATUSBAR),false,'texture','Timerbar',i),
-						backgroundColor = Auras:Color_VerifyDefaults(db.layout[spec].timerbars.groups[i].background,4,1,L["LABEL_STATUSBAR_BG_COLOR"],L["TOOLTIP_STATUSBAR_BG_COLOR"],true,nil,false,'color','Timerbar',i),
-						backgroundToggle = Auras:Toggle_VerifyDefaults(db.layout[spec].timerbars.groups[i].adjust,5,1,L["LABEL_STATUSBAR_MODIFY_BACKGROUND"],L["TOOLTIP_TOGGLE_STATUSBAR_BG_CUSTOMIZATON"],nil,false,'showBG','Timerbar',i),]]
-						width = Auras:Slider_VerifyDefaults(timerbars.groups[i].layout,6,spec,L["LABEL_WIDTH"],nil,10,250,nil,false,'width','Timerbar',i,true),
-						height = Auras:Slider_VerifyDefaults(timerbars.groups[i].layout,7,spec,L["LABEL_HEIGHT"],nil,5,100,nil,false,'height','Timerbar',i,true),
-						spacing = Auras:Slider_VerifyDefaults(timerbars.groups[i].layout,8,spec,L["LABEL_SPACING"],nil,5,100,nil,false,'spacing','Timerbar',i,true),
-						growth = {
-							order = 9,
-							type = "select",
-							name = "Bar Growth",
-							get = function()
-								return timerbars.groups[i].layout.growth
-							end,
-							set = function(this,value)
-								timerbars.groups[i].layout.growth = value
-								
-								Auras:UpdateTalents()
-								Auras:RefreshTimerBarGroupList(this.options,spec)
-							end,
-							values = function()
-								local args = {}
-								local orientation = timerbars.groups[i].layout.orientation
-								
-								if (orientation == "VERTICAL") then
-									args["LEFT"] = "Left"
-									args["RIGHT"] = "Right"
-								else
-									args["UP"] = "Up"
-									args["DOWN"] = "Down"
-								end
-								
-								return args
-							end,
-						},
-						--[[anchor = {
-							order = 10,
-							type = "select",
-							name = "Group Anchor",
-							get = function()
-								return db.layout[spec].timerbars.groups[i].layout.anchor
-							end,
-							set = function(this,value)
-								db.layout[spec].timerbars.groups[i].layout.anchor = value
-								
-								Auras:UpdateTalents()
-								Auras:RefreshTimerBarGroupList(this.options,spec)
-							end,
-							values = function()
-								local args = {}
-								local orientation = db.layout[spec].timerbars.groups[i].layout.orientation
-								
-								if (orientation == "VERTICAL") then
-									args["LEFT"] = "Left"
-									args["RIGHT"] = "Right"
-								else
-									args["TOP"] = "Top"
-									args["Bottom"] = "Bottom"
-								end
-								
-								return args
-							end,
-						},]]
-					},
-				},
-				nametext = {
-					name = L["LABEL_TEXT_SPELL"],
-					type = "group",
-					order = 9,
-					hidden = not timerbars.groups[i].isAdjust,
-					guiInline = true,
-					args = {
-						color = Auras:Color_VerifyDefaults(timerbars.groups[i].nametext.font,1,spec,L["LABEL_FONT_COLOR"],L["TOOLTIP_FONT_COLOR"],true,"full",false,'color','Timerbar',i,true),
-						fontName = Auras:Select_VerifyDefaults(timerbars.groups[i].nametext.font,2,spec,L["LABEL_FONT"],L["TOOLTIP_FONT_NAME"],"LSM30_Font",LSM:HashTable("font"),nil,false,'name','Timerbar',i,true),
-						fontSize = Auras:Slider_VerifyDefaults(timerbars.groups[i].nametext.font,3,spec,FONT_SIZE,L["TOOLTIP_COOLDOWN_FONT_SIZE"],5,40,nil,false,'size','Timerbar',i,true),
-						fontOutline = Auras:Select_VerifyDefaults(timerbars.groups[i].nametext.font,4,spec,L["LABEL_FONT_OUTLINE"],L["TOOLTIP_FONT_OUTLINE"],nil,FONT_OUTLINES,nil,false,'flag','Timerbar',i,true),
-						--nametextAnchor = Auras:Select_VerifyDefaults(db.layout[spec].timerbars.groups[i].nametext,5,spec,L["LABEL_FONT_ANCHOR"],L["TOOLTIP_FONT_ANCHOR_POINT"],nil,FRAME_ANCHOR_OPTIONS,nil,false,'justify','Timerbar',i,true),
-						--nametextX = Auras:Slider_VerifyDefaults(db.layout[spec].timerbars.groups[i].nametext,6,spec,"X",L["TOOLTIP_FONT_X_OFFSET"],-500,500,nil,false,'x','Timerbar',i,true),
-						--nametextY = Auras:Slider_VerifyDefaults(db.layout[spec].timerbars.groups[i].nametext,7,spec,"Y",L["TOOLTIP_FONT_Y_OFFSET"],-100,100,nil,false,'y','Timerbar',i,true),
-						shadow = {
-							name = '|cFFFFFFFF'..L["LABEL_FONT_SHADOW"]..'|r',
-							type = "group",
-							order = 8,
-							hidden = false,
-							guiInline = true,
-							args = {
-								shadowToggle = Auras:Toggle_VerifyDefaults(timerbars.groups[i].nametext.font.shadow,1,spec,L["TOGGLE"],nil,nil,false,'isEnabled','Timerbar',i,true),
-								shadowColor = Auras:Color_VerifyDefaults(timerbars.groups[i].nametext.font.shadow,2,spec,L["LABEL_FONT_SHADOW_COLOR"],L["TOOLTIP_FONT_SHADOW_COLOR"],true,nil,false,'color','Timerbar',i,true),
-								shadowX = Auras:Slider_VerifyDefaults(timerbars.groups[i].nametext.font.shadow.offset,3,spec,"X",L["TOOLTIP_FONT_SHADOW_X_OFFSET"],-10,10,nil,false,'x','Timerbar',i,true),
-								shadowY = Auras:Slider_VerifyDefaults(timerbars.groups[i].nametext.font.shadow.offset,4,spec,"Y",L["TOOLTIP_FONT_SHADOW_Y_OFFSET"],-10,10,nil,false,'y','Timerbar',i,true),
-							},
-						},
-					},
-				},
-				timetext = {
-					name = '|cFFFFFFFF'..L["LABEL_TIME_TEXT"]..'|r',
-					type = "group",
-					order = 10,
-					hidden = not timerbars.groups[i].isAdjust,
-					guiInline = true,
-					args = {
-						color = Auras:Color_VerifyDefaults(timerbars.groups[i].timetext.font,1,spec,L["LABEL_FONT_COLOR"],L["TOOLTIP_FONT_COLOR"],true,"full",false,'color','Timerbar',i,true),
-						fontName = Auras:Select_VerifyDefaults(timerbars.groups[i].timetext.font,2,spec,L["LABEL_FONT"],L["TOOLTIP_FONT_NAME"],"LSM30_Font",LSM:HashTable("font"),nil,false,'name','Timerbar',i,true),
-						fontSize = Auras:Slider_VerifyDefaults(timerbars.groups[i].timetext.font,3,spec,FONT_SIZE,L["TOOLTIP_COOLDOWN_FONT_SIZE"],5,40,nil,false,'size','Timerbar',i,true),
-						fontOutline = Auras:Select_VerifyDefaults(timerbars.groups[i].timetext.font,4,spec,L["LABEL_FONT_OUTLINE"],L["TOOLTIP_FONT_OUTLINE"],nil,FONT_OUTLINES,nil,false,'flag','Timerbar',i,true),
-						--timetextAnchor = Auras:Select_VerifyDefaults(db.layout[spec].timerbars.groups[i].timetext,5,spec,L["LABEL_FONT_ANCHOR"],L["TOOLTIP_FONT_ANCHOR_POINT"],nil,FRAME_ANCHOR_OPTIONS,nil,false,'justify','Timerbar',i,true),
-						--timetextX = Auras:Slider_VerifyDefaults(db.layout[spec].timerbars.groups[i].timetext,6,spec,"X",L["TOOLTIP_FONT_X_OFFSET"],-500,500,nil,false,'x','Timerbar',i,true),
-						--timetextY = Auras:Slider_VerifyDefaults(db.layout[spec].timerbars.groups[i].timetext,7,spec,"Y",L["TOOLTIP_FONT_Y_OFFSET"],-100,100,nil,false,'y','Timerbar',i,true),
-						shadow = {
-							name = '|cFFFFFFFF'..L["LABEL_FONT_SHADOW"]..'|r',
-							type = "group",
-							order = 8,
-							hidden = false,
-							guiInline = true,
-							args = {
-								shadowToggle = Auras:Toggle_VerifyDefaults(timerbars.groups[i].timetext.font.shadow,1,spec,L["TOGGLE"],nil,nil,false,'isEnabled','Timerbar',i,true),
-								shadowColor = Auras:Color_VerifyDefaults(timerbars.groups[i].timetext.font.shadow,2,spec,L["LABEL_FONT_SHADOW_COLOR"],L["TOOLTIP_FONT_SHADOW_COLOR"],true,nil,false,'color','Timerbar',i,true),
-								shadowX = Auras:Slider_VerifyDefaults(timerbars.groups[i].timetext.font.shadow.offset,3,spec,"X",L["TOOLTIP_FONT_SHADOW_X_OFFSET"],-10,10,nil,false,'x','Timerbar',i,true),
-								shadowY = Auras:Slider_VerifyDefaults(timerbars.groups[i].timetext.font.shadow.offset,4,spec,"Y",L["TOOLTIP_FONT_SHADOW_Y_OFFSET"],-10,10,nil,false,'y','Timerbar',i,true),
-							},
-						},
-					},
-				},
-				currentBars = {
-					order = 11,
-					type = "group",
-					name = "Current Bars",
-					inline = true,
-					hidden = timerbars.groups[i].isAdjust,
-					args = BuildCurrentBarList(Auras.db.char,spec,i),
-				},
-			}
-		}
-		
-		
-		args.groupList.args["BarGroup"..i] = {
-			order = i,
-			name = ' ',
-			type = "group",
-			guiInline = true,
-			args = {
-				groupTitle = {
-					order = 1,
-					type = "input",
-					name = '',
-					validate = function(_,value)
-						if (#value <= 12) then
-							return true
-						else
-							return "Use less than 12 characters"
-						end
-					end,
-					get = function()
+		--if (#timerbars.groups[i] > 0) then
+			args["groupTab"..i] = {
+				order = i+5,
+				type = "group",
+				childGroups = "tab",
+				name = function()
+					local name = timerbars.groups[i].name
+					if (name == '') then
+						return "Group #"..i
+					else
 						return timerbars.groups[i].name
-					end,
-					set = function(this,value)
-						timerbars.groups[i].name = value
-						
-						Auras:RefreshTimerBarGroupList(this.options,spec)
-					end,
-					width = "normal",
-				},
-				numBars = {
-					order = 2,
-					type = "description",
-					name = "        "..timerbars.groups[i].barCount.." Bars",
-					width = "half",
-				},
-				groupOrientation = {
-					order = 3,
-					type = "execute",
-					name = timerbars.groups[i].layout.orientation,
-					func = function(this)
-						if (timerbars.groups[i].layout.orientation == "HORIZONTAL") then
-							timerbars.groups[i].layout.orientation = "VERTICAL"
-							timerbars.groups[i].layout.growth = "RIGHT"
-						else
-							timerbars.groups[i].layout.orientation = "HORIZONTAL"
-							timerbars.groups[i].layout.growth = "DOWN"
-						end
-						
-						
-						Auras:RefreshTimerBarGroupList(this.options,spec)
-						Auras:UpdateTalents()
-					end,
-					width = "half",
-				},
-				deleteGroup = {
-					order = 4,
-					type = "execute",
-					name = DELETE,
-					--confirm = true,
-					func = function(this)
-						tremove(timerbars.groups,i)
-						tremove(timerbars.frames,i)
-						UpdateSpellTimerBarInfo(spec,i)
+					end
+				end,
+				inline = false,
+				disabled = function() return not db.settings[spec].display.isShowTimerbars end,
+				args = {
+					addBar = {
+						order = 1,
+						type = "execute",
+						name = "Add Bar",
+						disabled = timerbars.groups[i].isAdjust,
+						func = function(this)
+							--local splitStr = {strsplit(" ",BAR_LIST[selectedBar],2)}
+							--local barName = gsub(splitStr[2]," ","")
+							local barName = { strsplit(";",BAR_LIST[selectedBar]) }
+							timerbars.bars[barName[2]].layout.group = i
+							timerbars.bars[barName[2]].isEnabled = true
+							timerbars.bars[barName[2]].isInUse = true
+							
+							--[[if (listPos <= db.layout[spec].timerbars.groups[i].auraCount) then
+								ReorderAuraList(spec,i,listPos,barName,"add")	
+							end]]
 
-						--db.layout[spec].timerbars.groupCount = db.layout[spec].timerbars.groupCount - 1
-						ReorderTimerBarGroups(spec,i,"delete")
-						Auras:RefreshTimerBarGroupList(this.options,spec)
-						Auras:UpdateTalents()
-					end,
-					width = "half",
-				},
-				--[[renameAura = {
-					order = 5,
-					type = "input",
-					name = "Group Name",
-					validate = function(_,value)
-						if (#value <= 12) then
-							return true
-						else
-							return "Use less than 12 characters"
-						end
-					end,
-					get = function()
-						return db.layout[spec].groups[i].name
-					end,
-					set = function(this,value)
-						db.layout[spec].groups[i].name = value
-						
-						Auras:RefreshTimerBarGroupList(this.options,spec)
-					end,
-				},]]
+							timerbars.groups[i].barCount = timerbars.groups[i].barCount + 1
+							Auras:RefreshTimerBarGroupList(this.options,spec)
+							Auras:UpdateTalents()
+						end,
+						width = "half",
+					},
+					barList = {
+						order = 2,
+						type = "select",
+						name = "Timer Bar List",
+						disabled = timerbars.groups[i].isAdjust,
+						get = function()
+							return selectedBar
+						end,
+						set = function(this,value)
+							selectedBar = value
+						end,
+						values = function()
+							local items = {}
+							for i=1,#BAR_LIST do
+								local barInfo = { strsplit(";",BAR_LIST[i]) }
+								tinsert(items,barInfo[1])
+							end
+
+							return items
+						end,
+					},
+					--[[listPosition = {
+						order = 3,
+						type = "select",
+						name = "Position (Optional)",
+						get = function()
+							if (listPos == 0) then
+								listPos = db.layout[spec].timerbars.groups[i].auraCount + 1
+								return listPos
+							else
+								return listPos
+							end
+						end,
+						set = function(this,value)
+							listPos = value
+						end,
+						values = function()
+							local list = {}
+							
+							for i=1,(db.layout[spec].timerbars.groups[i].auraCount + 1) do
+								tinsert(list,i)
+							end
+							
+							return list
+							
+						end,
+						width = "half",
+					},]]
+					filler = {
+						order = 5,
+						type = "description",
+						name = " ",
+						width = "normal",
+					},
+					toggleLayout = {
+						order = 6,
+						type = "toggle",
+						name = "Layout",
+						desc = "Toggle to access controls to customize the group's layout",
+						get = function()
+							return timerbars.groups[i].isAdjust
+						end,
+						set = function(this,value)
+							timerbars.groups[i].isAdjust = value
+							
+							Auras:UpdateTalents()
+							
+							for k,v in pairs(timerbars.bars) do
+								if (v.layout.group == i and value) then
+									v.isAdjust = true
+									SSA[k]:Show()
+								else
+									if (timerbars.groups[v.layout.group] and timerbars.groups[v.layout.group].isAdjust) then
+										timerbars.groups[v.layout.group].isAdjust = false
+									end
+									v.isAdjust = false
+								end
+							end
+							
+							
+							Auras:RefreshTimerBarGroupList(this.options,spec)
+							
+							
+						end,
+						width = "half",
+					},
+					--[[barWidth = {
+						order = 7,
+						type = "range",
+						name = "Bar Length",
+						hidden = not db.layout[spec].timerbars.groups[i].isAdjust,
+						min = 16,
+						max = 256,
+						step = 1,
+						bigStep = 1,
+						get = function()
+							return db.layout[spec].timerbars.groups[i].layout.width
+						end,
+						set = function(_,value)
+							db.layout[spec].timerbars.groups[i].layout.width = value
+							Auras:InitializeTimerBars(spec)
+							--Auras:UpdateTalents()
+						end,
+					},
+					barHeight = {
+						order = 8,
+						type = "range",
+						name = "Bar Width",
+						hidden = not db.layout[spec].timerbars.groups[i].isAdjust,
+						min = 5,
+						max = 100,
+						step = 1,
+						bigStep = 1,
+						get = function()
+							return db.layout[spec].timerbars.groups[i].layout.height
+						end,
+						set = function(_,value)
+							db.layout[spec].timerbars.groups[i].layout.height = value
+							Auras:InitializeTimerBars(spec)
+							--Auras:UpdateTalents()
+						end,
+					},
+					barSpacing = {
+						order = 9,
+						type = "range",
+						name = "Bar Spacing",
+						hidden = not db.layout[spec].timerbars.groups[i].isAdjust,
+						min = 5,
+						max = 100,
+						step = 1,
+						bigStep = 1,
+						get = function()
+							return db.layout[spec].timerbars.groups[i].layout.spacing
+						end,
+						set = function(_,value)
+							db.layout[spec].timerbars.groups[i].layout.spacing = value
+							Auras:InitializeTimerBars(spec)
+							--Auras:UpdateTalents()
+						end,
+					},]]
+					general = {
+						name = "|cFFFFFFFF"..SETTINGS.."|r",
+						order = 7,
+						type = "group",
+						guiInline = true,
+						hidden = not timerbars.groups[i].isAdjust,
+						args = {
+							alphaCombat = Auras:Slider_VerifyDefaults(timerbars.groups[i],1,spec,L["LABEL_ALPHA_COMBAT"],L["TOOLTIP_STATUSBAR_ALPHA_COMBAT"],0,1,0.1,nil,false,'alphaCombat','Timerbar',i),
+							alphaOoC = Auras:Slider_VerifyDefaults(timerbars.groups[i],2,spec,L["LABEL_ALPHA_NO_TARGET_NO_COMBAT"],L["TOOLTIP_STATUSBAR_ALPHA_NO_COMBAT"],0,1,0.1,nil,false,'alphaOoC','Timerbar',i),
+						},
+					},
+					layout = {
+						name = L["LABEL_LAYOUT_DESIGN"],
+						type = "group",
+						order = 8,
+						hidden = not timerbars.groups[i].isAdjust,
+						guiInline = true,
+						args = {
+							--[[texture = Auras:Select_VerifyDefaults(db.layout[spec].timerbars.groups[i].foreground,1,1,L["LABEL_STATUSBAR_TEXTURE"],L["TOOLTIP_STATUSBAR_TEXTURE"],"LSM30_Statusbar",LSM:HashTable(LSM.MediaType.STATUSBAR),false,'texture','Timerbar',i),
+							textureColor = Auras:Color_VerifyDefaults(db.layout[spec].timerbars.groups[i].foreground,2,1,L["LABEL_STATUSBAR_COLOR"],nil,false,"double",false,'color','Timerbar',i),
+							backgroundTexture = Auras:Select_VerifyDefaults(db.layout[spec].timerbars.groups[i].background,3,1,L["LABEL_STATUSBAR_BG_TEXTURE"],L["TOOLTIP_STATUSBAR_BG_TEXTURE"],"LSM30_Statusbar",LSM:HashTable(LSM.MediaType.STATUSBAR),false,'texture','Timerbar',i),
+							backgroundColor = Auras:Color_VerifyDefaults(db.layout[spec].timerbars.groups[i].background,4,1,L["LABEL_STATUSBAR_BG_COLOR"],L["TOOLTIP_STATUSBAR_BG_COLOR"],true,nil,false,'color','Timerbar',i),
+							backgroundToggle = Auras:Toggle_VerifyDefaults(db.layout[spec].timerbars.groups[i].adjust,5,1,L["LABEL_STATUSBAR_MODIFY_BACKGROUND"],L["TOOLTIP_TOGGLE_STATUSBAR_BG_CUSTOMIZATON"],nil,false,'showBG','Timerbar',i),]]
+							width = Auras:Slider_VerifyDefaults(timerbars.groups[i].layout,6,spec,L["LABEL_WIDTH"],nil,10,250,1,nil,false,'width','Timerbar',i,true),
+							height = Auras:Slider_VerifyDefaults(timerbars.groups[i].layout,7,spec,L["LABEL_HEIGHT"],nil,5,100,1,nil,false,'height','Timerbar',i,true),
+							spacing = Auras:Slider_VerifyDefaults(timerbars.groups[i].layout,8,spec,L["LABEL_SPACING"],nil,5,100,1,nil,false,'spacing','Timerbar',i,true),
+							growth = {
+								order = 9,
+								type = "select",
+								name = "Bar Growth",
+								get = function()
+									return timerbars.groups[i].layout.growth
+								end,
+								set = function(this,value)
+									timerbars.groups[i].layout.growth = value
+									
+									Auras:UpdateTalents()
+									Auras:RefreshTimerBarGroupList(this.options,spec)
+								end,
+								values = function()
+									local args = {}
+									local orientation = timerbars.groups[i].layout.orientation
+									
+									if (orientation == "VERTICAL") then
+										args["LEFT"] = "Left"
+										args["RIGHT"] = "Right"
+									else
+										args["UP"] = "Up"
+										args["DOWN"] = "Down"
+									end
+									
+									return args
+								end,
+							},
+							--[[anchor = {
+								order = 10,
+								type = "select",
+								name = "Group Anchor",
+								get = function()
+									return db.layout[spec].timerbars.groups[i].layout.anchor
+								end,
+								set = function(this,value)
+									db.layout[spec].timerbars.groups[i].layout.anchor = value
+									
+									Auras:UpdateTalents()
+									Auras:RefreshTimerBarGroupList(this.options,spec)
+								end,
+								values = function()
+									local args = {}
+									local orientation = db.layout[spec].timerbars.groups[i].layout.orientation
+									
+									if (orientation == "VERTICAL") then
+										args["LEFT"] = "Left"
+										args["RIGHT"] = "Right"
+									else
+										args["TOP"] = "Top"
+										args["Bottom"] = "Bottom"
+									end
+									
+									return args
+								end,
+							},]]
+						},
+					},
+					nametext = {
+						name = L["LABEL_TEXT_SPELL"],
+						type = "group",
+						order = 9,
+						hidden = not timerbars.groups[i].isAdjust,
+						guiInline = true,
+						args = {
+							color = Auras:Color_VerifyDefaults(timerbars.groups[i].nametext.font,1,spec,L["LABEL_FONT_COLOR"],L["TOOLTIP_FONT_COLOR"],true,"full",false,'color','Timerbar',i,true),
+							fontName = Auras:Select_VerifyDefaults(timerbars.groups[i].nametext.font,2,spec,L["LABEL_FONT"],L["TOOLTIP_FONT_NAME"],"LSM30_Font",LSM:HashTable("font"),nil,false,'name','Timerbar',i,true),
+							fontSize = Auras:Slider_VerifyDefaults(timerbars.groups[i].nametext.font,3,spec,FONT_SIZE,L["TOOLTIP_COOLDOWN_FONT_SIZE"],5,40,1,nil,false,'size','Timerbar',i,true),
+							fontOutline = Auras:Select_VerifyDefaults(timerbars.groups[i].nametext.font,4,spec,L["LABEL_FONT_OUTLINE"],L["TOOLTIP_FONT_OUTLINE"],nil,FONT_OUTLINES,nil,false,'flag','Timerbar',i,true),
+							--nametextAnchor = Auras:Select_VerifyDefaults(db.layout[spec].timerbars.groups[i].nametext,5,spec,L["LABEL_FONT_ANCHOR"],L["TOOLTIP_FONT_ANCHOR_POINT"],nil,FRAME_ANCHOR_OPTIONS,nil,false,'justify','Timerbar',i,true),
+							--nametextX = Auras:Slider_VerifyDefaults(db.layout[spec].timerbars.groups[i].nametext,6,spec,"X",L["TOOLTIP_FONT_X_OFFSET"],-500,500,nil,false,'x','Timerbar',i,true),
+							--nametextY = Auras:Slider_VerifyDefaults(db.layout[spec].timerbars.groups[i].nametext,7,spec,"Y",L["TOOLTIP_FONT_Y_OFFSET"],-100,100,nil,false,'y','Timerbar',i,true),
+							shadow = {
+								name = '|cFFFFFFFF'..L["LABEL_FONT_SHADOW"]..'|r',
+								type = "group",
+								order = 8,
+								hidden = false,
+								guiInline = true,
+								args = {
+									shadowToggle = Auras:Toggle_VerifyDefaults(timerbars.groups[i].nametext.font.shadow,1,spec,L["TOGGLE"],nil,nil,false,'isEnabled','Timerbar',i,true),
+									shadowColor = Auras:Color_VerifyDefaults(timerbars.groups[i].nametext.font.shadow,2,spec,L["LABEL_FONT_SHADOW_COLOR"],L["TOOLTIP_FONT_SHADOW_COLOR"],true,nil,false,'color','Timerbar',i,true),
+									shadowX = Auras:Slider_VerifyDefaults(timerbars.groups[i].nametext.font.shadow.offset,3,spec,"X",L["TOOLTIP_FONT_SHADOW_X_OFFSET"],-10,10,0.5,nil,false,'x','Timerbar',i,true),
+									shadowY = Auras:Slider_VerifyDefaults(timerbars.groups[i].nametext.font.shadow.offset,4,spec,"Y",L["TOOLTIP_FONT_SHADOW_Y_OFFSET"],-10,10,0.5,nil,false,'y','Timerbar',i,true),
+								},
+							},
+						},
+					},
+					timetext = {
+						name = '|cFFFFFFFF'..L["LABEL_TIME_TEXT"]..'|r',
+						type = "group",
+						order = 10,
+						hidden = not timerbars.groups[i].isAdjust,
+						guiInline = true,
+						args = {
+							color = Auras:Color_VerifyDefaults(timerbars.groups[i].timetext.font,1,spec,L["LABEL_FONT_COLOR"],L["TOOLTIP_FONT_COLOR"],true,"full",false,'color','Timerbar',i,true),
+							fontName = Auras:Select_VerifyDefaults(timerbars.groups[i].timetext.font,2,spec,L["LABEL_FONT"],L["TOOLTIP_FONT_NAME"],"LSM30_Font",LSM:HashTable("font"),nil,false,'name','Timerbar',i,true),
+							fontSize = Auras:Slider_VerifyDefaults(timerbars.groups[i].timetext.font,3,spec,FONT_SIZE,L["TOOLTIP_COOLDOWN_FONT_SIZE"],5,40,1,nil,false,'size','Timerbar',i,true),
+							fontOutline = Auras:Select_VerifyDefaults(timerbars.groups[i].timetext.font,4,spec,L["LABEL_FONT_OUTLINE"],L["TOOLTIP_FONT_OUTLINE"],nil,FONT_OUTLINES,nil,false,'flag','Timerbar',i,true),
+							--timetextAnchor = Auras:Select_VerifyDefaults(db.layout[spec].timerbars.groups[i].timetext,5,spec,L["LABEL_FONT_ANCHOR"],L["TOOLTIP_FONT_ANCHOR_POINT"],nil,FRAME_ANCHOR_OPTIONS,nil,false,'justify','Timerbar',i,true),
+							--timetextX = Auras:Slider_VerifyDefaults(db.layout[spec].timerbars.groups[i].timetext,6,spec,"X",L["TOOLTIP_FONT_X_OFFSET"],-500,500,nil,false,'x','Timerbar',i,true),
+							--timetextY = Auras:Slider_VerifyDefaults(db.layout[spec].timerbars.groups[i].timetext,7,spec,"Y",L["TOOLTIP_FONT_Y_OFFSET"],-100,100,nil,false,'y','Timerbar',i,true),
+							shadow = {
+								name = '|cFFFFFFFF'..L["LABEL_FONT_SHADOW"]..'|r',
+								type = "group",
+								order = 8,
+								hidden = false,
+								guiInline = true,
+								args = {
+									shadowToggle = Auras:Toggle_VerifyDefaults(timerbars.groups[i].timetext.font.shadow,1,spec,L["TOGGLE"],nil,nil,false,'isEnabled','Timerbar',i,true),
+									shadowColor = Auras:Color_VerifyDefaults(timerbars.groups[i].timetext.font.shadow,2,spec,L["LABEL_FONT_SHADOW_COLOR"],L["TOOLTIP_FONT_SHADOW_COLOR"],true,nil,false,'color','Timerbar',i,true),
+									shadowX = Auras:Slider_VerifyDefaults(timerbars.groups[i].timetext.font.shadow.offset,3,spec,"X",L["TOOLTIP_FONT_SHADOW_X_OFFSET"],-10,10,0.5,nil,false,'x','Timerbar',i,true),
+									shadowY = Auras:Slider_VerifyDefaults(timerbars.groups[i].timetext.font.shadow.offset,4,spec,"Y",L["TOOLTIP_FONT_SHADOW_Y_OFFSET"],-10,10,0.5,nil,false,'y','Timerbar',i,true),
+								},
+							},
+						},
+					},
+					currentBars = {
+						order = 11,
+						type = "group",
+						name = "Current Bars",
+						inline = true,
+						hidden = timerbars.groups[i].isAdjust,
+						args = BuildCurrentBarList(Auras.db.char,spec,i),
+					},
+				}
 			}
-		}
+			
+			
+			args.groupList.args["BarGroup"..i] = {
+				order = i,
+				name = ' ',
+				type = "group",
+				guiInline = true,
+				args = {
+					groupTitle = {
+						order = 1,
+						type = "input",
+						name = '',
+						validate = function(_,value)
+							if (#value <= 12) then
+								return true
+							else
+								return "Use less than 12 characters"
+							end
+						end,
+						get = function()
+							return timerbars.groups[i].name
+						end,
+						set = function(this,value)
+							timerbars.groups[i].name = value
+							
+							Auras:RefreshTimerBarGroupList(this.options,spec)
+						end,
+						width = "normal",
+					},
+					numBars = {
+						order = 2,
+						type = "description",
+						name = "        "..timerbars.groups[i].barCount.." Bars",
+						width = "half",
+					},
+					groupOrientation = {
+						order = 3,
+						type = "execute",
+						name = timerbars.groups[i].layout.orientation,
+						func = function(this)
+							if (timerbars.groups[i].layout.orientation == "HORIZONTAL") then
+								timerbars.groups[i].layout.orientation = "VERTICAL"
+								timerbars.groups[i].layout.growth = "RIGHT"
+							else
+								timerbars.groups[i].layout.orientation = "HORIZONTAL"
+								timerbars.groups[i].layout.growth = "DOWN"
+							end
+							
+							
+							Auras:RefreshTimerBarGroupList(this.options,spec)
+							Auras:UpdateTalents()
+						end,
+						width = "half",
+					},
+					deleteGroup = {
+						order = 4,
+						type = "execute",
+						name = DELETE,
+						--confirm = true,
+						func = function(this)
+							tremove(timerbars.groups,i)
+							tremove(timerbars.frames,i)
+							UpdateSpellTimerBarInfo(spec,i)
+
+							--db.layout[spec].timerbars.groupCount = db.layout[spec].timerbars.groupCount - 1
+							ReorderTimerBarGroups(spec,i,"delete")
+							Auras:RefreshTimerBarGroupList(this.options,spec)
+							Auras:UpdateTalents()
+						end,
+						width = "half",
+					},
+					--[[renameAura = {
+						order = 5,
+						type = "input",
+						name = "Group Name",
+						validate = function(_,value)
+							if (#value <= 12) then
+								return true
+							else
+								return "Use less than 12 characters"
+							end
+						end,
+						get = function()
+							return db.layout[spec].groups[i].name
+						end,
+						set = function(this,value)
+							db.layout[spec].groups[i].name = value
+							
+							Auras:RefreshTimerBarGroupList(this.options,spec)
+						end,
+					},]]
+				}
+			}
+		--end
 	end
 	
 	options.args.timerbarGroups.args = args

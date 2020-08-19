@@ -177,7 +177,7 @@ function Auras:RetrieveAuraInfo(unit,spellID,filter)
 	local auraMax = ((match((filter or ''),"HELPFUL") or not filter) and BUFF_MAX_DISPLAY) or (match((filter or ''),"HARMFUL") and DEBUFF_MAX_DISPLAY)
 	
 	for i=1,auraMax do
-		local _,_,_,_,_,_,_,_,_,auraID = UnitAura(unit,i,filter or "HELPFUL PLAYER")
+		local name,_,_,_,_,_,_,_,_,auraID = UnitAura(unit,i,filter or "HELPFUL PLAYER")
 
 		if (auraID == spellID) then
 			return UnitAura(unit,i,filter or "HELPFUL PLAYER")
@@ -192,6 +192,7 @@ end
 -------------------------------------------------------------------------------------------------------
 
 local function CreateGrid()
+	print("CREATING GRID")
 	local grid = SSA.Move.Grid
 	
 	grid.boxSize = 128
@@ -273,16 +274,20 @@ function Auras:ChatCommand(input)
 	else
 		if not input or input:trim() == "" then
 			NavigateInterfaceOptions(0)
-		elseif input == "ele" or input == "elemental" then
+		elseif input == "opt" or input == "options" then
 			NavigateInterfaceOptions(1)
-		elseif input == "enh" or input == "enhance" or input == "enhancement" then
+		elseif input == "ele" or input == "elemental" then
 			NavigateInterfaceOptions(2)
-		elseif input == "res" or input == "resto" or input == "restoration" then
+		elseif input == "enh" or input == "enhance" or input == "enhancement" then
 			NavigateInterfaceOptions(3)
+		elseif input == "res" or input == "resto" or input == "restoration" then
+			NavigateInterfaceOptions(4)
 		elseif (input == "info" or input == "changelog") then
-			SSA.Bulletin:Show()
-		elseif input == "settings" or input == "options" or input == "option" or input == "opt" or input == "config" then
-			DEFAULT_CHAT_FRAME:AddMessage("|cFFFFFF77Sweetsour\'s Shaman Auras|r: |cFFFF7777The advanced configuration options have been embed directly in each of the specs' settings. Type /ssa <spec> and select the corresponding tabs that have been added.")
+			SSA.IntroFrame.isSlashCommand = true
+			SSA.IntroFrame:Show()
+			DEFAULT_CHAT_FRAME:AddMessage("|cFFFFFF77Sweetsour\'s Shaman Auras|r: |cFF9999FFInfo Panel Opening, please wait...|r")
+		--elseif input == "settings" or input == "options" or input == "option" or input == "opt" or input == "config" then
+			--DEFAULT_CHAT_FRAME:AddMessage("|cFFFFFF77Sweetsour\'s Shaman Auras|r: |cFFFF7777The advanced configuration options have been embed directly in each of the specs' settings. Type /ssa <spec> and select the corresponding tabs that have been added.")
 		elseif input == "version" then
 			DEFAULT_CHAT_FRAME:AddMessage("|cFFFFFF77Sweetsour\'s Shaman Auras|r: |cFF9999FF"..GetAddOnMetadata(FOLDER_NAME,"Version").."|r")
 		elseif (input == "toggle") then
@@ -336,10 +341,10 @@ function Auras:BuildMoveUI(obj)
 	--local Move = SSA["Move"..spec]
 	local Move = obj
 	
-	Move.Close = CreateFrame("Button","CloseButton",Move)
+	Move.Close = CreateFrame("Button","CloseButton",Move,BackdropTemplateMixin and "BackdropTemplate")
 	Move.GridDisplay = CreateFrame("CheckButton","MoveGrid",Move,"ChatConfigCheckButtonTemplate")
 	Move.InfoDisplay = CreateFrame("CheckButton","MoveInfoDisplay",Move,"ChatConfigCheckButtonTemplate")
-	Move.Info = CreateFrame("Frame","MoveInfoFrame",UIParent)
+	Move.Info = CreateFrame("Frame","MoveInfoFrame",UIParent,BackdropTemplateMixin and "BackdropTemplate")
 
 	Move.Info:SetWidth(446)
 	Move.Info:SetHeight(125)
@@ -351,7 +356,7 @@ function Auras:BuildMoveUI(obj)
 
 	Move.Info.text = Move.Info:CreateFontString(nil, "MEDIUM", "GameFontHighlightLarge")
 	Move.Info.text:SetPoint("TOPLEFT",11,-5)
-	Move.Info.text:SetFont("Interface\\addons\\ShamanAurasDev\\Media\\fonts\\courbd.ttf", 14,"NONE")
+	Move.Info.text:SetFont("Interface\\addons\\ShamanAuras2\\Media\\fonts\\courbd.ttf", 14,"NONE")
 	Move.Info.text:SetTextColor(1,1,1,1)
 	Move.Info.text:SetJustifyH("LEFT")
 	Move.Info.text:SetText("               Moving Auras Help\n\nShift + Left-Click:   Horizontal Center\nShift + Right-Click:  Vertical Center\nShift + Middle-Click: Horizonal/Vertical Center\n\nCtrl + Right-Click:   Reset Aura Group")
@@ -439,7 +444,47 @@ function Auras:BuildMoveUI(obj)
 	end)
 end
 
+function Auras:ResetCustomization()
+	local db = self.db.char
 
+	db.move.isMoving = false
+	db.settings.move.isMoving = false
+
+	for i=1,3 do
+		-- Reset All Aura Group Customization
+		for j=1,#db.auras[i].groups do
+			db.auras[i].groups[j].isAdjust = false
+		end
+
+		db.auras[i].cooldowns.adjust = false
+
+		-- Reset All Cooldown Group Customization
+		for j=1,#db.auras[i].cooldowns.groups do
+			db.auras[i].cooldowns.groups[j].isPreview = false
+		end
+
+		db.elements[i].isMoving = false
+
+		-- Reset All Statusbar Customizations
+		for k,v in pairs(db.statusbars[i].bars) do
+			v.adjust.isEnabled = false
+		end
+
+		-- Reset All Timerbar Group Customizations
+		for j=1,#db.timerbars[i].groups do
+			db.timerbars[i].groups[j].isAdjust = false
+		end
+
+		for k,v in pairs(db.timerbars[i].bars) do
+			if (SSA[k]:IsShown()) then
+				SSA[k]:Hide()
+			end
+
+			v.isAdjust = false
+			v.isCustomize = false
+		end
+	end
+end
 
 --function Auras:CreateVerticalStatusBar(statusbar,r1,g1,b1,text,duration,texture)
 function Auras:CreateVerticalStatusBar(statusbar,spec,ctr)
@@ -473,7 +518,10 @@ function Auras:CreateVerticalStatusBar(statusbar,spec,ctr)
 		statusbar:SetStatusBarColor(timerbar.layout.color.r,timerbar.layout.color.g,timerbar.layout.color.b)
 		--statusbar:SetStatusBarColor(r,g,b)
 		statusbar:SetMinMaxValues(0,statusbar.duration)
-		statusbar:Hide()
+		
+		if (not Auras:IsPreviewingTimerbar(statusbar)) then
+			statusbar:Hide()
+		end
 
 		--statusbar.duration = duration
 		if (not statusbar.bg) then
@@ -831,40 +879,42 @@ local function UpdateTimerbarParentDimensions(spec)
 		local width,height,x,y = 0,0,0,0
 		local anchor = ''
 		
-		if (barGroup.layout.growth == "RIGHT") then
-			anchor = "LEFT"
-		elseif (barGroup.layout.growth == "LEFT") then
-			anchor = "RIGHT"
-		elseif (barGroup.layout.growth == "UP") then
-			anchor = "BOTTOM"
-		else
-			anchor = "TOP"
-		end
-		
-		local point,relativeTo,relativePoint,parentX,parentY = parent:GetPoint()
-		
-		if (barGroup.barCount <= 1) then
-			parent:SetPoint("CENTER",relativeTo,"CENTER",parentX,parentY)
-		else
-			parent:SetPoint(anchor,relativeTo,"CENTER",parentX,parentY)
-		end
-		
-		if (barGroup.layout.orientation == "VERTICAL") then
-			width = barGroup.layout.height
-			height = barGroup.layout.width
-		else
-			width = barGroup.layout.width
-			height = barGroup.layout.height
-		end
-		
-		--if (barGroup.barCount > 0) then	
-			x = (barGroup.barCount * (barGroup.layout.spacing + width)) + padding
-			y = height + padding
+		if (#barGroup > 0) then
+			if (barGroup.layout.growth == "RIGHT") then
+				anchor = "LEFT"
+			elseif (barGroup.layout.growth == "LEFT") then
+				anchor = "RIGHT"
+			elseif (barGroup.layout.growth == "UP") then
+				anchor = "BOTTOM"
+			else
+				anchor = "TOP"
+			end
 			
-			parent:SetSize(x,y)
-		--[[else
-		
-		end]]
+			local point,relativeTo,relativePoint,parentX,parentY = parent:GetPoint()
+			
+			if (barGroup.barCount <= 1) then
+				parent:SetPoint("CENTER",relativeTo,"CENTER",parentX,parentY)
+			else
+				parent:SetPoint(anchor,relativeTo,"CENTER",parentX,parentY)
+			end
+			
+			if (barGroup.layout.orientation == "VERTICAL") then
+				width = barGroup.layout.height
+				height = barGroup.layout.width
+			else
+				width = barGroup.layout.width
+				height = barGroup.layout.height
+			end
+			
+			--if (barGroup.barCount > 0) then	
+				x = (barGroup.barCount * (barGroup.layout.spacing + width)) + padding
+				y = height + padding
+				
+				parent:SetSize(x,y)
+			--[[else
+			
+			end]]
+		end
 	end
 end
 
@@ -939,7 +989,7 @@ function Auras:GetNumActiveAurasByGroupID(groupID,spec)
 	for k,v in pairs(self.db.char.auras[spec].auras) do
 		if (v.group == groupID) then
 			local aura = SSA[k]
-			
+			SSA.DataFrame.text:SetText("BAD CONDITION: "..k)
 			if (not aura.condition()) then
 				SSA.DataFrame.text:SetText("BAD CONDITION: "..k)
 			end
@@ -1003,7 +1053,8 @@ function Auras:UpdateTalents(isTalentChange)
 		
 		-- Initialize Progress Bars Upon Specialization Change
 		--Auras:InitializeProgressBar('HealthBar1',nil,'healthBar','numtext','perctext',1)
-		Auras:InitializeProgressBar('MaelstromBar',nil,'text',nil,spec)
+		--Auras:InitializeProgressBar('MaelstromBar',nil,'text',nil,spec)
+		Auras:InitializeProgressBar('FulminationBar','Timer','counttext','timetext',spec)
 		Auras:InitializeProgressBar('CastBar',nil,'nametext','timetext',spec)
 		Auras:InitializeProgressBar('ChannelBar',nil,'nametext','timetext',spec)
 		Auras:InitializeProgressBar('IcefuryBar','Timer','counttext','timetext',spec)
@@ -1076,7 +1127,8 @@ function Auras:UpdateTalents(isTalentChange)
 		
 		-- Initialize Progress Bars Upon Specialization Change
 		--Auras:InitializeProgressBar('HealthBar1',nil,'healthBar','numtext','perctext',1)
-		Auras:InitializeProgressBar('MaelstromBar',nil,'text',nil,spec)
+		--Auras:InitializeProgressBar('MaelstromBar',nil,'text',nil,spec)
+		Auras:InitializeProgressBar('MaelstromWeaponBar','Timer','counttext','timetext',spec)
 		Auras:InitializeProgressBar('CastBar',nil,'nametext','timetext',spec)
 		Auras:InitializeProgressBar('ChannelBar',nil,'nametext','timetext',spec)
 		

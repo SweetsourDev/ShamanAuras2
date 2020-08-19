@@ -13,6 +13,35 @@ end
 
 
 local defaults = {
+	totems = {
+		[1] = {
+			totems = {
+				["Earthbind_Totem"] = {
+					layout = {
+						icon = [[totems\earthbind_totem]],
+					},
+				},
+			},
+		},
+		[2] = {
+			totems = {
+				["Earthbind_Totem"] = {
+					layout = {
+						icon = [[totems\earthbind_totem]],
+					},
+				},
+			},
+		},
+		[3] = {
+			totems = {
+				["Earthbind_Totem"] = {
+					layout = {
+						icon = [[totems\earthbind_totem]],
+					},
+				},
+			},
+		},
+	},
 	auras = {
 		[1] = {
 			base = {
@@ -34,7 +63,7 @@ local defaults = {
 					isAdjust = false,
 				},
 				[2] = {
-					auraCount = 6,
+					auraCount = 7,
 					name = "Primary #2",
 					icon = 32,
 					spacing = 50,
@@ -953,14 +982,50 @@ local defaults = {
 						},
 					},
 				},
+				["EchoingShock"] = {
+					group = 3,
+					order = 6,
+					isEnabled = true,
+					isInUse = true,
+					talentRow = 2,
+					layout = {
+						icon = [[elemental\echoing_shock]],
+						isGCD = false,
+						isCharge = false,
+					},
+					glow = {
+						isCustomize = false,
+						triggers = {
+							[1] = {
+								isEnabled = true,
+								isActive = false,
+								target = {
+									locked = false,
+									reaction = "off",
+									recommend = "off",
+								},
+								type = "buff",
+								name = "Buff Duration",
+								spellID = 320125,
+								threshold = false,
+								start = 0,
+								duration = 8,
+								pulseRate = 0.5,
+								displayTime = false,
+								show = false,
+								combat = "on",
+							},
+						},
+					},
+				},
 				["ElementalBlast"] = {
 					group = 1,
 					order = 5,
 					isEnabled = true,
 					isInUse = true,
-					talentRow = 1,
+					talentRow = 2,
 					layout = {
-						icon = [[elemental\elemental_blast]],
+						icon = [[shared\elemental_blast]],
 						isGCD = true,
 						isCharge = false,
 					},
@@ -989,14 +1054,14 @@ local defaults = {
 						},
 					},
 				},
-				["ExposedElements"] = {
+				--[[["ExposedElements"] = { REMOVED IN 8.1
 					group = 3,
 					order = 3,
 					isEnabled = true,
 					isInUse = true,
 					talentRow = 1,
 					layout = {
-						icon = [[elemental\exposed_elements]],
+						icon = elemental\exposed_elements,
 						isGCD = false,
 						isCharge = false,
 					},
@@ -1024,7 +1089,7 @@ local defaults = {
 							},
 						},
 					},
-				},
+				},]]
 				["FireElemental"] = {
 					group = 2,
 					order = 1,
@@ -1434,7 +1499,7 @@ local defaults = {
 					order = 5,
 					isEnabled = true,
 					isInUse = true,
-					talentRow = 2,
+					talentRow = 4,
 					layout = {
 						icon = [[elemental\master_of_elements]],
 						isGCD = false,
@@ -1537,6 +1602,42 @@ local defaults = {
 						},
 					},
 				},
+				["StaticDischarge"] = {
+					group = 2,
+					order = 7,
+					isEnabled = true,
+					isInUse = true,
+					talentRow = 1,
+					layout = {
+						icon = [[elemental\static_discharge]],
+						isGCD = true,
+						isCharge = false,
+					},
+					glow = {
+						isCustomize = false,
+						triggers = {
+							[1] = {
+								isEnabled = false,
+								isActive = false,
+								target = {
+									locked = false,
+									reaction = "enemy",
+									recommend = "enemy",
+								},
+								type = "cooldown",
+								name = "Spell Cooldown",
+								spellID = 342243,
+								threshold = 2,
+								start = 0,
+								duration = 30,
+								pulseRate = 1.5,
+								displayTime = 5,
+								show = "all",
+								combat = "on",
+							},
+						},
+					},
+				},
 				["StormElemental"] = {
 					group = 2,
 					order = 2,
@@ -1627,6 +1728,42 @@ local defaults = {
 								pulseRate = 1.5,
 								displayTime = 5,
 								show = "all",
+								combat = "on",
+							},
+						},
+					},
+				},
+				["SurgeOfPower"] = {
+					group = 3,
+					order = 3,
+					isEnabled = true,
+					isInUse = true,
+					talentRow = 6,
+					layout = {
+						icon = [[elemental\surge_of_power]],
+						isGCD = false,
+						isCharge = false,
+					},
+					glow = {
+						isCustomize = false,
+						triggers = {
+							[1] = {
+								isEnabled = true,
+								isActive = false,
+								target = {
+									locked = false,
+									reaction = "off",
+									recommend = "off",
+								},
+								type = "buff",
+								name = "Buff Duration",
+								spellID = 285514,
+								threshold = false,
+								start = 0,
+								duration = 15,
+								pulseRate = 0.5,
+								displayTime = false,
+								show = false,
 								combat = "on",
 							},
 						},
@@ -1872,7 +2009,7 @@ local defaults = {
 					isAdjust = false,
 				},
 				[2] = {
-					auraCount = 5,
+					auraCount = 7,
 					name = "Primary #2",
 					icon = 32,
 					spacing = 50,
@@ -1881,7 +2018,7 @@ local defaults = {
 					isAdjust = false,
 				},
 				[3] = {
-					auraCount = 3,
+					auraCount = 4,
 					name = "Buff Auras",
 					icon = 32,
 					spacing = 50,
@@ -2324,7 +2461,7 @@ local defaults = {
 				},
 				["Ascendance"] = {
 					group = 2,
-					order = 2,
+					order = 1,
 					isEnabled = true,
 					isInUse = true,
 					talentRow = 7,
@@ -2504,7 +2641,7 @@ local defaults = {
 				},
 				["CrashLightning"] = {
 					group = 1,
-					order = 4,
+					order = 3,
 					isEnabled = true,
 					isInUse = true,
 					talentRow = 0,
@@ -2667,7 +2804,7 @@ local defaults = {
 				},
 				["EarthenSpike"] = {
 					group = 2,
-					order = 3,
+					order = 2,
 					isEnabled = true,
 					isInUse = true,
 					talentRow = 7,
@@ -2694,6 +2831,42 @@ local defaults = {
 								start = 0,
 								duration = 20,
 								pulseRate = 1.5,
+								displayTime = 5,
+								show = "all",
+								combat = "on",
+							},
+						},
+					},
+				},
+				["ElementalBlast"] = {
+					group = 2,
+					order = 7,
+					isEnabled = true,
+					isInUse = true,
+					talentRow = 1,
+					layout = {
+						icon = [[shared\elemental_blast]],
+						isGCD = true,
+						isCharge = false,
+					},
+					glow = {
+						isCustomize = false,
+						triggers = {
+							[1] = {
+								isEnabled = false,
+								isActive = false,
+								target = {
+									locked = false,
+									reaction = "enemy",
+									recommend = "enemy",
+								},
+								type = "cooldown",
+								name = "Spell Cooldown",
+								spellID = 117014,
+								threshold = 2,
+								start = 0,
+								duration = 12,
+								pulseRate = 1,
 								displayTime = 5,
 								show = "all",
 								combat = "on",
@@ -2809,14 +2982,86 @@ local defaults = {
 						},
 					},
 				},
-				["Flametongue"] = {
+				["FireNova"] = {
+					group = 2,
+					order = 6,
+					isEnabled = true,
+					isInUse = true,
+					talentRow = 4,
+					layout = {
+						icon = [[enhancement\fire_nova]],
+						isGCD = true,
+						isCharge = false,
+					},
+					glow = {
+						isCustomize = false,
+						triggers = {
+							[1] = {
+								isEnabled = true,
+								isActive = false,
+								target = {
+									locked = false,
+									reaction = "off",
+									recommend = "off",
+								},
+								type = "cooldown",
+								name = "Spell Cooldown",
+								spellID = 333974,
+								threshold = 3,
+								start = 0,
+								duration = 12,
+								pulseRate = 1,
+								displayTime = 5,
+								show = "on",
+								combat = "on",
+							},
+						},
+					},
+				},
+				["FlameShock"] = {
 					group = 1,
 					order = 1,
 					isEnabled = true,
 					isInUse = true,
 					talentRow = 0,
 					layout = {
-						icon = [[enhancement\flametongue]],
+						icon = [[shared\flame_shock]],
+						isGCD = true,
+						isCharge = false,
+					},
+					glow = {
+						isCustomize = false,
+						triggers = {
+							[1] = {
+								isEnabled = true,
+								isActive = false,
+								target = {
+									locked = true,
+									reaction = "enemy",
+									recommend = "enemy",
+								},
+								type = "debuff",
+								name = "Debuff Duration",
+								spellID = 188389,
+								threshold = 10,
+								start = 0,
+								duration = 27,
+								pulseRate = 0.5,
+								displayTime = 0,
+								show = "all",
+								combat = "on",
+							},
+						},
+					},
+				},
+				--[["Flametongue"] = {
+					group = 1,
+					order = 1,
+					isEnabled = true,
+					isInUse = true,
+					talentRow = 0,
+					layout = {
+						icon = [enhancement\flametongue],
 						isGCD = true,
 						isCharge = false,
 					},
@@ -2863,7 +3108,7 @@ local defaults = {
 							},
 						},
 					},
-				},
+				},]]
 				["ForcefulWinds"] = {
 					group = 3,
 					order = 1,
@@ -2900,14 +3145,14 @@ local defaults = {
 						},
 					},
 				},
-				["Frostbrand"] = {
+				--[[["Frostbrand"] = {
 					group = 1,
 					order = 2,
 					isEnabled = true,
 					isInUse = true,
 					talentRow = 0,
 					layout = {
-						icon = [[enhancement\frostbrand]],
+						icon = [enhancement\frostbrand],
 						isGCD = true,
 						isCharge = false,
 					},
@@ -2935,7 +3180,7 @@ local defaults = {
 							},
 						},
 					},
-				},
+				},]]
 				["GladiatorsMedallion"] = {
 					group = 4,
 					order = 2,
@@ -3008,6 +3253,46 @@ local defaults = {
 						},
 					},
 				},
+				["Hailstorm"] = {
+					group = 3,
+					order = 4,
+					isEnabled = true,
+					isInUse = true,
+					talentRow = 4,
+					layout = {
+						icon = [[enhancement\hailstorm]],
+						isGCD = false,
+						isCharge = true,
+					},
+					glow = {
+						isEnabled = false,
+						states = {
+							combat = "both",
+							usable = "always",
+						},
+						triggers = {
+							[1] = {
+								isEnabled = true,
+								isActive = false,
+								target = {
+									locked = false,
+									reaction = "off",
+									recommend = "off",
+								},
+								type = "buff",
+								name = "Buff Duration",
+								spellID = 334196,
+								threshold = false,
+								start = 0,
+								duration = 20,
+								pulseRate = 0.5,
+								displayTime = false,
+								show = false,
+								combat = "on",
+							},
+						},
+					},
+				},
 				["Hex"] = {
 					group = 5,
 					order = 2,
@@ -3063,9 +3348,45 @@ local defaults = {
 						},
 					},
 				},
-				["LavaLash"] = {
+				["IceStrike"] = {
 					group = 1,
 					order = 5,
+					isEnabled = true,
+					isInUse = true,
+					talentRow = 2,
+					layout = {
+						icon = [[enhancement\ice_strike]],
+						isGCD = true,
+						isCharge = false,
+					},
+					glow = {
+						isCustomize = false,
+						triggers = {
+							[1] = {
+								isEnabled = false,
+								isActive = false,
+								target = {
+									locked = false,
+									reaction = "off",
+									recommend = "off",
+								},
+								type = "cooldown",
+								name = "Spell Cooldown",
+								spellID = 342240,
+								threshold = 3,
+								start = 0,
+								duration = 12,
+								pulseRate = 1,
+								displayTime = 5,
+								show = "on",
+								combat = "on",
+							},
+						},
+					},
+				},
+				["LavaLash"] = {
+					group = 1,
+					order = 4,
 					isEnabled = true,
 					isInUse = true,
 					talentRow = 0,
@@ -3158,14 +3479,14 @@ local defaults = {
 						},
 					},
 				},
-				["Rockbiter"] = {
+				--[[["Rockbiter"] = { REMOVED IN 9.0
 					group = 2,
 					order = 1,
 					isEnabled = true,
 					isInUse = true,
 					talentRow = 0,
 					layout = {
-						icon = [[enhancement\rockbiter]],
+						icon = [enhancement\rockbiter],
 						isGCD = true,
 						isCharge = true,
 					},
@@ -3212,7 +3533,7 @@ local defaults = {
 							},
 						},
 					},
-				},
+				},]]
 				["SkyfuryTotem"] = {
 					group = 4,
 					order = 4,
@@ -3321,9 +3642,68 @@ local defaults = {
 						},
 					},
 				},
+				["Stormkeeper"] = {
+					group = 2,
+					order = 3,
+					isEnabled = true,
+					isInUse = true,
+					talentRow = 6,
+					layout = {
+						icon = [[elemental\stormkeeper]],
+						isGCD = true,
+						isCharge = true,
+					},
+					glow = {
+						isEnabled = false,
+						states = {
+							combat = "both",
+							usable = "always",
+						},
+						triggers = {
+							[1] = {
+								isEnabled = true,
+								isActive = false,
+								target = {
+									locked = false,
+									reaction = "off",
+									recommend = "off",
+								},
+								type = "buff",
+								name = "Buff Duration",
+								spellID = 320137,
+								threshold = false,
+								start = 0,
+								duration = 15,
+								pulseRate = 0.5,
+								displayTime = false,
+								show = false,
+								combat = "on",
+							},
+							[2] = {
+								isEnabled = false,
+								isActive = false,
+								target = {
+									locked = false,
+									reaction = "off",
+									recommend = "off",
+								},
+								type = "cooldown",
+								name = "Spell Cooldown",
+								spellID = 320137,
+								threshold = 5,
+								start = 0,
+								duration = 60,
+								pulseRate = 1.5,
+								displayTime = 5,
+								show = "all",
+								combat = "on",
+							},
+						},
+					},
+				},
 				["Stormstrike"] = {
 					group = 1,
-					order = 3,
+					order = 2,
 					isEnabled = true,
 					isInUse = true,
 					talentRow = 0,
@@ -3603,7 +3983,7 @@ local defaults = {
 					isAdjust = false,
 				},
 				[3] = {
-					auraCount = 4,
+					auraCount = 6,
 					name = "Buff Auras",
 					icon = 32,
 					spacing = 50,
@@ -4046,7 +4426,7 @@ local defaults = {
 				},
 				["AncestralProtectionTotem"] = {
 					group = 2,
-					order = 6,
+					order = 7,
 					isEnabled = true,
 					isInUse = true,
 					talentRow = 4,
@@ -4082,7 +4462,7 @@ local defaults = {
 				},
 				["Ascendance"] = {
 					group = 2,
-					order = 3,
+					order = 4,
 					isEnabled = true,
 					isInUse = true,
 					talentRow = 7,
@@ -4424,7 +4804,7 @@ local defaults = {
 				},
 				["EarthenWallTotem"] = {
 					group = 2,
-					order = 5,
+					order = 6,
 					isEnabled = true,
 					isInUse = true,
 					talentRow = 4,
@@ -4856,6 +5236,42 @@ local defaults = {
 						},
 					},
 				},
+				["ManaTideTotem"] = {
+					group = 2,
+					order = 3,
+					isEnabled = true,
+					isInUse = true,
+					talentRow = 0,
+					layout = {
+						icon = [[totems\mana_tide_totem]],
+						isGCD = true,
+						isCharge = false,
+					},
+					glow = {
+						isCustomize = false,
+						triggers = {
+							[1] = {
+								isEnabled = false,
+								isActive = false,
+								target = {
+									locked = false,
+									reaction = "off",
+									recommend = "off",
+								},
+								type = "cooldown",
+								name = "Spell Cooldown",
+								spellID = 16191,
+								threshold = 10,
+								start = 0,
+								duration = 180,
+								pulseRate = 1.5,
+								displayTime = 5,
+								show = "all",
+								combat = "on",
+							},
+						},
+					},
+				},
 				["NaturesGuardian"] = {
 					group = 3,
 					order = 3,
@@ -5129,6 +5545,46 @@ local defaults = {
 						},
 					},
 				},
+				["SurgeOfEarth"] = {
+					group = 3,
+					order = 6,
+					isEnabled = true,
+					isInUse = true,
+					talentRow = 2,
+					layout = {
+						icon = [[restoration\surge_of_earth]],
+						isGCD = true,
+						isCharge = true,
+					},
+					glow = {
+						isEnabled = false,
+						states = {
+							combat = "both",
+							usable = "always",
+						},
+						triggers = {
+							[1] = {
+								isEnabled = false,
+								isActive = false,
+								target = {
+									locked = false,
+									reaction = "off",
+									recommend = "off",
+								},
+								type = "cooldown",
+								name = "Spell Cooldown",
+								spellID = 320746,
+								threshold = 5,
+								start = 0,
+								duration = 20,
+								pulseRate = 1.5,
+								displayTime = 5,
+								show = "all",
+								combat = "on",
+							},
+						},
+					},
+				},
 				["Tidebringer"] = {
 					group = 4,
 					order = 6,
@@ -5194,7 +5650,7 @@ local defaults = {
 				},
 				["Undulation"] = {
 					group = 3,
-					order = 4,
+					order = 5,
 					isEnabled = true,
 					isInUse = true,
 					talentRow = 6,
@@ -5285,7 +5741,7 @@ local defaults = {
 				},
 				["Wellspring"] = {
 					group = 2,
-					order = 4,
+					order = 5,
 					isEnabled = true,
 					isInUse = true,
 					talentRow = 7,
@@ -5320,8 +5776,8 @@ local defaults = {
 					},
 				},
 				["WindRushTotem"] = {
-					group = 2,
-					order = 7,
+					group = 3,
+					order = 4,
 					isEnabled = true,
 					isInUse = true,
 					talentRow = 5,
@@ -5927,6 +6383,23 @@ local defaults = {
 					isCustomize = false,
 					isShared = false,
 				},
+				["MountainDrumsBar"] = {
+					layout = {
+						group = 1,
+						text = "Drums of the Mountain",
+						texture = "Glamour2",
+						color = {
+							r = 0.54,
+							g = 0.63,
+							b = 0.39,
+						},
+					},
+					isEnabled = true,
+					isInUse = true,
+					isAdjust = false,
+					isCustomize = false,
+					isShared = true,
+				},
 				["PrimalEarthElementalBar"] = {
 					layout = {
 						group = 2,
@@ -6068,7 +6541,7 @@ local defaults = {
 		[2] = {
 			groups = {
 				[1] = {
-					barCount = 6,
+					barCount = 9,
 					name = "Buff Timers",
 					layout = {
 						width = 175,
@@ -6378,6 +6851,57 @@ local defaults = {
 					isCustomize = false,
 					isShared = false,
 				},
+				["ElementalBlastBarCrit"] = {
+					layout = {
+						group = 1,
+						text = "Critical Strike",
+						texture = "Glamour2",
+						color = {
+							r = 1,
+							g = 0.39,
+							b = 0.60,
+						},
+					},
+					isEnabled = true,
+					isInUse = true,
+					isAdjust = false,
+					isCustomize = false,
+					isShared = false,
+				},
+				["ElementalBlastBarHaste"] = {
+					layout = {
+						group = 1,
+						text = "Haste",
+						texture = "Glamour2",
+						color = {
+							r = 1,
+							g = 0.39,
+							b = 0.60,
+						},
+					},
+					isEnabled = true,
+					isInUse = true,
+					isAdjust = false,
+					isCustomize = false,
+					isShared = false,
+				},
+				["ElementalBlastBarMastery"] = {
+					layout = {
+						group = 1,
+						text = "Mastery",
+						texture = "Glamour2",
+						color = {
+							r = 1,
+							g = 0.39,
+							b = 0.60,
+						},
+					},
+					isEnabled = true,
+					isInUse = true,
+					isAdjust = false,
+					isCustomize = false,
+					isShared = false,
+				},
 				["EtherealFormBar"] = {
 					layout = {
 						group = 2,
@@ -6412,7 +6936,7 @@ local defaults = {
 					isCustomize = false,
 					isShared = false,
 				},
-				["FlametongueBar"] = {
+				--[[["FlametongueBar"] = {
 					layout = {
 						group = 2,
 						text = "Flametongue",
@@ -6428,7 +6952,7 @@ local defaults = {
 					isAdjust = false,
 					isCustomize = false,
 					isShared = false,
-				},
+				},]]
 				["ForcefulWindsBar"] = {
 					layout = {
 						group = 2,
@@ -6446,7 +6970,7 @@ local defaults = {
 					isCustomize = false,
 					isShared = false,
 				},
-				["FrostbrandBar"] = {
+				--[[["FrostbrandBar"] = {
 					layout = {
 						group = 2,
 						text = "Frostbrand",
@@ -6462,7 +6986,7 @@ local defaults = {
 					isAdjust = false,
 					isCustomize = false,
 					isShared = false,
-				},
+				},]]
 				["GroundingTotemBar"] = {
 					layout = {
 						group = 2,
@@ -6506,6 +7030,23 @@ local defaults = {
 							r = 0.30,
 							g = 0.76,
 							b = 0.28,
+						},
+					},
+					isEnabled = true,
+					isInUse = true,
+					isAdjust = false,
+					isCustomize = false,
+					isShared = true,
+				},
+				["MountainDrumsBar"] = {
+					layout = {
+						group = 1,
+						text = "Drums of the Mountain",
+						texture = "Glamour2",
+						color = {
+							r = 0.54,
+							g = 0.63,
+							b = 0.39,
 						},
 					},
 					isEnabled = true,
@@ -7033,6 +7574,40 @@ local defaults = {
 					isCustomize = false,
 					isShared = true,
 				},
+				["ManaTideTotemBar"] = {
+					layout = {
+						group = 2,
+						text = "Mana Tide Totem",
+						texture = "Glamour2",
+						color = {
+							r = 0.15,
+							g = 0.84,
+							b = 1,
+						},
+					},
+					isEnabled = true,
+					isInUse = true,
+					isAdjust = false,
+					isCustomize = false,
+					isShared = false,
+				},
+				["MountainDrumsBar"] = {
+					layout = {
+						group = 1,
+						text = "Drums of the Mountain",
+						texture = "Glamour2",
+						color = {
+							r = 0.54,
+							g = 0.63,
+							b = 0.39,
+						},
+					},
+					isEnabled = true,
+					isInUse = true,
+					isAdjust = false,
+					isCustomize = false,
+					isShared = true,
+				},
 				["SkyfuryTotemBar"] = {
 					layout = {
 						group = 2,
@@ -7247,17 +7822,47 @@ local defaults = {
 		[1] = {
 			defaultBar = false,
 			bars = {
-				["MaelstromBar"] = {
+				["FulminationBar"] = {
 					adjust = {
 						isEnabled = false,
 						showBG = false,
 					},
 					isEnabled = true,
 					animate = true,
-					text = {
+					counttext = {
 						isDisplayText = true,
-						justify = "CENTER",
-						x = 0,
+						justify = "LEFT",
+						x = 5,
+						y = 0,
+						font = {
+							name = "Friz Quadrata TT",
+							size = 12,
+							flag = "OUTLINE",
+							color = {
+								r = 1,
+								g = 1,
+								b = 1,
+								a = 1,
+							},
+							shadow = {
+								isEnabled = false,
+								offset = {
+									x = 2,
+									y = -2,
+								},
+								color = {
+									r = 0,
+									g = 0,
+									b = 0,
+									a = 1,
+								},
+							},
+						},
+					},
+					timetext = {
+						isDisplayText = true,
+						justify = "RIGHT",
+						x = -5,
 						y = 0,
 						font = {
 							name = "Friz Quadrata TT",
@@ -7293,8 +7898,18 @@ local defaults = {
 							a = 0.5,
 						},
 					},
+					timerBar = {
+						texture = 'Blizzard',
+						color = {
+							r = 1,
+							g = 1,
+							b = 1,
+							a = 0.35,
+						},
+						strata = "MEDIUM",
+					},
 					foreground = {
-						texture = 'Fifths',
+						texture = 'Eighths',
 						color = {
 							r = 0,
 							g = 0.5,
@@ -7319,7 +7934,7 @@ local defaults = {
 						point = "TOP",
 					},
 					justify = "CENTER",
-					threshold = 60,
+					threshold = 5,
 					alphaCombat = 1,
 					alphaOoC = 0,
 					alphaTar = 0.5,
@@ -7640,17 +8255,47 @@ local defaults = {
 				},
 			},
 			defaults = {
-				["MaelstromBar"] = {
+				["FulminationBar"] = {
 					adjust = {
 						isEnabled = false,
 						showBG = false,
 					},
 					isEnabled = true,
 					animate = true,
-					text = {
+					counttext = {
 						isDisplayText = true,
-						justify = "CENTER",
-						x = 0,
+						justify = "LEFT",
+						x = 5,
+						y = 0,
+						font = {
+							name = "Friz Quadrata TT",
+							size = 12,
+							flag = "OUTLINE",
+							color = {
+								r = 1,
+								g = 1,
+								b = 1,
+								a = 1,
+							},
+							shadow = {
+								isEnabled = false,
+								offset = {
+									x = 2,
+									y = -2,
+								},
+								color = {
+									r = 0,
+									g = 0,
+									b = 0,
+									a = 1,
+								},
+							},
+						},
+					},
+					timetext = {
+						isDisplayText = true,
+						justify = "RIGHT",
+						x = -5,
 						y = 0,
 						font = {
 							name = "Friz Quadrata TT",
@@ -7686,8 +8331,18 @@ local defaults = {
 							a = 0.5,
 						},
 					},
+					timerBar = {
+						texture = 'Blizzard',
+						color = {
+							r = 1,
+							g = 1,
+							b = 1,
+							a = 0.35,
+						},
+						strata = "MEDIUM",
+					},
 					foreground = {
-						texture = 'Fifths',
+						texture = 'Eighths',
 						color = {
 							r = 0,
 							g = 0.5,
@@ -7712,7 +8367,7 @@ local defaults = {
 						point = "TOP",
 					},
 					justify = "CENTER",
-					threshold = 90,
+					threshold = 5,
 					alphaCombat = 1,
 					alphaOoC = 0,
 					alphaTar = 0.5,
@@ -7830,17 +8485,47 @@ local defaults = {
 		[2] = {
 			defaultBar = false,
 			bars = {
-				["MaelstromBar"] = {
+				["MaelstromWeaponBar"] = {
 					adjust = {
 						isEnabled = false,
 						showBG = false,
 					},
 					isEnabled = true,
 					animate = true,
-					text = {
+					counttext = {
 						isDisplayText = true,
-						justify = "CENTER",
-						x = 0,
+						justify = "LEFT",
+						x = 5,
+						y = 0,
+						font = {
+							name = "Friz Quadrata TT",
+							size = 12,
+							flag = "OUTLINE",
+							color = {
+								r = 1,
+								g = 1,
+								b = 1,
+								a = 1,
+							},
+							shadow = {
+								isEnabled = false,
+								offset = {
+									x = 2,
+									y = -2,
+								},
+								color = {
+									r = 0,
+									g = 0,
+									b = 0,
+									a = 1,
+								},
+							},
+						},
+					},
+					timetext = {
+						isDisplayText = true,
+						justify = "RIGHT",
+						x = -5,
 						y = 0,
 						font = {
 							name = "Friz Quadrata TT",
@@ -7876,8 +8561,18 @@ local defaults = {
 							a = 0.5,
 						},
 					},
+					timerBar = {
+						texture = 'Blizzard',
+						color = {
+							r = 1,
+							g = 1,
+							b = 1,
+							a = 0.35,
+						},
+						strata = "MEDIUM",
+					},
 					foreground = {
-						texture = 'Fifths',
+						texture = 'Tenths',
 						color = {
 							r = 0,
 							g = 0.5,
@@ -7902,7 +8597,7 @@ local defaults = {
 						point = "TOP",
 					},
 					justify = "CENTER",
-					threshold = 90,
+					threshold = 5,
 					alphaCombat = 1,
 					alphaOoC = 0,
 					alphaTar = 0.5,
@@ -8114,17 +8809,47 @@ local defaults = {
 				},
 			},
 			defaults = {
-				["MaelstromBar"] = {
+				["MaelstromWeaponBar"] = {
 					adjust = {
 						isEnabled = false,
 						showBG = false,
 					},
 					isEnabled = true,
 					animate = true,
-					text = {
+					counttext = {
 						isDisplayText = true,
-						justify = "CENTER",
-						x = 0,
+						justify = "LEFT",
+						x = 5,
+						y = 0,
+						font = {
+							name = "Friz Quadrata TT",
+							size = 12,
+							flag = "OUTLINE",
+							color = {
+								r = 1,
+								g = 1,
+								b = 1,
+								a = 1,
+							},
+							shadow = {
+								isEnabled = false,
+								offset = {
+									x = 2,
+									y = -2,
+								},
+								color = {
+									r = 0,
+									g = 0,
+									b = 0,
+									a = 1,
+								},
+							},
+						},
+					},
+					timetext = {
+						isDisplayText = true,
+						justify = "RIGHT",
+						x = -5,
 						y = 0,
 						font = {
 							name = "Friz Quadrata TT",
@@ -8160,8 +8885,18 @@ local defaults = {
 							a = 0.5,
 						},
 					},
+					timerBar = {
+						texture = 'Blizzard',
+						color = {
+							r = 1,
+							g = 1,
+							b = 1,
+							a = 0.35,
+						},
+						strata = "MEDIUM",
+					},
 					foreground = {
-						texture = 'Fifths',
+						texture = 'Tenths',
 						color = {
 							r = 0,
 							g = 0.5,
@@ -8186,7 +8921,7 @@ local defaults = {
 						point = "TOP",
 					},
 					justify = "CENTER",
-					threshold = 90,
+					threshold = 5,
 					alphaCombat = 1,
 					alphaOoC = 0,
 					alphaTar = 0.5,
@@ -9194,6 +9929,7 @@ local database = {
 		version = nil,
 		name = nil,
 		isMoveGrid = true,
+		isIntroAnimated = true,
 		move = {
 			isDisplayGrid = true,
 			isDiplayInfo = true,
@@ -9813,7 +10549,27 @@ local database = {
 							a = 0.6,
 						}
 					},]]
-					TotemMastery1 = {
+					LightningShield = {
+						isEnabled = true,
+						point = "CENTER",
+						relativeTo = 'AuraBase',
+						relativePoint = "CENTER",
+						x = 0,
+						y = -210,
+						width = 400,
+						height = 180,
+					},
+					FlametongueWeapon = {
+						isEnabled = true,
+						point = "CENTER",
+						relativeTo = 'AuraBase',
+						relativePoint = "CENTER",
+						x = 0,
+						y = -210,
+						width = 400,
+						height = 180,
+					},
+					TotemMastery = {
 						isEnabled = true,
 						point = "CENTER",
 						relativeTo = 'AuraBase',
@@ -10206,6 +10962,26 @@ local database = {
 						width = 47,
 						height = 180,
 					},]]
+					LightningShield = {
+						isEnabled = true,
+						point = "CENTER",
+						relativeTo = 'AuraBase',
+						relativePoint = "CENTER",
+						x = 0,
+						y = -210,
+						width = 400,
+						height = 180,
+					},
+					FlametongueWeapon = {
+						isEnabled = true,
+						point = "CENTER",
+						relativeTo = 'AuraBase',
+						relativePoint = "CENTER",
+						x = 0,
+						y = -210,
+						width = 400,
+						height = 180,
+					},
 					StormstrikeChargeGrp = {
 						isEnabled = true,
 						point = "CENTER",
@@ -10216,7 +10992,7 @@ local database = {
 						width = 260,
 						height = 50,
 					},
-					TotemMastery2 = {
+					--[[TotemMastery2 = {
 						isEnabled = true,
 						point = "CENTER",
 						relativeTo = 'AuraBase',
@@ -10226,7 +11002,7 @@ local database = {
 						width = 400,
 						height = 180,
 					},
-					--[[DoomWindsTexture = { (REMOVED IN 8.0)
+					DoomWindsTexture = { (REMOVED IN 8.0)
 						isEnabled = true,
 						point = "CENTER",
 						relativeTo = 'AuraBase',
@@ -10765,6 +11541,26 @@ local database = {
 						width = 47,
 						height = 180,
 					},]]
+					LightningShield = {
+						isEnabled = false,
+						point = "CENTER",
+						relativeTo = 'AuraBase',
+						relativePoint = "CENTER",
+						x = 0,
+						y = -210,
+						width = 400,
+						height = 180,
+					},
+					FlametongueWeapon = {
+						isEnabled = false,
+						point = "CENTER",
+						relativeTo = 'AuraBase',
+						relativePoint = "CENTER",
+						x = 0,
+						y = -210,
+						width = 400,
+						height = 180,
+					},
 					Cloudburst = {
 						isEnabled = true,
 						point = "CENTER",
@@ -11742,6 +12538,17 @@ local database = {
 			},
 		},
 		settings = {
+			lowCPUMode = {
+				isEnabled = false,
+				isAlways = false,
+				isInScenario = false,
+				isInDungeon = false,
+				isInRaid = false,
+				isInWorld = false,
+				isInArena = false,
+				isInBG = false,
+				reduceRate = 100,
+			},
 			move = {
 				isMoving = false,
 				info = {
@@ -11772,8 +12579,14 @@ local database = {
 				},
 			},
 			[1] = {
+				isHideInVehicle = true,
+				display = {
+					isShowAuras = true,
+					isShowTimerbars = true,
+				},
 				flameShock = 10,
-				totemMastery = 15,
+				flametongueWeapon = 120,
+				lightningShield = 60,
 				OoCAlpha = 0.5,
 				OoRColor = {
 					r = 1,
@@ -11783,10 +12596,17 @@ local database = {
 				}
 			},
 			[2] = {
-				rockbiter = 5,
-				totemMastery = 15,
-				flametongue = 5,
-				frostbrand = 5,
+				isHideInVehicle = true,
+				display = {
+					isShowAuras = true,
+					isShowTimerbars = true,
+				},
+				--rockbiter = 5,
+				--totemMastery = 15,
+				--flametongue = 5,
+				flameShock = 10,
+				flametongueWeapon = 120,
+				--frostbrand = 5,
 				lavaLash = {
 					stacks = {
 						isEnabled = true,
@@ -11794,6 +12614,7 @@ local database = {
 					},
 					glow = true,
 				},
+				lightningShield = 60,
 				OoCAlpha = 0.5,
 				OoRColor = {
 					r = 1,
@@ -11803,8 +12624,15 @@ local database = {
 				}
 			},
 			[3] = {
+				isShowInVehicle = false,
+				display = {
+					isShowAuras = true,
+					isShowTimerbars = true,
+				},
 				cloudburst = 300000,
+				flametongueWeapon = 120,
 				flameShock = 10,
+				lightningShield = 60,
 				OoCAlpha = 0.5,
 				OoRColor = {
 					r = 1,
@@ -11823,19 +12651,23 @@ local database = {
 				},
 				[1] = {
 					flameShock = 10,
-					totemMastery = 15,
+					flametongueWeapon = 120,
+					lightningShield = 60,
 				},
 				[2] = {
 					rockbiter = 5,
-					flametongue = 5,
+					flametongueWeapon = 120,
 					frostbrand = 5,
 					lavaLash = {
 						stacks = 99,
 					},
+					lightningShield = 60,
 				},
 				[3] = {
 					cloudburst = 300000,
 					flameShock = 10,
+					flametongueWeapon = 120,
+					lightningShield = 60,
 				},
 			},
 		},

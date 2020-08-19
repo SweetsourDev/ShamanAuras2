@@ -1,7 +1,7 @@
 local SSA, Auras, L, LSM = unpack(select(2,...))
 
 -- Prepare All Move Functionality
-SSA.Move = CreateFrame('Frame','Move',UIParent);
+SSA.Move = CreateFrame('Frame','Move',UIParent,BackdropTemplateMixin and "BackdropTemplate");
 SSA.Move.Grid = CreateFrame('Frame', 'AuraGrid', UIParent)
 Auras:BuildMoveUI(SSA.Move);
 --Auras:BuildMoveUI(2);
@@ -128,12 +128,60 @@ local function InitializeFrame(name,db)
 	_G['SSA_'..name] = Frame
 end
 
+local function BuffCheck()
+	local buffIDs = {
+		-- Arcane Leylock
+		[298047] = true, 
+		[298657] = true,
+		[298654] = true,
+		[298659] = true,
+		[298565] = true,
+		
+		-- Arcane Runelock
+		[298048] = true,
+		[298598] = true,
+		[298661] = true,
+		[298663] = true,
+		[298665] = true,
+		[300495] = true,
+		[300857] = true,
+		[300927] = true,
+		[302286] = true,
+		[304095] = true,
+	}
+
+	for i=1,40 do
+		local _,_,_,_,_,_,_,_,_,spellID = UnitAura("player",i)
+
+		if (buffIDs[spellID]) then
+			return true
+		end
+	end
+	
+	return false
+end
 
 -- Build Aura Group Containers
 local AuraBase = Auras:CreateGroup('AuraBase',UIParent)
 AuraBase:SetPoint("CENTER",0,0)
 AuraBase:SetScript('OnUpdate',function(self,button)
 	Auras:ToggleFrameMove(self,Auras.db.char.settings.move.isMoving)
+	--[[local debuff = Auras:RetrieveAuraInfo("player",271571,"HARMFUL")
+	
+	
+	
+	SSA.DataFrame.text:SetText("DEBUFF: "..tostring(debuff))
+	if (debuff) then
+		self:SetAlpha(0)
+	else
+		self:SetAlpha(1)
+	end]]
+	
+	if (BuffCheck() or (UnitInVehicle("player") and not Auras.db.char.settings[1].isShowInVehicle)) then
+		self:SetAlpha(0)
+	else
+		self:SetAlpha(1)
+	end
 end)
 
 AuraBase:SetScript('OnMouseDown',function(self,button)
@@ -161,6 +209,14 @@ _G['SSA_AuraBase'] = AuraBase
 			end
 		end
 	end
+	
+	--for i=1,3 do
+		for k,v in pairs(SSA.defaults.totems[1].totems) do
+			if (not SSA[k]) then
+				InitializeFrame(k,v)
+			end
+		end
+	--end
 --end
 --Build Icon Frames Used by Multiple Shaman Specializations
 -- InitializeFrames('Adaptation')
@@ -318,15 +374,23 @@ _G['SSA_AscendanceBar'] = SSA.AscendanceBar
 SSA.AstralShiftBar = CreateFrame('StatusBar','AstralShiftBar')
 _G['SSA_AstralShiftBar'] = SSA.AstralShiftBar
 SSA.BloodlustBar = CreateFrame('StatusBar','BloodlustBar')
-_G['SSA_AstralShiftBar'] = SSA.AstralShiftBar
+_G['SSA_BloodlustBar'] = SSA.BloodlustBar
 SSA.EarthElementalBar = CreateFrame('StatusBar','EarthElementalBar')
 _G['SSA_EarthElementalBar'] = SSA.EarthElementalBar
 SSA.EarthbindTotemBar = CreateFrame('StatusBar','EarthbindTotemBar')
 _G['SSA_EarthbindTotemBar'] = SSA.EarthbindTotemBar
+SSA.ElementalBlastBarCrit = CreateFrame('StatusBar','ElementalBlastBarCrit')
+_G['SSA_ElementalBlastBarCrit'] = SSA.ElementalBlastBarCrit
+SSA.ElementalBlastBarHaste = CreateFrame('StatusBar','ElementalBlastBarHaste')
+_G['SSA_ElementalBlastBarHaste'] = SSA.ElementalBlastBarHaste
+SSA.ElementalBlastBarMastery = CreateFrame('StatusBar','ElementalBlastBarMastery')
+_G['SSA_ElementalBlastBarMastery'] = SSA.ElementalBlastBarMastery
 SSA.HeroismBar = CreateFrame('StatusBar','HeroismBar')
 _G['SSA_HeroismBar'] = SSA.HeroismBar
 SSA.HexBar = CreateFrame('StatusBar','HexBar')
 _G['SSA_HexBar'] = SSA.HexBar
+SSA.MountainDrumsBar = CreateFrame('StatusBar','MountainDrumsBar')
+_G['SSA_MountainDrumsBar'] = SSA.MountainDrumsBar
 SSA.TimeWarpBar = CreateFrame('StatusBar','TimeWarpBar')
 _G['SSA_TimeWarpBar'] = SSA.TimeWarpBar
 SSA.TremorTotemBar = CreateFrame('StatusBar','TremorTotemBar')
@@ -341,12 +405,6 @@ SSA.SkyfuryTotemBar = CreateFrame('StatusBar','SkyfuryTotemBar')
 
 -- Build Elemental Timer Bars
 SSA.PrimalEarthElementalBar = CreateFrame('StatusBar','PrimalEarthElementalBar')
-SSA.ElementalBlastBarCrit = CreateFrame('StatusBar','ElementalBlastBarCrit')
-_G['SSA_ElementalBlastBarCrit'] = SSA.ElementalBlastBarCrit
-SSA.ElementalBlastBarHaste = CreateFrame('StatusBar','ElementalBlastBarHaste')
-_G['SSA_ElementalBlastBarHaste'] = SSA.ElementalBlastBarHaste
-SSA.ElementalBlastBarMastery = CreateFrame('StatusBar','ElementalBlastBarMastery')
-_G['SSA_ElementalBlastBarMastery'] = SSA.ElementalBlastBarMastery
 --[[SSA.ElementalBlastCritBar = CreateFrame('StatusBar','ElementalBlastCritBar')
 _G['SSA_ElementalBlastCritBar'] = SSA.ElementalBlastCritBar
 SSA.ElementalBlastHasteBar = CreateFrame('StatusBar','ElementalBlastHasteBar')
@@ -389,6 +447,7 @@ SSA.EarthgrabTotemBar = CreateFrame('StatusBar','EarthgrabTotemBar')
 SSA.HealingStreamTotemBarOne = CreateFrame('StatusBar','HealingStreamTotemBarOne')
 SSA.HealingStreamTotemBarTwo = CreateFrame('StatusBar','HealingStreamTotemBarTwo')
 SSA.HealingTideTotemBar = CreateFrame('StatusBar','HealingTideTotemBar')
+SSA.ManaTideTotemBar = CreateFrame('StatusBar','ManaTideTotemBar')
 SSA.SpiritLinkTotemBar = CreateFrame('StatusBar','SpiritLinkTotemBar')
 SSA.SpiritwalkersGraceBar = CreateFrame('StatusBar','SpiritwalkersGraceBar')
 SSA.UnleashLifeBar = CreateFrame('StatusBar','UnleashLifeBar')
@@ -437,6 +496,8 @@ function Auras:InitializeTimerBars(spec)
 		if (self.db.char.settings.move.isMoving and v.isEnabled and v.isInUse) then
 			v.isAdjust = true
 			SSA[k]:Show()
+		elseif (v.isAdjust and not self.db.char.settings.move.isMoving) then
+			v.isAdjust = false
 		end
 	end
 	--[[

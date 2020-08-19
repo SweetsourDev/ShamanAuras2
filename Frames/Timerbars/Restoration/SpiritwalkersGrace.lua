@@ -7,13 +7,20 @@ local SpiritwalkersGraceBar = SSA.SpiritwalkersGraceBar
 SpiritwalkersGraceBar.spellID = 79206
 SpiritwalkersGraceBar.start = 0
 SpiritwalkersGraceBar.duration = 15
+SpiritwalkersGraceBar.elapsed = 0
 SpiritwalkersGraceBar.condition = function()
 	return IsSpellKnown(79206)
 end
 
-SpiritwalkersGraceBar:SetScript('OnUpdate',function(self)
-	if ((Auras:CharacterCheck(self,3) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
-		Auras:RunTimerBarCode(self)
+SpiritwalkersGraceBar:SetScript('OnUpdate',function(self,elapsed)
+	if (Auras:RefreshRateHandler(0.1,self.elapsed)) then
+		self.elapsed = 0
+		
+		if ((Auras:CharacterCheck(self,3) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
+			Auras:RunTimerBarCode(self)
+		end
+	else
+		self.elapsed = self.elapsed + elapsed
 	end
 end)
 
@@ -22,5 +29,7 @@ SpiritwalkersGraceBar:SetScript("OnEvent",function(self,event)
 		return
 	end
 	
-	Auras:RunTimerEvent_Aura(self,false,CombatLogGetCurrentEventInfo())
+	if ((Auras:CharacterCheck(self,3) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
+		Auras:RunTimerEvent_Aura(self,false,CombatLogGetCurrentEventInfo())
+	end
 end)

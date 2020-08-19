@@ -7,13 +7,20 @@ local AstralShiftBar = SSA.AstralShiftBar
 AstralShiftBar.spellID = 108271
 AstralShiftBar.start = 0
 AstralShiftBar.duration = 8
+AstralShiftBar.elapsed = 0
 AstralShiftBar.condition = function()
 	return IsSpellKnown(108271)
 end
 
-AstralShiftBar:SetScript('OnUpdate',function(self)
-	if ((Auras:CharacterCheck(self,0) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
-		Auras:RunTimerBarCode(self)
+AstralShiftBar:SetScript('OnUpdate',function(self,elapsed)
+	if (Auras:RefreshRateHandler(0.1,self.elapsed)) then
+		self.elapsed = 0
+		
+		if ((Auras:CharacterCheck(self,0) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
+			Auras:RunTimerBarCode(self)
+		end
+	else
+		self.elapsed = self.elapsed + elapsed
 	end
 end)
 
@@ -22,5 +29,7 @@ AstralShiftBar:SetScript("OnEvent",function(self,event)
 		return
 	end
 	
-	Auras:RunTimerEvent_Aura(self,false,CombatLogGetCurrentEventInfo())
+	if ((Auras:CharacterCheck(self,0) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
+		Auras:RunTimerEvent_Aura(self,false,CombatLogGetCurrentEventInfo())
+	end
 end)

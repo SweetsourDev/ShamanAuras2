@@ -10,13 +10,20 @@ EarthElementalBar.icon = 136024
 EarthElementalBar.start = 0
 EarthElementalBar.duration = 60
 EarthElementalBar.GUID = ''
+EarthElementalBar.elapsed = 0
 EarthElementalBar.condition = function()
 	return IsSpellKnown(198103)
 end
 
-EarthElementalBar:SetScript('OnUpdate',function(self)
-	if ((Auras:CharacterCheck(self,0) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
-		Auras:RunTimerBarCode(self)
+EarthElementalBar:SetScript('OnUpdate',function(self,elapsed)
+	if (Auras:RefreshRateHandler(0.1,self.elapsed)) then
+		self.elapsed = 0
+		
+		if ((Auras:CharacterCheck(self,0) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
+			Auras:RunTimerBarCode(self)
+		end
+	else
+		self.elapsed = self.elapsed + elapsed
 	end
 end)
 
@@ -25,7 +32,9 @@ EarthElementalBar:SetScript("OnEvent",function(self,event)
 		return
 	end
 
-	Auras:RunTimerEvent_Elemental(self,nil,CombatLogGetCurrentEventInfo())
+	if ((Auras:CharacterCheck(self,0) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
+		Auras:RunTimerEvent_Elemental(self,nil,CombatLogGetCurrentEventInfo())
+	end
 end)
 
 -- Initialize Data Variables
@@ -34,15 +43,22 @@ PrimalEarthElementalBar.start = 0
 PrimalEarthElementalBar.duration = 60
 PrimalEarthElementalBar.GUID = ''
 PrimalEarthElementalBar.isPrimal = true
+PrimalEarthElementalBar.elapsed = 0
 PrimalEarthElementalBar.condition = function()
 	local _,_,_,selected = GetTalentInfo(6,2,1)
 	
 	return selected
 end
 
-PrimalEarthElementalBar:SetScript('OnUpdate',function(self)
-	if ((Auras:CharacterCheck(self,1) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
-		Auras:RunTimerBarCode(self)
+PrimalEarthElementalBar:SetScript('OnUpdate',function(self,elapsed)
+	if (Auras:RefreshRateHandler(0.1,self.elapsed)) then
+		self.elapsed = 0
+		
+		if ((Auras:CharacterCheck(self,1) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
+			Auras:RunTimerBarCode(self)
+		end
+	else
+		self.elapsed = self.elapsed + elapsed
 	end
 end)
 
@@ -69,5 +85,7 @@ PrimalEarthElementalBar:SetScript("OnEvent",function(self,event)
 		primalEarthBar.startTime = 0
 	end]]
 	
-	Auras:RunTimerEvent_Elemental(self,{118291,157319},CombatLogGetCurrentEventInfo())
+	if ((Auras:CharacterCheck(self,1) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
+		Auras:RunTimerEvent_Elemental(self,{118291,157319},CombatLogGetCurrentEventInfo())
+	end
 end)

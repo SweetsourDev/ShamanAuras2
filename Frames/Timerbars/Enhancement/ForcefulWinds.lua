@@ -7,15 +7,22 @@ local ForcefulWindsBar = SSA.ForcefulWindsBar
 ForcefulWindsBar.spellID = 262652
 ForcefulWindsBar.start = 0
 ForcefulWindsBar.duration = 15
+ForcefulWindsBar.elapsed = 0
 ForcefulWindsBar.condition = function()
 	local _,_,_,selected = GetTalentInfo(2,2,1)
 	
 	return selected
 end
 
-ForcefulWindsBar:SetScript('OnUpdate',function(self)
-	if ((Auras:CharacterCheck(self,2) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
-		Auras:RunTimerBarCode(self)
+ForcefulWindsBar:SetScript('OnUpdate',function(self,elapsed)
+	if (Auras:RefreshRateHandler(0.1,self.elapsed)) then
+		self.elapsed = 0
+		
+		if ((Auras:CharacterCheck(self,2) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
+			Auras:RunTimerBarCode(self)
+		end
+	else
+		self.elapsed = self.elapsed + elapsed
 	end
 end)
 
@@ -24,5 +31,7 @@ ForcefulWindsBar:SetScript("OnEvent",function(self,event)
 		return
 	end
 	
-	Auras:RunTimerEvent_Aura(self,false,CombatLogGetCurrentEventInfo())
+	if ((Auras:CharacterCheck(self,2) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
+		Auras:RunTimerEvent_Aura(self,false,CombatLogGetCurrentEventInfo())
+	end
 end)

@@ -7,13 +7,20 @@ local SpiritWalkBar = SSA.SpiritWalkBar
 SpiritWalkBar.spellID = 58875
 SpiritWalkBar.start = 0
 SpiritWalkBar.duration = 8
+SpiritWalkBar.elapsed = 0
 SpiritWalkBar.condition = function()
 	return IsSpellKnown(58875)
 end
 
-SpiritWalkBar:SetScript('OnUpdate',function(self)
-	if ((Auras:CharacterCheck(self,2) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
-		Auras:RunTimerBarCode(self)
+SpiritWalkBar:SetScript('OnUpdate',function(self,elapsed)
+	if (Auras:RefreshRateHandler(0.1,self.elapsed)) then
+		self.elapsed = 0
+		
+		if ((Auras:CharacterCheck(self,2) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
+			Auras:RunTimerBarCode(self)
+		end
+	else
+		self.elapsed = self.elapsed + elapsed
 	end
 end)
 
@@ -22,5 +29,7 @@ SpiritWalkBar:SetScript("OnEvent",function(self,event)
 		return
 	end
 	
-	Auras:RunTimerEvent_Aura(self,false,CombatLogGetCurrentEventInfo())
+	if ((Auras:CharacterCheck(self,2) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
+		Auras:RunTimerEvent_Aura(self,false,CombatLogGetCurrentEventInfo())
+	end
 end)

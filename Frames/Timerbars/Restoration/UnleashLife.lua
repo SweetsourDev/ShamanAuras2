@@ -7,15 +7,22 @@ local UnleashLifeBar = SSA.UnleashLifeBar
 UnleashLifeBar.spellID = 73685
 UnleashLifeBar.start = 0
 UnleashLifeBar.duration = 10
+UnleashLifeBar.elapsed = 0
 UnleashLifeBar.condition = function()
 	local _,_,_,selected = GetTalentInfo(1,3,1)
 
 	return selected
 end
 
-UnleashLifeBar:SetScript('OnUpdate',function(self)
-	if ((Auras:CharacterCheck(self,3) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
-		Auras:RunTimerBarCode(self)
+UnleashLifeBar:SetScript('OnUpdate',function(self,elapsed)
+	if (Auras:RefreshRateHandler(0.1,self.elapsed)) then
+		self.elapsed = 0
+		
+		if ((Auras:CharacterCheck(self,3) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
+			Auras:RunTimerBarCode(self)
+		end
+	else
+		self.elapsed = self.elapsed + elapsed
 	end
 end)
 
@@ -24,5 +31,7 @@ UnleashLifeBar:SetScript("OnEvent",function(self,event)
 		return
 	end
 	
-	Auras:RunTimerEvent_Aura(self,false,CombatLogGetCurrentEventInfo())
+	if ((Auras:CharacterCheck(self,3) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
+		Auras:RunTimerEvent_Aura(self,false,CombatLogGetCurrentEventInfo())
+	end
 end)

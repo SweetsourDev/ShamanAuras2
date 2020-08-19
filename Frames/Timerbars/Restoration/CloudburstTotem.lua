@@ -8,15 +8,22 @@ CloudburstTotemBar.spellID = 157153
 CloudburstTotemBar.icon = 971076
 CloudburstTotemBar.start = 0
 CloudburstTotemBar.duration = 15
+CloudburstTotemBar.elapsed = 0
 CloudburstTotemBar.condition = function()
 	local _,_,_,selected = GetTalentInfo(6,3,1)
 	
 	return selected
 end
 
-CloudburstTotemBar:SetScript('OnUpdate',function(self)
-	if ((Auras:CharacterCheck(self,3) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
-		Auras:RunTimerBarCode(self)
+CloudburstTotemBar:SetScript('OnUpdate',function(self,elapsed)
+	if (Auras:RefreshRateHandler(0.1,self.elapsed)) then
+		self.elapsed = 0
+		
+		if ((Auras:CharacterCheck(self,3) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
+			Auras:RunTimerBarCode(self)
+		end
+	else
+		self.elapsed = self.elapsed + elapsed
 	end
 end)
 
@@ -25,5 +32,7 @@ CloudburstTotemBar:SetScript("OnEvent",function(self,event)
 		return
 	end
 	
-	Auras:RunTimerEvent_Totem(self,CombatLogGetCurrentEventInfo())
+	if ((Auras:CharacterCheck(self,3) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
+		Auras:RunTimerEvent_Totem(self,CombatLogGetCurrentEventInfo())
+	end
 end)

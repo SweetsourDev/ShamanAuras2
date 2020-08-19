@@ -177,7 +177,7 @@ function Auras:Toggle_Statusbar(db,order,name,desc,dbKey,barName)
 	return toggle
 end
 
-function Auras:Slider_VerifyDefaults(db,order,spec,name,desc,min,max,width,disabled,dbKey,optionsGroup,optionsSubgroup,isUpdateTalents)
+function Auras:Slider_Basic(db,order,name,desc,min,max,step,width,disabled,dbKey,isUpdateTalents)
 	local slider = {
 		order = order,
 		type = "range",
@@ -185,8 +185,33 @@ function Auras:Slider_VerifyDefaults(db,order,spec,name,desc,min,max,width,disab
 		desc = desc,
 		min = min,
 		max = max,
-		step = 0.1,
-		bigStep = 0.1,
+		step = step,
+		bigStep = step,
+		disabled = disabled,
+		get = function() return db[dbKey] end,
+		set = function(this,value)
+			db[dbKey] = value
+			
+			if (isUpdateTalents) then
+				self:UpdateTalents()
+			end
+		end,
+		width = width or "normal",
+	}
+	
+	return slider
+end
+
+function Auras:Slider_VerifyDefaults(db,order,spec,name,desc,min,max,step,width,disabled,dbKey,optionsGroup,optionsSubgroup,isUpdateTalents)
+	local slider = {
+		order = order,
+		type = "range",
+		name = name,
+		desc = desc,
+		min = min,
+		max = max,
+		step = step,
+		bigStep = step,
 		disabled = disabled,
 		get = function() return db[dbKey] end,
 		set = function(this,value)
@@ -218,7 +243,7 @@ function Auras:Color_VerifyDefaults(db,order,spec,name,desc,hasAlpha,width,disab
 		end,
 		set = function(this, r, g, b, a)
 			local color = db[dbKey]
-			
+
 			color.r = tonumber(format("%.2f",r))
 			color.g = tonumber(format("%.2f",g))
 			color.b = tonumber(format("%.2f",b))

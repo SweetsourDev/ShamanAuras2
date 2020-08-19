@@ -8,6 +8,7 @@ SkyfuryTotemBar.spellID = 204330
 SkyfuryTotemBar.icon = 135829
 SkyfuryTotemBar.start = 0
 SkyfuryTotemBar.duration = 15
+SkyfuryTotemBar.elapsed = 0
 SkyfuryTotemBar.condition = function() 
 	local spec = GetSpecialization()
 	local spellID = (spec == 1 and 3488) or (spec == 2 and 3487) or (spec == 3 and 707)
@@ -23,9 +24,15 @@ SkyfuryTotemBar.condition = function()
 	return selected and Auras:IsPvPZone()
 end
 
-SkyfuryTotemBar:SetScript('OnUpdate',function(self)
-	if ((Auras:CharacterCheck(self,1) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
-		Auras:RunTimerBarCode(self)
+SkyfuryTotemBar:SetScript('OnUpdate',function(self,elapsed)
+	if (Auras:RefreshRateHandler(0.1,self.elapsed)) then
+		self.elapsed = 0
+		
+		if ((Auras:CharacterCheck(self,0) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
+			Auras:RunTimerBarCode(self)
+		end
+	else
+		self.elapsed = self.elapsed + elapsed
 	end
 end)
 
@@ -34,5 +41,7 @@ SkyfuryTotemBar:SetScript("OnEvent",function(self,event)
 		return
 	end
 	
-	Auras:RunTimerEvent_Totem(self,CombatLogGetCurrentEventInfo())
+	if ((Auras:CharacterCheck(self,0) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
+		Auras:RunTimerEvent_Totem(self,CombatLogGetCurrentEventInfo())
+	end
 end)

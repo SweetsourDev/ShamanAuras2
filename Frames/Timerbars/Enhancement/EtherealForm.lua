@@ -7,15 +7,22 @@ local EtherealFormBar = SSA.EtherealFormBar
 EtherealFormBar.spellID = 210918
 EtherealFormBar.start = 0
 EtherealFormBar.duration = 15
+EtherealFormBar.elapsed = 0
 EtherealFormBar.condition = function()
 	local _,_,_,_,_,_,_,_,_,selected = GetPvpTalentInfoByID(1944)
 
 	return selected and Auras:IsPvPZone()
 end
 
-EtherealFormBar:SetScript('OnUpdate',function(self)
-	if ((Auras:CharacterCheck(self,2) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
-		Auras:RunTimerBarCode(self)
+EtherealFormBar:SetScript('OnUpdate',function(self,elapsed)
+	if (Auras:RefreshRateHandler(0.1,self.elapsed)) then
+		self.elapsed = 0
+		
+		if ((Auras:CharacterCheck(self,2) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
+			Auras:RunTimerBarCode(self)
+		end
+	else
+		self.elapsed = self.elapsed + elapsed
 	end
 end)
 
@@ -24,5 +31,7 @@ EtherealFormBar:SetScript("OnEvent",function(self,event)
 		return
 	end
 	
-	Auras:RunTimerEvent_Aura(self,false,CombatLogGetCurrentEventInfo())
+	if ((Auras:CharacterCheck(self,2) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
+		Auras:RunTimerEvent_Aura(self,false,CombatLogGetCurrentEventInfo())
+	end
 end)

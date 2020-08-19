@@ -117,7 +117,7 @@ EarthenWallTotemBar:SetScript('OnUpdate',function(self,elapsed)
 		
 		if (bar.isEnabled and not bar.adjust.isEnabled and not isMoving) then		
 			
-			if (bar.data.start > 0) then
+			if (bar.data.start > 0 and GetTime() < (bar.data.start + 15)) then
 			--if (bar.info.GUID ~= '') then
 				--[[if (not self:IsShown()) then
 					self:Show()
@@ -139,6 +139,7 @@ EarthenWallTotemBar:SetScript('OnUpdate',function(self,elapsed)
 				end
 			else
 				--self:Hide()
+				bar.data.start = 0
 				self:SetAlpha(0)
 				self.Timer:SetValue(0)
 				self.timetext:SetText('')

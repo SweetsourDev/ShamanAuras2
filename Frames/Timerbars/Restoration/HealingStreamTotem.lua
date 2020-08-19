@@ -13,13 +13,20 @@ HealingStreamTotemBarOne.icon = 135127
 HealingStreamTotemBarOne.start = 0
 HealingStreamTotemBarOne.duration = 15
 HealingStreamTotemBarOne.numTotems = 0
+HealingStreamTotemBarOne.elapsed = 0
 HealingStreamTotemBarOne.condition = function()
 	return IsSpellKnown(5394)
 end
 
-HealingStreamTotemBarOne:SetScript('OnUpdate',function(self)
-	if ((Auras:CharacterCheck(self,3) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
-		Auras:RunTimerBarCode(self)
+HealingStreamTotemBarOne:SetScript('OnUpdate',function(self,elapsed)
+	if (Auras:RefreshRateHandler(0.1,self.elapsed)) then
+		self.elapsed = 0
+		
+		if ((Auras:CharacterCheck(self,3) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
+			Auras:RunTimerBarCode(self)
+		end
+	else
+		self.elapsed = self.elapsed + elapsed
 	end
 end)
 --/script for i=1,4 do local _,_,start,duration = GetTotemInfo(i);local r = (start + duration) - GetTime();print(i..". "..r) end
@@ -33,29 +40,30 @@ HealingStreamTotemBarOne:SetScript('OnEvent',function(self,event)
 		return
 	end
 
-	
-	local _,subevent,_,srcGUID,_,_,_,destGUID,_,_,_,spellID = CombatLogGetCurrentEventInfo()
-	
-	if (subevent == "SPELL_SUMMON" and srcGUID == UnitGUID("player") and spellID == self.spellID) then
-		if (self.start == 0) then
-			
-			self.start = floor(GetTime())
-			--print("SUMMON TOTEM ONE: "..streamOne.startTime)
-			--SSA.activeTotems[streamOne.startTime] = self:GetName()
-			SSA.activeTotems[self:GetName()] = self.start
-			--streamOne.info.isActive = true
-			self:Show()
-		elseif (self.start > 0) then
-			local streamTwoBar = SSA.HealingStreamTotemBarTwo
-			
-			streamTwoBar.start = floor(GetTime())
-			--print("SUMMON TOTEM TWO:"..streamTwo.startTime)
-			--SSA.activeTotems[streamTwo.startTime] = "HealingStreamTotemBarTwo"
-			SSA.activeTotems["HealingStreamTotemBarTwo"] = streamTwoBar.start
-			--streamTwo.info.isActive = true
-			streamTwoBar:Show()
+	if ((Auras:CharacterCheck(self,3) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
+		local _,subevent,_,srcGUID,_,_,_,destGUID,_,_,_,spellID = CombatLogGetCurrentEventInfo()
+		
+		if (subevent == "SPELL_SUMMON" and srcGUID == UnitGUID("player") and spellID == self.spellID) then
+			if (self.start == 0) then
+				
+				self.start = floor(GetTime())
+				--print("SUMMON TOTEM ONE: "..streamOne.startTime)
+				--SSA.activeTotems[streamOne.startTime] = self:GetName()
+				SSA.activeTotems[self:GetName()] = self.start
+				--streamOne.info.isActive = true
+				self:Show()
+			elseif (self.start > 0) then
+				local streamTwoBar = SSA.HealingStreamTotemBarTwo
+				
+				streamTwoBar.start = floor(GetTime())
+				--print("SUMMON TOTEM TWO:"..streamTwo.startTime)
+				--SSA.activeTotems[streamTwo.startTime] = "HealingStreamTotemBarTwo"
+				SSA.activeTotems["HealingStreamTotemBarTwo"] = streamTwoBar.start
+				--streamTwo.info.isActive = true
+				streamTwoBar:Show()
+			end
+			self.numTotems = self.numTotems + 1
 		end
-		self.numTotems = self.numTotems + 1
 	end
 end)
 
@@ -64,13 +72,20 @@ HealingStreamTotemBarTwo.spellID = 5394
 HealingStreamTotemBarTwo.icon = 135127
 HealingStreamTotemBarTwo.start = 0
 HealingStreamTotemBarTwo.duration = 15
+HealingStreamTotemBarTwo.elapsed = 0
 HealingStreamTotemBarTwo.condition = function()
 	return IsSpellKnown(5394)
 end
 
-HealingStreamTotemBarTwo:SetScript('OnUpdate',function(self)
-	if ((Auras:CharacterCheck(self,3) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
-		Auras:RunTimerBarCode(self)
+HealingStreamTotemBarTwo:SetScript('OnUpdate',function(self,elapsed)
+	if (Auras:RefreshRateHandler(0.1,self.elapsed)) then
+		self.elapsed = 0
+		
+		if ((Auras:CharacterCheck(self,3) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
+			Auras:RunTimerBarCode(self)
+		end
+	else
+		self.elapsed = self.elapsed + elapsed
 	end
 end)
 

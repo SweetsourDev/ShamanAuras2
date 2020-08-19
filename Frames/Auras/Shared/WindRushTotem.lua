@@ -10,28 +10,35 @@ local WindRushTotem = SSA.WindRushTotem
 -- Initialize Data Variables
 WindRushTotem.spellID = 192077
 WindRushTotem.pulseTime = 0
+WindRushTotem.elapsed = 0
 WindRushTotem.condition = function()
 	local _,_,_,selected = GetTalentInfo(5,3,1)
 	
 	return selected
 end
 
-WindRushTotem:SetScript('OnUpdate',function(self)
-	if ((Auras:CharacterCheck(self,0) and self.condition()) or Auras:IsPreviewingAura(self)) then
-		local groupID = Auras:GetAuraGroupID(self,self:GetName())
-		local start,duration = GetSpellCooldown(Auras:GetSpellName(self.spellID))
+WindRushTotem:SetScript('OnUpdate',function(self,elapsed)
+	if (Auras:RefreshRateHandler(0.5,self.elapsed)) then
+		self.elapsed = 0
 		
-		Auras:SetGlowStartTime(self,start,duration,self.spellID,"cooldown")
-		Auras:GlowHandler(self)
-		Auras:ToggleAuraVisibility(self,true,'showhide')
-		Auras:CooldownHandler(self,groupID,start,duration)
-		
-		if (Auras:IsPlayerInCombat()) then
-			self:SetAlpha(1)
+		if ((Auras:CharacterCheck(self,0) and self.condition()) or Auras:IsPreviewingAura(self)) then
+			local groupID = Auras:GetAuraGroupID(self,self:GetName())
+			local start,duration = GetSpellCooldown(Auras:GetSpellName(self.spellID))
+			
+			Auras:SetGlowStartTime(self,start,duration,self.spellID,"cooldown")
+			Auras:GlowHandler(self)
+			Auras:ToggleAuraVisibility(self,true,'showhide')
+			Auras:CooldownHandler(self,groupID,start,duration)
+			
+			if (Auras:IsPlayerInCombat()) then
+				self:SetAlpha(1)
+			else
+				Auras:NoCombatDisplay(self,groupID)
+			end
 		else
-			Auras:NoCombatDisplay(self,groupID)
+			Auras:ToggleAuraVisibility(self,false,'showhide')
 		end
 	else
-		Auras:ToggleAuraVisibility(self,false,'showhide')
+		self.elapsed = self.elapsed + elapsed
 	end
 end)

@@ -10,31 +10,40 @@ local Icefury = SSA.Icefury
 -- Initialize Data Variables
 Icefury.spellID = 210714
 Icefury.pulseTime = 0
+Icefury.elapsed = 0
 Icefury.condition = function()
 	local _,_,_,selected = GetTalentInfo(6,3,1)
 	
 	return selected
 end
 
-Icefury:SetScript('OnUpdate',function(self)
-	if ((Auras:CharacterCheck(self,1) and self.condition()) or Auras:IsPreviewingAura(self)) then
-		local groupID = Auras:GetAuraGroupID(self,self:GetName())
-		local start,duration = GetSpellCooldown(Auras:GetSpellName(self.spellID))
-		local _,_,_,_,buffDuration,expires = Auras:RetrieveAuraInfo("player",self.spellID)
+Icefury:SetScript('OnUpdate',function(self,elapsed)
+	if (Auras:RefreshRateHandler(0.5,self.elapsed)) then
+		self.elapsed = 0
 		
-		Auras:SetGlowStartTime(self,((expires or 0) - (buffDuration or 0)),buffDuration,self.spellID,"buff")
-		Auras:SetGlowStartTime(self,start,duration,self.spellID,"cooldown")
-		Auras:GlowHandler(self)
-		Auras:ToggleAuraVisibility(self,true,'showhide')
-		Auras:SpellRangeCheck(self,self.spellID,true)
-		Auras:CooldownHandler(self,groupID,start,duration)
+		if ((Auras:CharacterCheck(self,1) and self.condition()) or Auras:IsPreviewingAura(self)) then
+			local groupID = Auras:GetAuraGroupID(self,self:GetName())
+			local start,duration = GetSpellCooldown(Auras:GetSpellName(self.spellID))
+			local _,_,_,_,buffDuration,expires = Auras:RetrieveAuraInfo("player",self.spellID)
 			
-		if (Auras:IsPlayerInCombat()) then
-			self:SetAlpha(1)
+			Auras:SetGlowStartTime(self,((expires or 0) - (buffDuration or 0)),buffDuration,self.spellID,"buff")
+			Auras:SetGlowStartTime(self,start,duration,self.spellID,"cooldown")
+			Auras:GlowHandler(self)
+			Auras:ToggleAuraVisibility(self,true,'showhide')
+			Auras:SpellRangeCheck(self,self.spellID,true)
+			Auras:CooldownHandler(self,groupID,start,duration)
+				
+			if (Auras:IsPlayerInCombat()) then
+				self:SetAlpha(1)
+			else
+				Auras:NoCombatDisplay(self,groupID)
+			end
 		else
-			Auras:NoCombatDisplay(self,groupID)
+			Auras:ToggleAuraVisibility(self,false,'showhide')
 		end
 	else
-		Auras:ToggleAuraVisibility(self,false,'showhide')
+		self.elapsed = self.elapsed + elapsed
 	end
 end)
+
+_G["SSA_Icefury"] = Icefury

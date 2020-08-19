@@ -11,6 +11,7 @@ CounterstrikeTotemBar.spellID = 204331
 CounterstrikeTotemBar.icon = 511726
 CounterstrikeTotemBar.start = 0
 CounterstrikeTotemBar.duration = 15
+CounterstrikeTotemBar.elapsed = 0
 CounterstrikeTotemBar.condition = function()
 	local spec = SSA.spec or GetSpecialization()
 	local spellID = (spec == 1 and 3490) or (spec == 2 and 3489) or (spec == 3 and 708)
@@ -26,9 +27,15 @@ CounterstrikeTotemBar.condition = function()
 	return selected and Auras:IsPvPZone()
 end
 
-CounterstrikeTotemBar:SetScript('OnUpdate',function(self)
-	if ((Auras:CharacterCheck(self,0) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
-		Auras:RunTimerBarCode(self)
+CounterstrikeTotemBar:SetScript('OnUpdate',function(self,elapsed)
+	if (Auras:RefreshRateHandler(0.1,self.elapsed)) then
+		self.elapsed = 0
+		
+		if ((Auras:CharacterCheck(self,0) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
+			Auras:RunTimerBarCode(self)
+		end
+	else
+		self.elapsed = self.elapsed + elapsed
 	end
 end)
 
@@ -37,5 +44,7 @@ CounterstrikeTotemBar:SetScript("OnEvent",function(self,event)
 		return
 	end
 	
-	Auras:RunTimerEvent_Totem(self,CombatLogGetCurrentEventInfo())
+	if ((Auras:CharacterCheck(self,0) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
+		Auras:RunTimerEvent_Totem(self,CombatLogGetCurrentEventInfo())
+	end
 end)

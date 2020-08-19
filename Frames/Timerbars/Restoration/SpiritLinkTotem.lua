@@ -8,13 +8,20 @@ SpiritLinkTotemBar.spellID = 98008
 SpiritLinkTotemBar.icon = 237586
 SpiritLinkTotemBar.start = 0
 SpiritLinkTotemBar.duration = 6
+SpiritLinkTotemBar.elapsed = 0
 SpiritLinkTotemBar.condition = function()
 	return IsSpellKnown(98008)
 end
 
-SpiritLinkTotemBar:SetScript('OnUpdate',function(self)
-	if ((Auras:CharacterCheck(self,3) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
-		Auras:RunTimerBarCode(self)
+SpiritLinkTotemBar:SetScript('OnUpdate',function(self,elapsed)
+	if (Auras:RefreshRateHandler(0.1,self.elapsed)) then
+		self.elapsed = 0
+		
+		if ((Auras:CharacterCheck(self,3) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
+			Auras:RunTimerBarCode(self)
+		end
+	else
+		self.elapsed = self.elapsed + elapsed
 	end
 end)
 
@@ -23,5 +30,7 @@ SpiritLinkTotemBar:SetScript("OnEvent",function(self,event)
 		return
 	end
 	
-	Auras:RunTimerEvent_Totem(self,CombatLogGetCurrentEventInfo())
+	if ((Auras:CharacterCheck(self,3) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
+		Auras:RunTimerEvent_Totem(self,CombatLogGetCurrentEventInfo())
+	end
 end)

@@ -38,12 +38,15 @@ end
 
 
 local TidalWavesBar = CreateFrame('StatusBar','TidalWavesBar',AuraBase)
-TidalWavesBar:SetStatusBarTexture([[Interface\addons\ShamanAuras\media\statusbar\Halves]])
+TidalWavesBar:SetStatusBarTexture([[Interface\AddOns\ShamanAuras2\Media\statusbar\Halves]])
 TidalWavesBar:GetStatusBarTexture():SetHorizTile(false)
 TidalWavesBar:GetStatusBarTexture():SetVertTile(false)
 TidalWavesBar:SetMinMaxValues(0,2)
 TidalWavesBar:SetAlpha(0)
 TidalWavesBar:Show()
+
+LSM.MediaTable.statusbar.Halves = nil
+LSM:Register("statusbar","Halves", [[Interface\AddOns\ShamanAuras2\Media\statusbar\Halves]])
 
 TidalWavesBar.bg = TidalWavesBar:CreateTexture(nil,'BACKGROUND')
 TidalWavesBar.bg:SetAllPoints(true)
@@ -108,7 +111,7 @@ TidalWavesBar:SetScript('OnUpdate',function(self)
 		end
 		
 		if (bar.isEnabled and not isMoving and not bar.adjust.isEnabled) then
-			local buff,_,count,_,duration,expires = Auras:RetrieveAuraInfo('player',Auras:GetSpellName(53390))
+			local buff,_,count,_,duration,expires = Auras:RetrieveAuraInfo('player',53390)
 			local remaining,progress
 			
 			if (buff) then
@@ -229,3 +232,4 @@ end)
 
 SSA.TidalWavesBar = TidalWavesBar
 _G["SSA_TidalWavesBar"] = TidalWavesBar
+_G["LSM_Test"] = LSM

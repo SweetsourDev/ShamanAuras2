@@ -13,6 +13,7 @@ local EarthenStrength = SSA.EarthenStrength
 -- Initialize Data Variables
 EarthenStrength.spellID = 252141
 EarthenStrength.pulseTime = 0
+EarthenStrength.elapsed = 0
 EarthenStrength.GetEleT21SetCount = function()
 	local numSetPieces = 0
 	local setPieces = {
@@ -38,28 +39,34 @@ EarthenStrength.condition = function()
 	return EarthenStrength.GetEleT21SetCount() >= 2
 end
 
-EarthenStrength:SetScript('OnUpdate', function(self)
-	if ((Auras:CharacterCheck(self,1) and self.condition()) or Auras:IsPreviewingAura(self)) then
-		local groupID = Auras:GetAuraGroupID(self,self:GetName())
-		local buff,_,_,_,duration,expires = Auras:RetrieveAuraInfo("player", self.spellID)
-
-		Auras:SetGlowStartTime(self,((expires or 0) - (duration or 0)),duration,self.spellID,"buff")
-		Auras:GlowHandler(self)
-		Auras:ToggleAuraVisibility(self,true,'showhide')
-		Auras:CooldownHandler(self,groupID,((expires or 0) - (duration or 0)),duration)
+EarthenStrength:SetScript('OnUpdate', function(self,elapsed)
+	if (Auras:RefreshRateHandler(0.5,self.elapsed)) then
+		self.elapsed = 0
 		
-		if (Auras:IsPlayerInCombat(true)) then
-			if (buff) then
-				self:SetAlpha(1)
-				--Auras:ToggleOverlayGlow(self.glow,true,false)
+		if ((Auras:CharacterCheck(self,1) and self.condition()) or Auras:IsPreviewingAura(self)) then
+			local groupID = Auras:GetAuraGroupID(self,self:GetName())
+			local buff,_,_,_,duration,expires = Auras:RetrieveAuraInfo("player", self.spellID)
+
+			Auras:SetGlowStartTime(self,((expires or 0) - (duration or 0)),duration,self.spellID,"buff")
+			Auras:GlowHandler(self)
+			Auras:ToggleAuraVisibility(self,true,'showhide')
+			Auras:CooldownHandler(self,groupID,((expires or 0) - (duration or 0)),duration)
+			
+			if (Auras:IsPlayerInCombat(true)) then
+				if (buff) then
+					self:SetAlpha(1)
+					--Auras:ToggleOverlayGlow(self.glow,true,false)
+				else
+					self:SetAlpha(0.5)
+					--Auras:ToggleOverlayGlow(self.glow,false)
+				end
 			else
-				self:SetAlpha(0.5)
-				--Auras:ToggleOverlayGlow(self.glow,false)
+				Auras:NoCombatDisplay(self,groupID)
 			end
 		else
-			Auras:NoCombatDisplay(self,groupID)
+			Auras:ToggleAuraVisibility(self,false,'showhide')
 		end
 	else
-		Auras:ToggleAuraVisibility(self,false,'showhide')
+		self.elapsed = self.elapsed + elapsed
 	end
 end)

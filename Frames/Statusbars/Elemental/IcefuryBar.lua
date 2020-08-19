@@ -12,7 +12,7 @@ local AuraBase = SSA.AuraBase
 --SSA.DataFrame.text:SetText(Auras:CurText('DataFrame').."IcefuryBar.lua: "..tostring(SSA.AuraBase).."\n")
 -- Build the Icefury Bar
 local IcefuryBar = CreateFrame('StatusBar','IcefuryBar',SSA.AuraBase)
-IcefuryBar:SetStatusBarTexture([[Interface\addons\ShamanAuras\media\statusbar\fourths]])
+IcefuryBar:SetStatusBarTexture([[Interface\addons\ShamanAuras2\media\statusbar\fourths]])
 IcefuryBar:GetStatusBarTexture():SetHorizTile(false)
 IcefuryBar:GetStatusBarTexture():SetVertTile(false)
 IcefuryBar:RegisterForDrag('LeftButton')
@@ -34,13 +34,14 @@ IcefuryBar.Timer:SetMinMaxValues(0,15)
 IcefuryBar.counttext = IcefuryBar.Timer:CreateFontString(nil, 'HIGH', 'GameFontHighlightLarge')
 IcefuryBar.timetext = IcefuryBar.Timer:CreateFontString(nil, 'HIGH', 'GameFontHighlightLarge')
 
+IcefuryBar.spellID = 210714
 IcefuryBar.condition = function()
 	local _,_,_,selected = GetTalentInfo(6,3,1)
 	
 	return selected
 end
 
-IcefuryBar:SetScript('OnUpdate',function(self)
+IcefuryBar:SetScript('OnUpdate',function(self,elapsed)
 	if ((Auras:CharacterCheck(nil,1) and self.condition()) or Auras:IsPreviewingStatusbar(self)) then
 		local db = Auras.db.char
 		local bar = db.statusbars[1].bars.IcefuryBar
@@ -68,9 +69,9 @@ IcefuryBar:SetScript('OnUpdate',function(self)
 				self.timetext:SetText('5')
 			else
 				self:SetValue(4)
-				self.Timer:SetValue(15)
+				self.Timer:SetValue(10)
 				self.counttext:SetText('4')
-				self.timetext:SetText('15')
+				self.timetext:SetText('10')
 			end
 			
 			if (bar.adjust.showTimer) then
@@ -102,8 +103,8 @@ IcefuryBar:SetScript('OnUpdate',function(self)
 		end		
 
 		if (bar.isEnabled and not isMoving and not bar.adjust.isEnabled) then
-			local buff,_,count,_,_,expires = Auras:RetrieveAuraInfo("player", Auras:GetSpellName(210714))
-			
+			local buff,_,count,_,_,expires = Auras:RetrieveAuraInfo("player", self.spellID)
+
 			if (buff) then
 				local timer,seconds = Auras:parseTime(expires - GetTime(),false)
 				
@@ -113,6 +114,7 @@ IcefuryBar:SetScript('OnUpdate',function(self)
 				else
 					self.counttext:SetText('')
 				end
+				
 				self.Timer:SetValue(seconds)
 				if (bar.timetext.isDisplayText) then
 					self.timetext:SetText(format('%.1f',seconds))
