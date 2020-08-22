@@ -20,15 +20,17 @@ AscendanceBar.condition = function()
 end
 
 AscendanceBar:SetScript('OnUpdate',function(self,elapsed)
-	if (Auras:RefreshRateHandler(0.1,self.elapsed)) then
-		self.elapsed = 0
-		
-		--print("PREVIEW: "..tostring(Auras:IsPreviewingTimerbar(self)))
-		if ((Auras:CharacterCheck(self,0) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
-			Auras:RunTimerBarCode(self)
+	if (not Auras.db.char.isFirstEverLoad) then
+		if (Auras:RefreshRateHandler(0.1,self.elapsed)) then
+			self.elapsed = 0
+			
+			--print("PREVIEW: "..tostring(Auras:IsPreviewingTimerbar(self)))
+			if ((Auras:CharacterCheck(self,0) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
+				Auras:RunTimerBarCode(self)
+			end
+		else
+			self.elapsed = self.elapsed + elapsed
 		end
-	else
-		self.elapsed = self.elapsed + elapsed
 	end
 end)
 

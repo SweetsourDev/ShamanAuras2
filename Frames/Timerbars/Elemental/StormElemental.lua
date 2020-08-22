@@ -26,14 +26,16 @@ StormElementalBar.condition = function()
 end
 
 StormElementalBar:SetScript('OnUpdate',function(self,elapsed)
-	if (Auras:RefreshRateHandler(0.1,self.elapsed)) then
-		self.elapsed = 0
-		
-		if ((Auras:CharacterCheck(self,1) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
-			Auras:RunTimerBarCode(self)
+	if (not Auras.db.char.isFirstEverLoad) then
+		if (Auras:RefreshRateHandler(0.1,self.elapsed)) then
+			self.elapsed = 0
+			
+			if ((Auras:CharacterCheck(self,1) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
+				Auras:RunTimerBarCode(self)
+			end
+		else
+			self.elapsed = self.elapsed + elapsed
 		end
-	else
-		self.elapsed = self.elapsed + elapsed
 	end
 end)
 

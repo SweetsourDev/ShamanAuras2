@@ -59,73 +59,74 @@ CastBar.progress = 0
 CastBar.isSnapping = false
 
 CastBar:SetScript('OnUpdate',function(self)
-	if (Auras:CharacterCheck(nil,0)) then
-		local spec = GetSpecialization()
-		local db = Auras.db.char
-		local bar = Auras.db.char.statusbars[spec].bars.CastBar
-		local isMoving = db.settings.move.isMoving
+	if (not Auras.db.char.isFirstEverLoad) then
+		if (Auras:CharacterCheck(nil,0)) then
+			local spec = GetSpecialization()
+			local db = Auras.db.char
+			local bar = Auras.db.char.statusbars[spec].bars.CastBar
+			local isMoving = db.settings.move.isMoving
 
-		Auras:ToggleProgressBarMove(self,isMoving,bar)
-		
-		if (not db.statusbars[spec].defaultBar and CastingBarFrame:IsShown()) then
-			CastingBarFrame:Hide()
-		end
-		
-		if (isMoving) then
-			local name,_,texture = GetSpellInfo(51505)
+			Auras:ToggleProgressBarMove(self,isMoving,bar)
+			
+			if (not db.statusbars[spec].defaultBar and CastingBarFrame:IsShown()) then
+				CastingBarFrame:Hide()
+			end
+			
+			if (isMoving) then
+				local name,_,texture = GetSpellInfo(51505)
 
-			self:SetMinMaxValues(0,3)
-			self:SetValue(3)
-			self.nametext:SetText(name)
-			self.timetext:SetText('3.0')
-			
-			if (bar.icon.isEnabled) then
-				self.icon:Show()
-				self.icon:SetTexture(texture)
-			end
-			self.spark:Hide()
-		end
-		
-		--if (bar.adjust.isEnabled) then
-		if (Auras:IsPreviewingStatusbar(self)) then
-			local name,_,texture = GetSpellInfo(51505)
-			self.nametext:SetText(name)
-			self.timetext:SetText('3.0')
-			self:SetAlpha(1)
-			
-			Auras:AdjustStatusBarText(self.nametext,bar.nametext)
-			Auras:AdjustStatusBarText(self.timetext,bar.timetext)
-			if (not self.isSnapping) then
-				Auras:AdjustStatusBarIcon(self,bar,texture)
-			end
-			--AdjustStatusBarSpark(self,bar)
-			
-			if (bar.adjust.showBG) then
-				self:SetMinMaxValues(0,1)
-				self:SetValue(0.33)
-				Auras:AdjustStatusBarSpark(self,bar,0.33)
-			else
-				self:SetMinMaxValues(0,1)
-				self:SetValue(1)
-				Auras:AdjustStatusBarSpark(self,bar,1)
+				self:SetMinMaxValues(0,3)
+				self:SetValue(3)
+				self.nametext:SetText(name)
+				self.timetext:SetText('3.0')
+				
+				if (bar.icon.isEnabled) then
+					self.icon:Show()
+					self.icon:SetTexture(texture)
+				end
+				self.spark:Hide()
 			end
 			
-			self:SetStatusBarTexture(LSM.MediaTable.statusbar[bar.foreground.texture])
-			self:SetStatusBarColor(bar.foreground.color.r,bar.foreground.color.g,bar.foreground.color.b)
+			--if (bar.adjust.isEnabled) then
+			if (Auras:IsPreviewingStatusbar(self)) then
+				local name,_,texture = GetSpellInfo(51505)
+				self.nametext:SetText(name)
+				self.timetext:SetText('3.0')
+				self:SetAlpha(1)
+				
+				Auras:AdjustStatusBarText(self.nametext,bar.nametext)
+				Auras:AdjustStatusBarText(self.timetext,bar.timetext)
+				if (not self.isSnapping) then
+					Auras:AdjustStatusBarIcon(self,bar,texture)
+				end
+				--AdjustStatusBarSpark(self,bar)
+				
+				if (bar.adjust.showBG) then
+					self:SetMinMaxValues(0,1)
+					self:SetValue(0.33)
+					Auras:AdjustStatusBarSpark(self,bar,0.33)
+				else
+					self:SetMinMaxValues(0,1)
+					self:SetValue(1)
+					Auras:AdjustStatusBarSpark(self,bar,1)
+				end
+				
+				self:SetStatusBarTexture(LSM.MediaTable.statusbar[bar.foreground.texture])
+				self:SetStatusBarColor(bar.foreground.color.r,bar.foreground.color.g,bar.foreground.color.b)
+				
+				self.bg:SetTexture(LSM.MediaTable.statusbar[bar.background.texture])
+				self.bg:SetVertexColor(bar.background.color.r,bar.background.color.g,bar.background.color.b,bar.background.color.a)
+				
+				self:SetHeight(bar.layout.height)
+				self:SetFrameStrata(bar.layout.strata)			
+			end
 			
-			self.bg:SetTexture(LSM.MediaTable.statusbar[bar.background.texture])
-			self.bg:SetVertexColor(bar.background.color.r,bar.background.color.g,bar.background.color.b,bar.background.color.a)
-			
-			self:SetHeight(bar.layout.height)
-			self:SetFrameStrata(bar.layout.strata)			
-		end
-		
-		if (bar.isEnabled and not isMoving and not bar.adjust.isEnabled) then
-			local spellName = UnitCastingInfo('player')
-			if (self.isCast and (spellName or GetTime() == self.endTime)) then
-				if (bar.timetext.isDisplayText) then
+			if (bar.isEnabled and not isMoving and not bar.adjust.isEnabled) then
+				local spellName = UnitCastingInfo('player')
+				if (self.isCast and (spellName or GetTime() == self.endTime)) then
 					local timer,seconds = Auras:parseTime(self.endTime - GetTime(),true)
 					local diff = 0
+					
 					if (self.isChannel) then
 						diff = seconds
 					else
@@ -133,35 +134,39 @@ CastBar:SetScript('OnUpdate',function(self)
 					end
 
 					self:SetValue(diff)
-					self.timetext:SetText(timer)
-				else
-					self.timetext:SetText('')
-				end
-				if (bar.spark) then
-					self.progress = self.endTime - GetTime()
-
-					if (self.duration > 0 and self.progress > 0) then
-						local position = self:GetWidth() - (self:GetWidth() / (self.duration / self.progress))
-						self.spark:SetPoint('CENTER', self, 'LEFT', position, 0)
-					end
-				end
-				
-				if (Auras:IsPlayerInCombat(true)) then
-					self:SetAlpha(bar.alphaCombat)
-				else
-					self:SetAlpha(bar.alphaOoC)
 					
+					if (bar.timetext.isDisplayText) then
+						self.timetext:SetText(timer)
+					else
+						self.timetext:SetText('')
+					end
+
+					if (bar.spark) then
+						self.progress = self.endTime - GetTime()
+
+						if (self.duration > 0 and self.progress > 0) then
+							local position = self:GetWidth() - (self:GetWidth() / (self.duration / self.progress))
+							self.spark:SetPoint('CENTER', self, 'LEFT', position, 0)
+						end
+					end
+					
+					if (Auras:IsPlayerInCombat(true)) then
+						self:SetAlpha(bar.alphaCombat)
+					else
+						self:SetAlpha(bar.alphaOoC)
+						
+					end
+					self.bg:SetAlpha(bar.background.color.a)
+				else
+					self.isCast = false
+					self:SetAlpha(0)
 				end
-				self.bg:SetAlpha(bar.background.color.a)
-			else
-				self.isCast = false
+			elseif (not bar.isEnabled and not isMoving and not bar.adjust.isEnabled) then
 				self:SetAlpha(0)
 			end
-		elseif (not bar.isEnabled and not isMoving and not bar.adjust.isEnabled) then
+		else
 			self:SetAlpha(0)
 		end
-	else
-		self:SetAlpha(0)
 	end
 end)
 

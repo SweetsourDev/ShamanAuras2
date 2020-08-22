@@ -42,94 +42,101 @@ ChannelBar.progress = 0
 ChannelBar.isSnapping = false
 
 ChannelBar:SetScript('OnUpdate',function(self)
-	if (Auras:CharacterCheck(nil,0)) then
-		local spec = GetSpecialization()
-		local db = Auras.db.char
-		local bar = Auras.db.char.statusbars[spec].bars.ChannelBar
-		local isMoving = db.settings.move.isMoving
-		
-		Auras:ToggleProgressBarMove(self,isMoving,bar)
-		
-		if (isMoving) then
-			local name,_,texture = GetSpellInfo(6196)
+	if (not Auras.db.char.isFirstEverLoad) then
+		if (Auras:CharacterCheck(nil,0)) then
+			local spec = GetSpecialization()
+			local db = Auras.db.char
+			local bar = Auras.db.char.statusbars[spec].bars.ChannelBar
+			local isMoving = db.settings.move.isMoving
+			
+			Auras:ToggleProgressBarMove(self,isMoving,bar)
+			
+			if (isMoving) then
+				local name,_,texture = GetSpellInfo(6196)
 
-			self:SetMinMaxValues(0,60)
-			self:SetValue(60)
-			self.nametext:SetText(name)
-			self.timetext:SetText('59.9')
-			
-			if (bar.icon.isEnabled) then
-				self.icon:Show()
-				self.icon:SetTexture(texture)
-			end
-			self.spark:Hide()
-		end
-		
-		--if (bar.adjust.isEnabled) then
-		if (Auras:IsPreviewingStatusbar(self)) then
-			local name,_,texture = GetSpellInfo(6196)
-			self.nametext:SetText(name)
-			self:SetAlpha(1)
-			
-			Auras:AdjustStatusBarText(self.nametext,bar.nametext)
-			Auras:AdjustStatusBarText(self.timetext,bar.timetext)
-			if (not self.isSnapping) then
-				Auras:AdjustStatusBarIcon(self,bar,texture)
-			end
-			
-			if (bar.adjust.showBG) then
-				self:SetMinMaxValues(0,1)
-				self:SetValue(0.33)
-				self.timetext:SetText('20.0')
-				Auras:AdjustStatusBarSpark(self,bar,0.33)
-			else
-				self:SetMinMaxValues(0,1)
-				self:SetValue(1)
-				self.timetext:SetText('60.0')
-				Auras:AdjustStatusBarSpark(self,bar,1)
-			end
-			
-			self:SetStatusBarTexture(LSM.MediaTable.statusbar[bar.foreground.texture])
-			self:SetStatusBarColor(bar.foreground.color.r,bar.foreground.color.g,bar.foreground.color.b)
-			
-			self.bg:SetTexture(LSM.MediaTable.statusbar[bar.background.texture])
-			self.bg:SetVertexColor(bar.background.color.r,bar.background.color.g,bar.background.color.b,bar.background.color.a)
-			
-			self:SetHeight(bar.layout.height)
-			self:SetFrameStrata(bar.layout.strata)
-		end
-
-		if (bar.isEnabled and not isMoving and not bar.adjust.isEnabled) then
-			local spellName,_,_,_,_,endTime = UnitChannelInfo('player')
-			
-			if (self.isChannel and spellName) then
-				local timer,seconds = Auras:parseTime(self.endTime - GetTime(),true)
-
-				self:SetValue(seconds)
-				self.timetext:SetText(timer)
+				self:SetMinMaxValues(0,60)
+				self:SetValue(60)
+				self.nametext:SetText(name)
+				self.timetext:SetText('59.9')
 				
-				if (bar.spark) then
-					self.progress = self.endTime - GetTime()
-					
-					self.spark:SetPoint('CENTER', self, 'LEFT', (self.progress / self.duration) * self:GetWidth(), 0)
+				if (bar.icon.isEnabled) then
+					self.icon:Show()
+					self.icon:SetTexture(texture)
+				end
+				self.spark:Hide()
+			end
+			
+			--if (bar.adjust.isEnabled) then
+			if (Auras:IsPreviewingStatusbar(self)) then
+				local name,_,texture = GetSpellInfo(6196)
+				self.nametext:SetText(name)
+				self:SetAlpha(1)
+				
+				Auras:AdjustStatusBarText(self.nametext,bar.nametext)
+				Auras:AdjustStatusBarText(self.timetext,bar.timetext)
+				if (not self.isSnapping) then
+					Auras:AdjustStatusBarIcon(self,bar,texture)
 				end
 				
-				if (Auras:IsPlayerInCombat(true)) then
-					self:SetAlpha(bar.alphaCombat)
+				if (bar.adjust.showBG) then
+					self:SetMinMaxValues(0,1)
+					self:SetValue(0.33)
+					self.timetext:SetText('20.0')
+					Auras:AdjustStatusBarSpark(self,bar,0.33)
 				else
-					self:SetAlpha(bar.alphaOoC)
-					
+					self:SetMinMaxValues(0,1)
+					self:SetValue(1)
+					self.timetext:SetText('60.0')
+					Auras:AdjustStatusBarSpark(self,bar,1)
 				end
-				self.bg:SetAlpha(bar.background.color.a)
-			else
-				self.isChannel = false
+				
+				self:SetStatusBarTexture(LSM.MediaTable.statusbar[bar.foreground.texture])
+				self:SetStatusBarColor(bar.foreground.color.r,bar.foreground.color.g,bar.foreground.color.b)
+				
+				self.bg:SetTexture(LSM.MediaTable.statusbar[bar.background.texture])
+				self.bg:SetVertexColor(bar.background.color.r,bar.background.color.g,bar.background.color.b,bar.background.color.a)
+				
+				self:SetHeight(bar.layout.height)
+				self:SetFrameStrata(bar.layout.strata)
+			end
+
+			if (bar.isEnabled and not isMoving and not bar.adjust.isEnabled) then
+				local spellName,_,_,_,_,endTime = UnitChannelInfo('player')
+				
+				if (self.isChannel and spellName) then
+					local timer,seconds = Auras:parseTime(self.endTime - GetTime(),true)
+
+					self:SetValue(seconds)
+					
+					if (bar.timetext.isDisplayText) then
+						self.timetext:SetText(timer)
+					else
+						self.timetext:SetText('')
+					end
+					
+					if (bar.spark) then
+						self.progress = self.endTime - GetTime()
+						
+						self.spark:SetPoint('CENTER', self, 'LEFT', (self.progress / self.duration) * self:GetWidth(), 0)
+					end
+					
+					if (Auras:IsPlayerInCombat(true)) then
+						self:SetAlpha(bar.alphaCombat)
+					else
+						self:SetAlpha(bar.alphaOoC)
+						
+					end
+					self.bg:SetAlpha(bar.background.color.a)
+				else
+					self.isChannel = false
+					self:SetAlpha(0)
+				end
+			elseif (not bar.isEnabled and not isMoving and not bar.adjust.isEnabled) then
 				self:SetAlpha(0)
 			end
-		elseif (not bar.isEnabled and not isMoving and not bar.adjust.isEnabled) then
+		else
 			self:SetAlpha(0)
 		end
-	else
-		self:SetAlpha(0)
 	end
 end)
 

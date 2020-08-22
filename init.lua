@@ -306,6 +306,68 @@ local function ResetMovable()
 	db.settings.move.isMoving = false
 end
 
+-- This will fix incorrect Database values from previous releases
+local function FixDatabase()
+	local db = Auras.db.char
+
+	-- Fix Database Issues from r9-beta1
+	if (not db.auras[1].auras.EchoingShock.layout.isGCD) then
+		db.auras[1].auras.EchoingShock.layout.isGCD = true
+	end
+
+	if (not db.auras[1].auras.EchoingShock.layout.isCharge) then
+		db.auras[1].auras.EchoingShock.layout.isCharge = true
+	end
+
+	if (db.auras[1].auras.EchoingShock.glow.triggers[1].duration ~= 30) then
+		db.auras[1].auras.EchoingShock.glow.triggers[1].duration = 30
+	end
+
+	-- Fix Database Issues from r9-beta2
+	if (db.auras[3].auras.FlameShock.glow.triggers[1].spellID ~= 188389) then
+		db.auras[3].auras.FlameShock.glow.triggers[1].spellID = 188389
+	end
+
+	-- Fix Database Issues from r9-beta7
+	if (db.auras[1].cooldowns.sweep ~= nil) then
+		for i=1,3 do
+			db.auras[i].cooldowns.isEnabled = nil
+			db.auras[i].cooldowns.text = nil
+			db.auras[i].cooldowns.sweep = nil
+			db.auras[i].cooldowns.inverse = nil
+			db.auras[i].cooldowns.bling = nil
+			db.auras[i].cooldowns.GCD = nil
+			for j=1,#db.auras[i].cooldowns.groups do
+				db.auras[i].cooldowns.groups[j].isEnabled = true
+				db.auras[i].cooldowns.groups[j].text = true
+				db.auras[i].cooldowns.groups[j].sweep = true
+				db.auras[i].cooldowns.groups[j].inverse = false
+				db.auras[i].cooldowns.groups[j].bling = false
+				db.auras[i].cooldowns.groups[j].GCD = {
+					isEnabled = false,
+					length = 0,
+					sweep = true,
+					bling = true,
+				}
+			end
+		end
+
+		db.auras.templates.cooldowns.isEnabled = true
+		db.auras.templates.cooldowns.text = true
+		db.auras.templates.cooldowns.sweep = true
+		db.auras.templates.cooldowns.inverse = false
+		db.auras.templates.cooldowns.bling = false
+		db.auras.templates.cooldowns.GCD = {
+			isEnabled = false,
+			length = 0,
+			sweep = true,
+			bling = true,
+		}
+		db.auras.templates.cooldowns.text.isDisplayText = true
+		db.auras.templates.cooldowns.text.font.shadow.isEnabled = false
+	end
+end
+
 -- Event: ADDON_LOADED
 function Auras:OnInitialize()
 
@@ -317,83 +379,89 @@ function Auras:OnInitialize()
 	end
 	
 	self.db = LibStub("AceDB-3.0"):New("SSA2_db",database)
+	if (self.db.global.isShadowlandsLoaded == nil) then
+		self.db.global.isShadowlandsLoaded = false
+	end
+
 	self:SetupOptions()
 
 	if (not self.db.char.isFirstEverLoad and not IsAddOnLoaded("ShamanAuras")) then
-		Auras:BuildAuraGroups()
+		self:BuildAuraGroups()
 	end
 	
 end
 
 local function VerifyDatabaseContents()
-	local db = Auras.db.char
-	local defaults = SSA.defaults
-	
-	for i=1,3 do
-		-- Verify Auras #1: Create new table if doesn't exist in database.
-		for k,v in pairs(defaults.auras[i].auras) do
-			if (not db.auras[i].auras[k]) then
-				db.auras[i].auras[k] = {}
-				Auras:CopyTableValues(db.auras[i].auras[k],defaults.auras[i].auras[k])
-			end
-		end
+	if (not Auras.db.char.isFirstEverLoad) then
+		local db = Auras.db.char
+		local defaults = SSA.defaults
 		
-		-- Verify Auras #1: Create new table if doesn't exist in database.
-		for k,v in pairs(defaults.totems[i].totems) do
-			if (not db.totems) then
-				db.totems = {
-					[1] = {
-						totems = {},
-					},
-					[2] = {
-						totems = {},
-					},
-					[3] = {
-						totems = {},
-					},
-				}
+		for i=1,3 do
+			-- Verify Auras #1: Create new table if doesn't exist in database.
+			for k,v in pairs(defaults.auras[i].auras) do
+				if (not db.auras[i].auras[k]) then
+					db.auras[i].auras[k] = {}
+					Auras:CopyTableValues(db.auras[i].auras[k],defaults.auras[i].auras[k])
+				end
 			end
 			
-			if (not db.totems[i].totems[k]) then
-				db.totems[i].totems[k] = {}
-				Auras:CopyTableValues(db.totems[i].totems[k],defaults.totems[i].totems[k])
+			-- Verify Auras #1: Create new table if doesn't exist in database.
+			for k,v in pairs(defaults.totems[i].totems) do
+				if (not db.totems) then
+					db.totems = {
+						[1] = {
+							totems = {},
+						},
+						[2] = {
+							totems = {},
+						},
+						[3] = {
+							totems = {},
+						},
+					}
+				end
+				
+				if (not db.totems[i].totems[k]) then
+					db.totems[i].totems[k] = {}
+					Auras:CopyTableValues(db.totems[i].totems[k],defaults.totems[i].totems[k])
+				end
 			end
-		end
-		
-		-- Verify Auras #2: Delete old table if not found in defaults table.
-		for k,v in pairs(db.auras[i].auras) do
-			if (not defaults.auras[i].auras[k]) then
-				db.auras[i].auras[k] = nil
+			
+			-- Verify Auras #2: Delete old table if not found in defaults table.
+			for k,v in pairs(db.auras[i].auras) do
+				if (not defaults.auras[i].auras[k]) then
+					db.auras[i].auras[k] = nil
+				end
 			end
-		end
-		
-		-- Verify Statusbars #1: Create new table if doesn't exist in database.
-		for k,v in pairs(defaults.statusbars[i].bars) do
-			if (not db.statusbars[i].bars[k]) then
-				db.statusbars[i].bars[k] = {}
-				Auras:CopyTableValues(db.statusbars[i].bars[k],defaults.statusbars[i].bars[k])
+			
+			-- Verify Statusbars #1: Create new table if doesn't exist in database.
+			for k,v in pairs(defaults.statusbars[i].bars) do
+				if (not db.statusbars[i].bars[k]) then
+					db.statusbars[i].bars[k] = {}
+					Auras:CopyTableValues(db.statusbars[i].bars[k],defaults.statusbars[i].bars[k])
+				end
 			end
-		end
-		
-		-- Verify Statusbars #2: Delete old table if not found in defaults table.
-		for k,v in pairs(db.statusbars[i].bars) do
-			if (not defaults.statusbars[i].bars[k]) then
-				db.statusbars[i].bars[k] = nil
+			
+			-- Verify Statusbars #2: Delete old table if not found in defaults table.
+			for k,v in pairs(db.statusbars[i].bars) do
+				if (not defaults.statusbars[i].bars[k]) then
+					db.statusbars[i].bars[k] = nil
+				end
 			end
-		end
-		
-		-- Verify Timerbars #1: Create new table if doesn't exist in database.
-		for k,v in pairs(defaults.timerbars[i].bars) do
-			if (not db.timerbars[i].bars[k]) then
-				db.timerbars[i].bars[k] = {}
-				Auras:CopyTableValues(db.timerbars[i].bars[k],defaults.timerbars[i].bars[k])
+			
+			-- Verify Timerbars #1: Create new table if doesn't exist in database.
+			for k,v in pairs(defaults.timerbars[i].bars) do
+				if (not db.timerbars[i].bars[k]) then
+					db.timerbars[i].bars[k] = {}
+					Auras:CopyTableValues(db.timerbars[i].bars[k],defaults.timerbars[i].bars[k])
+				end
 			end
-		end
-		
-		-- Verify Timerbars #2: Delete old table if not found in defaults table.
-		for k,v in pairs(db.timerbars[i].bars) do
-			if (not defaults.timerbars[i].bars[k]) then
-				db.timerbars[i].bars[k] = nil
+			
+			-- Verify Timerbars #2: Delete old table if not found in defaults table.
+			for k,v in pairs(db.timerbars[i].bars) do
+				if (not defaults.timerbars[i].bars[k]) then
+					db.timerbars[i].bars[k] = nil
+				end
 			end
 		end
 	end
@@ -405,7 +473,7 @@ end
 function Auras:OnEnable()
 	VerifyDatabaseContents()
 	
-	local db = Auras.db.char
+	local db = self.db.char
 	
 	if (db.isFirstEverLoad or IsAddOnLoaded("ShamanAuras")) then
 		if (IsAddOnLoaded("ShamanAuras")) then
@@ -537,11 +605,14 @@ function Auras:OnEnable()
 
 	self.db.char.settings.move.isMoving = false
 	
-	Auras:UpdateTalents()
-	Auras:ResetCustomization()
+	self:UpdateTalents()
+	self:ResetCustomization()
 	ResetAdjustable()
 	ResetMovable()
+	FixDatabase()
 	
+	
+
 	-- Initialize Cooldown Configuration
 	--Auras:InitializeCooldowns('AuraBase',1)
 	--Auras:InitializeCooldowns('AuraBase',2)
@@ -575,14 +646,14 @@ function Auras:OnEnable()
 		preferredIndex = 3,
 	}
 
-	if (not Auras:CharacterCheck(nil,0)) then
+	if (not self:CharacterCheck(nil,0)) then
 		StaticPopup_Show ("SSA_CLASS_CHECKER")
 	end
 end
 
 function Auras:PLAYER_TALENT_UPDATE()
-	Auras:UpdateTalents(true);
-	Auras:UpdateInterfaceSettings();
+	self:UpdateTalents(true);
+	self:UpdateInterfaceSettings();
 end
 
 function Auras:PLAYER_EQUIPMENT_CHANGED(event,slot)
@@ -599,7 +670,7 @@ function Auras:PLAYER_EQUIPMENT_CHANGED(event,slot)
 
 	-- We only want to update talents if the gear slot that has been change is in the list above
 	if (relevantSlots[slot]) then
-		Auras:UpdateTalents();
+		self:UpdateTalents();
 	end
 end
 
@@ -638,24 +709,24 @@ function Auras:IsPvPZone()
 end
 
 function Auras:ZONE_CHANGED_NEW_AREA()
-	Auras:UpdateTalents();
+	self:UpdateTalents();
 end
 
 function Auras:ZONE_CHANGED()
-	Auras:UpdateTalents();
+	self:UpdateTalents();
 end
 
 --function Auras:FOG_OF_WAR_UPDATED()
 function Auras:UI_INFO_MESSAGE(e,msg)
 	if (msg == 994 or msg == 995) then
-		Auras:UpdateTalents()
+		self:UpdateTalents()
 	end
 end
 
 function Auras:UNIT_PET()
 	local spec = GetSpecialization()
 	
-	for k,v in pairs(Auras.db.char.timerbars[spec].bars) do
+	for k,v in pairs(self.db.char.timerbars[spec].bars) do
 		local bar = SSA[k]
 		
 		if (bar.isPrimal and not UnitExists("pet") and bar.start > 0) then
@@ -954,23 +1025,41 @@ function Auras:PLAYER_TOTEM_UPDATE()
 end
 
 function Auras:COMBAT_LOG_EVENT_UNFILTERED()
-	local spec = GetSpecialization()
-	local _,subevent,_,srcGUID,_,_,_,destGUID,_,_,_,spellID = CombatLogGetCurrentEventInfo()
+	local spec = SSA.spec or GetSpecialization()
+	local _,subevent,_,srcGUID,_,_,_,destGUID,_,_,_,spellID,_,_,failType = CombatLogGetCurrentEventInfo()
 	
 	local initBar = function(k,v)
 		v.startTime = GetTime()
 		SSA[k]:Show()
 	end
 
-	if (subevent == "SPELL_CAST_SUCCESS" or subevent == "SPELL_AURA_APPLIED" or subevent == "SPELL_SUMMON" or subevent == "SPELL_AURA_REMOVED") then
-		--for k,v in pairs(Auras.db.char.timerbars[spec]) do
+	if (subevent == "SPELL_CAST_START" and srcGUID == UnitGUID("player")) then
+		--[[local cd = self.db.char.auras[spec].cooldowns
+
+		local groupID = self:GetAuraGroupID(spellID)
+		local start,duration = GetSpellCooldown(self:GetSpellName(546))
+
+		if ((duration or 0) <= 1.5 and (duration or 0) > 0) then
+			cd.groups[groupID].GCD.length = duration
+			cd.groups[groupID].GCD.start = GetTime()
+			cd.groups[groupID].GCD.endTime = GetTime() + duration
+			cd.interrupted = false
+		end]]
+	elseif (subevent == "SPELL_CAST_FAILED" and srcGUID == UnitGUID("player") and failType == "Interrupted") then
+		local cd = self.db.char.auras[spec].cooldowns
+			
+		--[[local groupID = self:GetAuraGroupID(spellID)
+		
+		cd.groups[groupID].GCD.length = 0]]
+	elseif (subevent == "SPELL_CAST_SUCCESS" or subevent == "SPELL_AURA_APPLIED" or subevent == "SPELL_SUMMON" or subevent == "SPELL_AURA_REMOVED") then
+		--for k,v in pairs(self.db.char.timerbars[spec]) do
 			--if (srcGUID == UnitGUID("player") and subevent == "SPELL_AURA_REMOVED" and v.spellID == spellID) then
 				--v.startTime = 0
 			--elseif ((v.info.source == "any" or (v.info.source == "player" and srcGUID == UnitGUID("player"))) and v.spellID == spellID and v.info.name == subevent) then
 				--[[if (k == "HealingStreamTotemBarOne" and v.startTime == 0) then
 					initBar(k,v)
 					break
-				elseif (k == "HealingStreamTotemBarTwo" and Auras.db.char.timerbars[spec].HealingStreamTotemBarOne.startTime > 0) then
+				elseif (k == "HealingStreamTotemBarTwo" and self.db.char.timerbars[spec].HealingStreamTotemBarOne.startTime > 0) then
 					initBar(k,v)
 					break
 				elseif (k ~= "HealingStreamTotemBarOne" and k ~= "HealingStreamTotemBarTwo" and subevent ~= "SPELL_SUMMON") then
@@ -981,7 +1070,7 @@ function Auras:COMBAT_LOG_EVENT_UNFILTERED()
 				
 				
 				--[[if (subevent == "SPELL_SUMMON") then
-					SSA.DataFrame.text:SetText(Auras:CurText('DataFrame')..k.."\n")
+					SSA.DataFrame.text:SetText(self:CurText('DataFrame')..k.."\n")
 					if (k == "HealingStreamTotemBarOne" and spellID == 5394 and v.startTime == 0) then
 						
 						v.startTime = math.floor(GetTime())
@@ -989,7 +1078,7 @@ function Auras:COMBAT_LOG_EVENT_UNFILTERED()
 						SSA[k]:Show()
 						--print("Healing Stream #1 ("..(v.startTime + v.duration)..")")
 						break
-					elseif (k == "HealingStreamTotemBarTwo" and spellID == 5394 and Auras.db.char.timerbars[spec].HealingStreamTotemBarOne.startTime > 0) then
+					elseif (k == "HealingStreamTotemBarTwo" and spellID == 5394 and self.db.char.timerbars[spec].HealingStreamTotemBarOne.startTime > 0) then
 						v.startTime = math.floor(GetTime())
 						v.info.isActive = true
 						SSA[k]:Show()
@@ -1021,7 +1110,7 @@ function Auras:COMBAT_LOG_EVENT_UNFILTERED()
 			if (spellID == 31616) then
 				SSA.natureGuardianCastTime = GetTime()
 			elseif (subevent == "SPELL_CAST_SUCCESS") then
-				for k,v in pairs(Auras.db.char.timerbars[spec]) do
+				for k,v in pairs(self.db.char.timerbars[spec]) do
 					if (v.spellID == spellID) then
 						v.startTime = GetTime()
 					end
@@ -1029,7 +1118,7 @@ function Auras:COMBAT_LOG_EVENT_UNFILTERED()
 			end
 		end]]
 	elseif (subevent == "UNIT_DIED") then
-		--[[for k,v in pairs(Auras.db.char.timerbars[spec]) do
+		--[[for k,v in pairs(self.db.char.timerbars[spec]) do
 			if (destGUID == v.info.elementalGUID) then
 				v.startTime = 0
 			end
@@ -1042,21 +1131,26 @@ Frame:HookScript("OnEvent",function(self,event,...)
 		return
 	end
 	
-	local spec = GetSpecialization()
+	local spec = SSA.spec or GetSpecialization()
 
 	local castBar,channelBar = SSA["CastBar"],SSA["ChannelBar"]
 	
 	if (event == "UNIT_SPELLCAST_SENT" or event == "UNIT_SPELLCAST_START" or event == "UNIT_SPELLCAST_CHANNEL_START") then
 		if (event == "UNIT_SPELLCAST_SENT") then
-			local cd = Auras.db.char.auras[spec].cooldowns
-			
-			local start,duration = GetSpellCooldown(Auras:GetSpellName(546))
+			local unit,_,_,spellID = ...
 
-			if ((duration or 0) <= 1.5 and (duration or 0) > 0) then
-				cd.GCD.length = duration
-				cd.GCD.start = GetTime()
-				cd.GCD.endTime = GetTime() + duration
-				cd.interrupted = false
+			if (unit == "player") then
+				local cd = Auras.db.char.auras[spec].cooldowns
+
+				local groupID = Auras:GetAuraGroupID(spellID)
+				local start,duration = GetSpellCooldown(Auras:GetSpellName(546))
+
+				if ((duration or 0) <= 1.5 and (duration or 0) > 0) then
+					cd.groups[groupID].GCD.length = duration
+					cd.groups[groupID].GCD.start = GetTime()
+					cd.groups[groupID].GCD.endTime = GetTime() + duration
+					cd.interrupted = false
+				end
 			end
 		elseif (event == "UNIT_SPELLCAST_START") then
 			--[[local bar = Auras.db.char.statusbars[spec].bars.CastBar
@@ -1170,10 +1264,18 @@ Frame:HookScript("OnEvent",function(self,event,...)
 			channelBar:SetAlpha(0)
 		end]]
 	elseif (event == "UNIT_SPELLCAST_INTERRUPTED" or event == "UNIT_SPELLCAST_SUCCEEDED") then
-		local cd = Auras.db.char.auras[spec].cooldowns
+		
 		if (event == "UNIT_SPELLCAST_INTERRUPTED") then
-			cd.interrupted = true
-			cd.GCD.length = 0
+			local unit,_,spellID = ...
+
+			if (unit == "player") then
+				local cd = Auras.db.char.auras[spec].cooldowns
+
+				local groupID = Auras:GetAuraGroupID(spellID)
+		
+				cd.interrupted = true
+				cd.groups[groupID].GCD.length = 0
+			end
 		end
 		--
 		--cd.GCD.start = 0

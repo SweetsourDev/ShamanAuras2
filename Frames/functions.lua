@@ -9,87 +9,91 @@ local twipe = table.wipe
 local GetSpecialization = GetSpecialization
 
 -- Set the aura's opacity to the user-specified level when the player is out of combat.
-function Auras:NoCombatDisplay(self,group)
+function Auras:NoCombatDisplay(obj,group)
 	local spec = SSA.spec or GetSpecialization()
 	
-	if ((Auras.db.char.auras[spec].cooldowns.groups[group] and Auras.db.char.auras[spec].cooldowns.groups[group].isPreview) or (Auras.db.char.auras[spec].groups[group] and Auras.db.char.auras[spec].groups[group].isAdjust)) then
-		self:SetAlpha(1)
+	if ((self.db.char.auras[spec].cooldowns.groups[group] and self.db.char.auras[spec].cooldowns.groups[group].isPreview) or (self.db.char.auras[spec].groups[group] and self.db.char.auras[spec].groups[group].isAdjust)) then
+		obj:SetAlpha(1)
 	else
-		self:SetAlpha(Auras.db.char.settings[spec].OoCAlpha)
+		obj:SetAlpha(self.db.char.settings[spec].OoCAlpha)
 	end
 end
 
 function Auras:SetGlowStartTime(obj,start,duration,spellID,triggerType)
-	local glow = Auras.db.char.auras[SSA.spec].auras[obj:GetName()].glow
-	
-	--if ((duration or 0) > 1.5) then
-	for i=1,#glow.triggers do
-		local trigger = glow.triggers[i]
+	if (not self.db.char.isFirstEverLoad) then
+		local glow = Auras.db.char.auras[SSA.spec].auras[obj:GetName()].glow
 		
-		if (trigger.isEnabled) then
-			if ((trigger.spellID or 0) == spellID and trigger.type == triggerType) then	
-				
-				if ((duration or 0) > 1.5) then
-					if (obj:GetName() == "HealingStreamTotem") then
-						if ((duration or 0) > 0) then
-							--print("Duration: "..tostring(duration))
-						end
-					end
-					if (trigger.start == 0) then
-						trigger.start = start
-					end
-				else
-					if (trigger.start > 0) then
+		--if ((duration or 0) > 1.5) then
+		for i=1,#glow.triggers do
+			local trigger = glow.triggers[i]
+			
+			if (trigger.isEnabled) then
+				if ((trigger.spellID or 0) == spellID and trigger.type == triggerType) then	
+					
+					if ((duration or 0) > 1.5) then
 						if (obj:GetName() == "HealingStreamTotem") then
-							--print("Start above 0")
+							if ((duration or 0) > 0) then
+								--print("Duration: "..tostring(duration))
+							end
 						end
-						if ((trigger.displayTime or 0) > 0) then
-							local expire = trigger.start + trigger.duration
-							--print(floor(GetTime()).." - "..tostring(floor(expire + trigger.displayTime)))
-							if (GetTime() > (expire + trigger.displayTime)) then
-								
+						if (trigger.start == 0) then
+							trigger.start = start
+						end
+					else
+						if (trigger.start > 0) then
+							if (obj:GetName() == "HealingStreamTotem") then
+								--print("Start above 0")
+							end
+							if ((trigger.displayTime or 0) > 0) then
+								local expire = trigger.start + trigger.duration
+								--print(floor(GetTime()).." - "..tostring(floor(expire + trigger.displayTime)))
+								if (GetTime() > (expire + trigger.displayTime)) then
+									
+									trigger.start = 0
+								end
+							else
 								trigger.start = 0
 							end
 						else
-							trigger.start = 0
-						end
-					else
-						if (obj:GetName() == "HealingStreamTotem") then
-							--print("Start 0")
+							if (obj:GetName() == "HealingStreamTotem") then
+								--print("Start 0")
+							end
 						end
 					end
 				end
 			end
 		end
-	end
 	--end
+	end
 end
 
 
 
-function Auras:GlowHandler(obj)
-	local glow = Auras.db.char.auras[SSA.spec].auras[obj:GetName()].glow
-	
+function Auras:GlowHandler(obj,groupID)
+	local glow = self.db.char.auras[SSA.spec].auras[obj:GetName()].glow
+
+
+	--SSA.DataFrame.text:SetText(self:CurText('DataFrame')..tostring(obj:GetName()).."\n")
 	for i=1,#glow.triggers do
 		local trigger = glow.triggers[i]
-
+		
 		-- Check the type of trigger
 		if ((trigger.type == "cooldown" or trigger.type == "buff" or trigger.type == "debuff")) then
 			-- Check if the trigger is enabled
 			if (trigger.isEnabled) then
-				if ((trigger.target.reaction == "enemy" and Auras:IsTargetEnemy()) or (trigger.target.reaction == "friend" and not Auras:IsTargetEnemy()) or (trigger.target.reaction == "all" and UnitExists("target")) or (trigger.target.reaction == "off")) then
+				-- Check if the trigger's target conditions are met
+				if ((trigger.target.reaction == "enemy" and self:IsTargetEnemy()) or (trigger.target.reaction == "friend" and not self:IsTargetEnemy()) or (trigger.target.reaction == "all" and UnitExists("target")) or (trigger.target.reaction == "off")) then
 					local expire = trigger.start + (trigger.duration or 0)
 					local remains = expire - GetTime()
 
-					if (obj:GetName() == "FlameShock") then
-						--SSA.DataFrame.text:SetText(GetTime().."\n"..trigger.start.." + "..trigger.duration.." = "..expire.."\n"..remains)
-					end
+					--[[if (obj:GetName() == "FlameShock") then
+						SSA.DataFrame.text:SetText(self:CurText('DataFrame').."#4\n"..GetTime().."\n"..trigger.start.." + "..trigger.duration.." = "..expire.."\n"..remains.."\n")
+					end]]
+
 					-- Check if the trigger's combat conditions are met
-					if (trigger.combat == "all" or (trigger.combat == "on" and Auras:IsPlayerInCombat(true)) or (trigger.combat == "off" and not Auras:IsPlayerInCombat(true))) then
+					if (trigger.combat == "all" or (trigger.combat == "on" and self:IsPlayerInCombat(true)) or (trigger.combat == "off" and not self:IsPlayerInCombat(true))) then
 						-- Check if the trigger's "show" and threshold conditons are met
-						--if ((not trigger.threshold and trigger.start > 0) or ((trigger.show == "all" or not trigger.show) and (remains <= (trigger.threshold or 0) and remains > 0 or (GetTime() >= expire and trigger.start > 0))) or (trigger.show == "on" and remains <= (trigger.threshold or 0) and remains > 0) or (trigger.show == "off" and GetTime() >= expire)) then
-						--if ((not trigger.threshold and trigger.start > 0) or ((trigger.show == "all" or not trigger.show) and (trigger.threshold or 0) == 0) or ((trigger.show == "all" or not trigger.show) and (trigger.threshold or 0) > 0 and (remains <= (trigger.threshold or 0) and remains > 0 or (GetTime() >= expire and trigger.start > 0))) or (trigger.show == "on" and remains <= (trigger.threshold or 0) and remains > 0) or (trigger.show == "off" and GetTime() >= expire)) then
-						if ((not trigger.threshold and trigger.start > 0) or ((trigger.show == "all" or not trigger.show) and (remains <= (trigger.threshold or 0) and remains > 0 or (GetTime() >= expire and type(trigger.treshold) == "number"))) or (trigger.show == "on" and remains <= (trigger.threshold or 0) and remains > 0) or (trigger.show == "off" and GetTime() >= expire)) then
+						if ((not trigger.threshold and trigger.start > 0) or ((trigger.show == "all" or not trigger.show) and ((remains <= (trigger.threshold or 0) and remains > 0) or (GetTime() >= expire and type(trigger.threshold) == "number"))) or (trigger.show == "on" and remains <= (trigger.threshold or 0) and remains > 0) or (trigger.show == "off" and GetTime() >= expire)) then
 							-- If the trigger has a glow duration time, keep it active after the trigger expiration, otherwise just activate the trigger while it's not expired.
 							if ((trigger.show == "all" or trigger.show == "off") and GetTime() >= expire and (trigger.displayTime or 0) > 0) then
 								if (GetTime() < (expire + trigger.displayTime)) then
@@ -118,7 +122,7 @@ function Auras:GlowHandler(obj)
 				-- Check if the trigger's threshold conditions are met
 				if (obj.charges <= trigger.threshold and obj.charges > 0) then
 					-- Check if the trigger's combat conditions are met
-					if (trigger.combat == "all" or (trigger.combat == "on" and Auras:IsPlayerInCombat(true)) or (trigger.combat == "off" and not Auras:IsPlayerInCombat(true))) then
+					if (trigger.combat == "all" or (trigger.combat == "on" and self:IsPlayerInCombat(true)) or (trigger.combat == "off" and not self:IsPlayerInCombat(true))) then
 						--SSA.DataFrame.text:SetText("Time: "..GetTime().."\nTrigger: "..trigger.start.."\nDisplay: "..tostring(trigger.displayTime).."\nEnd: "..(trigger.start + trigger.displayTime).."\nTriggered: "..tostring(trigger.isActive))
 						if (trigger.displayTime == 0) then
 							trigger.isActive = true
@@ -146,7 +150,7 @@ function Auras:GlowHandler(obj)
 			-- Check if the trigger is enabled
 			if (trigger.isEnabled) then
 				-- Check if the trigger's combat conditions are met
-				if (trigger.combat == "all" or (trigger.combat == "on" and Auras:IsPlayerInCombat(true)) or (trigger.combat == "off" and not Auras:IsPlayerInCombat(true))) then
+				if (trigger.combat == "all" or (trigger.combat == "on" and self:IsPlayerInCombat(true)) or (trigger.combat == "off" and not self:IsPlayerInCombat(true))) then
 					-- Check if a target is casting an interruptible cast
 					if (obj.isInterruptible) then
 						-- If the trigger's start time hasn't been initialize, do so now.
@@ -173,7 +177,8 @@ function Auras:GlowHandler(obj)
 			if (not obj.pulseTime) then
 				--print(obj:GetName())
 			end
-			if (trigger.pulseRate > 0 and GetTime() >= obj.pulseTime) then
+			if (trigger.pulseRate > 0 and GetTime() >= obj.pulseTime and self.db.char.auras[SSA.spec].groups[groupID].isPulse) then
+			--if (trigger.pulseRate > 0 and GetTime() >= obj.pulseTime) then
 				obj.pulseTime = GetTime() + trigger.pulseRate
 				LBG.HideOverlayGlow(obj.glow)
 				LBG.ShowOverlayGlow(obj.glow)
@@ -400,27 +405,41 @@ end
 -- Returns the current spec as well as group ID for the specified aura
 --function Auras:GetAuraInfo(obj,debugHelper)
 function Auras:GetAuraGroupID(obj,debugHelper)
-	if (not obj) then
-		SSA.DataFrame.text:SetText("ERROR: GetAurainfo()\nMESSAGE: NO OBJECT\nSOURCE: "..debugHelper)
-	else
-		local spec = SSA.spec
-		--local spec,groupID = GetSpecialization()
-		
-		if (not Auras.db.char.auras[spec].auras[obj:GetName()]) then
-			SSA.DataFrame.text:SetText("ERROR: GetAurainfo()\nMESSAGE: BAD INDEX\nSOURCE: "..debugHelper)
+	if (not self.db.char.isFirstEverLoad) then
+		if (not obj) then
+			SSA.DataFrame.text:SetText("ERROR: GetAurainfo()\nMESSAGE: NO OBJECT\nSOURCE: "..debugHelper)
+		elseif (type(obj) == "number") then
+			for k,v in pairs(self.db.char.auras[SSA.spec].auras) do
+				if (SSA[k].spellID and SSA[k].spellID == obj) then
+					return v.group
+				end
+			end
 		else
-			--groupID = Auras.db.char.auras[spec].auras[obj:GetName()].group
-			return Auras.db.char.auras[spec].auras[obj:GetName()].group
+			local spec = SSA.spec
+			--local spec,groupID = GetSpecialization()
+			
+			if (not self.db.char.auras[spec].auras[obj:GetName()]) then
+				SSA.DataFrame.text:SetText("ERROR: GetAurainfo()\nMESSAGE: BAD INDEX\nSOURCE: "..debugHelper)
+			else
+				--groupID = self.db.char.auras[spec].auras[obj:GetName()].group
+				return self.db.char.auras[spec].auras[obj:GetName()].group
+			end
+			
+			--return spec,groupID
 		end
-		
-		--return spec,groupID
 	end
 end
 
-function Auras:GetGroupID(category,spec,auraName)
+function Auras:GetGroupID(category,spec,auraInfo)
 	for k,v in pairs(Auras.db.char[category][spec]) do
-		if (k == auraName) then
-			return v.group
+		if (type(auraInfo) == "number") then
+			if (SSA[k].spellID and SSA[k].spellID == auraInfo) then
+				return v.group
+			end
+		else
+			if (k == auraInfo) then
+				return v.group
+			end
 		end
 	end
 	--return tonumber(groupID)

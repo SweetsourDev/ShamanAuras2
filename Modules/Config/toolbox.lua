@@ -128,17 +128,19 @@ function Auras:Toggle_Cooldowns(db,order,spec,name,desc,disabled,dbKey,auraGroup
 	return toggle
 end
 
-function Auras:Toggle_VerifyDefaults(db,order,spec,name,desc,width,disabled,dbKey,optionsGroup,optionsSubgroup,isUpdateTalents)
+function Auras:Toggle_VerifyDefaults(db,order,spec,name,desc,width,disabled,hidden,dbKey,optionsGroup,optionsSubgroup,isUpdateTalents)
 	local toggle = {
 		order = order,
 		type = "toggle",
 		name = name,
 		desc = desc,
 		disabled = disabled,
+		hidden = hidden,
 		get = function()
 			return db[dbKey]
 		end,
 		set = function(this,value)
+			print("SPEC: "..tostring(spec).."("..tostring(selected)..")")
 			db[dbKey] = value
 			self:VerifyDefaultValues(spec,this.options,optionsGroup,optionsSubgroup)
 			
@@ -264,7 +266,7 @@ function Auras:Select_CooldownCopy(order,spec,name,desc,copyMethod,cdGroup,value
 	local selection = {
 		order = order,
 		type = "select",
-		dialogControl = dialogControl,
+		--dialogControl = dialogControl,
 		name = name,
 		desc = desc,
 		values = values,
@@ -273,9 +275,9 @@ function Auras:Select_CooldownCopy(order,spec,name,desc,copyMethod,cdGroup,value
 		end,
 		set = function(this,value)
 			if (copyMethod == "formatting") then
-				self:CopyCooldownFormatting(value,spec,cdGroup)
+				self:CopyCooldownFormatting(spec,value,cdGroup)
 			elseif (copyMethod == "options") then
-				self:CopyCooldownOptions(value,spec,cdGroup)
+				self:CopyCooldownOptions(spec,value,cdGroup)
 			end
 			
 			self:VerifyDefaultValues(spec,this.options,optionsGroup,optionsSubgroup)
@@ -305,7 +307,7 @@ function Auras:Select_VerifyDefaults(db,order,spec,name,desc,dialogControl,value
 				self:UpdateTalents()
 			end
 			
-			if (isUpdateCooldown) then
+			--[[if (isUpdateCooldown) then
 				for i=1,#Auras.db.char.auras[spec].groups do
 					if (db.selected == i) then
 						db.groups[i].isPreview = true
@@ -314,7 +316,7 @@ function Auras:Select_VerifyDefaults(db,order,spec,name,desc,dialogControl,value
 					end
 				end
 				self:RefreshCooldownList(this.options,spec,db)
-			end
+			end]]
 		end,
 		width = width or "normal",
 	}

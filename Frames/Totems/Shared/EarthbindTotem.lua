@@ -11,11 +11,11 @@ EarthbindTotem.isClicked = false
 EarthbindTotem:SetPoint("CENTER",SSA.AuraBase,"CENTER",0,0)
 
 local function TotemDestroyHandler()
-	print("Destroyed Totem")
+	--print("Destroyed Totem")
 end
 
 EarthbindTotem:SetScript("OnMouseDown",function(self,button)
-	print("BUTTON: "..tostring(button))
+	--print("BUTTON: "..tostring(button))
 	--self.isClicked = true
 	hooksecurefunc("DestroyTotem",TotemDestroyHandler)
 end)

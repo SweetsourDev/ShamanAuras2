@@ -27,45 +27,46 @@ FireElementalBar.condition = function()
 end
 
 FireElementalBar:SetScript('OnUpdate',function(self,elapsed)
-	--if (Auras:CharacterCheck(self,1,198067) and not select(4,GetTalentInfo(4,2,1)) and not select(4,GetTalentInfo(6,2,1))) then
-	if (Auras:RefreshRateHandler(0.1,self.elapsed)) then
-		self.elapsed = 0
-		
-		if ((Auras:CharacterCheck(self,1,198067) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
-			--if (bar.hasEssence) then
+	if (not Auras.db.char.isFirstEverLoad) then
+		if (Auras:RefreshRateHandler(0.1,self.elapsed)) then
+			self.elapsed = 0
+			
+			if ((Auras:CharacterCheck(self,1,198067) and self.condition()) or Auras:IsPreviewingTimerbar(self)) then
+				--if (bar.hasEssence) then
 
-				--local numVars = { GetTotemInfo(1) }
-				--SSA.DataFrame.text:SetText('')
-				--print("Num Vars: "..tostring(#numVars)).
-				if (self.start > 0) then
-					for i=1,MAX_TOTEMS do
-						local _,_,_,duration,icon = GetTotemInfo(i)
+					--local numVars = { GetTotemInfo(1) }
+					--SSA.DataFrame.text:SetText('')
+					--print("Num Vars: "..tostring(#numVars)).
+					if (self.start > 0) then
+						for i=1,MAX_TOTEMS do
+							local _,_,_,duration,icon = GetTotemInfo(i)
 
 
-						if (icon == self.totemIcon) then
-							
-							if (self.newDuration == 0 and duration < self.baseDuration) then
-								self.newDuration = duration
-								self.duration = duration
-								self:SetValue(duration)
-								self:SetMinMaxValues(1,duration)
-							elseif ((self.newDuration == 0 and self.duration ~= duration) or (self.newDuration > 0 and self.newDuration ~= duration)) then
-								self.newDuration = duration
-								self.duration = self.duration + (duration - self:GetValue())
-								self:SetValue(duration)
-								self:SetMinMaxValues(1,self.duration)
+							if (icon == self.totemIcon) then
+								
+								if (self.newDuration == 0 and duration < self.baseDuration) then
+									self.newDuration = duration
+									self.duration = duration
+									self:SetValue(duration)
+									self:SetMinMaxValues(1,duration)
+								elseif ((self.newDuration == 0 and self.duration ~= duration) or (self.newDuration > 0 and self.newDuration ~= duration)) then
+									self.newDuration = duration
+									self.duration = self.duration + (duration - self:GetValue())
+									self:SetValue(duration)
+									self:SetMinMaxValues(1,self.duration)
+								end
 							end
+							
+							
 						end
-						
-						
 					end
-				end
-			--end
+				--end
 
-			Auras:RunTimerBarCode(self)
+				Auras:RunTimerBarCode(self)
+			end
+		else
+			self.elapsed = self.elapsed + elapsed
 		end
-	else
-		self.elapsed = self.elapsed + elapsed
 	end
 end)
 

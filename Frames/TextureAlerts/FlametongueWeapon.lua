@@ -42,7 +42,7 @@ FlametongueWeapon.Flash.fadeOut:SetDuration(0.4)
 FlametongueWeapon.Flash.fadeOut:SetEndDelay(0)
 
 FlametongueWeapon:SetScript('OnUpdate',function(self)
-	--if (Auras:CharacterCheck(nil,1)) then
+	if (not Auras.db.char.isFirstEverLoad) then
 		local spec = GetSpecialization()
 
 		local remaining = 0
@@ -96,6 +96,7 @@ FlametongueWeapon:SetScript('OnUpdate',function(self)
 	--else
 		--Auras:ToggleAuraVisibility(self,false,'showhide')
 	--end
+	end
 end)
 
 FlametongueWeapon:SetScript('OnMouseDown',function(self,button)

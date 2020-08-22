@@ -18,42 +18,44 @@ UnlimitedPower.condition = function()
 end
 
 UnlimitedPower:SetScript('OnUpdate',function(self,elapsed)
-	if (Auras:RefreshRateHandler(0.5,self.elapsed)) then
-		self.elapsed = 0
-		
-		if ((Auras:CharacterCheck(self,1) and self.condition()) or Auras:IsPreviewingAura(self)) then
-			local groupID = Auras:GetAuraGroupID(self,self:GetName())
-			local buff,_,count,_,duration,expires,caster = Auras:RetrieveAuraInfo("player", 272737)
+	if (not Auras.db.char.isFirstEverLoad) then
+		if (Auras:RefreshRateHandler(0.5,self.elapsed)) then
+			self.elapsed = 0
 			
-			self.charges = count or 0
-			
-			Auras:SetGlowStartTime(self,((expires or 0) - (duration or 0)),duration,272373,"buff")
-			Auras:GlowHandler(self)
-			Auras:ToggleAuraVisibility(self,true,'showhide')
-			Auras:CooldownHandler(self,groupID,((expires or 0) - (duration or 0)),duration)
-			
-			self.CD.text:SetText('')
-			
-			if ((count or 0) >= 1) then
-				self.Charges.text:SetText(count)
-			else
-				self.Charges.text:SetText('')
-			end
-			
-			if (Auras:IsPlayerInCombat()) then
-				if (buff) then
-					self:SetAlpha(1)
+			if ((Auras:CharacterCheck(self,1) and self.condition()) or Auras:IsPreviewingAura(self)) then
+				local groupID = Auras:GetAuraGroupID(self,self:GetName())
+				local buff,_,count,_,duration,expires,caster = Auras:RetrieveAuraInfo("player", 272737)
+				
+				self.charges = count or 0
+				
+				Auras:SetGlowStartTime(self,((expires or 0) - (duration or 0)),duration,272373,"buff")
+				Auras:GlowHandler(self,groupID)
+				Auras:ToggleAuraVisibility(self,true,'showhide')
+				Auras:CooldownHandler(self,groupID,((expires or 0) - (duration or 0)),duration)
+				
+				self.CD.text:SetText('')
+				
+				if ((count or 0) >= 1) then
+					self.Charges.text:SetText(count)
 				else
-					self:SetAlpha(0.5)
+					self.Charges.text:SetText('')
+				end
+				
+				if (Auras:IsPlayerInCombat()) then
+					if (buff) then
+						self:SetAlpha(1)
+					else
+						self:SetAlpha(0.5)
+					end
+				else
+					Auras:NoCombatDisplay(self,groupID)
 				end
 			else
-				Auras:NoCombatDisplay(self,groupID)
+				Auras:ToggleAuraVisibility(self,false,'showhide')
 			end
 		else
-			Auras:ToggleAuraVisibility(self,false,'showhide')
+			self.elapsed = self.elapsed + elapsed
 		end
-	else
-		self.elapsed = self.elapsed + elapsed
 	end
 end)
 

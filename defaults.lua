@@ -61,6 +61,7 @@ local defaults = {
 					charges = 13.5,
 					orientation = "Horizontal",
 					isAdjust = false,
+					isPulse = true,
 				},
 				[2] = {
 					auraCount = 7,
@@ -70,6 +71,7 @@ local defaults = {
 					charges = 13.5,
 					orientation = "Horizontal",
 					isAdjust = false,
+					isPulse = true,
 				},
 				[3] = {
 					auraCount = 6,
@@ -79,6 +81,7 @@ local defaults = {
 					charges = 13.5,
 					orientation = "Horizontal",
 					isAdjust = false,
+					isPulse = true,
 				},
 				[4] = {
 					auraCount = 6,
@@ -88,6 +91,7 @@ local defaults = {
 					charges = 13.5,
 					orientation = "Horizontal",
 					isAdjust = false,
+					isPulse = true,
 				},
 				[5] = {
 					auraCount = 6,
@@ -97,6 +101,7 @@ local defaults = {
 					charges = 13.5,
 					orientation = "Vertical",
 					isAdjust = false,
+					isPulse = true,
 				},
 				[6] = {
 					auraCount = 5,
@@ -106,6 +111,7 @@ local defaults = {
 					charges = 13.5,
 					orientation = "Vertical",
 					isAdjust = false,
+					isPulse = true,
 				},
 			},
 			frames = {
@@ -170,24 +176,33 @@ local defaults = {
 					height = 160,
 				},
 			},
+			--[[spellIDs = {
+				["108281"] = { -- Adaptation
+					group = 5,
+				},
+				["108281"] = { -- Ancestral Guidance
+					group = 5,
+				},
+				
+			},]]
 			cooldowns = {
-				isEnabled = true,
-				text = true,
-				sweep = true,
-				inverse = false,
-				bling = true,
 				interrupted = false,
 				adjust = false,
 				selected = 1,
-				GCD = {
-					isEnabled = false,
-					length = 0,
-					sweep = true,
-					bling = true,
-				},
 				groups = {
 					[1] = {
 						isPreview = false,
+						isEnabled = true,
+						text = true,
+						sweep = true,
+						inverse = false,
+						bling = false,
+						GCD = {
+							isEnabled = false,
+							length = 0,
+							sweep = true,
+							bling = true,
+						},
 						text = {
 							isDisplayText = true,
 							justify = "CENTER",
@@ -236,6 +251,17 @@ local defaults = {
 					},
 					[2] = {
 						isPreview = false,
+						isEnabled = true,
+						text = true,
+						sweep = true,
+						inverse = false,
+						bling = false,
+						GCD = {
+							isEnabled = false,
+							length = 0,
+							sweep = true,
+							bling = true,
+						},
 						text = {
 							isDisplayText = true,
 							justify = "CENTER",
@@ -284,6 +310,17 @@ local defaults = {
 					},
 					[3] = {
 						isPreview = false,
+						isEnabled = true,
+						text = true,
+						sweep = true,
+						inverse = false,
+						bling = false,
+						GCD = {
+							isEnabled = false,
+							length = 0,
+							sweep = true,
+							bling = true,
+						},
 						text = {
 							isDisplayText = true,
 							justify = "CENTER",
@@ -332,6 +369,17 @@ local defaults = {
 					},
 					[4] = {
 						isPreview = false,
+						isEnabled = true,
+						text = true,
+						sweep = true,
+						inverse = false,
+						bling = false,
+						GCD = {
+							isEnabled = false,
+							length = 0,
+							sweep = true,
+							bling = true,
+						},
 						text = {
 							isDisplayText = true,
 							justify = "CENTER",
@@ -380,6 +428,17 @@ local defaults = {
 					},
 					[5] = {
 						isPreview = false,
+						isEnabled = true,
+						text = true,
+						sweep = true,
+						inverse = false,
+						bling = false,
+						GCD = {
+							isEnabled = false,
+							length = 0,
+							sweep = true,
+							bling = true,
+						},
 						text = {
 							isDisplayText = true,
 							justify = "CENTER",
@@ -428,6 +487,17 @@ local defaults = {
 					},
 					[6] = {
 						isPreview = false,
+						isEnabled = true,
+						text = true,
+						sweep = true,
+						inverse = false,
+						bling = false,
+						GCD = {
+							isEnabled = false,
+							length = 0,
+							sweep = true,
+							bling = true,
+						},
 						text = {
 							isDisplayText = true,
 							justify = "CENTER",
@@ -477,14 +547,14 @@ local defaults = {
 				},
 			},
 			auras = {
-				["Adaptation"] = {
+				--[[["Adaptation"] = { REMOVED 9.0
 					group = 4,
 					order = 1,
 					isEnabled = true,
 					isInUse = true,
 					talentRow = 0,
 					layout = {
-						icon = [[shared\adaptation]],
+						icon = [shared\adaptation],
 						isGCD = false,
 						isCharge = false,
 					},
@@ -512,7 +582,7 @@ local defaults = {
 							},
 						},
 					},
-				},
+				},]]
 				["AncestralGuidance"] = {
 					group = 5,
 					order = 4,
@@ -990,8 +1060,8 @@ local defaults = {
 					talentRow = 2,
 					layout = {
 						icon = [[elemental\echoing_shock]],
-						isGCD = false,
-						isCharge = false,
+						isGCD = true,
+						isCharge = true,
 					},
 					glow = {
 						isCustomize = false,
@@ -1009,7 +1079,7 @@ local defaults = {
 								spellID = 320125,
 								threshold = false,
 								start = 0,
-								duration = 8,
+								duration = 30,
 								pulseRate = 0.5,
 								displayTime = false,
 								show = false,
@@ -1162,14 +1232,14 @@ local defaults = {
 						},
 					},
 				},
-				["GladiatorsMedallion"] = {
+				--[[["GladiatorsMedallion"] = { REMOVED IN 9.0
 					group = 4,
 					order = 2,
 					isEnabled = true,
 					isInUse = true,
 					talentRow = 0,
 					layout = {
-						icon = [[shared\gladiators_medallion]],
+						icon = [shared\gladiators_medallion],
 						isGCD = false,
 						isCharge = false,
 					},
@@ -1197,7 +1267,7 @@ local defaults = {
 							},
 						},
 					},
-				},
+				},]]
 				["GroundingTotem"] = {
 					group = 4,
 					order = 6,
@@ -2007,6 +2077,7 @@ local defaults = {
 					charges = 13.5,
 					orientation = "Horizontal",
 					isAdjust = false,
+					isPulse = true,
 				},
 				[2] = {
 					auraCount = 7,
@@ -2016,6 +2087,7 @@ local defaults = {
 					charges = 13.5,
 					orientation = "Horizontal",
 					isAdjust = false,
+					isPulse = true,
 				},
 				[3] = {
 					auraCount = 4,
@@ -2025,6 +2097,7 @@ local defaults = {
 					charges = 13.5,
 					orientation = "Horizontal",
 					isAdjust = false,
+					isPulse = true,
 				},
 				[4] = {
 					auraCount = 8,
@@ -2034,6 +2107,7 @@ local defaults = {
 					charges = 13.5,
 					orientation = "Horizontal",
 					isAdjust = false,
+					isPulse = true,
 				},
 				[5] = {
 					auraCount = 5,
@@ -2043,6 +2117,7 @@ local defaults = {
 					charges = 13.5,
 					orientation = "Vertical",
 					isAdjust = false,
+					isPulse = true,
 				},
 				[6] = {
 					auraCount = 5,
@@ -2052,6 +2127,7 @@ local defaults = {
 					charges = 13.5,
 					orientation = "Vertical",
 					isAdjust = false,
+					isPulse = true,
 				},
 			},
 			frames = {
@@ -2117,23 +2193,23 @@ local defaults = {
 				},
 			},
 			cooldowns = {
-				isEnabled = true,
-				text = true,
-				sweep = true,
-				inverse = false,
-				bling = true,
 				interrupted = false,
 				adjust = false,
 				selected = 1,
-				GCD = {
-					isEnabled = false,
-					length = 0,
-					sweep = true,
-					bling = true,
-				},
 				groups = {
 					[1] = {
 						isPreview = false,
+						isEnabled = true,
+						text = true,
+						sweep = true,
+						inverse = false,
+						bling = false,
+						GCD = {
+							isEnabled = false,
+							length = 0,
+							sweep = true,
+							bling = true,
+						},
 						text = {
 							isDisplayText = true,
 							justify = "CENTER",
@@ -2182,6 +2258,17 @@ local defaults = {
 					},
 					[2] = {
 						isPreview = false,
+						isEnabled = true,
+						text = true,
+						sweep = true,
+						inverse = false,
+						bling = false,
+						GCD = {
+							isEnabled = false,
+							length = 0,
+							sweep = true,
+							bling = true,
+						},
 						text = {
 							isDisplayText = true,
 							justify = "CENTER",
@@ -2230,6 +2317,17 @@ local defaults = {
 					},
 					[3] = {
 						isPreview = false,
+						isEnabled = true,
+						text = true,
+						sweep = true,
+						inverse = false,
+						bling = false,
+						GCD = {
+							isEnabled = false,
+							length = 0,
+							sweep = true,
+							bling = true,
+						},
 						text = {
 							isDisplayText = true,
 							justify = "CENTER",
@@ -2278,6 +2376,17 @@ local defaults = {
 					},
 					[4] = {
 						isPreview = false,
+						isEnabled = true,
+						text = true,
+						sweep = true,
+						inverse = false,
+						bling = false,
+						GCD = {
+							isEnabled = false,
+							length = 0,
+							sweep = true,
+							bling = true,
+						},
 						text = {
 							isDisplayText = true,
 							justify = "CENTER",
@@ -2326,6 +2435,17 @@ local defaults = {
 					},
 					[5] = {
 						isPreview = false,
+						isEnabled = true,
+						text = true,
+						sweep = true,
+						inverse = false,
+						bling = false,
+						GCD = {
+							isEnabled = false,
+							length = 0,
+							sweep = true,
+							bling = true,
+						},
 						text = {
 							isDisplayText = true,
 							justify = "CENTER",
@@ -2374,6 +2494,17 @@ local defaults = {
 					},
 					[6] = {
 						isPreview = false,
+						isEnabled = true,
+						text = true,
+						sweep = true,
+						inverse = false,
+						bling = false,
+						GCD = {
+							isEnabled = false,
+							length = 0,
+							sweep = true,
+							bling = true,
+						},
 						text = {
 							isDisplayText = true,
 							justify = "CENTER",
@@ -3972,6 +4103,7 @@ local defaults = {
 					charges = 13.5,
 					orientation = "Horizontal",
 					isAdjust = false,
+					isPulse = true,
 				},
 				[2] = {
 					auraCount = 7,
@@ -3981,6 +4113,7 @@ local defaults = {
 					charges = 13.5,
 					orientation = "Horizontal",
 					isAdjust = false,
+					isPulse = true,
 				},
 				[3] = {
 					auraCount = 6,
@@ -3990,6 +4123,7 @@ local defaults = {
 					charges = 13.5,
 					orientation = "Horizontal",
 					isAdjust = false,
+					isPulse = true,
 				},
 				[4] = {
 					auraCount = 6,
@@ -3999,6 +4133,7 @@ local defaults = {
 					charges = 13.5,
 					orientation = "Horizontal",
 					isAdjust = false,
+					isPulse = true,
 				},
 				[5] = {
 					auraCount = 5,
@@ -4008,6 +4143,7 @@ local defaults = {
 					charges = 13.5,
 					orientation = "Vertical",
 					isAdjust = false,
+					isPulse = true,
 				},
 				[6] = {
 					auraCount = 6,
@@ -4017,6 +4153,7 @@ local defaults = {
 					charges = 13.5,
 					orientation = "Vertical",
 					isAdjust = false,
+					isPulse = true,
 				},
 			},
 			frames = {
@@ -4082,23 +4219,23 @@ local defaults = {
 				},
 			},
 			cooldowns = {
-				isEnabled = true,
-				text = true,
-				sweep = true,
-				inverse = false,
-				bling = true,
 				interrupted = false,
 				adjust = false,
 				selected = 1,
-				GCD = {
-					isEnabled = false,
-					length = 0,
-					sweep = true,
-					bling = true,
-				},
 				groups = {
 					[1] = {
 						isPreview = false,
+						isEnabled = true,
+						text = true,
+						sweep = true,
+						inverse = false,
+						bling = false,
+						GCD = {
+							isEnabled = false,
+							length = 0,
+							sweep = true,
+							bling = false,
+						},
 						text = {
 							isDisplayText = true,
 							justify = "CENTER",
@@ -4147,6 +4284,17 @@ local defaults = {
 					},
 					[2] = {
 						isPreview = false,
+						isEnabled = true,
+						text = true,
+						sweep = true,
+						inverse = false,
+						bling = false,
+						GCD = {
+							isEnabled = false,
+							length = 0,
+							sweep = true,
+							bling = true,
+						},
 						text = {
 							isDisplayText = true,
 							justify = "CENTER",
@@ -4195,6 +4343,17 @@ local defaults = {
 					},
 					[3] = {
 						isPreview = false,
+						isEnabled = true,
+						text = true,
+						sweep = true,
+						inverse = false,
+						bling = false,
+						GCD = {
+							isEnabled = false,
+							length = 0,
+							sweep = true,
+							bling = true,
+						},
 						text = {
 							isDisplayText = true,
 							justify = "CENTER",
@@ -4243,6 +4402,17 @@ local defaults = {
 					},
 					[4] = {
 						isPreview = false,
+						isEnabled = true,
+						text = true,
+						sweep = true,
+						inverse = false,
+						bling = false,
+						GCD = {
+							isEnabled = false,
+							length = 0,
+							sweep = true,
+							bling = true,
+						},
 						text = {
 							isDisplayText = true,
 							justify = "CENTER",
@@ -4291,6 +4461,17 @@ local defaults = {
 					},
 					[5] = {
 						isPreview = false,
+						isEnabled = true,
+						text = true,
+						sweep = true,
+						inverse = false,
+						bling = false,
+						GCD = {
+							isEnabled = false,
+							length = 0,
+							sweep = true,
+							bling = true,
+						},
 						text = {
 							isDisplayText = true,
 							justify = "CENTER",
@@ -4339,6 +4520,17 @@ local defaults = {
 					},
 					[6] = {
 						isPreview = false,
+						isEnabled = true,
+						text = true,
+						sweep = true,
+						inverse = false,
+						bling = false,
+						GCD = {
+							isEnabled = false,
+							length = 0,
+							sweep = true,
+							bling = true,
+						},
 						text = {
 							isDisplayText = true,
 							justify = "CENTER",
@@ -4898,7 +5090,7 @@ local defaults = {
 								},
 								type = "debuff",
 								name = "Debuff Duration",
-								spellID = 188838,
+								spellID = 188839,
 								threshold = 10,
 								start = 0,
 								duration = 27,
@@ -5887,7 +6079,19 @@ local defaults = {
 			},
 			cooldowns = {
 				isPreview = false,
+				isEnabled = true,
+				text = true,
+				sweep = true,
+				inverse = false,
+				bling = false,
+				GCD = {
+					isEnabled = false,
+					length = 0,
+					sweep = true,
+					bling = true,
+				},
 				text = {
+					isDisplayText = true,
 					justify = "CENTER",
 					x = 0,
 					y = 0,
@@ -5917,6 +6121,7 @@ local defaults = {
 							a = 1,
 						},
 						shadow = {
+							isEnabled = false,
 							offset = {
 								x = 2,
 								y = -2,

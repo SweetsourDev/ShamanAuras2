@@ -46,7 +46,16 @@ IntroFrame.dbReady = false
 IntroFrame.isSlashCommand = false
 local isTesting = false
 IntroFrame:SetScript("OnUpdate",function(self,elapsed)
-	if (((GetAddOnMetadata("ShamanAuras2","Version") ~= Auras.db.char.version or Auras.db.char.isFirstEverLoad) and not IsAddOnLoaded("ShamanAuras")) or isTesting or self.isSlashCommand) then
+	--[[print("Addon Version: "..tostring(GetAddOnMetadata("ShamanAuras2","Version") ~= Auras.db.char.version))
+	print("Is First Ever Load:"..tostring(Auras.db.char.isFirstEverLoad))
+	print("Is Shadowlands Loaded: "..tostring(Auras.db.global.isShadowlandsLoaded))
+	print("Is Testing: "..tostring(isTesting))
+	print("Is Slash Command: "..tostring(self.isSlashCommand))
+	print("All ORs: "..tostring(GetAddOnMetadata("ShamanAuras2","Version") ~= Auras.db.char.version or Auras.db.char.isFirstEverLoad or not Auras.db.global.isShadowlandsLoaded or isTesting or self.isSlashCommand))
+	print("No Old Addon: "..tostring(not IsAddOnLoaded("ShamanAuras")))
+	print("Character Check: "..tostring(Auras:CharacterCheck(nil,0,true)))
+	print("Total: "..tostring(((GetAddOnMetadata("ShamanAuras2","Version") ~= Auras.db.char.version or Auras.db.char.isFirstEverLoad or not Auras.db.global.isShadowlandsLoaded or isTesting or self.isSlashCommand) and not IsAddOnLoaded("ShamanAuras") and Auras:CharacterCheck(nil,0))))]]
+	if (((GetAddOnMetadata("ShamanAuras2","Version") ~= Auras.db.char.version or Auras.db.char.isFirstEverLoad or not Auras.db.global.isShadowlandsLoaded or isTesting or self.isSlashCommand) and not IsAddOnLoaded("ShamanAuras") and Auras:CharacterCheck(nil,0,true))) then
 		self.isAnimate:SetChecked(Auras.db.char.isIntroAnimated)
 		
 		if (Auras.db.char.isIntroAnimated) then
@@ -92,7 +101,7 @@ IntroFrame:SetScript("OnUpdate",function(self,elapsed)
 						self.dbReady = true
 					end
 				elseif (self.dbReady) then
-					if (Auras.db.char.isFirstEverLoad) then
+					if (Auras.db.char.isFirstEverLoad or not Auras.db.global.isShadowlandsLoaded) then
 						local acceleration = 0.05
 						local maxSpeed = 8
 						local maxX = 750
@@ -141,6 +150,7 @@ IntroFrame.desc:SetFrameStrata("DIALOG")
 IntroFrame.desc:SetPoint("TOPLEFT",IntroFrame,"BOTTOMLEFT",0,2)
 IntroFrame.desc:SetAlpha(0)
 
+-- Text Highlight Color Reference: |cFFFDFF7F
 IntroFrame.desc.text = IntroFrame.desc:CreateFontString(nil,"MEDIUM", "GameFontHighlightLarge")
 IntroFrame.desc.text:SetFont([[Interface\addons\ShamanAuras2\media\fonts\PT_Sans_Narrow.TTF]], 13,'OUTLINE')
 IntroFrame.desc.text:SetPoint("TOPLEFT",10,-10)
@@ -148,11 +158,11 @@ IntroFrame.desc.text:SetSize(1024,128)
 IntroFrame.desc.text:SetTextColor(1,1,1,1)
 IntroFrame.desc.text:SetJustifyH("LEFT")
 IntroFrame.desc.text:SetJustifyV("TOP")
-IntroFrame.desc.text:SetText("NEW\n    • The Earth Shield aura has been re-designed.\n"..
-								  "        • The aura will now track party/raid members buff duration and stacks.\n"..
-								  "        • If a party/raid member goes out of range, the aura will turn red, but resume when back in range.\n\n"..
-								  "FIXES\n       • Timerbars for Elementals should be working again.\n"..
-								  "       • The texture for the Totem Mastery alert should display properly\n")
+IntroFrame.desc.text:SetText("FIXES\n    • All config controls for the |cFFFDFF7FMaelstrom Weapon|r bar should no longer cause Lua errors. (Thanks, |cFFFDFF7FIves|r!)\n"..
+									"    • Text toggle checkboxes for all statusbars should be clickable after unchecking them in the config. (Thanks, |cFFFDFF7FIves|r!)\n"..
+									"    • Disabling the icon for the |cFFFDFF7FCast|r and |cFFFDFF7FChannel|r bars should no longer cause continuous Lua errors. (Thanks, |cFFFDFF7FIves|r!)\n"..
+									"    • Disabling the time text for the |cFFFDFF7FCast|r and |cFFFDFF7FChannel|r bars should no longer freeze the bar cast/channel animation. \n"..
+								    "    • Disabling the time text for the |cFFFDFF7FChannel|r bar should now correctly hide the text.")
 
 IntroFrame.desc.button = CreateFrame("Button",nil,IntroFrame.desc,"UIPanelButtonTemplate")
 IntroFrame.desc.button:SetSize(75,20)
@@ -227,8 +237,13 @@ IntroFrame.dbFrame.button:SetSize(128,20)
 IntroFrame.dbFrame.button:SetPoint("BOTTOM",0,10)
 IntroFrame.dbFrame.button:SetText("Proceed")
 IntroFrame.dbFrame.button:SetScript("OnClick",function(self,button)
+	if (not Auras.db.global.isShadowlandsLoaded) then
+		Auras.db:ResetDB("Default")
+	end
+
 	Auras:CopyTableValues(Auras.db.char,SSA.defaults)
 	Auras.db.char.isFirstEverLoad = false
+	Auras.db.global.isShadowlandsLoaded = true
 	ReloadUI()
 end)
 

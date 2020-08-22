@@ -2,7 +2,7 @@
 ## Title: Sweetsour's Shaman Auras 2
 ## Notes: A full package of auras for all 3 Shaman specializations
 ## Author: Sweetsour
-## Version: r9beta
+## Version: r9-beta7
 ## SavedVariables: SSA2_db
 
 ## OptionalDeps: Ace3, LibAboutPanel

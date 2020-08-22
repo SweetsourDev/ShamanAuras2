@@ -21,27 +21,29 @@ Adaptation.condition = function()
 end
 
 Adaptation:SetScript('OnUpdate',function(self,elapsed)
-	if (Auras:RefreshRateHandler(0.5,self.elapsed)) then
-		self.elapsed = 0
-		
-		if (Auras:CharacterCheck(self,1,"3597") or Auras:CharacterCheck(self,2,"3552") or Auras:CharacterCheck(self,3,"3485")) then
-			local groupID = Auras:GetAuraGroupID(self,self:GetName())
-			local start,duration = GetSpellCooldown(Auras:GetSpellName(self.spellID))
+	if (not Auras.db.char.isFirstEverLoad) then
+		if (Auras:RefreshRateHandler(0.5,self.elapsed)) then
+			self.elapsed = 0
 			
-			Auras:SetGlowStartTime(self,start,duration,self.spellID,"cooldown")
-			Auras:GlowHandler(self)
-			Auras:ToggleAuraVisibility(self,true,'showhide')
-			Auras:CooldownHandler(self,groupID,start,duration)
+			if (Auras:CharacterCheck(self,1,"3597") or Auras:CharacterCheck(self,2,"3552") or Auras:CharacterCheck(self,3,"3485")) then
+				local groupID = Auras:GetAuraGroupID(self,self:GetName())
+				local start,duration = GetSpellCooldown(Auras:GetSpellName(self.spellID))
 				
-			if (Auras:IsPlayerInCombat()) then
-				self:SetAlpha(1)
+				Auras:SetGlowStartTime(self,start,duration,self.spellID,"cooldown")
+				Auras:GlowHandler(self,groupID)
+				Auras:ToggleAuraVisibility(self,true,'showhide')
+				Auras:CooldownHandler(self,groupID,start,duration)
+					
+				if (Auras:IsPlayerInCombat()) then
+					self:SetAlpha(1)
+				else
+					Auras:NoCombatDisplay(self,groupID)
+				end
 			else
-				Auras:NoCombatDisplay(self,groupID)
+				Auras:ToggleAuraVisibility(self,false,'showhide')
 			end
 		else
-			Auras:ToggleAuraVisibility(self,false,'showhide')
+			self.elapsed = self.elapsed + elapsed
 		end
-	else
-		self.elapsed = self.elapsed + elapsed
 	end
 end)

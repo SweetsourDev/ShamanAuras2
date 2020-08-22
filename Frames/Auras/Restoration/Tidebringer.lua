@@ -24,68 +24,70 @@ end
 
 --SSA.Tidebringer.isTimerActive = false
 Tidebringer:SetScript('OnUpdate',function(self,elapsed)
-	if (Auras:RefreshRateHandler(0.5,self.elapsed)) then
-		self.elapsed = 0
-		
-		if ((Auras:CharacterCheck(self,3) and self.condition()) or Auras:IsPreviewingAura(self)) then
-			local groupID = Auras:GetAuraGroupID(self,self:GetName())
-			local buff,_,count = Auras:RetrieveAuraInfo("player",236502)
-			local pvpBuff = Auras:RetrieveAuraInfo("player",269083)
+	if (not Auras.db.char.isFirstEverLoad) then
+		if (Auras:RefreshRateHandler(0.5,self.elapsed)) then
+			self.elapsed = 0
 			
-			--if (not self.auraTimer) then self.auraTimer = Auras.db.char.elements[3].cooldowns.primary[4].tidebringerStart end
-			
-			Auras:ToggleAuraVisibility(self,true,'showhide')
+			if ((Auras:CharacterCheck(self,3) and self.condition()) or Auras:IsPreviewingAura(self)) then
+				local groupID = Auras:GetAuraGroupID(self,self:GetName())
+				local buff,_,count = Auras:RetrieveAuraInfo("player",236502)
+				local pvpBuff = Auras:RetrieveAuraInfo("player",269083)
+				
+				--if (not self.auraTimer) then self.auraTimer = Auras.db.char.elements[3].cooldowns.primary[4].tidebringerStart end
+				
+				Auras:ToggleAuraVisibility(self,true,'showhide')
 
-			--if (pvpBuff and self.isTimerActive) then
-			if (pvpBuff) then
-				--[[while ((self.auraTimer + 8) < GetTime() and self.auraTimer > 0) do
-				--while ((self.auraTimer + 8) < GetTime() and self.auraTimer > 0) do
-					self.auraTimer = self.auraTimer + 8
-					Auras.db.char.elements[3].cooldowns.primary[4].tidebringerStart = Auras.db.char.elements[3].cooldowns.primary[4].tidebringerStart + 8
-					--SSA.DataFrame.text:SetText(Auras:CurText('DataFrame').."Increment!\n")
-				end]]
-				
-				--[[if (GetTime() >= (self.auraTimer + 8)) then
-					self.auraTimer = GetTime()
-					Auras.db.char.elements[3].cooldowns.primary[4].tidebringerStart = GetTime()
-				end]]
-				
-				if ((count or 0) < 2) then
-					if (not self.CD:IsShown()) then
-						self.CD:Show()
-					end
+				--if (pvpBuff and self.isTimerActive) then
+				if (pvpBuff) then
+					--[[while ((self.auraTimer + 8) < GetTime() and self.auraTimer > 0) do
+					--while ((self.auraTimer + 8) < GetTime() and self.auraTimer > 0) do
+						self.auraTimer = self.auraTimer + 8
+						Auras.db.char.elements[3].cooldowns.primary[4].tidebringerStart = Auras.db.char.elements[3].cooldowns.primary[4].tidebringerStart + 8
+						--SSA.DataFrame.text:SetText(Auras:CurText('DataFrame').."Increment!\n")
+					end]]
 					
-					--Auras:CooldownHandler(self,3,'primary',4,self.auraTimer,8)
-				else
-					self.CD:Hide()
-				end
+					--[[if (GetTime() >= (self.auraTimer + 8)) then
+						self.auraTimer = GetTime()
+						Auras.db.char.elements[3].cooldowns.primary[4].tidebringerStart = GetTime()
+					end]]
+					
+					if ((count or 0) < 2) then
+						if (not self.CD:IsShown()) then
+							self.CD:Show()
+						end
+						
+						--Auras:CooldownHandler(self,3,'primary',4,self.auraTimer,8)
+					else
+						self.CD:Hide()
+					end
 
-				if ((count or 0) > 0) then
+					if ((count or 0) > 0) then
+						self.Charges.text:SetText(count)
+						self.CD.text:SetText('')
+					else
+						self.ChargeCD:Hide()
+						self.Charges.text:SetText('')
+					end
+				else
+					--[[if (self.auraTimer > 0) then
+						self.auraTimer = 0
+						Auras.db.char.elements[3].cooldowns.primary[4].tidebringerStart = 0
+					end]]
+					
 					self.Charges.text:SetText(count)
 					self.CD.text:SetText('')
+				end		
+				
+				if (Auras:IsPlayerInCombat(true)) then
+					self:SetAlpha(1)
 				else
-					self.ChargeCD:Hide()
-					self.Charges.text:SetText('')
+					Auras:NoCombatDisplay(self,groupID)
 				end
 			else
-				--[[if (self.auraTimer > 0) then
-					self.auraTimer = 0
-					Auras.db.char.elements[3].cooldowns.primary[4].tidebringerStart = 0
-				end]]
-				
-				self.Charges.text:SetText(count)
-				self.CD.text:SetText('')
-			end		
-			
-			if (Auras:IsPlayerInCombat(true)) then
-				self:SetAlpha(1)
-			else
-				Auras:NoCombatDisplay(self,groupID)
+				Auras:ToggleAuraVisibility(self,false,'showhide')
 			end
 		else
-			Auras:ToggleAuraVisibility(self,false,'showhide')
+			self.elapsed = self.elapsed + elapsed
 		end
-	else
-		self.elapsed = self.elapsed + elapsed
 	end
 end)

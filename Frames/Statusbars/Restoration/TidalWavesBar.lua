@@ -69,128 +69,63 @@ TidalWavesBar.Flash.fadeOut:SetEndDelay(0)
 TidalWavesBar.healTime = 0
 
 TidalWavesBar:SetScript('OnUpdate',function(self)
-	if (Auras:CharacterCheck(nil,3)) then
-		local db = Auras.db.char
-		local bar = Auras.db.char.statusbars[3].bars[self:GetName()]
-		local isMoving = db.settings.move.isMoving
+	if (not Auras.db.char.isFirstEverLoad) then
+		if (Auras:CharacterCheck(nil,3)) then
+			local db = Auras.db.char
+			local bar = Auras.db.char.statusbars[3].bars[self:GetName()]
+			local isMoving = db.settings.move.isMoving
 
-		if (isMoving or bar.adjust.isEnabled) then
-			if (self.Flash:IsPlaying()) then
-				self.Flash:Stop()
-			end
-			self:SetAlpha(1)
-		end
-		
-		Auras:ToggleProgressBarMove(self,isMoving,bar)
-		
-		if (isMoving) then
-			self:SetValue(2)
-		end
-		
-		if (Auras:IsPreviewingStatusbar(self)) then
-			if (self.Flash:IsPlaying()) then
-				self.Flash:Stop()
+			if (isMoving or bar.adjust.isEnabled) then
+				if (self.Flash:IsPlaying()) then
+					self.Flash:Stop()
+				end
+				self:SetAlpha(1)
 			end
 			
-			if (bar.adjust.showBG) then
-				self:SetValue(1)
-			else
+			Auras:ToggleProgressBarMove(self,isMoving,bar)
+			
+			if (isMoving) then
 				self:SetValue(2)
 			end
 			
-			self:SetStatusBarTexture(LSM.MediaTable.statusbar[bar.foreground.texture])
-			self:SetStatusBarColor(bar.foreground.color.r,bar.foreground.color.g,bar.foreground.color.b)
-			
-			self.bg:SetTexture(LSM.MediaTable.statusbar[bar.background.texture])
-			self.bg:SetVertexColor(bar.background.color.r,bar.background.color.g,bar.background.color.b,bar.background.color.a)
-			
-			self:SetWidth(bar.layout.width)
-			self:SetHeight(bar.layout.height)
-			--self:SetPoint(bar.layout.point,AuraBase,bar.layout.point,bar.layout.x,bar.layout.y)
-			self:SetFrameStrata(bar.layout.strata)
-		end
-		
-		if (bar.isEnabled and not isMoving and not bar.adjust.isEnabled) then
-			local buff,_,count,_,duration,expires = Auras:RetrieveAuraInfo('player',53390)
-			local remaining,progress
-			
-			if (buff) then
-				remaining = expires - GetTime()
-				progress = 15 - remaining
-			end
-		
-			if (Auras:IsPlayerInCombat(true)) then
-				if (Auras:IsTargetFriendly()) then
-					if (bar.combatDisplay == 'Never') then
-						--SSA.DataFrame.text:SetText("1")
-						SetTidalWavesAnimationState(self,bar.animate,false,count,bar.emptyColor)
-					elseif (bar.combatDisplay == 'On Heal Only') then
-						if ((progress or 0) <= bar.OoCTime and (progress or 0) ~= 0) then
-							--SSA.DataFrame.text:SetText("13")
-							SetTidalWavesAnimationState(self,bar.animate,true,count,bar.emptyColor)
-						else
-							--SSA.DataFrame.text:SetText("14")
-							SetTidalWavesAnimationState(self,bar.animate,false,count,bar.emptyColor)
-						end
-					else
-						--SSA.DataFrame.text:SetText("2")
-						SetTidalWavesAnimationState(self,bar.animate,true,count,bar.emptyColor)
-					end
-				else
-					if (bar.combatDisplay == 'Target Only') then
-						--SSA.DataFrame.text:SetText("3")
-						SetTidalWavesAnimationState(self,bar.animate,false,count,bar.emptyColor)
-					else
-						if (bar.combatDisplay == 'Always') then
-							--SSA.DataFrame.text:SetText("4")
-							SetTidalWavesAnimationState(self,bar.animate,true,count,bar.emptyColor)
-						elseif (bar.combatDisplay == 'Never') then
-							--SSA.DataFrame.text:SetText("5")
-							SetTidalWavesAnimationState(self,bar.animate,false,count,bar.emptyColor)
-						elseif (bar.combatDisplay == 'Target & On Heal' or bar.combatDisplay == 'On Heal Only') then
-							if ((progress or 0) <= bar.OoCTime and (progress or 0) ~= 0) then
-								--SSA.DataFrame.text:SetText("6")
-								SetTidalWavesAnimationState(self,bar.animate,true,count,bar.emptyColor)
-							else
-								--SSA.DataFrame.text:SetText("7")
-								SetTidalWavesAnimationState(self,bar.animate,false,count,bar.emptyColor)
-							end
-						else
-							--SSA.DataFrame.text:SetText("??")
-						end
-					end
+			if (Auras:IsPreviewingStatusbar(self)) then
+				if (self.Flash:IsPlaying()) then
+					self.Flash:Stop()
 				end
-			else
-				if (Auras:IsTargetFriendly()) then
-					if (bar.OoCDisplay == 'Never') then
-						--SSA.DataFrame.text:SetText("8")
-						SetTidalWavesAnimationState(self,bar.animate,false,count,bar.emptyColor)
-					elseif (bar.OoCDisplay == 'On Heal Only') then
-						if ((progress or 0) <= bar.OoCTime and (progress or 0) ~= 0) then
-							--SSA.DataFrame.text:SetText("13")
-							SetTidalWavesAnimationState(self,bar.animate,true,count,bar.emptyColor)
-						else
-							--SSA.DataFrame.text:SetText("14")
-							SetTidalWavesAnimationState(self,bar.animate,false,count,bar.emptyColor)
-						end
-					else
-						--SSA.DataFrame.text:SetText("9")
-						SetTidalWavesAnimationState(self,bar.animate,true,count,bar.emptyColor)
-					end
+				
+				if (bar.adjust.showBG) then
+					self:SetValue(1)
 				else
-					--SSA.DataFrame.text:SetText("15")
-					if (bar.OoCDisplay == 'Target Only') then
-						--SSA.DataFrame.text:SetText("10")
-						SetTidalWavesAnimationState(self,bar.animate,false,count,bar.emptyColor)
-					else
-						--SSA.DataFrame.text:SetText("16")
-						if (bar.OoCDisplay == 'Always') then
-							--SSA.DataFrame.text:SetText("11")
-							SetTidalWavesAnimationState(self,bar.animate,true,count,bar.emptyColor)
-						elseif (bar.OoCDisplay == 'Never') then
-							--SSA.DataFrame.text:SetText("12")
+					self:SetValue(2)
+				end
+				
+				self:SetStatusBarTexture(LSM.MediaTable.statusbar[bar.foreground.texture])
+				self:SetStatusBarColor(bar.foreground.color.r,bar.foreground.color.g,bar.foreground.color.b)
+				
+				self.bg:SetTexture(LSM.MediaTable.statusbar[bar.background.texture])
+				self.bg:SetVertexColor(bar.background.color.r,bar.background.color.g,bar.background.color.b,bar.background.color.a)
+				
+				self:SetWidth(bar.layout.width)
+				self:SetHeight(bar.layout.height)
+				--self:SetPoint(bar.layout.point,AuraBase,bar.layout.point,bar.layout.x,bar.layout.y)
+				self:SetFrameStrata(bar.layout.strata)
+			end
+			
+			if (bar.isEnabled and not isMoving and not bar.adjust.isEnabled) then
+				local buff,_,count,_,duration,expires = Auras:RetrieveAuraInfo('player',53390)
+				local remaining,progress
+				
+				if (buff) then
+					remaining = expires - GetTime()
+					progress = 15 - remaining
+				end
+			
+				if (Auras:IsPlayerInCombat(true)) then
+					if (Auras:IsTargetFriendly()) then
+						if (bar.combatDisplay == 'Never') then
+							--SSA.DataFrame.text:SetText("1")
 							SetTidalWavesAnimationState(self,bar.animate,false,count,bar.emptyColor)
-						elseif (bar.OoCDisplay == 'Target & On Heal' or bar.OoCDisplay == 'On Heal Only') then
+						elseif (bar.combatDisplay == 'On Heal Only') then
 							if ((progress or 0) <= bar.OoCTime and (progress or 0) ~= 0) then
 								--SSA.DataFrame.text:SetText("13")
 								SetTidalWavesAnimationState(self,bar.animate,true,count,bar.emptyColor)
@@ -198,22 +133,89 @@ TidalWavesBar:SetScript('OnUpdate',function(self)
 								--SSA.DataFrame.text:SetText("14")
 								SetTidalWavesAnimationState(self,bar.animate,false,count,bar.emptyColor)
 							end
+						else
+							--SSA.DataFrame.text:SetText("2")
+							SetTidalWavesAnimationState(self,bar.animate,true,count,bar.emptyColor)
+						end
+					else
+						if (bar.combatDisplay == 'Target Only') then
+							--SSA.DataFrame.text:SetText("3")
+							SetTidalWavesAnimationState(self,bar.animate,false,count,bar.emptyColor)
+						else
+							if (bar.combatDisplay == 'Always') then
+								--SSA.DataFrame.text:SetText("4")
+								SetTidalWavesAnimationState(self,bar.animate,true,count,bar.emptyColor)
+							elseif (bar.combatDisplay == 'Never') then
+								--SSA.DataFrame.text:SetText("5")
+								SetTidalWavesAnimationState(self,bar.animate,false,count,bar.emptyColor)
+							elseif (bar.combatDisplay == 'Target & On Heal' or bar.combatDisplay == 'On Heal Only') then
+								if ((progress or 0) <= bar.OoCTime and (progress or 0) ~= 0) then
+									--SSA.DataFrame.text:SetText("6")
+									SetTidalWavesAnimationState(self,bar.animate,true,count,bar.emptyColor)
+								else
+									--SSA.DataFrame.text:SetText("7")
+									SetTidalWavesAnimationState(self,bar.animate,false,count,bar.emptyColor)
+								end
+							else
+								--SSA.DataFrame.text:SetText("??")
+							end
 						end
 					end
-				end	
+				else
+					if (Auras:IsTargetFriendly()) then
+						if (bar.OoCDisplay == 'Never') then
+							--SSA.DataFrame.text:SetText("8")
+							SetTidalWavesAnimationState(self,bar.animate,false,count,bar.emptyColor)
+						elseif (bar.OoCDisplay == 'On Heal Only') then
+							if ((progress or 0) <= bar.OoCTime and (progress or 0) ~= 0) then
+								--SSA.DataFrame.text:SetText("13")
+								SetTidalWavesAnimationState(self,bar.animate,true,count,bar.emptyColor)
+							else
+								--SSA.DataFrame.text:SetText("14")
+								SetTidalWavesAnimationState(self,bar.animate,false,count,bar.emptyColor)
+							end
+						else
+							--SSA.DataFrame.text:SetText("9")
+							SetTidalWavesAnimationState(self,bar.animate,true,count,bar.emptyColor)
+						end
+					else
+						--SSA.DataFrame.text:SetText("15")
+						if (bar.OoCDisplay == 'Target Only') then
+							--SSA.DataFrame.text:SetText("10")
+							SetTidalWavesAnimationState(self,bar.animate,false,count,bar.emptyColor)
+						else
+							--SSA.DataFrame.text:SetText("16")
+							if (bar.OoCDisplay == 'Always') then
+								--SSA.DataFrame.text:SetText("11")
+								SetTidalWavesAnimationState(self,bar.animate,true,count,bar.emptyColor)
+							elseif (bar.OoCDisplay == 'Never') then
+								--SSA.DataFrame.text:SetText("12")
+								SetTidalWavesAnimationState(self,bar.animate,false,count,bar.emptyColor)
+							elseif (bar.OoCDisplay == 'Target & On Heal' or bar.OoCDisplay == 'On Heal Only') then
+								if ((progress or 0) <= bar.OoCTime and (progress or 0) ~= 0) then
+									--SSA.DataFrame.text:SetText("13")
+									SetTidalWavesAnimationState(self,bar.animate,true,count,bar.emptyColor)
+								else
+									--SSA.DataFrame.text:SetText("14")
+									SetTidalWavesAnimationState(self,bar.animate,false,count,bar.emptyColor)
+								end
+							end
+						end
+					end	
+				end
+			elseif (not bar.isEnabled and not isMoving and not bar.adjust.isEnabled) then
+				
+				if (self.Flash:IsPlaying()) then
+					self.Flash:Stop()
+				end
+				self:SetAlpha(0)
 			end
-		elseif (not bar.isEnabled and not isMoving and not bar.adjust.isEnabled) then
-			
+		else
 			if (self.Flash:IsPlaying()) then
 				self.Flash:Stop()
 			end
 			self:SetAlpha(0)
 		end
-	else
-		if (self.Flash:IsPlaying()) then
-			self.Flash:Stop()
-		end
-		self:SetAlpha(0)
 	end
 end)
 

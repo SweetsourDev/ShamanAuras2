@@ -44,113 +44,115 @@ end
 
 EarthenWallTotemBar:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 EarthenWallTotemBar:SetScript('OnUpdate',function(self,elapsed)
-	if ((Auras:CharacterCheck(nil,3) and self.condition()) or Auras:IsPreviewingStatusbar(self)) then
-		--SSA.DataFrame.text:SetText("ACTIVATE")
-		local db = Auras.db.char
-		--local bar = db.elements[3].statusbars.earthenWallBar
-		local bar = Auras.db.char.statusbars[3].bars[self:GetName()]
-		local isMoving = db.settings.move.isMoving
-		local maxHealth = UnitHealthMax('player')
-		
-		local timer,seconds = Auras:parseTime(((bar.data.start + bar.data.duration) - GetTime()),true)
-		
-		local _,maxVal = self:GetMinMaxValues()
-		
-		if (maxVal ~= maxHealth) then
-			self:SetMinMaxValues(0,maxHealth)
-		end
-		
-		Auras:ToggleProgressBarMove(self,isMoving,bar)
-		
-		if (isMoving) then
-			self:SetValue(maxHealth)
-			self.healthtext:SetText('100%')
-			self.timetext:SetText('15.0')
-			self.Timer:SetValue(15)
-		end
-		
-		if (Auras:IsPreviewingStatusbar(self)) then
-			self.healthtext:SetText('75%')
-			self.timetext:SetText('5.0')
+	if (not Auras.db.char.isFirstEverLoad) then
+		if ((Auras:CharacterCheck(nil,3) and self.condition()) or Auras:IsPreviewingStatusbar(self)) then
+			--SSA.DataFrame.text:SetText("ACTIVATE")
+			local db = Auras.db.char
+			--local bar = db.elements[3].statusbars.earthenWallBar
+			local bar = Auras.db.char.statusbars[3].bars[self:GetName()]
+			local isMoving = db.settings.move.isMoving
+			local maxHealth = UnitHealthMax('player')
 			
-			self:SetAlpha(1)
+			local timer,seconds = Auras:parseTime(((bar.data.start + bar.data.duration) - GetTime()),true)
 			
-			Auras:AdjustStatusBarText(self.healthtext,bar.healthtext)
-			Auras:AdjustStatusBarText(self.timetext,bar.timetext)
+			local _,maxVal = self:GetMinMaxValues()
 			
-			self:SetMinMaxValues(0,1)
-			self:SetValue(0.75)
-			self.Timer:SetValue(5)
+			if (maxVal ~= maxHealth) then
+				self:SetMinMaxValues(0,maxHealth)
+			end
 			
-			if (bar.adjust.showBG) then
-				self:SetValue(maxHealth - (maxHealth * 0.75))
-				self.healthtext:SetText("25%")
-			else
+			Auras:ToggleProgressBarMove(self,isMoving,bar)
+			
+			if (isMoving) then
 				self:SetValue(maxHealth)
-				self.healthtext:SetText("100%")
-			end
-
-			if (bar.adjust.showTimer) then
-				self.Timer:SetStatusBarTexture(LSM.MediaTable.statusbar[bar.timerBar.texture])
-			else
-				self.Timer:SetStatusBarTexture(nil)
+				self.healthtext:SetText('100%')
+				self.timetext:SetText('15.0')
+				self.Timer:SetValue(15)
 			end
 			
-			self:SetStatusBarTexture(LSM.MediaTable.statusbar[bar.foreground.texture])
-			self:SetStatusBarColor(bar.foreground.color.r,bar.foreground.color.g,bar.foreground.color.b)
-			
-			self.Timer:SetStatusBarColor(bar.timerBar.color.r,bar.timerBar.color.g,bar.timerBar.color.b,bar.timerBar.color.a)
-			
-			self.bg:SetTexture(LSM.MediaTable.statusbar[bar.background.texture])
-			self.bg:SetVertexColor(bar.background.color.r,bar.background.color.g,bar.background.color.b,bar.background.color.a)
-			
-			self:SetWidth(bar.layout.width)
-			self:SetHeight(bar.layout.height)
-			--self:SetPoint(bar.layout.point,AuraBase,bar.layout.point,bar.layout.x,bar.layout.y)
-			self:SetFrameStrata(bar.layout.strata)
-			
-			self.Timer:SetWidth(bar.layout.width)
-			self.Timer:SetHeight(bar.layout.height)
-			self.Timer:SetFrameStrata(bar.layout.strata)
-			self.Timer:SetAlpha(1)
-		end
-		
-		if (bar.isEnabled and not bar.adjust.isEnabled and not isMoving) then		
-			
-			if (bar.data.start > 0 and GetTime() < (bar.data.start + 15)) then
-			--if (bar.info.GUID ~= '') then
-				--[[if (not self:IsShown()) then
-					self:Show()
-				end]]
+			if (Auras:IsPreviewingStatusbar(self)) then
+				self.healthtext:SetText('75%')
+				self.timetext:SetText('5.0')
 				
-				self.Timer:SetAlpha(1)
-				self.Timer:SetValue(seconds)
+				self:SetAlpha(1)
 				
-				if (Auras:IsPlayerInCombat(true)) then
-					self:SetAlpha(bar.alphaCombat)
+				Auras:AdjustStatusBarText(self.healthtext,bar.healthtext)
+				Auras:AdjustStatusBarText(self.timetext,bar.timetext)
+				
+				self:SetMinMaxValues(0,1)
+				self:SetValue(0.75)
+				self.Timer:SetValue(5)
+				
+				if (bar.adjust.showBG) then
+					self:SetValue(maxHealth - (maxHealth * 0.75))
+					self.healthtext:SetText("25%")
 				else
-					self:SetAlpha(bar.alphaOoC)
+					self:SetValue(maxHealth)
+					self.healthtext:SetText("100%")
+				end
+
+				if (bar.adjust.showTimer) then
+					self.Timer:SetStatusBarTexture(LSM.MediaTable.statusbar[bar.timerBar.texture])
+				else
+					self.Timer:SetStatusBarTexture(nil)
 				end
 				
-				if (bar.timetext.isDisplayText) then
-					self.timetext:SetText(timer)
+				self:SetStatusBarTexture(LSM.MediaTable.statusbar[bar.foreground.texture])
+				self:SetStatusBarColor(bar.foreground.color.r,bar.foreground.color.g,bar.foreground.color.b)
+				
+				self.Timer:SetStatusBarColor(bar.timerBar.color.r,bar.timerBar.color.g,bar.timerBar.color.b,bar.timerBar.color.a)
+				
+				self.bg:SetTexture(LSM.MediaTable.statusbar[bar.background.texture])
+				self.bg:SetVertexColor(bar.background.color.r,bar.background.color.g,bar.background.color.b,bar.background.color.a)
+				
+				self:SetWidth(bar.layout.width)
+				self:SetHeight(bar.layout.height)
+				--self:SetPoint(bar.layout.point,AuraBase,bar.layout.point,bar.layout.x,bar.layout.y)
+				self:SetFrameStrata(bar.layout.strata)
+				
+				self.Timer:SetWidth(bar.layout.width)
+				self.Timer:SetHeight(bar.layout.height)
+				self.Timer:SetFrameStrata(bar.layout.strata)
+				self.Timer:SetAlpha(1)
+			end
+			
+			if (bar.isEnabled and not bar.adjust.isEnabled and not isMoving) then		
+				
+				if (bar.data.start > 0 and GetTime() < (bar.data.start + 15)) then
+				--if (bar.info.GUID ~= '') then
+					--[[if (not self:IsShown()) then
+						self:Show()
+					end]]
+					
+					self.Timer:SetAlpha(1)
+					self.Timer:SetValue(seconds)
+					
+					if (Auras:IsPlayerInCombat(true)) then
+						self:SetAlpha(bar.alphaCombat)
+					else
+						self:SetAlpha(bar.alphaOoC)
+					end
+					
+					if (bar.timetext.isDisplayText) then
+						self.timetext:SetText(timer)
+					else
+						self.timetext:SetText('')
+					end
 				else
+					--self:Hide()
+					bar.data.start = 0
+					self:SetAlpha(0)
+					self.Timer:SetValue(0)
 					self.timetext:SetText('')
 				end
-			else
+				
+			elseif (not bar.isEnabled and not isMoving and not bar.adjust.isEnabled) then
 				--self:Hide()
-				bar.data.start = 0
 				self:SetAlpha(0)
-				self.Timer:SetValue(0)
-				self.timetext:SetText('')
 			end
-			
-		elseif (not bar.isEnabled and not isMoving and not bar.adjust.isEnabled) then
-			--self:Hide()
+		else
 			self:SetAlpha(0)
 		end
-	else
-		self:SetAlpha(0)
 	end
 end)
 

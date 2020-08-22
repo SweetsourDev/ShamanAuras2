@@ -4,6 +4,7 @@ local Auras = LibStub("AceAddon-3.0"):GetAddon("ShamanAurasDev")
 
 -- Cache Global Lua Functions
 local upper = string.upper
+local twipe = table.wipe
 
 --[[----------------------------------------------------------------
 	Constants
@@ -39,8 +40,8 @@ local TIME_FORMATS = {
 	Copy font options from other cooldown groups.
 ------------------------------------------------------------------]]
 function Auras:CopyCooldownOptions(spec,srcGrp,destGrp)
-	local src = Auras.db.char.auras[spec].cooldowns.groups[srcGrp].text
-	local dest = Auras.db.char.auras[spec].cooldowns.groups[destGrp].text
+	local src = self.db.char.auras[spec].cooldowns.groups[srcGrp].text
+	local dest = self.db.char.auras[spec].cooldowns.groups[destGrp].text
 	
 	dest.justify = src.justify
 	dest.x = src.x
@@ -65,8 +66,8 @@ end
 	Copy formatting options from other cooldown groups.
 ------------------------------------------------------------------]]
 function Auras:CopyCooldownFormatting(spec,srcGrp,destGrp)
-	local src = Auras.db.char.auras[spec].cooldowns.groups[srcGrp].text
-	local dest = Auras.db.char.auras[spec].cooldowns.groups[destGrp].text
+	local src = self.db.char.auras[spec].cooldowns.groups[srcGrp].text
+	local dest = self.db.char.auras[spec].cooldowns.groups[destGrp].text
 	
 	dest.formatting.length = src.formatting.length
 	dest.formatting.decimals = src.formatting.decimals
@@ -123,6 +124,16 @@ function Auras:SetBarOptions(db,option,text1,text2,spark,timer)
 			end
 		end
 	
+		if (option.layout.args.timerColor) then
+			if (db.adjust.showTimer) then
+				option.layout.args.timerColor.disabled = false
+				option.layout.args.timerTexture.disabled = false
+			else
+				option.layout.args.timerColor.disabled = true
+				option.layout.args.timerTexture.disabled = true
+			end
+		end
+
 		if (db.adjust.showBG) then
 			option.layout.args.backgroundColor.disabled = false
 			option.layout.args.backgroundTexture.disabled = false
@@ -283,6 +294,45 @@ function Auras:GetResetButtonState(db,default,text1,text2,bg,fg,layout,timer)
 	end
 end
 
+function Auras:GetCooldownResetButtonState(cdGroup,default)
+	if (cdGroup.isEnabled ~= default.isEnabled or
+		cdGroup.sweep ~= default.sweep or
+		cdGroup.inverse ~= default.inverse or
+		cdGroup.bling ~= default.bling or
+		cdGroup.GCD.isEnabled ~= default.GCD.isEnabled or
+		cdGroup.text.x ~= default.text.x or
+		cdGroup.text.y ~= default.text.y or
+		cdGroup.text.isDisplayText ~= default.text.isDisplayText or
+		cdGroup.text.justify ~= default.text.justify or
+		cdGroup.text.font.size ~= default.text.font.size or
+		cdGroup.text.font.flag ~= default.text.font.flag or
+		cdGroup.text.font.name ~= default.text.font.name or
+		cdGroup.text.font.color.a ~= default.text.font.color.a or
+		cdGroup.text.font.color.r ~= default.text.font.color.r or
+		cdGroup.text.font.color.g ~= default.text.font.color.g or
+		cdGroup.text.font.color.b ~= default.text.font.color.b or
+		cdGroup.text.font.shadow.isEnabled ~= default.text.font.shadow.isEnabled or
+		cdGroup.text.font.shadow.color.a ~= default.text.font.shadow.color.a or
+		cdGroup.text.font.shadow.color.r ~= default.text.font.shadow.color.r or
+		cdGroup.text.font.shadow.color.g ~= default.text.font.shadow.color.g or
+		cdGroup.text.font.shadow.color.b ~= default.text.font.shadow.color.b or
+		cdGroup.text.font.shadow.offset.x ~= default.text.font.shadow.offset.x or
+		cdGroup.text.font.shadow.offset.y ~= default.text.font.shadow.offset.y or
+		cdGroup.text.formatting.decimals ~= default.text.formatting.decimals or
+		cdGroup.text.formatting.length ~= default.text.formatting.length or
+		cdGroup.text.formatting.alert.animate ~= default.text.formatting.alert.animate or
+		cdGroup.text.formatting.alert.isEnabled ~= default.text.formatting.alert.isEnabled or
+		cdGroup.text.formatting.alert.threshold ~= default.text.formatting.alert.threshold or
+		cdGroup.text.formatting.alert.color.a ~= default.text.formatting.alert.color.a or
+		cdGroup.text.formatting.alert.color.r ~= default.text.formatting.alert.color.r or
+		cdGroup.text.formatting.alert.color.g ~= default.text.formatting.alert.color.g or
+		cdGroup.text.formatting.alert.color.b ~= default.text.formatting.alert.color.b) then
+		return true
+	else
+		return false
+	end
+end
+
 function Auras:ResetText(db,text,default)
 	db[text].isDisplayText = true
 	db[text].x = default[text].x
@@ -352,19 +402,11 @@ end
 ------------------------------------------------------------------]]
 function Auras:SetCooldownOptions(spec,options)
 	local db = Auras.db.char
-	local cooldown = Auras.db.char.auras[spec].cooldowns
+	local cooldown = self.db.char.auras[spec].cooldowns
 	local defaults = SSA.defaults.auras[spec].cooldowns
 	local option = options.args.cooldowns.args
 	
-	if (cooldown.sweep and cooldown.isEnabled) then
-		option.GCD.disabled = false
-		option.inverse.disabled = false
-		option.bling.disabled = false
-	else
-		option.GCD.disabled = true
-		option.inverse.disabled = true
-		option.bling.disabled = true
-	end
+	
 	
 	--local grp,subGrp = split(";",cd.selected or 'primary;1')
 	--local selected = ''
@@ -376,14 +418,57 @@ function Auras:SetCooldownOptions(spec,options)
 			--cd.groups[i].isPreview = false
 		end
 		
-		if (cooldown.adjust and cooldown.isEnabled) then
-			option.cdGroups.args["cd"..i.."_adjustGroup"].disabled = false
+		if (not cooldown.adjust) then
+			if (not option.group.disabled) then
+				option.group.disabled = true
+			end
+
+			--[[option.cdGroups.args["cd"..i.."_animation"].disabled = true
+			option.cdGroups.args["cd"..i.."_formatting"].disabled = true
+			option.cdGroups.args["cd"..i.."_adjustGroup"].disabled = true]]
 		else
-			cooldown.groups[i].isPreview = false
-			option.cdGroups.args["cd"..i.."_adjustGroup"].disabled = true
+			if (option.group.disabled) then
+				option.group.disabled = false
+			end
+
+			--[[option.cdGroups.args["cd"..i.."_animation"].disabled = false
+			option.cdGroups.args["cd"..i.."_formatting"].disabled = false
+			option.cdGroups.args["cd"..i.."_adjustGroup"].disabled = false]]
 		end
-		
-		if (cooldown.groups[i].text.formatting.alert.isEnabled) then
+
+		if (cooldown.groups[i].isEnabled) then
+			
+			--option.cdGroups.args["cd"..i.."_animation"].args.text.disabled = false
+			--option.cdGroups.args["cd"..i.."_animation"].args.sweep.disabled = false
+			
+			
+		else
+			--[[if (cooldown.adjust) then
+				cooldown.adjust = false
+			end]]
+			--option.cdGroups.args["cd"..i.."_animation"].args.text.disabled = true
+			--option.cdGroups.args["cd"..i.."_animation"].args.sweep.disabled = true
+			
+			--[[if (not option.group.disabled) then
+				option.group.disabled = true
+			end
+			
+			if (not option.adjustToggle.disabled) then
+				option.adjustToggle.disabled = true
+			end]]
+		end
+
+		if (cooldown.adjust and cooldown.groups[i].sweep and cooldown.groups[i].isEnabled) then
+			option.cdGroups.args["cd"..i.."_animation"].args.GCD.disabled = false
+			option.cdGroups.args["cd"..i.."_animation"].args.inverse.disabled = false
+			option.cdGroups.args["cd"..i.."_animation"].args.bling.disabled = false
+		else
+			option.cdGroups.args["cd"..i.."_animation"].args.GCD.disabled = true
+			option.cdGroups.args["cd"..i.."_animation"].args.inverse.disabled = true
+			option.cdGroups.args["cd"..i.."_animation"].args.bling.disabled = true
+		end
+
+		if (cooldown.adjust and cooldown.groups[i].text.formatting.alert.isEnabled) then
 			option.cdGroups.args["cd"..i.."_formatting"].args.alertFlash.disabled = false
 			option.cdGroups.args["cd"..i.."_formatting"].args.alertColor.disabled = false
 			option.cdGroups.args["cd"..i.."_formatting"].args.alertThreshold.disabled = false
@@ -393,7 +478,17 @@ function Auras:SetCooldownOptions(spec,options)
 			option.cdGroups.args["cd"..i.."_formatting"].args.alertThreshold.disabled = true
 		end
 		
-		if (cooldown.groups[i].text.font.shadow.isEnabled and cooldown.adjust) then
+		if (cooldown.adjust and cooldown.groups[i].isEnabled) then
+			option.cdGroups.args["cd"..i.."_animation"].disabled = false
+			option.cdGroups.args["cd"..i.."_formatting"].disabled = false
+			option.cdGroups.args["cd"..i.."_adjustGroup"].disabled = false
+		else
+			cooldown.groups[i].isPreview = false
+			option.cdGroups.args["cd"..i.."_animation"].disabled = true
+			option.cdGroups.args["cd"..i.."_formatting"].disabled = true
+			option.cdGroups.args["cd"..i.."_adjustGroup"].disabled = true
+		end
+		--[[if (cooldown.groups[i].text.font.shadow.isEnabled and cooldown.adjust) then
 			option.cdGroups.args["cd"..i.."_adjustGroup"].args.shadow.args.shadowColor.disabled = false
 			option.cdGroups.args["cd"..i.."_adjustGroup"].args.shadow.args.shadowX.disabled = false
 			option.cdGroups.args["cd"..i.."_adjustGroup"].args.shadow.args.shadowY.disabled = false
@@ -401,105 +496,44 @@ function Auras:SetCooldownOptions(spec,options)
 			option.cdGroups.args["cd"..i.."_adjustGroup"].args.shadow.args.shadowColor.disabled = true
 			option.cdGroups.args["cd"..i.."_adjustGroup"].args.shadow.args.shadowX.disabled = true
 			option.cdGroups.args["cd"..i.."_adjustGroup"].args.shadow.args.shadowY.disabled = true
-		end
+		end]]
 		
-		if (not Auras:GetResetButtonState(cooldown.groups[i],defaults.groups[i],'text')) then
+		
+
+		if (Auras:GetCooldownResetButtonState(cooldown.groups[i],defaults.groups[i])) then
 			option.cdGroups.args["cd"..i.."_adjustGroup"].args.reset.disabled = false
-			option.cdGroups.args["cd"..i.."_adjustGroup"].args.reset.name = "|cFFFFCC00"..RESET_TO_DEFAULT.."|r"
+			option.cdGroups.args["cd"..i.."_adjustGroup"].args.reset.name = "|cFFFFCC00Reset to Default|r"
 		else
 			option.cdGroups.args["cd"..i.."_adjustGroup"].args.reset.disabled = true
-			option.cdGroups.args["cd"..i.."_adjustGroup"].args.reset.name = "|cFF666666"..RESET_TO_DEFAULT.."|r"
+			option.cdGroups.args["cd"..i.."_adjustGroup"].args.reset.name = "|cFF666666Reset to Default|r"
 		end
 	end
 	
-	if (cooldown.isEnabled) then
-		option.text.disabled = false
-		option.sweep.disabled = false
+	if (option.group.disabled) then
+		
+	end
+	
+	
+	--[[if (cooldown.groups[i].isEnabled) then
+		option.cdGroups.args["cd"..i.."_animation"].text.disabled = false
+		option.cdGroups.args["cd"..i.."_animation"].sweep.disabled = false
 		option.group.disabled = false
 		option.adjustToggle.disabled = false
 	else
 		if (cooldown.adjust) then
 			cooldown.adjust = false
 		end
-		option.text.disabled = true
-		option.sweep.disabled = true
+		option.cdGroups.args["cd"..i.."_animation"].text.disabled = true
+		option.cdGroups.args["cd"..i.."_animation"].sweep.disabled = true
 		option.group.disabled = true
 		option.adjustToggle.disabled = true
-	end
-	
-	--[[if (cd[grp][tonumber(subGrp)].text.formatting.alert.isEnabled) then
-		option[selected.."_formatting"].args.alertFlash.disabled = false
-		option[selected.."_formatting"].args.alertColor.disabled = false
-		option[selected.."_formatting"].args.alertThreshold.disabled = false
-	else
-		option[selected.."_formatting"].args.alertFlash.disabled = true
-		option[selected.."_formatting"].args.alertColor.disabled = true
-		option[selected.."_formatting"].args.alertThreshold.disabled = true
-	end
-	
-	if (cd[grp][tonumber(subGrp)].text.font.shadow.isEnabled and cd.adjust) then
-		option[selected.."_adjustGroup"].args.shadow.args.shadowColor.disabled = false
-		option[selected.."_adjustGroup"].args.shadow.args.shadowX.disabled = false
-		option[selected.."_adjustGroup"].args.shadow.args.shadowY.disabled = false
-	else
-		option[selected.."_adjustGroup"].args.shadow.args.shadowColor.disabled = true
-		option[selected.."_adjustGroup"].args.shadow.args.shadowX.disabled = true
-		option[selected.."_adjustGroup"].args.shadow.args.shadowY.disabled = true
-	end
-	
-	if (not Auras:GetResetButtonState(cd.primary[1],default,'text')) then
-		option.p1_adjustGroup.args.reset.disabled = false
-		option.p1_adjustGroup.args.reset.name = "|cFFFFCC00"..RESET_TO_DEFAULT.."|r"
-	else
-		option.p1_adjustGroup.args.reset.disabled = true
-		option.p1_adjustGroup.args.reset.name = "|cFF666666"..RESET_TO_DEFAULT.."|r"
-	end
-	
-	if (not Auras:GetResetButtonState(cd.primary[2],default,'text')) then
-		option.p2_adjustGroup.args.reset.disabled = false
-		option.p2_adjustGroup.args.reset.name = "|cFFFFCC00"..RESET_TO_DEFAULT.."|r"
-	else
-		option.p2_adjustGroup.args.reset.disabled = true
-		option.p2_adjustGroup.args.reset.name = "|cFF666666"..RESET_TO_DEFAULT.."|r"
-	end
-	
-	if (not Auras:GetResetButtonState(cd.primary[3],default,'text')) then
-		option.p3_adjustGroup.args.reset.disabled = false
-		option.p3_adjustGroup.args.reset.name = "|cFFFFCC00"..RESET_TO_DEFAULT.."|r"
-	else
-		option.p3_adjustGroup.args.reset.disabled = true
-		option.p3_adjustGroup.args.reset.name = "|cFF666666"..RESET_TO_DEFAULT.."|r"
-	end
-	
-	if (not Auras:GetResetButtonState(cd.primary[4],default,'text')) then
-		option.p4_adjustGroup.args.reset.disabled = false
-		option.p4_adjustGroup.args.reset.name = "|cFFFFCC00"..RESET_TO_DEFAULT.."|r"
-	else
-		option.p4_adjustGroup.args.reset.disabled = true
-		option.p4_adjustGroup.args.reset.name = "|cFF666666"..RESET_TO_DEFAULT.."|r"
-	end
-	
-	if (not Auras:GetResetButtonState(cd.secondary[1],default,'text')) then
-		option.s1_adjustGroup.args.reset.disabled = false
-		option.s1_adjustGroup.args.reset.name = "|cFFFFCC00"..RESET_TO_DEFAULT.."|r"
-	else
-		option.s1_adjustGroup.args.reset.disabled = true
-		option.s1_adjustGroup.args.reset.name = "|cFF666666"..RESET_TO_DEFAULT.."|r"
-	end
-	
-	if (not Auras:GetResetButtonState(cd.secondary[2],default,'text')) then
-		option.s2_adjustGroup.args.reset.disabled = false
-		option.s2_adjustGroup.args.reset.name = "|cFFFFCC00"..RESET_TO_DEFAULT.."|r"
-	else
-		option.s2_adjustGroup.args.reset.disabled = true
-		option.s2_adjustGroup.args.reset.name = "|cFF666666"..RESET_TO_DEFAULT.."|r"
 	end]]
 end
 
 function Auras:VerifyDefaultValues(spec,options,group,subgroup)
 	if (group == "Cooldowns") then
-		Auras:SetCooldownOptions(spec,options)
 		Auras:RefreshCooldownList(options,spec,Auras.db.char.auras[spec].cooldowns)
+		Auras:SetCooldownOptions(spec,options)
 	elseif (group == "Cast" or group == "Channel") then
 		local db = Auras.db.char
 		local bar = db.statusbars[spec].bars[group.."Bar"]
@@ -573,13 +607,12 @@ function Auras:VerifyDefaultValues(spec,options,group,subgroup)
 			bar.alphaTar ~= default.alphaTar or
 			bar.threshold ~= default.threshold or
 			not bar.animate or
-			
 			not Auras:GetResetButtonState(bar,default,'counttext','timetext',true,true,true)) then
 			option.reset.disabled = false
-			option.reset.name = "|cFFFFCC00"..L["BUTTON_RESET_STATUSBAR_FULMINATION"].."|r"
+			option.reset.name = "|cFFFFCC00"..L["BUTTON_RESET_STATUSBAR_MAELSTROM_WEAPON"].."|r"
 		else
 			option.reset.disabled = true
-			option.reset.name = "|cFF666666"..L["BUTTON_RESET_STATUSBAR_FULMINATION"].."|r"
+			option.reset.name = "|cFF666666"..L["BUTTON_RESET_STATUSBAR_MAELSTROM_WEAPON"].."|r"
 		end
 	elseif (group == 'Settings') then
 		local db = Auras.db.char
@@ -759,13 +792,40 @@ function Auras:RefreshCooldownList(options,spec)
 	local args = {}
 	local orderCtr = 9
 	local COOLDOWN_VALUES = {}
-	local auras = Auras.db.char.auras[spec]
-	for i=1,#auras.groups do
-		tinsert(COOLDOWN_VALUES,"Group #"..i.." Cooldowns")
-	end
+	local auras = self.db.char.auras[spec]
+	
 	
 	for i=1,#auras.groups do
 		local cdGroup = auras.cooldowns.groups[i]
+
+		for i=1,#auras.groups do
+			if (auras.cooldowns.selected ~= i) then
+				tinsert(COOLDOWN_VALUES,"Group #"..i.." Cooldowns")
+			end
+		end
+
+		args["cd"..i.."toggle"] = self:Toggle_VerifyDefaults(cdGroup,1,spec,ENABLE,L["TOOLTIP_TOGGLE_COOLDOWN_TEXT"],"full",false,auras.cooldowns.selected ~= i,'isEnabled','Cooldowns')
+
+		orderCtr = orderCtr + 1
+
+		args["cd"..i.."_animation"] = {
+			name = "Cooldown Animation",
+			type = "group",
+			order = orderCtr,
+			guiInline = true,
+			hidden = auras.cooldowns.selected ~= i,
+			disabled = not auras.cooldowns.adjust,
+			args = {
+				text = self:Toggle_Cooldowns(cdGroup.text,1,spec,L["LABEL_COOLDOWN_TEXT"],L["TOOLTIP_TOGGLE_COOLDOWN_TEXT"],nil,'isDisplayText','AuraBase','Cooldowns'),
+				sweep = self:Toggle_Cooldowns(cdGroup,2,spec,L["LABEL_COOLDOWN_SWEEP"],L["TOOLTIP_TOGGLE_COOLDOWN_SWEEP"],nil,'sweep','AuraBase','Cooldowns'),
+				GCD = self:Toggle_Cooldowns(cdGroup.GCD,3,spec,L["LABEL_COOLDOWN_GCD"],L["TOOLTIP_TOGGLE_COOLDOWN_GCD"],nil,'isEnabled','AuraBase','Cooldowns'),
+				inverse = self:Toggle_Cooldowns(cdGroup,4,spec,L["LABEL_COOLDOWN_REVERSE_SWEEP"],L["TOOLTIP_COOLDOWN_REVERSE_SWEEP"],nil,'inverse','AuraBase','Cooldowns'),
+				bling = self:Toggle_Cooldowns(cdGroup,5,spec,L["LABEL_COOLDOWN_BLING"],L["TOOLTIP_TOGGLE_COOLDOWN_BLING"],nil,'bling','AuraBase','Cooldowns'),
+			},
+		}
+
+		orderCtr = orderCtr + 1
+
 		args["cd"..i.."_formatting"] = {
 			name = FORMATTING,
 			type = "group",
@@ -774,13 +834,13 @@ function Auras:RefreshCooldownList(options,spec)
 			hidden = auras.cooldowns.selected ~= i,
 			disabled = not auras.cooldowns.adjust,
 			args = {
-				alertToggle = Auras:Toggle_VerifyDefaults(cdGroup.text.formatting.alert,1,spec,L["LABEL_ALERT"],L["TOOLTIP_ALERT"],'double',nil,'isEnabled','Cooldowns'),
-				copy = Auras:Select_CooldownCopy(2,spec,L["LABEL_COOLDOWN_COPY_FROM"],L["TOOLTIP_COOLDOWN_COPY_FROM"],'formatting',i,COOLDOWN_VALUES,'Cooldowns'),
-				alertFlash = Auras:Toggle_VerifyDefaults(cdGroup.text.formatting.alert,3,spec,L["LABEL_ALERT_ANIMATE"],L["TOOLTIP_ALERT_ANIMATE"],nil,not cdGroup.text.formatting.alert.isEnabled,'animate','Cooldowns'),
-				alertColor = Auras:Color_VerifyDefaults(cdGroup.text.formatting.alert,4,spec,L["LABEL_ALERT_COLOR"],L["TOOLTIP_ALERT_COLOR"],true,nil,not cdGroup.text.formatting.alert.isEnabled,'color','Cooldowns'),
-				alertThreshold = Auras:Slider_VerifyDefaults(cdGroup.text.formatting.alert,5,spec,L["LABEL_ALERT_THRESHOLD"],L["TOOLTIP_ALERT_THRESHOLD"],3,10,1,nil,not cdGroup.text.formatting.alert.isEnabled,'threshold','Cooldowns'),
-				decimals = Auras:Toggle_VerifyDefaults(cdGroup.text.formatting,6,spec,L["LABEL_DECIMALS"],L["TOOLTIP_DECIMALS"],nil,nil,'decimals','Cooldowns'),
-				format = Auras:Select_VerifyDefaults(cdGroup.text.formatting,7,spec,L["LABEL_MINUTE_FORMAT"],L["TOOLTIP_MINUTE_FORMAT"],nil,TIME_FORMATS,nil,nil,'length','Cooldowns'),
+				alertToggle = self:Toggle_VerifyDefaults(cdGroup.text.formatting.alert,1,spec,L["LABEL_ALERT"],L["TOOLTIP_ALERT"],'double',nil,nil,'isEnabled','Cooldowns'),
+				copy = self:Select_CooldownCopy(2,spec,L["LABEL_COOLDOWN_COPY_FROM"],L["TOOLTIP_COOLDOWN_COPY_FROM"],'formatting',i,COOLDOWN_VALUES,'Cooldowns'),
+				alertFlash = self:Toggle_VerifyDefaults(cdGroup.text.formatting.alert,3,spec,L["LABEL_ALERT_ANIMATE"],L["TOOLTIP_ALERT_ANIMATE"],nil,not cdGroup.text.formatting.alert.isEnabled,nil,'animate','Cooldowns'),
+				alertColor = self:Color_VerifyDefaults(cdGroup.text.formatting.alert,4,spec,L["LABEL_ALERT_COLOR"],L["TOOLTIP_ALERT_COLOR"],true,nil,not cdGroup.text.formatting.alert.isEnabled,'color','Cooldowns'),
+				alertThreshold = self:Slider_VerifyDefaults(cdGroup.text.formatting.alert,5,spec,L["LABEL_ALERT_THRESHOLD"],L["TOOLTIP_ALERT_THRESHOLD"],3,10,1,nil,not cdGroup.text.formatting.alert.isEnabled,'threshold','Cooldowns'),
+				decimals = self:Toggle_VerifyDefaults(cdGroup.text.formatting,6,spec,L["LABEL_DECIMALS"],L["TOOLTIP_DECIMALS"],nil,nil,nil,'decimals','Cooldowns'),
+				format = self:Select_VerifyDefaults(cdGroup.text.formatting,7,spec,L["LABEL_MINUTE_FORMAT"],L["TOOLTIP_MINUTE_FORMAT"],nil,TIME_FORMATS,nil,nil,'length','Cooldowns'),
 			},
 		}
 		
@@ -794,14 +854,14 @@ function Auras:RefreshCooldownList(options,spec)
 			hidden = auras.cooldowns.selected ~= i,
 			disabled = not auras.cooldowns.adjust,
 			args = {
-				color = Auras:Color_VerifyDefaults(cdGroup.text.font,1,spec,L["LABEL_FONT_COLOR"],L["TOOLTIP_FONT_COLOR"],true,'double',nil,'color','Cooldowns'),
-				copy = Auras:Select_CooldownCopy(2,spec,L["LABEL_COOLDOWN_COPY_FROM"],L["TOOLTIP_COOLDOWN_COPY_FROM"],'options',i,COOLDOWN_VALUES,'Cooldowns'),
-				fontName = Auras:Select_VerifyDefaults(cdGroup.text.font,3,spec,L["LABEL_FONT"],L["TOOLTIP_FONT_NAME"],"LSM30_Font",LSM:HashTable("font"),nil,nil,'name','Cooldowns'),
-				fontSize = Auras:Slider_VerifyDefaults(cdGroup.text.font,4,spec,FONT_SIZE,L["TOOLTIP_COOLDOWN_FONT_SIZE"],5,40,1,nil,nil,'size','Cooldowns'),
-				fontOutline = Auras:Select_VerifyDefaults(cdGroup.text.font,5,spec,L["LABEL_FONT_OUTLINE"],L["TOOLTIP_FONT_OUTLINE"],nil,FONT_OUTLINES,nil,nil,'flag','Cooldowns'),
-				textAnchor = Auras:Select_VerifyDefaults(cdGroup.text,6,spec,L["LABEL_FONT_ANCHOR"],L["TOOLTIP_FONT_ANCHOR_POINT"],nil,FRAME_ANCHOR_OPTIONS,nil,nil,'justify','Cooldowns'),
-				textX = Auras:Slider_VerifyDefaults(cdGroup.text,7,spec,"X",L["TOOLTIP_FONT_X_OFFSET"],-100,100,1,nil,nil,'x','Cooldowns'),
-				textY = Auras:Slider_VerifyDefaults(cdGroup.text,8,spec,"Y",L["TOOLTIP_FONT_Y_OFFSET"],-100,100,1,nil,nil,'y','Cooldowns'),
+				color = self:Color_VerifyDefaults(cdGroup.text.font,1,spec,L["LABEL_FONT_COLOR"],L["TOOLTIP_FONT_COLOR"],true,'double',nil,'color','Cooldowns'),
+				copy = self:Select_CooldownCopy(2,spec,L["LABEL_COOLDOWN_COPY_FROM"],L["TOOLTIP_COOLDOWN_COPY_FROM"],'options',i,COOLDOWN_VALUES,'Cooldowns'),
+				fontName = self:Select_VerifyDefaults(cdGroup.text.font,3,spec,L["LABEL_FONT"],L["TOOLTIP_FONT_NAME"],"LSM30_Font",LSM:HashTable("font"),nil,nil,'name','Cooldowns'),
+				fontSize = self:Slider_VerifyDefaults(cdGroup.text.font,4,spec,FONT_SIZE,L["TOOLTIP_COOLDOWN_FONT_SIZE"],5,40,1,nil,nil,'size','Cooldowns'),
+				fontOutline = self:Select_VerifyDefaults(cdGroup.text.font,5,spec,L["LABEL_FONT_OUTLINE"],L["TOOLTIP_FONT_OUTLINE"],nil,FONT_OUTLINES,nil,nil,'flag','Cooldowns'),
+				textAnchor = self:Select_VerifyDefaults(cdGroup.text,6,spec,L["LABEL_FONT_ANCHOR"],L["TOOLTIP_FONT_ANCHOR_POINT"],nil,FRAME_ANCHOR_OPTIONS,nil,nil,'justify','Cooldowns'),
+				textX = self:Slider_VerifyDefaults(cdGroup.text,7,spec,"X",L["TOOLTIP_FONT_X_OFFSET"],-100,100,1,nil,nil,'x','Cooldowns'),
+				textY = self:Slider_VerifyDefaults(cdGroup.text,8,spec,"Y",L["TOOLTIP_FONT_Y_OFFSET"],-100,100,1,nil,nil,'y','Cooldowns'),
 				shadow = {
 					name = '|cFFFFFFFF'..L["LABEL_FONT_SHADOW"]..'|r',
 					type = "group",
@@ -809,34 +869,116 @@ function Auras:RefreshCooldownList(options,spec)
 					hidden = false,
 					guiInline = true,
 					args = {
-						shadowToggle = Auras:Toggle_VerifyDefaults(cdGroup.text.font.shadow,1,spec,L["TOGGLE"],nil,nil,nil,'isEnabled','Cooldowns'),
-						shadowColor = Auras:Color_VerifyDefaults(cdGroup.text.font.shadow,2,spec,L["LABEL_FONT_SHADOW_COLOR"],L["TOOLTIP_FONT_SHADOW_COLOR"],true,nil,nil,'color','Cooldowns'),
-						--filler_0 = Auras:Spacer(3,nil),
-						shadowX = Auras:Slider_VerifyDefaults(cdGroup.text.font.shadow.offset,4,spec,"X",L["TOOLTIP_FONT_SHADOW_X_OFFSET"],-10,10,0.5,nil,nil,'x','Cooldowns'),
-						shadowY = Auras:Slider_VerifyDefaults(cdGroup.text.font.shadow.offset,5,spec,"Y",L["TOOLTIP_FONT_SHADOW_Y_OFFSET"],-10,10,0.5,nil,nil,'y','Cooldowns'),
+						shadowToggle = self:Toggle_VerifyDefaults(cdGroup.text.font.shadow,1,spec,L["TOGGLE"],nil,nil,nil,nil,'isEnabled','Cooldowns'),
+						shadowColor = self:Color_VerifyDefaults(cdGroup.text.font.shadow,2,spec,L["LABEL_FONT_SHADOW_COLOR"],L["TOOLTIP_FONT_SHADOW_COLOR"],true,nil,nil,'color','Cooldowns'),
+						--filler_0 = self:Spacer(3,nil),
+						shadowX = self:Slider_VerifyDefaults(cdGroup.text.font.shadow.offset,4,spec,"X",L["TOOLTIP_FONT_SHADOW_X_OFFSET"],-10,10,0.5,nil,nil,'x','Cooldowns'),
+						shadowY = self:Slider_VerifyDefaults(cdGroup.text.font.shadow.offset,5,spec,"Y",L["TOOLTIP_FONT_SHADOW_Y_OFFSET"],-10,10,0.5,nil,nil,'y','Cooldowns'),
 					},
 				},
 				reset = {
 					order = 10,
 					type = "execute",
+					--[[name = function(this)
+						if (self:GetCooldownResetButtonState(cdGroup,self.db.char.auras.templates.cooldowns)) then
+							--this.options.args.cooldowns.args.cdGroups.args["cd"..i.."_adjustGroup"].args.reset.disabled = false
+							this.options.args.cooldowns.args.cdGroups.args["cd"..i.."_adjustGroup"].args.reset.name = "|cFFFFCC00"..RESET_TO_DEFAULT.."|r"
+						else
+							--this.options.args.cooldowns.args.cdGroups.args["cd"..i.."_adjustGroup"].args.reset.disabled = true
+							this.options.args.cooldowns.args.cdGroups.args["cd"..i.."_adjustGroup"].args.reset.name = "|cFF666666"..RESET_TO_DEFAULT.."|r"
+						end
+					end,]]
 					name = RESET_TO_DEFAULT,
+					disabled = false,
+					--disabled = not self:GetCooldownResetButtonState(cdGroup,self.db.char.auras.templates.cooldowns),
 					func = function(this)
 						local cd = cdGroup
-						local default = Auras.db.char.auras.templates.cooldowns
+						local default = self.db.char.auras.templates.cooldowns
 						
-						Auras:ResetText(cd,'text',default)
+						--self:ResetText(cd,'text',default)
 
-						this.options.args.cooldowns.args["cd"..i.."_adjustGroup"].args.reset.disabled = true
-						this.options.args.cooldowns.args["cd"..i.."_adjustGroup"].args.reset.name = "|cFF666666"..RESET_TO_DEFAULT.."|r"
-						Auras:VerifyDefaultValues(spec,this.options,'Cooldowns')
+						cdGroup.isEnabled = true
+						cdGroup.sweep = true
+						cdGroup.inverse = false
+						cdGroup.bling = false
+						cdGroup.GCD.isEnabled = false
+
+						cdGroup.text.isDisplayText = true
+						cdGroup.text.x = default.text.x
+						cdGroup.text.y = default.text.y
+						cdGroup.text.justify = default.text.justify
+
+						cdGroup.text.font.size = default.text.font.size
+						cdGroup.text.font.flag = default.text.font.flag
+						cdGroup.text.font.name = default.text.font.name
+
+						cdGroup.text.font.color.a = default.text.font.color.a
+						cdGroup.text.font.color.r = default.text.font.color.r
+						cdGroup.text.font.color.g = default.text.font.color.g
+						cdGroup.text.font.color.b = default.text.font.color.b
+
+						cdGroup.text.font.shadow.isEnabled = false
+
+						cdGroup.text.font.shadow.color.a = default.text.font.shadow.color.a
+						cdGroup.text.font.shadow.color.r = default.text.font.shadow.color.r
+						cdGroup.text.font.shadow.color.g = default.text.font.shadow.color.g
+						cdGroup.text.font.shadow.color.b = default.text.font.shadow.color.b
+
+						cdGroup.text.font.shadow.offset.x = default.text.font.shadow.offset.x
+						cdGroup.text.font.shadow.offset.y = default.text.font.shadow.offset.y
+
+						cdGroup.text.formatting.decimals = default.text.formatting.decimals
+						cdGroup.text.formatting.length = default.text.formatting.length
+
+						cdGroup.text.formatting.alert.animate = default.text.formatting.alert.animate
+						cdGroup.text.formatting.alert.isEnabled = default.text.formatting.alert.isEnabled
+						cdGroup.text.formatting.alert.threshold = default.text.formatting.alert.threshold
+
+						cdGroup.text.formatting.alert.color.a = default.text.formatting.alert.color.a
+						cdGroup.text.formatting.alert.color.r = default.text.formatting.alert.color.r
+						cdGroup.text.formatting.alert.color.g = default.text.formatting.alert.color.g
+						cdGroup.text.formatting.alert.color.b = default.text.formatting.alert.color.b
+
+						--[[for k,v in pairs(this) do
+							if (type(v) == "table") then
+								print(">"..k)
+								for key,val in pairs(v) do
+									if (type(val) == "table") then
+										print("--->"..key)
+										for keys,value in pairs(val) do
+											if (type(value) == "table") then
+												print("------>"..keys)
+												for keyz,values in pairs(value) do
+													print("---------"..tostring(keyz).." - "..tostring(values))	
+												end
+											else
+												print("------"..tostring(keys).." - "..tostring(value))
+											end
+										end
+									else
+										print("---"..tostring(key).." - "..tostring(val))
+									end
+								end
+							else
+								print(tostring(k).." - "..tostring(v))
+							end
+						end]]
+						
+						this.options.args.cooldowns.args.cdGroups.args["cd"..i.."_adjustGroup"].args.reset.disabled = true
+						this.options.args.cooldowns.args.cdGroups.args["cd"..i.."_adjustGroup"].args.reset.name = "|cFF666666"..RESET_TO_DEFAULT.."|r"
+						self:InitializeCooldowns(spec)
+						self:VerifyDefaultValues(spec,this.options,'Cooldowns')
 					end,
 				},
 			},
 		}
+
+		COOLDOWN_VALUES = nil
+		COOLDOWN_VALUES = {}
 	end
 
 	options.args.cooldowns.args.cdGroups.args = args
-	options.args.cooldowns.args.cdGroups.name = "Group "..Auras.db.char.auras[spec].cooldowns.selected.." Cooldown Settings"
+	options.args.cooldowns.args.cdGroups.name = "Group "..self.db.char.auras[spec].cooldowns.selected.." Cooldown Settings"
 end
 
 local function UpdateSpellAuraInfo(spec,group)
@@ -2182,6 +2324,7 @@ function Auras:RefreshAuraGroupList(options,spec)
 						--local auraName = { strsplit(";",AURA_LIST[selectedAura]) }
 						--auras.auras[auraName[2]].group = i
 						--auras.auras[auraName[2]].isInUse = true
+						--auras.spellIDs[tostring(SSA[AURA_NAME[selectedAura]].spellID)].group = i
 						auras.auras[AURA_NAME[selectedAura]].group = i
 						auras.auras[AURA_NAME[selectedAura]].isInUse = true
 						
@@ -2236,10 +2379,28 @@ function Auras:RefreshAuraGroupList(options,spec)
 					end,
 					width = "half",
 				},
-				filler = {
+				--[[filler = {
 					order = 5,
 					type = "description",
 					name = " ",
+					width = "half",
+				},]]
+				toggleGlobalPulse = {
+					order = 5,
+					type = "toggle",
+					name = "Pulse",
+					desc = "Toggle the glow pulse for all auras within this group",
+					get = function()
+						if (auras.groups[i].isPulse == nil) then
+							auras.groups[i].isPulse = true
+						end
+						return auras.groups[i].isPulse
+					end,
+					set = function(this,value)
+						auras.groups[i].isPulse = value
+						Auras:UpdateTalents()
+						Auras:RefreshAuraGroupList(this.options,spec)
+					end,
 					width = "half",
 				},
 				toggleLayout = {
@@ -2456,7 +2617,7 @@ local function BuildCurrentBarList(db,spec,grp)
 		end
 	end
 	if (spec == 3) then
-		print("GROUP: "..tostring(grp))
+		--print("GROUP: "..tostring(grp))
 	end
 
 	table.sort(sortTable)
@@ -3019,7 +3180,7 @@ function Auras:RefreshTimerBarGroupList(options,spec)
 								hidden = false,
 								guiInline = true,
 								args = {
-									shadowToggle = Auras:Toggle_VerifyDefaults(timerbars.groups[i].nametext.font.shadow,1,spec,L["TOGGLE"],nil,nil,false,'isEnabled','Timerbar',i,true),
+									shadowToggle = Auras:Toggle_VerifyDefaults(timerbars.groups[i].nametext.font.shadow,1,spec,L["TOGGLE"],nil,nil,false,nil,'isEnabled','Timerbar',i,true),
 									shadowColor = Auras:Color_VerifyDefaults(timerbars.groups[i].nametext.font.shadow,2,spec,L["LABEL_FONT_SHADOW_COLOR"],L["TOOLTIP_FONT_SHADOW_COLOR"],true,nil,false,'color','Timerbar',i,true),
 									shadowX = Auras:Slider_VerifyDefaults(timerbars.groups[i].nametext.font.shadow.offset,3,spec,"X",L["TOOLTIP_FONT_SHADOW_X_OFFSET"],-10,10,0.5,nil,false,'x','Timerbar',i,true),
 									shadowY = Auras:Slider_VerifyDefaults(timerbars.groups[i].nametext.font.shadow.offset,4,spec,"Y",L["TOOLTIP_FONT_SHADOW_Y_OFFSET"],-10,10,0.5,nil,false,'y','Timerbar',i,true),
@@ -3048,7 +3209,7 @@ function Auras:RefreshTimerBarGroupList(options,spec)
 								hidden = false,
 								guiInline = true,
 								args = {
-									shadowToggle = Auras:Toggle_VerifyDefaults(timerbars.groups[i].timetext.font.shadow,1,spec,L["TOGGLE"],nil,nil,false,'isEnabled','Timerbar',i,true),
+									shadowToggle = Auras:Toggle_VerifyDefaults(timerbars.groups[i].timetext.font.shadow,1,spec,L["TOGGLE"],nil,nil,false,nil,'isEnabled','Timerbar',i,true),
 									shadowColor = Auras:Color_VerifyDefaults(timerbars.groups[i].timetext.font.shadow,2,spec,L["LABEL_FONT_SHADOW_COLOR"],L["TOOLTIP_FONT_SHADOW_COLOR"],true,nil,false,'color','Timerbar',i,true),
 									shadowX = Auras:Slider_VerifyDefaults(timerbars.groups[i].timetext.font.shadow.offset,3,spec,"X",L["TOOLTIP_FONT_SHADOW_X_OFFSET"],-10,10,0.5,nil,false,'x','Timerbar',i,true),
 									shadowY = Auras:Slider_VerifyDefaults(timerbars.groups[i].timetext.font.shadow.offset,4,spec,"Y",L["TOOLTIP_FONT_SHADOW_Y_OFFSET"],-10,10,0.5,nil,false,'y','Timerbar',i,true),

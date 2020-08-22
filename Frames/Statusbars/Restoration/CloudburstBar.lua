@@ -61,51 +61,53 @@ end
 
 CloudburstBar.spellID = 157504
 CloudburstBar:SetScript('OnUpdate',function(self,elapsed)
-	if ((Auras:CharacterCheck(nil,3) and self.condition()) or Auras.db.char.settings.move.isMoving) then
-		local db = Auras.db.char
-		local isMoving = db.settings.move.isMoving
-		local _,_,_,x,y = self:GetPoint()
-		local names,_,_,_,_,_,_,_,_,_,_,_,_,_,_,absorbed = Auras:RetrieveAuraInfo('player',self.spellID)
-	
-		if (not self.isLoaded or not isMoving) then
-			if (x ~= db.miscellaneous[3][self:GetName()].layout.x or y ~= db.miscellaneous[3][self:GetName()].layout.y) then
-				local cbLayout = db.miscellaneous[3][self:GetName()].layout
-				self:SetPoint(cbLayout.point,SSA[cbLayout.relativeTo],cbLayout.relativePoint,cbLayout.x,cbLayout.y)
-			end
-			self.isLoaded = true
-		end
+	if (not Auras.db.char.isFirstEverLoad) then
+		if ((Auras:CharacterCheck(nil,3) and self.condition()) or Auras.db.char.settings.move.isMoving) then
+			local db = Auras.db.char
+			local isMoving = db.settings.move.isMoving
+			local _,_,_,x,y = self:GetPoint()
+			local names,_,_,_,_,_,_,_,_,_,_,_,_,_,_,absorbed = Auras:RetrieveAuraInfo('player',self.spellID)
 		
-		Auras:ToggleAuraVisibility(self,true,'showhide')
-		Auras:ToggleFrameMove(self,isMoving)
-		
-		for i=1,5 do
-			local _,name = GetTotemInfo(i)
-			if (name == 'Cloudburst Totem') then
-				duration = GetTotemTimeLeft(i)
+			if (not self.isLoaded or not isMoving) then
+				if (x ~= db.miscellaneous[3][self:GetName()].layout.x or y ~= db.miscellaneous[3][self:GetName()].layout.y) then
+					local cbLayout = db.miscellaneous[3][self:GetName()].layout
+					self:SetPoint(cbLayout.point,SSA[cbLayout.relativeTo],cbLayout.relativePoint,cbLayout.x,cbLayout.y)
+				end
+				self.isLoaded = true
 			end
-		end
+			
+			Auras:ToggleAuraVisibility(self,true,'showhide')
+			Auras:ToggleFrameMove(self,isMoving)
+			
+			for i=1,5 do
+				local _,name = GetTotemInfo(i)
+				if (name == 'Cloudburst Totem') then
+					duration = GetTotemTimeLeft(i)
+				end
+			end
 
-		if (not isMoving) then
-			if (not self:GetBackdrop()) then
-				self:SetBackdrop(BackdropCB)
-			end
-			--print(tostring(absorbed).." + "..tostring(names))
-			if (absorbed and db.miscellaneous[3].CloudburstBar.isEnabled) then
-				self.icon.text:SetText(duration)
-				self:SetAlpha(1)
-				self.text:SetText(absorbed)
+			if (not isMoving) then
+				if (not self:GetBackdrop()) then
+					self:SetBackdrop(BackdropCB)
+				end
+				--print(tostring(absorbed).." + "..tostring(names))
+				if (absorbed and db.miscellaneous[3].CloudburstBar.isEnabled) then
+					self.icon.text:SetText(duration)
+					self:SetAlpha(1)
+					self.text:SetText(absorbed)
+				else
+					self:SetAlpha(0)
+					self.text:SetText('0')
+					SSA.CloudburstTotemBar:Hide()
+				end
 			else
-				self:SetAlpha(0)
-				self.text:SetText('0')
-				SSA.CloudburstTotemBar:Hide()
+				self:SetAlpha(1)
 			end
+			
+			
 		else
-			self:SetAlpha(1)
+			Auras:ToggleAuraVisibility(self,false,'showhide')
 		end
-		
-		
-	else
-		Auras:ToggleAuraVisibility(self,false,'showhide')
 	end
 end)
 

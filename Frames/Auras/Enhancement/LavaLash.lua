@@ -18,39 +18,41 @@ LavaLash.condition = function()
 end
 
 LavaLash:SetScript('OnUpdate', function(self,elapsed)
-	if (Auras:RefreshRateHandler(0.5,self.elapsed)) then
-		self.elapsed = 0
-		
-		if ((Auras:CharacterCheck(self,2) and self.condition()) or Auras:IsPreviewingAura(self)) then
-			local groupID = Auras:GetAuraGroupID(self,self:GetName())
-			local db = Auras.db.char
-			local start,duration = GetSpellCooldown(Auras:GetSpellName(self.spellID))
-			local buff,_,_,_,buffDuration,expires = Auras:RetrieveAuraInfo('player',215785)
+	if (not Auras.db.char.isFirstEverLoad) then
+		if (Auras:RefreshRateHandler(0.5,self.elapsed)) then
+			self.elapsed = 0
 			
-			--local power = UnitPower('player',Enum.PowerType.Maelstrom)
-			
-			Auras:SetGlowStartTime(self,((expires or 0) - (buffDuration or 0)),buffDuration,215785,"buff")
-			Auras:GlowHandler(self)
-			Auras:SpellRangeCheck(self,self.spellID,true)
-			Auras:ToggleAuraVisibility(self,true,'showhide')
-			Auras:CooldownHandler(self,groupID,start,duration)
-			
-			if (Auras:IsPlayerInCombat()) then
-				self:SetAlpha(1)
-				--[[local powerCost = GetSpellPowerCost(self.spellID)
+			if ((Auras:CharacterCheck(self,2) and self.condition()) or Auras:IsPreviewingAura(self)) then
+				local groupID = Auras:GetAuraGroupID(self,self:GetName())
+				local db = Auras.db.char
+				local start,duration = GetSpellCooldown(Auras:GetSpellName(self.spellID))
+				local buff,_,_,_,buffDuration,expires = Auras:RetrieveAuraInfo('player',215785)
 				
-				if (power >= powerCost[1].cost or buff) then
+				--local power = UnitPower('player',Enum.PowerType.Maelstrom)
+				
+				Auras:SetGlowStartTime(self,((expires or 0) - (buffDuration or 0)),buffDuration,215785,"buff")
+				Auras:GlowHandler(self,groupID)
+				Auras:SpellRangeCheck(self,self.spellID,true)
+				Auras:ToggleAuraVisibility(self,true,'showhide')
+				Auras:CooldownHandler(self,groupID,start,duration)
+				
+				if (Auras:IsPlayerInCombat()) then
 					self:SetAlpha(1)
+					--[[local powerCost = GetSpellPowerCost(self.spellID)
+					
+					if (power >= powerCost[1].cost or buff) then
+						self:SetAlpha(1)
+					else
+						self:SetAlpha(0.5)
+					end]]
 				else
-					self:SetAlpha(0.5)
-				end]]
+					Auras:NoCombatDisplay(self,groupID)
+				end
 			else
-				Auras:NoCombatDisplay(self,groupID)
+				Auras:ToggleAuraVisibility(self,false,'showhide')
 			end
 		else
-			Auras:ToggleAuraVisibility(self,false,'showhide')
+			self.elapsed = self.elapsed + elapsed
 		end
-	else
-		self.elapsed = self.elapsed + elapsed
 	end
 end)

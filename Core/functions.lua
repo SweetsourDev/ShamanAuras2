@@ -63,7 +63,7 @@ function Auras:AdjustStatusBarIcon(self,db,texture)
 	
 		self:SetWidth(db.layout.width - db.layout.height)
 	else
-		SetPoint(db.layout.point,self:GetParent(),db.layout.point,db.layout.x,db.layout.y)
+		self:SetPoint(db.layout.point,self:GetParent(),db.layout.point,db.layout.x,db.layout.y)
 		self:SetWidth(db.layout.width)
 		self.icon:Hide()
 	end
@@ -192,7 +192,7 @@ end
 -------------------------------------------------------------------------------------------------------
 
 local function CreateGrid()
-	print("CREATING GRID")
+	--print("CREATING GRID")
 	local grid = SSA.Move.Grid
 	
 	grid.boxSize = 128

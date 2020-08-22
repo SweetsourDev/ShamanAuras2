@@ -3,7 +3,7 @@
 	<Script file="intro.lua"/>
 	<Script file="functions.lua"/>
 	<Script file="init.lua"/>
-	<Script file="Auras\Shared\Adaptation.lua"/>
+	<!-- <Script file="Auras\Shared\Adaptation.lua"/> REMOVED IN 9.0 -->
 	<Script file="Auras\Shared\Ascendance.lua"/>
 	<Script file="Auras\Shared\AstralShift.lua"/>
 	<Script file="Auras\Shared\CapacitorTotem.lua"/>
@@ -14,7 +14,7 @@
 	<Script file="Auras\Shared\EarthbindTotem.lua"/>
 	<Script file="Auras\Shared\ElementalBlast.lua"/>
 	<Script file="Auras\Shared\FlameShock.lua"/>
-	<Script file="Auras\Shared\GladiatorsMedallion.lua"/>
+	<!-- <Script file="Auras\Shared\GladiatorsMedallion.lua"/> REMOVED IN 9.0 -->
 	<Script file="Auras\Shared\GroundingTotem.lua"/>
 	<Script file="Auras\Shared\Hex.lua"/>
 	<Script file="Auras\Shared\LavaBurst.lua"/>

@@ -51,7 +51,7 @@ function Auras:IsPvPZone()
 end
 
 -- Check Current Class
-function Auras:CharacterCheck(obj,spec,...)
+function Auras:CharacterCheck(obj,spec,bypass)
 	if (not self.db.char.isFirstEverLoad) then
 		local _,_,classIndex = UnitClass('player')
 		local curSpec = GetSpecialization()
@@ -194,6 +194,14 @@ function Auras:CharacterCheck(obj,spec,...)
 		--return isPreview or (isAuraInUse and isCorrectSpecializationAndClass and isValidSpell)
 		--return isAuraInUse and isCorrectSpecializationAndClass and isValidSpell
 		return isAuraInUse and isCorrectSpecializationAndClass
+	elseif (bypass) then
+		local _,_,classIndex = UnitClass('player')
+
+		if (classIndex == 7) then
+			return true
+		else
+			return false
+		end
 	else
 		return false
 	end
@@ -630,23 +638,24 @@ function Auras:IsTargetFriendly()
 end
 
 -- FIX THIS
-function Auras:SpellRangeCheck(self,spellID,flag)
+function Auras:SpellRangeCheck(obj,spellID,flag)
 	local spec = SSA.spec
 	
-	if (Auras:IsTargetEnemy() and flag) then
-		if (IsSpellInRange(Auras:GetSpellName(spellID)) == 1) then
-			self.texture:SetDesaturated(false);
-			self.texture:SetVertexColor(1,1,1,1)
+	if (self:IsTargetEnemy() and flag) then
+		-- Stormstrike does not work with IsSpellInRange(), so check for Lava Lash instead
+		if (IsSpellInRange(obj:GetName() == "Stormstrike" and "Lava Lash" or self:GetSpellName(spellID)) == 1) then
+			obj.texture:SetDesaturated(false);
+			obj.texture:SetVertexColor(1,1,1,1)
 		else
-			self.texture:SetDesaturated(true)
-			self.texture:SetVertexColor(Auras.db.char.settings[spec].OoRColor.r,Auras.db.char.settings[spec].OoRColor.g,Auras.db.char.settings[spec].OoRColor.b,Auras.db.char.settings[spec].OoRColor.a)
+			obj.texture:SetDesaturated(true)
+			obj.texture:SetVertexColor(self.db.char.settings[spec].OoRColor.r,self.db.char.settings[spec].OoRColor.g,self.db.char.settings[spec].OoRColor.b,self.db.char.settings[spec].OoRColor.a)
 		end
-	elseif (Auras:IsTargetEnemy() and not flag) then
-		self.texture:SetDesaturated(true)
-		self.texture:SetVertexColor(0.5,0.5,0.5,1)
+	elseif (self:IsTargetEnemy() and not flag) then
+		obj.texture:SetDesaturated(true)
+		obj.texture:SetVertexColor(0.5,0.5,0.5,1)
 	else
-		self.texture:SetDesaturated(false)
-		self.texture:SetVertexColor(1,1,1,1)
+		obj.texture:SetDesaturated(false)
+		obj.texture:SetVertexColor(1,1,1,1)
 	end
 end
 

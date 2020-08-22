@@ -16,7 +16,7 @@ function Auras:parseTime(timer,precision,isFormatted,group,msg)
 		local m,s,ms,fs = floor(timer / 60),floor(fmod(timer,60)),(('%%.%df'):format(1)):format(fmod(timer,60),1),timer
 
 		if (isFormatted) then
-			local cd = Auras.db.char.auras[SSA.spec].cooldowns.groups[group]
+			local cd = self.db.char.auras[SSA.spec].cooldowns.groups[group]
 			
 			if (cd.text.formatting.length == "full") then
 				if (m >= 1 and s == 0) then
@@ -74,7 +74,7 @@ end
 
 function Auras:InitializeCooldowns(spec)
 	local spec = spec or SSA.spec or GetSpecialization()
-	local cd = Auras.db.char.auras[spec].cooldowns
+	local cd = self.db.char.auras[spec].cooldowns
 	--local frames = { SSA[self]:GetChildren() }
 	
 	--[[local ignoreFrames = {
@@ -83,36 +83,41 @@ function Auras:InitializeCooldowns(spec)
 		["Cloudburst"] = true,
 	}]]
 	
-	for k,_ in pairs(Auras.db.char.auras[spec].auras) do
+	for k,_ in pairs(self.db.char.auras[spec].auras) do
 		--SSA.DataFrame.text:SetText("AURA: "..tostring(k))
 		local aura = SSA[k]
 		
 		if (aura) then
-			-- Set Cooldown's Text Visibility
-			aura.CD:SetHideCountdownNumbers(true)
-			aura.PCD:SetHideCountdownNumbers(true)
-			
-			-- Set Cooldown's Spiral Direction
-			aura.CD:SetReverse(cd.inverse)
-			aura.PCD:SetReverse(cd.inverse)
-			
-			if (aura.GCD) then
-				aura.GCD:SetReverse(cd.inverse)
-			end
-			
-			if (aura.ChargeCD) then
-				aura.ChargeCD:SetHideCountdownNumbers(true)
-			end
-			
-			if (cd.sweep) then
-				aura.PCD:SetDrawSwipe(true)
-				aura.PCD:SetDrawEdge(true)
-			else
-				aura.PCD:SetDrawSwipe(false)
-				aura.PCD:SetDrawEdge(false)
+			-- We don't need to initialize the cooldown of an aura if it's not part of an aura group
+			if (self.db.char.auras[spec].auras[k].group > 0) then
+				-- Set Cooldown's Text Visibility
+				aura.CD:SetHideCountdownNumbers(true)
+				aura.PCD:SetHideCountdownNumbers(true)
+				
+				-- Set Cooldown's Spiral Direction
+				SSA.DataFrame.text:SetText("Group: "..tostring(self.db.char.auras[spec].auras[k].group).."\n")
+				SSA.DataFrame.text:SetText(self:CurText('DataFrame').."K: "..tostring(k).."\n")
+				aura.CD:SetReverse(cd.groups[self.db.char.auras[spec].auras[k].group].inverse)
+				aura.PCD:SetReverse(cd.groups[self.db.char.auras[spec].auras[k].group].inverse)
+				
+				if (aura.GCD) then
+					aura.GCD:SetReverse(cd.groups[self.db.char.auras[spec].auras[k].group].inverse)
+				end
+				
+				if (aura.ChargeCD) then
+					aura.ChargeCD:SetHideCountdownNumbers(true)
+				end
+				
+				if (cd.groups[self.db.char.auras[spec].auras[k].group].sweep) then
+					aura.PCD:SetDrawSwipe(true)
+					aura.PCD:SetDrawEdge(true)
+				else
+					aura.PCD:SetDrawSwipe(false)
+					aura.PCD:SetDrawEdge(false)
+				end
 			end
 		else
-			Auras.db.char.auras[spec].auras[k] = nil
+			self.db.char.auras[spec].auras[k] = nil
 		end
 	end
 	--for i=1,getn(frames) do
@@ -157,259 +162,272 @@ function Auras:InitializeCooldowns(spec)
 end
 
 -- Complete Cooldown Handler
-function Auras:CooldownHandler(self,group,start,duration,bypass)
+function Auras:CooldownHandler(obj,group,start,duration,bypass)
 	local spec = SSA.spec
-	local cd = Auras.db.char.auras[spec].cooldowns
+	local cd = self.db.char.auras[spec].cooldowns
 
 	if (cd.adjust and not UnitAffectingCombat('player')) then
-		if (self.CD:IsShown()) then
-			self.CD:Hide()
+		if (obj.CD:IsShown()) then
+			obj.CD:Hide()
 		end
 		
-		cd.groups[cd.selected].isPreview = true
+		
 		
 		if (group == cd.selected) then
-			if (self.Charges) then
-				self.Charges:Hide()
+			if (obj.Charges) then
+				obj.Charges:Hide()
 			end
 
-			Auras:PreviewCooldown(self,group,spec)
+			cd.groups[cd.selected].isPreview = true
+
+			self:PreviewCooldown(obj,group,spec)
 		else
-			if (self.PCD:IsShown()) then
-				self.PCD:Hide()
+			if (obj.PCD:IsShown()) then
+				obj.PCD:Hide()
 			end
+
+			for i=1,#cd.groups do
+				if (i ~= cd.selected) then
+					cd.groups[i].isPreview = false
+				end
+			end
+			--self:NoCombatDisplay(obj,group)
+			--obj:SetAlpha(0.5)
 		end
 	else
-		if (self.PCD:IsShown()) then
-			self.PCD:Hide()
+		if (obj.PCD:IsShown()) then
+			obj.PCD:Hide()
 		end
 		
-		cd.groups[cd.selected].isPreview = false
-		
-		if (self.Charges and not self.Charges:IsShown()) then
-			self.Charges:Show()
+		--cd.groups[cd.selected].isPreview = false
+		for i=1,#cd.groups do
+			cd.groups[i].isPreview = false
 		end
 		
-		Auras:ExecuteGCD(self,(start or 0),spec)
-		Auras:UpdateCooldown(self,cd)
+		if (obj.Charges and not obj.Charges:IsShown()) then
+			obj.Charges:Show()
+		end
+		
+		self:ExecuteGCD(obj,(start or 0),spec,group)
+		self:UpdateCooldown(obj,cd,group)
 		
 		if (not bypass and (duration or 0) > 1.5) then
-			if (not self.CD:IsShown()) then
-				self.CD:Show()
+			if (not obj.CD:IsShown()) then
+				obj.CD:Show()
 			end
 
-			Auras:ExecuteCooldown(self,start,duration,group,spec)
+			self:ExecuteCooldown(obj,start,duration,group,spec)
 		else
-			if (self.CD:IsShown()) then
-				self.CD:Hide()
+			if (obj.CD:IsShown()) then
+				obj.CD:Hide()
 			end
 		end
 	end
 end
 
-function Auras:UpdateCooldown(self,cd)
+function Auras:UpdateCooldown(obj,cd,group)
 	-- Gather CD Information
-	local swipe,bling = self.CD:GetDrawSwipe(),self.CD:GetDrawBling()
-	local start,duration = self.CD:GetCooldownTimes()
+	local swipe,bling = obj.CD:GetDrawSwipe(),obj.CD:GetDrawBling()
+	local start,duration = obj.CD:GetCooldownTimes()
 					
 	-- Configure CD
 	if (start == 0 or duration == 0) then
 		if (swipe) then
-			self.CD:SetDrawSwipe(false)
-			self.CD:SetDrawEdge(false)
+			obj.CD:SetDrawSwipe(false)
+			obj.CD:SetDrawEdge(false)
 		end
 		
 		if (bling) then
-			self.CD:SetDrawBling(false)
+			obj.CD:SetDrawBling(false)
 		end
-	elseif (cd.sweep and cd.bling) then
+	elseif (cd.groups[group].sweep and cd.groups[group].bling) then
 		if (not swipe) then
-			self.CD:SetDrawSwipe(true)
-			self.CD:SetDrawEdge(true)
+			obj.CD:SetDrawSwipe(true)
+			obj.CD:SetDrawEdge(true)
 		end
 		
 		if (not bling) then
-			self.CD:SetDrawBling(true)
+			obj.CD:SetDrawBling(true)
 		end
-	elseif (cd.sweep and not cd.bling) then
+	elseif (cd.groups[group].sweep and not cd.groups[group].bling) then
 		if (not swipe) then
-			self.CD:SetDrawSwipe(true)
-			self.CD:SetDrawEdge(true)
+			obj.CD:SetDrawSwipe(true)
+			obj.CD:SetDrawEdge(true)
 		end
 		
 		if (bling) then
-			self.CD:SetDrawBling(false)
+			obj.CD:SetDrawBling(false)
 		end
 	else
 		if (swipe) then
-			self.CD:SetDrawSwipe(false)
-			self.CD:SetDrawEdge(false)
+			obj.CD:SetDrawSwipe(false)
+			obj.CD:SetDrawEdge(false)
 		end
 		
 		if (bling) then
-			self.CD:SetDrawBling(false)
+			obj.CD:SetDrawBling(false)
 		end
 	end
 
-	if (self.GCD) then
+	if (obj.GCD) then
 		-- Gather GCD Information
-		local gSwipe,gBling = self.GCD:GetDrawSwipe(),self.GCD:GetDrawBling()
-		local gStart,gDuration = self.GCD:GetCooldownTimes()
+		local gSwipe,gBling = obj.GCD:GetDrawSwipe(),obj.GCD:GetDrawBling()
+		local gStart,gDuration = obj.GCD:GetCooldownTimes()
 	
-		if (cd.GCD.isEnabled and cd.sweep and cd.bling) then
+		if (cd.groups[group].GCD.isEnabled and cd.groups[group].sweep and cd.groups[group].bling) then
 			if (not gSwipe) then
-				self.GCD:SetDrawSwipe(true)
-				self.GCD:SetDrawEdge(true)
+				obj.GCD:SetDrawSwipe(true)
+				obj.GCD:SetDrawEdge(true)
 			end
 			
 			if (not gBling) then
-				self.GCD:SetDrawBling(true)
+				obj.GCD:SetDrawBling(true)
 			end
-		elseif (cd.GCD.isEnabled and cd.sweep and not cd.bling) then
+		elseif (cd.groups[group].GCD.isEnabled and cd.groups[group].sweep and not cd.groups[group].bling) then
 			if (not gSwipe) then
-				self.GCD:SetDrawSwipe(true)
-				self.GCD:SetDrawEdge(true)
+				obj.GCD:SetDrawSwipe(true)
+				obj.GCD:SetDrawEdge(true)
 			end
 			
 			if (gBling) then
-				self.GCD:SetDrawBling(false)
+				obj.GCD:SetDrawBling(false)
 			end
 		else
 			if (gSwipe) then
-				self.GCD:SetDrawSwipe(false)
-				self.GCD:SetDrawEdge(false)
+				obj.GCD:SetDrawSwipe(false)
+				obj.GCD:SetDrawEdge(false)
 			end
 			
 			if (gBling) then
-				self.GCD:SetDrawBling(false)
+				obj.GCD:SetDrawBling(false)
 			end
 		end
 	end
 end
 
-function Auras:SetCooldownFont(self,cdGrp,remaining)
-	self.text:SetFont(LSM.MediaTable.font[cdGrp.text.font.name] or LSM.DefaultMedia.font,cdGrp.text.font.size,cdGrp.text.font.flag)
+function Auras:SetCooldownFont(obj,cdGrp,remaining)
+	obj.text:SetFont(LSM.MediaTable.font[cdGrp.text.font.name] or LSM.DefaultMedia.font,cdGrp.text.font.size,cdGrp.text.font.flag)
 	
 	if (cdGrp.text.formatting.alert.isEnabled and remaining) then
 		if (remaining <= ((cdGrp.text.formatting.decimals and cdGrp.text.formatting.alert.threshold + 0.1) or (not cdGrp.text.formatting.decimals and cdGrp.text.formatting.alert.threshold + 1))) then
 			if (cdGrp.text.formatting.alert.animate) then
-				if (not self.Flash:IsPlaying()) then
-					self.Flash:Play()
+				if (not obj.Flash:IsPlaying()) then
+					obj.Flash:Play()
 				end
 			else
-				if (self.Flash:IsPlaying()) then
-					self.Flash:Stop()
+				if (obj.Flash:IsPlaying()) then
+					obj.Flash:Stop()
 				end
 			end
-			self.text:SetTextColor(cdGrp.text.formatting.alert.color.r,cdGrp.text.formatting.alert.color.g,cdGrp.text.formatting.alert.color.b,cdGrp.text.formatting.alert.color.a)
+			obj.text:SetTextColor(cdGrp.text.formatting.alert.color.r,cdGrp.text.formatting.alert.color.g,cdGrp.text.formatting.alert.color.b,cdGrp.text.formatting.alert.color.a)
 		else
-			if (self.Flash:IsPlaying()) then
-				self.Flash:Stop()
+			if (obj.Flash:IsPlaying()) then
+				obj.Flash:Stop()
 			end
 			
-			self.text:SetTextColor(cdGrp.text.font.color.r,cdGrp.text.font.color.g,cdGrp.text.font.color.b,cdGrp.text.font.color.a)
+			obj.text:SetTextColor(cdGrp.text.font.color.r,cdGrp.text.font.color.g,cdGrp.text.font.color.b,cdGrp.text.font.color.a)
 		end
 	else
-		self.text:SetTextColor(cdGrp.text.font.color.r,cdGrp.text.font.color.g,cdGrp.text.font.color.b,cdGrp.text.font.color.a)
+		obj.text:SetTextColor(cdGrp.text.font.color.r,cdGrp.text.font.color.g,cdGrp.text.font.color.b,cdGrp.text.font.color.a)
 	end
 
-	self.text:ClearAllPoints()
-	self.text:SetPoint(cdGrp.text.justify,self,cdGrp.text.justify,cdGrp.text.x,cdGrp.text.y)
+	obj.text:ClearAllPoints()
+	obj.text:SetPoint(cdGrp.text.justify,obj,cdGrp.text.justify,cdGrp.text.x,cdGrp.text.y)
 	
 	if (cdGrp.text.font.shadow.isEnabled) then
-		self.text:SetShadowColor(cdGrp.text.font.shadow.color.r,cdGrp.text.font.shadow.color.g,cdGrp.text.font.shadow.color.b,cdGrp.text.font.shadow.color.a)
-		self.text:SetShadowOffset(cdGrp.text.font.shadow.offset.x,cdGrp.text.font.shadow.offset.y)
+		obj.text:SetShadowColor(cdGrp.text.font.shadow.color.r,cdGrp.text.font.shadow.color.g,cdGrp.text.font.shadow.color.b,cdGrp.text.font.shadow.color.a)
+		obj.text:SetShadowOffset(cdGrp.text.font.shadow.offset.x,cdGrp.text.font.shadow.offset.y)
 	else
-		self.text:SetShadowColor(0,0,0,0)
+		obj.text:SetShadowColor(0,0,0,0)
 	end
 end
 
-function Auras:PreviewCooldown(self,group)
+function Auras:PreviewCooldown(obj,group)
 	local spec = SSA.spec
-	local cd = Auras.db.char.auras[spec].cooldowns
+	local cd = self.db.char.auras[spec].cooldowns
 	local cdGrp = cd.groups[group]
 	
-	if (not self.PCD:IsShown()) then
-		self.PCD:Show()
+	if (not obj.PCD:IsShown()) then
+		obj.PCD:Show()
 	end
 	
-	self:SetAlpha(1)
+	--obj:SetAlpha(1)
 	
-	local start,duration = self.PCD:GetCooldownTimes()
+	local start,duration = obj.PCD:GetCooldownTimes()
 	local remains = ((start + duration) / 1e3) - GetTime()
 
-	Auras:SetCooldownFont(self.PCD,cdGrp,remains)
+	self:SetCooldownFont(obj.PCD,cdGrp,remains)
 		
 	if (remains <= 3) then
-		self.PCD:SetCooldown(GetTime(),10)	
+		obj.PCD:SetCooldown(GetTime(),10)	
 	else
-		if (cd.text) then
+		if (cdGrp.text.isDisplayText) then
 			if (remains < 10 and cdGrp.text.formatting.decimals) then
-				self.PCD.text:SetText(Auras:parseTime(remains,true,true,group))
+				obj.PCD.text:SetText(self:parseTime(remains,true,true,group))
 			else
-				self.PCD.text:SetText(Auras:parseTime(remains,false,true,group))
+				obj.PCD.text:SetText(self:parseTime(remains,false,true,group))
 			end
 		else
-			self.PCD.text:SetText('')
+			obj.PCD.text:SetText('')
 		end	
 	end
 end
 
-function Auras:ExecuteGCD(self,start)
-	if (not self.GCD) then
+function Auras:ExecuteGCD(obj,start,group)
+	if (not obj.GCD) then
 		return
 	end
 	
-	local cd = Auras.db.char.auras[SSA.spec].cooldowns
-	local strt,duration = self.CD:GetCooldownTimes()
-	local gDur = self.GCD:GetCooldownDuration()
-	
-	if (cd.isEnabled and cd.GCD.isEnabled and cd.GCD.length > 0 and strt == 0 and GetTime() < cd.GCD.endTime) then
-		if (not self.GCD:IsShown()) then
-			self.GCD:Show()
+	local cd = self.db.char.auras[SSA.spec].cooldowns
+	local strt,duration = obj.CD:GetCooldownTimes()
+	local gDur = obj.GCD:GetCooldownDuration()
+	SSA.DataFrame.text:SetText("GCD Check: "..tostring(obj:GetName()))
+	if (cd.groups[group].isEnabled and cd.groups[group].GCD.isEnabled and cd.groups[group].GCD.length > 0 and (strt or 0) == 0 and GetTime() < cd.groups[group].GCD.endTime) then
+		if (not obj.GCD:IsShown()) then
+			obj.GCD:Show()
 		end
-		self.GCD:SetReverse(cd.inverse)
-		self.GCD:SetCooldown(start,cd.GCD.length)
+		obj.GCD:SetReverse(cd.groups[group].inverse)
+		obj.GCD:SetCooldown(start,cd.groups[group].GCD.length)
 	else
 		
-		if (not cd.isEnabled or not cd.GCD.isEnabled or cd.interrupted or GetTime() > (cd.GCD.endTime + 1) or strt > 0) then
-			if (self.GCD:IsShown()) then
-				self.GCD:Hide()
+		if (not cd.groups[group].isEnabled or not cd.groups[group].GCD.isEnabled or cd.interrupted or GetTime() > (cd.groups[group].GCD.endTime + 1) or strt > 0) then
+			if (obj.GCD:IsShown()) then
+				obj.GCD:Hide()
 			end
 		end
 	end
 end
 
 --function Auras:ExecuteCooldown(self,start,duration,isSmallAura,isHideText,spec)
-function Auras:ExecuteCooldown(self,start,duration,group)
+function Auras:ExecuteCooldown(obj,start,duration,group)
 	-- Initialize Database Vars
-	local cd = Auras.db.char.auras[SSA.spec].cooldowns
+	local cd = self.db.char.auras[SSA.spec].cooldowns
 	local cdGrp = cd.groups[group]
 	
 	-- Initialize Time-based Vars
 	local expires = start + duration
 	local remains = expires - GetTime()
-	--local remaining,seconds = Auras:parseTime(timer,false,spec,group,subgroup)
+	--local remaining,seconds = self:parseTime(timer,false,spec,group,subgroup)
 
-	if (not cd.isEnabled) then
-		self.CD:Hide()
+	if (not cdGrp.isEnabled) then
+		obj.CD:Hide()
 		return
 	else
-		if (not self.CD:IsShown()) then
-			self.CD:Show()
+		if (not obj.CD:IsShown()) then
+			obj.CD:Show()
 		end
 	end
 	
-	Auras:SetCooldownFont(self.CD,cdGrp,remains)
-	self.CD:SetCooldown(start,duration)
+	self:SetCooldownFont(obj.CD,cdGrp,remains)
+	obj.CD:SetCooldown(start,duration)
 	
-	if (cd.text) then
+	if (cdGrp.text.isDisplayText) then
 		if (remains < 10 and cdGrp.text.formatting.decimals) then
-			self.CD.text:SetText(Auras:parseTime(remains,true,true,group))
+			obj.CD.text:SetText(self:parseTime(remains,true,true,group))
 		else
-			self.CD.text:SetText(Auras:parseTime(remains,false,true,group))
+			obj.CD.text:SetText(self:parseTime(remains,false,true,group))
 		end
 	else
-		self.CD.text:SetText('')
+		obj.CD.text:SetText('')
 	end
 end

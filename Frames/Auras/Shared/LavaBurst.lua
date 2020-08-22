@@ -16,79 +16,80 @@ LavaBurst.condition = function()
 end
 
 LavaBurst:SetScript('OnUpdate', function(self,elapsed)
-	--if (Auras:RefreshRateHandler(0.5,self.elapsed)) then
-	if (Auras:RefreshRateHandler(0.5,self.elapsed)) then
-		self.elapsed = 0
+	if (not Auras.db.char.isFirstEverLoad) then
+		if (Auras:RefreshRateHandler(0.5,self.elapsed)) then
+			self.elapsed = 0
 
-		if (((Auras:CharacterCheck(self,1) or Auras:CharacterCheck(self,3)) and self.condition()) or Auras:IsPreviewingAura(self)) then
-			local groupID = Auras:GetAuraGroupID(self,self:GetName())
-			local ascendance,_,_,_,ascDuration,ascExpires = Auras:RetrieveAuraInfo("player", (SSA.spec == 1 and 114050) or (SSA.spec == 3 and 114052))
-			local start,duration = GetSpellCooldown(Auras:GetSpellName(self.spellID))
-			local charges,maxCharges,chgStart,chgDuration = GetSpellCharges(self.spellID)
-		
-			if (ascendance) then
-				Auras:SetGlowStartTime(self,((ascExpires or 0) - (ascDuration or 0)),ascDuration,((SSA.spec == 1 and 114050) or (SSA.spec == 3 and 114052)),"buff")
-			end
-			Auras:SetGlowStartTime(self,start,duration,self.spellID,"cooldown")
-			Auras:GlowHandler(self)
-			Auras:ToggleAuraVisibility(self,true,'showhide')
-			Auras:SpellRangeCheck(self,self.spellID,true)
-			Auras:CooldownHandler(self,groupID,start,duration,true)
+			if (((Auras:CharacterCheck(self,1) or Auras:CharacterCheck(self,3)) and self.condition()) or Auras:IsPreviewingAura(self)) then
+				local groupID = Auras:GetAuraGroupID(self,self:GetName())
+				local ascendance,_,_,_,ascDuration,ascExpires = Auras:RetrieveAuraInfo("player", (SSA.spec == 1 and 114050) or (SSA.spec == 3 and 114052))
+				local start,duration = GetSpellCooldown(Auras:GetSpellName(self.spellID))
+				local charges,maxCharges,chgStart,chgDuration = GetSpellCharges(self.spellID)
 			
-			if (maxCharges > 1) then
-				if (charges == 2) then
-					self.ChargeCD:Hide()
-					self.ChargeCD:SetCooldown(0,0)
-					--self.Charges.text:SetText(2)
-				elseif (charges == 1) then
-					self.ChargeCD:Show()
-					self.ChargeCD:SetCooldown(chgStart,chgDuration)
-					--self.Charges.text:SetText(charges)
-				end
-				if (charges > 0) then
-					self.Charges.text:SetText(charges)
-					self.CD.text:SetText('')
-					--self.ChargeCD:Show()
-				else
-					--Auras:ExecuteCooldown(self,chgStart,chgDuration,false,false,1)
-					Auras:CooldownHandler(self,groupID,start,duration)
-					self.Charges.text:SetText('')
-					self.ChargeCD:Hide()
-				end
-			else
-				self.ChargeCD:Hide()
-				self.Charges.text:SetText('')
-			end
-
-			if ((duration or 0) > 2) then
-				Auras:CooldownHandler(self,groupID,start,duration)
-				self.CD:Show()
-			elseif (buff or ascendance) then
 				if (ascendance) then
-					self.Charges.text:SetText('')
-					self.ChargeCD:Hide()
+					Auras:SetGlowStartTime(self,((ascExpires or 0) - (ascDuration or 0)),ascDuration,((SSA.spec == 1 and 114050) or (SSA.spec == 3 and 114052)),"buff")
 				end
-				self.CD:Hide()
-				self.CD:SetCooldown(0,0)
-			else
-				--Auras:ToggleOverlayGlow(self.glow,false)
-				self.CD.text:SetText('')
-			end
-			
-			if (Auras:IsPlayerInCombat()) then
-				self:SetAlpha(1)
-			else
-				Auras:NoCombatDisplay(self,groupID)
+				Auras:SetGlowStartTime(self,start,duration,self.spellID,"cooldown")
+				Auras:GlowHandler(self,groupID)
+				Auras:ToggleAuraVisibility(self,true,'showhide')
+				Auras:SpellRangeCheck(self,self.spellID,true)
+				Auras:CooldownHandler(self,groupID,start,duration,true)
 				
-				--[[if (buff and Auras:IsTargetEnemy()) then
-					Auras:ToggleOverlayGlow(self.glow,true)
-				end]]
+				if (maxCharges > 1) then
+					if (charges == 2) then
+						self.ChargeCD:Hide()
+						self.ChargeCD:SetCooldown(0,0)
+						--self.Charges.text:SetText(2)
+					elseif (charges == 1) then
+						self.ChargeCD:Show()
+						self.ChargeCD:SetCooldown(chgStart,chgDuration)
+						--self.Charges.text:SetText(charges)
+					end
+					if (charges > 0) then
+						self.Charges.text:SetText(charges)
+						self.CD.text:SetText('')
+						--self.ChargeCD:Show()
+					else
+						--Auras:ExecuteCooldown(self,chgStart,chgDuration,false,false,1)
+						Auras:CooldownHandler(self,groupID,start,duration)
+						self.Charges.text:SetText('')
+						self.ChargeCD:Hide()
+					end
+				else
+					self.ChargeCD:Hide()
+					self.Charges.text:SetText('')
+				end
+
+				if ((duration or 0) > 2) then
+					Auras:CooldownHandler(self,groupID,start,duration)
+					self.CD:Show()
+				elseif (buff or ascendance) then
+					if (ascendance) then
+						self.Charges.text:SetText('')
+						self.ChargeCD:Hide()
+					end
+					self.CD:Hide()
+					self.CD:SetCooldown(0,0)
+				else
+					--Auras:ToggleOverlayGlow(self.glow,false)
+					self.CD.text:SetText('')
+				end
+				
+				if (Auras:IsPlayerInCombat()) then
+					self:SetAlpha(1)
+				else
+					Auras:NoCombatDisplay(self,groupID)
+					
+					--[[if (buff and Auras:IsTargetEnemy()) then
+						Auras:ToggleOverlayGlow(self.glow,true)
+					end]]
+				end
+			else
+				Auras:ToggleAuraVisibility(self,false,'showhide')
 			end
 		else
-			Auras:ToggleAuraVisibility(self,false,'showhide')
+			self.elapsed = self.elapsed + elapsed
 		end
-	else
-		self.elapsed = self.elapsed + elapsed
 	end
 end)
 

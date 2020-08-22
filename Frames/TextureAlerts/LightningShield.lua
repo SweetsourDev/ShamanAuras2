@@ -42,7 +42,7 @@ LightningShield.Flash.fadeOut:SetDuration(0.4)
 LightningShield.Flash.fadeOut:SetEndDelay(0)
 
 LightningShield:SetScript('OnUpdate',function(self)
-	--if (Auras:CharacterCheck(nil,1)) then
+	if (not Auras.db.char.isFirstEverLoad) then
 		local spec = GetSpecialization()
 
 		local remaining = 0
@@ -88,6 +88,7 @@ LightningShield:SetScript('OnUpdate',function(self)
 	--else
 		--Auras:ToggleAuraVisibility(self,false,'showhide')
 	--end
+	end
 end)
 
 LightningShield:SetScript('OnMouseDown',function(self,button)

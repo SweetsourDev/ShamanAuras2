@@ -16,4 +16,5 @@
 	<Include file="AceHook-3.0\AceHook-3.0.xml"/>
 	<Include file="AceConfig-3.0\AceConfig-3.0.xml"/>
 	<Script file="LibDataBroker-1.1\LibDataBroker-1.1.lua"/>
+	<Script file="LibSpellRange-1.0\LibSpellRange-1.0.lua"/>
 </Ui>
